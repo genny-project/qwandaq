@@ -43,7 +43,7 @@ public class Value implements Serializable,Comparable<Value> {
 	public LocalTime valueTime;
 	public Boolean valueBoolean;
 
-	@Type(type = "text")
+	@Type(type = "string")
 	public String valueString;
 
 	public Boolean expired = false;
