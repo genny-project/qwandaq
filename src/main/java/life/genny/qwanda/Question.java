@@ -129,9 +129,6 @@ public class Question extends PanacheEntity implements Serializable {
     @Type(type = "text")
     @Expose
     private String html;
-    @Id
-    private String id;
-
 
     static public final String REGEX_NAME = "[\\pL0-9/\\:\\ \\_\\.\\,\\?\\>\\<\\%\\$\\&\\!\\*" + ""
             + "\\[\\]\\'\\-\\@\\(\\)]+.?";
@@ -593,11 +590,11 @@ public class Question extends PanacheEntity implements Serializable {
         this.readonly = readonly;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 }

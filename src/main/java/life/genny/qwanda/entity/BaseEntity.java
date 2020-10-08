@@ -83,9 +83,6 @@ public class BaseEntity extends PanacheEntity {
     private static final String REGEX_REALM = "[a-zA-Z0-9]+";
     private static final String DEFAULT_REALM = "genny";
 
-    @Id
-    private Long id;
-
     public void setId(Long id) {
         this.id = id;
     }
