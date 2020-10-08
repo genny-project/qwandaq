@@ -60,9 +60,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
-@Table(name = "ask", indexes = {@Index(columnList = "id", name = "code_idx"),
-        @Index(columnList = "realm", name = "code_idx")}, uniqueConstraints = @UniqueConstraint(columnNames = {"id",
-        "realm"}))
+@Table(name = "ask", indexes = {@Index(columnList = "id", name = "code_idx")})
 
 @Entity
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
@@ -112,6 +110,7 @@ public class Ask extends PanacheEntity implements Serializable {
 
     @Expose
     private Boolean createOnTrigger = false;
+
 
     @Transient
     @Expose

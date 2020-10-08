@@ -58,12 +58,7 @@ import java.io.Serializable;
 
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
-@Table(name = "context",
-        indexes = {
-                @Index(columnList = "id", name = "code_idx"),
-                @Index(columnList = "realm", name = "code_idx")
-        },
-        uniqueConstraints = @UniqueConstraint(columnNames = {"id", "realm"}))
+@Table(name = "context", indexes = {@Index(columnList = "id", name = "code_idx")})
 @Entity
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 @Inheritance(strategy = InheritanceType.JOINED)
