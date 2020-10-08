@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.gson.annotations.Expose;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwanda.attribute.Attribute;
 import life.genny.qwanda.exception.BadDataException;
 import org.apache.logging.log4j.LogManager;
@@ -78,6 +79,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Inheritance(strategy = InheritanceType.JOINED)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 
+@RegisterForReflection
 public class Question extends PanacheEntity implements Serializable {
 
     protected static final Logger log = LogManager
