@@ -94,8 +94,6 @@ public class Context extends PanacheEntity implements Serializable {
 
     @Expose
     private VisualControlType visualControlType;
-    @Id
-    private String id;
 
 
     /**
@@ -241,11 +239,11 @@ public class Context extends PanacheEntity implements Serializable {
     }
 
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getId() {
-        return id;
+    public Long getId() {
+        return this.id;
     }
 }
