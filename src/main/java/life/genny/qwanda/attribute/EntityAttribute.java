@@ -52,6 +52,15 @@ public class EntityAttribute extends PanacheEntity {
 
     @JsonbTypeAdapter(LocalDateTimeAdapter.class)
     public LocalDateTime updated;
+
+    public Attribute getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(Attribute attribute) {
+        this.attribute = attribute;
+    }
+
     //
 //	@JsonbTypeAdapter(AttributeAdapter.class)
     @NotNull
@@ -63,9 +72,35 @@ public class EntityAttribute extends PanacheEntity {
     @JoinColumn(name = "BASEENTITY_ID", nullable = false)
     public BaseEntity baseentity;
 
+    public String getBaseEntityCode() {
+        return baseEntityCode;
+    }
+
+    public void setBaseEntityCode(String baseEntityCode) {
+        this.baseEntityCode = baseEntityCode;
+    }
+
     // For compatibility initially
     public String baseEntityCode;
+
+    public String getAttributeCode() {
+        return attributeCode;
+    }
+
+    public void setAttributeCode(String attributeCode) {
+        this.attributeCode = attributeCode;
+    }
+
     public String attributeCode;
+
+    public String getAttributeName() {
+        return attributeName;
+    }
+
+    public void setAttributeName(String attributeName) {
+        this.attributeName = attributeName;
+    }
+
     public String attributeName;
 
     @Embedded
@@ -77,10 +112,26 @@ public class EntityAttribute extends PanacheEntity {
     @Transient
     public Integer index = 0; // used to assist with ordering
 
+    public Boolean getInferred() {
+        return inferred;
+    }
+
+    public void setInferred(Boolean inferred) {
+        this.inferred = inferred;
+    }
+
     /**
      * Store the relative importance of the attribute for the baseEntity
      */
     public Boolean inferred = false;
+
+    public Boolean getPrivacyFlag() {
+        return privacyFlag;
+    }
+
+    public void setPrivacyFlag(Boolean privacyFlag) {
+        this.privacyFlag = privacyFlag;
+    }
 
     /**
      * Store the privacy of this attribute , i.e. Don't display

@@ -60,7 +60,15 @@ public class Link implements Serializable {
   /**
    * 
    */
- 
+
+  public String getAttributeCode() {
+    return attributeCode;
+  }
+
+  public void setAttributeCode(String attributeCode) {
+    this.attributeCode = attributeCode;
+  }
+
   /**
    * A field that stores the human readable attributecode associated with this link.
    * <p>
@@ -68,13 +76,29 @@ public class Link implements Serializable {
   @Column(name = "LINK_CODE", updatable = false, nullable = false, unique = false)
   public String attributeCode;
 
- 
+
+  public String getTargetCode() {
+    return targetCode;
+  }
+
+  public void setTargetCode(String targetCode) {
+    this.targetCode = targetCode;
+  }
+
   /**
    * A field that stores the human readable targetcode associated with this link.
    * <p>
    */
   @Column(name = "TARGET_CODE", updatable = false, nullable = false, unique = false)
   public String targetCode;
+
+  public String getSourceCode() {
+    return sourceCode;
+  }
+
+  public void setSourceCode(String sourceCode) {
+    this.sourceCode = sourceCode;
+  }
 
   /**
    * A field that stores the human readable sourcecode associated with this link.
@@ -84,12 +108,28 @@ public class Link implements Serializable {
   public String sourceCode;
 
 
+  public String getLinkValue() {
+    return linkValue;
+  }
+
+  public void setLinkValue(String linkValue) {
+    this.linkValue = linkValue;
+  }
+
   /**
    * A field that stores the human readable link Value associated with this link.
    * <p>
    */
   public String linkValue;
-  
+
+  public Double getWeight() {
+    return weight;
+  }
+
+  public void setWeight(Double weight) {
+    this.weight = weight;
+  }
+
   @Column(name = "LINK_WEIGHT", updatable = true, nullable = true, unique = false)
   public Double weight;
   

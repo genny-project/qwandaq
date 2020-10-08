@@ -1,29 +1,21 @@
 package life.genny.qwanda.entity;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import life.genny.qwanda.Link;
+import life.genny.qwanda.Value;
+import life.genny.qwanda.adapter.LocalDateTimeAdapter;
+import life.genny.qwanda.attribute.Attribute;
+import org.jboss.logging.Logger;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.json.bind.annotation.JsonbTypeAdapter;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-import org.jboss.logging.Logger;
-
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import io.quarkus.runtime.annotations.RegisterForReflection;
-import life.genny.qwanda.adapter.LocalDateTimeAdapter;
-import life.genny.qwanda.Link;
-import life.genny.qwanda.Value;
-import life.genny.qwanda.attribute.Attribute;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Table(name = "qbaseentity_baseentity")
@@ -73,6 +65,10 @@ public class EntityEntity extends PanacheEntity implements java.io.Serializable,
     @Embedded
     @NotNull
     public Value value = new Value();
+
+    public Link getLink() {
+        return link;
+    }
 
     @Embedded
     public Link link = new Link();

@@ -92,6 +92,14 @@ public class Attribute extends PanacheEntity {
     @Pattern(regexp = REGEX_REALM, message = "Must be valid Realm Format!")
     public String realm = DEFAULT_REALM;
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     @NotNull
     @Size(max = 64)
     @Pattern(regexp = REGEX_CODE, message = "Must be valid Code!")
@@ -111,6 +119,14 @@ public class Attribute extends PanacheEntity {
     @JsonbTypeAdapter(LocalDateTimeAdapter.class)
     public LocalDateTime updated;
 
+
+    public DataType getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(DataType dataType) {
+        this.dataType = dataType;
+    }
 
     @Embedded
     @NotNull

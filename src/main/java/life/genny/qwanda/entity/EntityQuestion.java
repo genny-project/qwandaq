@@ -35,7 +35,10 @@ public class EntityQuestion  extends PanacheEntity implements Serializable, Comp
 //
 	public EntityQuestion() {
 	}
-//
+
+	public EntityQuestion(Link link) {
+		this.link = link;
+	}
 ////  public EntityQuestion(Link link) {
 ////    this.link = link;
 ////  }
