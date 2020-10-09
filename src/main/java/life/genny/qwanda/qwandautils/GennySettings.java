@@ -67,6 +67,10 @@ public class GennySettings {
     public static final String emailSmtpStartTls = System.getenv("EMAIL_SMTP_STARTTLS") != null ? System.getenv("EMAIL_SMTP_STARTTLS") : "http://keycloak.genny.life";
 
     public static final String twilioSenderMobile = System.getenv("TWILIO_SENDER_MOBILE") != null ? System.getenv("TWILIO_SENDER_MOBILE") : "TWILIO_SENDER_MOBILE";
+    public final static Boolean detectRuleChanges = System.getenv("DETECT_RULE_CHANGES") != null && "TRUE".equalsIgnoreCase(System.getenv("DETECT_RULE_CHANGES"));
+    public final static Boolean persistRules = System.getenv("PERSIST_RULES") != null && "TRUE".equalsIgnoreCase(System.getenv("PERSIST_RULES"));
+    public static final Boolean useApiRules = "TRUE".equalsIgnoreCase(System.getenv("USE_API_RULES"));
+
 
     static {
         Optional<String> cacheServerNameOptional = Optional.ofNullable(System.getenv("CACHE_SERVER_NAME"));
