@@ -90,8 +90,11 @@ public class Question extends PanacheEntity implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    @Transient
     private static final String default_code_prefix = "QUE_";
-    private final String question_group_attribute_code = "QQQ_QUESTION_GROUP";
+
+    @Transient
+    private static final String question_group_attribute_code = "QQQ_QUESTION_GROUP";
 
     @XmlTransient
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.source", cascade = CascadeType.MERGE)
@@ -132,6 +135,7 @@ public class Question extends PanacheEntity implements Serializable {
     @Expose
     private String html;
 
+    @Transient
     private final String regex_name = "[\\pL0-9/\\:\\ \\_\\.\\,\\?\\>\\<\\%\\$\\&\\!\\*" + ""
             + "\\[\\]\\'\\-\\@\\(\\)]+.?";
 
@@ -155,6 +159,7 @@ public class Question extends PanacheEntity implements Serializable {
     @Expose
     private String name;
 
+    @Transient
     private final String regex_code = "[A-Z]{3}\\_[A-Z0-9\\.\\-\\@\\_]*";
 
     public String getCode() {
@@ -172,7 +177,9 @@ public class Question extends PanacheEntity implements Serializable {
     @Expose
     private String code;
 
+    @Transient
     private final String regex_realm = "[a-zA-Z0-9]+";
+    @Transient
     private final String default_realm = "genny";
 
     public String getRealm() {
