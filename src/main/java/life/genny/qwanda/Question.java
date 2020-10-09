@@ -91,7 +91,7 @@ public class Question extends PanacheEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final String default_code_prefix = "QUE_";
-    public static final String QUESTION_GROUP_ATTRIBUTE_CODE = "QQQ_QUESTION_GROUP";
+    private final String question_group_attribute_code = "QQQ_QUESTION_GROUP";
 
     @XmlTransient
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.source", cascade = CascadeType.MERGE)
@@ -132,7 +132,7 @@ public class Question extends PanacheEntity implements Serializable {
     @Expose
     private String html;
 
-    static public final String regex_name = "[\\pL0-9/\\:\\ \\_\\.\\,\\?\\>\\<\\%\\$\\&\\!\\*" + ""
+    private final String regex_name = "[\\pL0-9/\\:\\ \\_\\.\\,\\?\\>\\<\\%\\$\\&\\!\\*" + ""
             + "\\[\\]\\'\\-\\@\\(\\)]+.?";
 
     public String getName() {
@@ -155,7 +155,7 @@ public class Question extends PanacheEntity implements Serializable {
     @Expose
     private String name;
 
-    static public final String regex_code = "[A-Z]{3}\\_[A-Z0-9\\.\\-\\@\\_]*";
+    private final String regex_code = "[A-Z]{3}\\_[A-Z0-9\\.\\-\\@\\_]*";
 
     public String getCode() {
         return code;
@@ -172,8 +172,8 @@ public class Question extends PanacheEntity implements Serializable {
     @Expose
     private String code;
 
-    static public final String regex_realm = "[a-zA-Z0-9]+";
-    static public final String default_realm = "genny";
+    private final String regex_realm = "[a-zA-Z0-9]+";
+    private final String default_realm = "genny";
 
     public String getRealm() {
         return realm;
@@ -268,7 +268,7 @@ public class Question extends PanacheEntity implements Serializable {
             throw new InvalidParameterException("QuestionList must not be null");
         }
         this.attribute = null;
-        this.attributeCode = QUESTION_GROUP_ATTRIBUTE_CODE;
+        this.attributeCode = question_group_attribute_code;
 
         initialiseChildQuestions(childQuestions);
     }
@@ -283,7 +283,7 @@ public class Question extends PanacheEntity implements Serializable {
         this.name = aName;
         this.code = aCode;
         this.attribute = null;
-        this.attributeCode = QUESTION_GROUP_ATTRIBUTE_CODE;
+        this.attributeCode = question_group_attribute_code;
 
     }
 
@@ -554,7 +554,7 @@ public class Question extends PanacheEntity implements Serializable {
         List<QuestionQuestion> qqList = new CopyOnWriteArrayList<QuestionQuestion>(getChildQuestions());
         Collections.sort(qqList);
         String ret = "";
-        if (getAttributeCode().equals(QUESTION_GROUP_ATTRIBUTE_CODE)) {
+        if (getAttributeCode().equals(question_group_attribute_code)) {
             for (QuestionQuestion childQuestion : qqList) {
                 ret += childQuestion.getPk().getTargetCode() + ",";
             }
