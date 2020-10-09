@@ -90,8 +90,11 @@ public class Question extends PanacheEntity implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    private static final String DEFAULT_CODE_PREFIX = "QUE_";
-    public static final String QUESTION_GROUP_ATTRIBUTE_CODE = "QQQ_QUESTION_GROUP";
+    @Transient
+    private static final String default_code_prefix = "QUE_";
+
+    @Transient
+    private static final String question_group_attribute_code = "QQQ_QUESTION_GROUP";
 
     @XmlTransient
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.source", cascade = CascadeType.MERGE)
@@ -132,7 +135,8 @@ public class Question extends PanacheEntity implements Serializable {
     @Expose
     private String html;
 
-    static public final String REGEX_NAME = "[\\pL0-9/\\:\\ \\_\\.\\,\\?\\>\\<\\%\\$\\&\\!\\*" + ""
+    @Transient
+    private final String regex_name = "[\\pL0-9/\\:\\ \\_\\.\\,\\?\\>\\<\\%\\$\\&\\!\\*" + ""
             + "\\[\\]\\'\\-\\@\\(\\)]+.?";
 
     public String getName() {
@@ -150,12 +154,13 @@ public class Question extends PanacheEntity implements Serializable {
      */
     @NotNull
     @Size(max = 128)
-    @Pattern(regexp = REGEX_NAME, message = "Must contain valid characters for name")
+    @Pattern(regexp = regex_name, message = "Must contain valid characters for name")
     @Column(name = "name", updatable = true, nullable = true)
     @Expose
     private String name;
 
-    static public final String REGEX_CODE = "[A-Z]{3}\\_[A-Z0-9\\.\\-\\@\\_]*";
+    @Transient
+    private final String regex_code = "[A-Z]{3}\\_[A-Z0-9\\.\\-\\@\\_]*";
 
     public String getCode() {
         return code;
@@ -167,13 +172,15 @@ public class Question extends PanacheEntity implements Serializable {
 
     @NotNull
     @Size(max = 64)
-    @Pattern(regexp = REGEX_CODE, message = "Must be valid Code!")
+    @Pattern(regexp = regex_code, message = "Must be valid Code!")
     @Column(name = "code", updatable = false, nullable = false)
     @Expose
     private String code;
 
-    static public final String REGEX_REALM = "[a-zA-Z0-9]+";
-    static public final String DEFAULT_REALM = "genny";
+    @Transient
+    private final String regex_realm = "[a-zA-Z0-9]+";
+    @Transient
+    private final String default_realm = "genny";
 
     public String getRealm() {
         return realm;
@@ -190,10 +197,10 @@ public class Question extends PanacheEntity implements Serializable {
      */
     @NotNull
     @Size(max = 48)
-    @Pattern(regexp = REGEX_REALM, message = "Must contain valid characters for realm")
+    @Pattern(regexp = regex_realm, message = "Must contain valid characters for realm")
     @Column(name = "realm", updatable = true, nullable = false)
     @Expose
-    private String realm = DEFAULT_REALM;
+    private String realm = default_realm;
 
     /**
      * Constructor.
@@ -268,7 +275,7 @@ public class Question extends PanacheEntity implements Serializable {
             throw new InvalidParameterException("QuestionList must not be null");
         }
         this.attribute = null;
-        this.attributeCode = QUESTION_GROUP_ATTRIBUTE_CODE;
+        this.attributeCode = question_group_attribute_code;
 
         initialiseChildQuestions(childQuestions);
     }
@@ -283,7 +290,7 @@ public class Question extends PanacheEntity implements Serializable {
         this.name = aName;
         this.code = aCode;
         this.attribute = null;
-        this.attributeCode = QUESTION_GROUP_ATTRIBUTE_CODE;
+        this.attributeCode = question_group_attribute_code;
 
     }
 
@@ -370,7 +377,7 @@ public class Question extends PanacheEntity implements Serializable {
      * @return the default Code prefix for this class.
      */
     static public String getDefaultCodePrefix() {
-        return DEFAULT_CODE_PREFIX;
+        return default_code_prefix;
     }
 
     /**
@@ -554,7 +561,7 @@ public class Question extends PanacheEntity implements Serializable {
         List<QuestionQuestion> qqList = new CopyOnWriteArrayList<QuestionQuestion>(getChildQuestions());
         Collections.sort(qqList);
         String ret = "";
-        if (getAttributeCode().equals(QUESTION_GROUP_ATTRIBUTE_CODE)) {
+        if (getAttributeCode().equals(question_group_attribute_code)) {
             for (QuestionQuestion childQuestion : qqList) {
                 ret += childQuestion.getPk().getTargetCode() + ",";
             }
