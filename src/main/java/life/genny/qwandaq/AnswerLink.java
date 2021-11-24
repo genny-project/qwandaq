@@ -231,7 +231,7 @@ public class AnswerLink implements java.io.Serializable {
 		List<String> formatStrings = null;
 
 		switch (this.getAttribute().getDataType().getClassName()) {
-		case "life.genny.qwanda.entity":
+		case "life.genny.qwandaq.entity":
 			List<String> beCodeList = new CopyOnWriteArrayList<String>();
 			beCodeList.add(answer.getValue());
 			setValueBaseEntityCodeList(beCodeList);
@@ -770,7 +770,7 @@ public class AnswerLink implements java.io.Serializable {
 	public <T> T getValue() {
 		final String dataType = getAttribute().getDataType().getClassName();
 		switch (dataType) {
-		case "life.genny.qwanda.entity":
+		case "life.genny.qwandaq.entity":
 			return (T) getValueBaseEntityCodeList();
 		case "java.lang.Integer":
 		case "Integer":
@@ -809,7 +809,7 @@ public class AnswerLink implements java.io.Serializable {
 	@XmlTransient
 	public <T> void setValue(final Object value) {
 		switch (this.pk.getAttribute().getDataType().getClassName()) {
-		case "life.genny.qwanda.entity":
+		case "life.genny.qwandaq.entity":
 			setValueBaseEntityCodeList((List<String>) value);
 			break;
 		case "java.lang.Integer":
