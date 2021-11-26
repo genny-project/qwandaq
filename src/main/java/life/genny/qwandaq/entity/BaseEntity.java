@@ -118,7 +118,6 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 			@org.hibernate.annotations.Filter(name = "filterAttribute2", condition = "attributeCode =:attributeCode")
 
 	})
-
 	private Set<EntityAttribute> baseEntityAttributes = new HashSet<EntityAttribute>(0);
 
 	@XmlTransient

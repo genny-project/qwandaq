@@ -3,7 +3,6 @@ package life.genny.qwandaq.message;
 import java.io.Serializable;
 import java.util.List;
 
-
 public abstract class QMessage implements Serializable, QMessageIntf {
 
 	/**

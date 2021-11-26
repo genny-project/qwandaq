@@ -1551,10 +1551,11 @@ public class SearchEntity extends BaseEntity {
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
-	// @Override
-	// public String toString() {
-	// 	return QwandaJsonUtils.toJson(this);
-	// }
+	@Override
+	public String toString() {
+		// return QwandaJsonUtils.toJson(this);
+		return this.toString();
+	}
 
 	public Integer getPageStart(Integer defaultPageSize) {
 		Integer pageStart = getValue("SCH_PAGE_START", defaultPageSize);

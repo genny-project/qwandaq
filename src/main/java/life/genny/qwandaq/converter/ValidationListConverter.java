@@ -94,20 +94,27 @@ public class ValidationListConverter implements AttributeConverter<List<Validati
 
 	public String convertToString(final List<String> list) {
 
-		JsonArrayBuilder builder = Json.createArrayBuilder();
-		for(String item : list) {
-			builder.add(item);
-		}
-		JsonArray array = builder.build();
-		String json = array.toString();
-		return json;
+		// log.info(list);
+
+		// JsonArrayBuilder builder = Json.createArrayBuilder();
+		// for(String item : list) {
+		// 	builder.add(item);
+		// }
+		// JsonArray array = builder.build();
+		// String json = array.toString();
+		return list.toString();
 	}
 
 	public List<String> convertFromString(final String joined) {
 
-		JsonReader reader = Json.createReader(new StringReader(joined));
-		JsonArray array = reader.readArray();
-		List<String> list = (List) array;
+		List<String> list = new CopyOnWriteArrayList<String>();
+		if (joined.startsWith("[") || joined.startsWith("{")) {
+			JsonReader reader = Json.createReader(new StringReader(joined));
+			JsonArray array = reader.readArray();
+			list = (List) array;
+		} else {
+			list.add(joined);
+		}
 
 		return list;
 	}

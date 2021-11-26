@@ -75,13 +75,17 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	private static final Logger log = Logger.getLogger(EntityAttribute.class);
 
 	private static final long serialVersionUID = 1L;
+
 	@Column
 	private String baseEntityCode;
+
 	@Column
 	private String attributeCode;
+
 	@Transient
 	@Column
 	private String attributeName;
+
 	@Column
 	private Boolean readonly = false;
 	
