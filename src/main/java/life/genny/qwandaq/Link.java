@@ -67,33 +67,33 @@ public class Link implements Serializable {
    * A field that stores the human readable attributecode associated with this link.
    * <p>
    */
-  private String attributeCode;
+  public String attributeCode;
 
  
   /**
    * A field that stores the human readable targetcode associated with this link.
    * <p>
    */
-  private String targetCode;
+  public String targetCode;
 
   /**
    * A field that stores the human readable sourcecode associated with this link.
    * <p>
    */
-  private String sourceCode;
+  public String sourceCode;
 
 
   /**
    * A field that stores the human readable link Value associated with this link.
    * <p>
    */
-  private String linkValue;
+  public String linkValue;
   
-  private Double weight;
+  public Double weight;
   
-  private String childColor;
-  private String parentColor;
-  private String rule;
+  public String childColor;
+  public String parentColor;
+  public String rule;
 
   /**
    * Constructor.
@@ -101,7 +101,7 @@ public class Link implements Serializable {
    * @param none
    */
   @SuppressWarnings("unused")
-  private Link() {
+  public Link() {
     // dummy for hibernate
   }
 
