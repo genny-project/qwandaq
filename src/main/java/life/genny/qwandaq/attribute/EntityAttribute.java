@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.math.BigDecimal;
 import java.io.StringReader;
 
 import javax.persistence.AssociationOverride;
@@ -769,7 +770,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 			switch (this.getAttribute().getDataType().getClassName()) {
 			case "java.lang.Integer":
 			case "Integer":
-				setValueInteger((Integer) value);
+				if (value instanceof BigDecimal)
+					setValueInteger(((BigDecimal) value).intValue());
+				else
+					setValueInteger((Integer) value);
 				break;
 			case "java.time.LocalDateTime":
 			case "LocalDateTime":
@@ -781,7 +785,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 				break;
 			case "java.lang.Long":
 			case "Long":
-				setValueLong((Long) value);
+				if (value instanceof BigDecimal)
+					setValueLong(((BigDecimal) value).longValue());
+				else
+					setValueLong((Long) value);
 				break;
 			case "java.time.LocalTime":
 			case "LocalTime":
@@ -793,7 +800,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 				break;
 			case "java.lang.Double":
 			case "Double":
-				setValueDouble((Double) value);
+				if (value instanceof BigDecimal)
+					setValueDouble(((BigDecimal) value).doubleValue());
+				else
+					setValueDouble((Double) value);
 				break;
 			case "java.lang.Boolean":
 			case "Boolean":
@@ -838,33 +848,32 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 			return; 
 		}
 
+		if (value instanceof Money)
+			setValueMoney((Money) value);
+		else if (value instanceof Integer)
+			setValueInteger((Integer) value);
+		else if (value instanceof LocalDateTime)
+			setValueDateTime((LocalDateTime) value);
+		else if (value instanceof LocalDate)
+			setValueDate((LocalDate) value);
+		else if (value instanceof Long)
+			setValueLong((Long) value);
+		else if (value instanceof LocalTime)
+			setValueTime((LocalTime) value);
+		else if (value instanceof Double)
+			setValueDouble((Double) value);
+		else if (value instanceof Boolean)
+			setValueBoolean((Boolean) value);
+		else if (value instanceof BigDecimal)
+			setValueDouble(((BigDecimal) value).doubleValue());
+		else
+			setValueString((String) value);
 
-			if (value instanceof Money)
-				setValueMoney((Money) value);
-			else if (value instanceof Integer)
-				setValueInteger((Integer) value);
-			else if (value instanceof LocalDateTime)
-				setValueDateTime((LocalDateTime) value);
-			else if (value instanceof LocalDate)
-				setValueDate((LocalDate) value);
-			else if (value instanceof Long)
-				setValueLong((Long) value);
-			else if (value instanceof LocalTime)
-				setValueTime((LocalTime) value);
-			else if (value instanceof Double)
-				setValueDouble((Double) value);
-			else if (value instanceof Boolean)
-				setValueBoolean((Boolean) value);
-//			else if (value instanceof Range<?>)
-//				setValueDateRange((Range<LocalDate>) value);
-			else
-				setValueString((String) value);
- 
-			if (lock) {
-				this.setReadonly(true);
-			}
-
+		if (lock) {
+			this.setReadonly(true);
+		}
 	}
+
 	@JsonIgnore
 	@Transient
 	@XmlTransient
