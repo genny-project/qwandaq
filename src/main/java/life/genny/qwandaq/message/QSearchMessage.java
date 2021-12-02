@@ -9,6 +9,7 @@ public class QSearchMessage extends QMessage implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final String MESSAGE_TYPE = "SCH_MSG";
 	public SearchEntity searchEntity;
+	public String destination;
 
 	public QSearchMessage() {
 		super(MESSAGE_TYPE);
@@ -23,11 +24,20 @@ public class QSearchMessage extends QMessage implements Serializable {
 	public String toString() {
 		return "QSearchMessage [searchEntity=" + searchEntity.getCode() + "]";
 	}
+
 	public void setSearchEntity(SearchEntity searchEntity) {
 		this.searchEntity = searchEntity;
 	}
+
 	public SearchEntity getSearchEntity() {
 		return this.searchEntity;
 	}
 	
+	public void setDestination(String destination) {
+		this.destination = destination;
+	}
+
+	public String getDestination() {
+		return this.destination;
+	}
 }

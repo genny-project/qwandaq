@@ -32,6 +32,11 @@ public class QSearchBeResult implements Serializable {
 		this.total = total;
 	}
 
+	public QSearchBeResult(BaseEntity[] entities, Long total) {
+		this.entities = entities;
+		this.total = total;
+	}
+
 	/**
 	 * @param total
 	 */

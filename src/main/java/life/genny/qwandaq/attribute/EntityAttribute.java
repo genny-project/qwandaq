@@ -45,6 +45,9 @@ import javax.money.Monetary;
 
 import javax.json.Json;
 import javax.json.JsonReader;
+import javax.json.bind.annotation.JsonbCreator;
+import javax.json.bind.annotation.JsonbProperty;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.json.JsonObject;
 
 import org.jboss.logging.Logger;
@@ -241,6 +244,21 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	public EntityAttribute() {
 	}
 
+	// @JsonbCreator
+	// public EntityAttribute(@JsonbProperty("valueString") String valueString,
+	// 						@JsonbProperty("valueBoolean") Boolean valueBoolean,
+	// 						@JsonbProperty("valueInteger") String valueInteger,
+	// 						@JsonbProperty("valueDouble") String valueDouble,
+	// 						@JsonbProperty("valueLong") String valueLong,
+	// 						@JsonbProperty("valueDate") String valueDate,
+	// 						@JsonbProperty("valueDateTime") String valueDateTime,
+	// 						@JsonbProperty("valueTime") String valueTime) {
+
+	// 	if (valueBoolean != null) {
+	// 		setValueBoolean((Boolean) valueBoolean);
+	// 	}
+	// }
+
 	/**
 	 * Constructor.
 	 * 
@@ -294,6 +312,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	}
 
 	@JsonIgnore
+	@JsonbTransient
 	public EntityAttributeId getPk() {
 		return pk;
 	}
@@ -330,6 +349,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	/**
 	 * @return the created
 	 */
+	@JsonbTransient
 	public LocalDateTime getCreated() {
 		return created;
 	}
@@ -345,6 +365,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	/**
 	 * @return the updated
 	 */
+	// @JsonbTransient
 	public LocalDateTime getUpdated() {
 		return updated;
 	}
@@ -599,6 +620,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	@Transient
 	@JsonIgnore
+	@JsonbTransient
 	public Date getCreatedDate() {
 		final Date out = Date.from(created.atZone(ZoneId.systemDefault()).toInstant());
 		return out;
@@ -606,6 +628,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	@Transient
 	@JsonIgnore
+	@JsonbTransient
 	public Date getUpdatedDate() {
 		if (updated==null) return null;
 		final Date out = Date.from(updated.atZone(ZoneId.systemDefault()).toInstant());
@@ -629,6 +652,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	@JsonIgnore
 	@Transient
 	@XmlTransient
+	@JsonbProperty(nillable=true)
 	public <T> T getValue() {
 		if ((getPk()==null)||(getPk().attribute==null)) {
 			return getLoopValue();
@@ -865,7 +889,15 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		else if (value instanceof Boolean)
 			setValueBoolean((Boolean) value);
 		else if (value instanceof BigDecimal)
-			setValueDouble(((BigDecimal) value).doubleValue());
+			// NOTE: This assumes at least one will not be null and defaults to int otherwise
+			// This could cause issues with deserialisation.
+			if (this.getValueDouble() != null) {
+				setValueDouble(((BigDecimal) value).doubleValue());
+			} else if (this.getValueLong() != null) {
+				setValueLong(((BigDecimal) value).longValue());
+			} else {
+				setValueInteger(((BigDecimal) value).intValue());
+			}
 		else
 			setValueString((String) value);
 
@@ -877,6 +909,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	@JsonIgnore
 	@Transient
 	@XmlTransient
+	@JsonbTransient
 	public String getAsString() {
 		if ((getPk()==null)||(getPk().attribute==null)) {
 			return getAsLoopString();
@@ -932,6 +965,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	@JsonIgnore
 	@Transient
 	@XmlTransient
+	@JsonbTransient
 	public String getAsLoopString() {
 		String ret = "";
 		if( getValueString() != null) {
@@ -981,6 +1015,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	@JsonIgnore
 	@Transient
 	@XmlTransient
+	@JsonbTransient
 	public  <T> T getLoopValue() {
 		if (getValueString() != null) {
 			return  (T) getValueString();
@@ -1185,6 +1220,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	@JsonIgnore
 	@Transient
 	@XmlTransient
+	@JsonbTransient
 	public <T> T getObject() {
 
 		if (getValueInteger() != null) {
@@ -1232,6 +1268,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	@JsonIgnore
 	@Transient
 	@XmlTransient
+	@JsonbTransient
 	public String getObjectAsString() {
 
 		if (getValueInteger() != null) {

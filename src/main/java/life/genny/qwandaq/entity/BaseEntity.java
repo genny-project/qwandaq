@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Cacheable;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -134,6 +135,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	@XmlTransient
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.source")
 	@Cascade({ CascadeType.MERGE, CascadeType.DELETE })
+	@JsonbTransient
 	private Set<AnswerLink> answers = new HashSet<AnswerLink>(0);
 
 	@XmlTransient
@@ -218,6 +220,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return the links
 	 */
 	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonbTransient
 	public Set<EntityEntity> getLinks() {
 		return links;
 	}
@@ -879,11 +882,13 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	}
 
 	@Transient
+	@JsonbTransient
 	public String[] getPushCodes() {
 		return getPushCodes(new String[0]);
 	}
 
 	@Transient
+	@JsonbTransient
 	public String[] getPushCodes(String... initialCodes) {
 		// go through all the links
 		Set<String> codes = new HashSet<String>();

@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
 import javax.persistence.AttributeOverride;
@@ -77,6 +78,7 @@ public class EntityEntity implements java.io.Serializable, Comparable<Object> {
 
   @EmbeddedId
 	@Column
+	@JsonbTransient
   private EntityEntityId pk = new EntityEntityId();
 
  
@@ -671,7 +673,11 @@ public <T> void setValue(final Object value) {
 @Transient
 @XmlTransient
 public String getAsString() {
-	final String dataType = getPk().getAttribute().getDataType().getClassName();
+	String dataType = "";
+	try {
+		dataType = getPk().getAttribute().getDataType().getClassName();
+	} catch (Exception e) {
+	}
 	switch (dataType) {
 	case "java.lang.Integer":
 		return "" + getValueInteger();

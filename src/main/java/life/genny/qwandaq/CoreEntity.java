@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -198,6 +199,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	 * @return the created
 	 */
 	@XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+	@JsonbTransient
 	public LocalDateTime getCreated() {
 		return created;
 	}
@@ -214,6 +216,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	/**
 	 * @return the updated
 	 */
+	@JsonbTransient
 	public LocalDateTime getUpdated() {
 		return updated;
 	}
@@ -255,6 +258,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 
 	@Transient
 	@JsonIgnore
+	@JsonbTransient
 	public Date getCreatedDate() {
 		final Date out = Date.from(created.atZone(ZoneId.systemDefault()).toInstant());
 		return out;
@@ -262,6 +266,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 
 	@Transient
 	@JsonIgnore
+	@JsonbTransient
 	public Date getUpdatedDate() {
 		if (updated != null) {
 			final Date out = Date.from(updated.atZone(ZoneId.systemDefault()).toInstant());
