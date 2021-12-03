@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.CodedEntity;
 import life.genny.qwandaq.datatype.DataType;
 
@@ -80,7 +80,7 @@ uniqueConstraints = @UniqueConstraint(columnNames = {"code", "realm"}))
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-
+@RegisterForReflection
 public class Attribute extends CodedEntity implements Serializable {
 	
 	/**

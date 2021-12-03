@@ -52,6 +52,8 @@ import javax.json.JsonObject;
 
 import org.jboss.logging.Logger;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import life.genny.qwandaq.converter.MoneyConverter;
@@ -72,6 +74,7 @@ uniqueConstraints = @UniqueConstraint(columnNames = {"attributeCode","baseEntity
 		@AssociationOverride(name = "pk.attribute", joinColumns = @JoinColumn(name = "ATTRIBUTE_ID")) }
 		)
 
+@RegisterForReflection
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class EntityAttribute implements java.io.Serializable, Comparable<Object> {

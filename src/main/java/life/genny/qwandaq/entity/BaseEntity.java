@@ -39,6 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.jboss.logging.Logger;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -93,6 +95,7 @@ import life.genny.qwandaq.exception.BadDataException;
 				@ParamDef(name = "attributeCode", type = "string") }) })
 
 @Cacheable
+@RegisterForReflection
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 
