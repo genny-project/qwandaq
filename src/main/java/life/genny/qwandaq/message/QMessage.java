@@ -3,6 +3,9 @@ package life.genny.qwandaq.message;
 import java.io.Serializable;
 import java.util.List;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public abstract class QMessage implements Serializable, QMessageIntf {
 
 	/**

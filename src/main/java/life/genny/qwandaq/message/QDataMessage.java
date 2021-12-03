@@ -1,6 +1,8 @@
 package life.genny.qwandaq.message;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
+@RegisterForReflection
 public abstract class QDataMessage extends QMessage implements QDataMessageIntf {
 
   @Override
