@@ -1,6 +1,9 @@
 package life.genny.qwandaq;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -8,6 +11,7 @@ import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.entity.BaseEntity;
 
 @Embeddable
+@RegisterForReflection
 public class AnswerLinkId implements java.io.Serializable {
 
   @JsonIgnore
