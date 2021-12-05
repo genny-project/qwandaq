@@ -39,6 +39,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.jboss.logging.Logger;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import com.cdi.crud.infra.model.CoreEntityInterface;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -65,6 +67,7 @@ import life.genny.qwandaq.datatype.LocalDateTimeAdapter;
  */
 
 @MappedSuperclass
+@RegisterForReflection
 public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Serializable, Comparable<Object> {
 
 	private static final long serialVersionUID = 1L;
