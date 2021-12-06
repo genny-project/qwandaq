@@ -6,9 +6,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import life.genny.qwandaq.entity.BaseEntity;
 
+@RegisterForReflection
 public class QSearchBeResult implements Serializable {
 	/**
 	 * 
