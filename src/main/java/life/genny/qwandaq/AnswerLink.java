@@ -27,6 +27,9 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import org.hibernate.annotations.Type;
 
 import org.javamoney.moneta.Money;
@@ -52,6 +55,7 @@ import life.genny.qwandaq.entity.BaseEntity;
 
 @AssociationOverrides({ @AssociationOverride(name = "pk.source", joinColumns = @JoinColumn(name = "SOURCE_ID")),
 		@AssociationOverride(name = "pk.target", joinColumns = @JoinColumn(name = "TARGET_ID")) })
+@RegisterForReflection
 public class AnswerLink implements java.io.Serializable {
 
 	private static final Logger log = Logger.getLogger(AnswerLink.class);

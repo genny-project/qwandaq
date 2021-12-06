@@ -31,6 +31,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 /**
  * A Link object
  * is used as a means of storing information from a source to a target attribute. This link
@@ -53,6 +55,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Embeddable
+@RegisterForReflection
 public class Link implements Serializable {
 	
 	static public String RULE_PARENT_OVERRIDE = "PO";

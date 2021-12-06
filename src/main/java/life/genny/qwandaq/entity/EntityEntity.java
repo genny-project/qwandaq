@@ -33,6 +33,9 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.time.DateUtils;
 import org.jboss.logging.Logger;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import org.hibernate.annotations.Type;
 import org.javamoney.moneta.Money;
 
@@ -49,6 +52,7 @@ import life.genny.qwandaq.converter.MoneyConverter;
 @AssociationOverrides({
     @AssociationOverride(name = "pk.source", joinColumns = @JoinColumn(name = "SOURCE_ID"))})
 
+@RegisterForReflection
 public class EntityEntity implements java.io.Serializable, Comparable<Object> {
 
 	/**

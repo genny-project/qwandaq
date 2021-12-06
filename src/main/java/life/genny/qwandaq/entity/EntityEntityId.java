@@ -7,12 +7,15 @@ import javax.persistence.ManyToOne;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import life.genny.qwandaq.attribute.Attribute;
 
 @Embeddable
+@RegisterForReflection
 public class EntityEntityId implements java.io.Serializable {
 
 	/**
