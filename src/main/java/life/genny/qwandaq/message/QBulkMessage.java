@@ -5,8 +5,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 
+@RegisterForReflection
 public class QBulkMessage implements Serializable {
 
 	/**
