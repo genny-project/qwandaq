@@ -31,10 +31,6 @@ import life.genny.qwandaq.models.GennyToken;
 public class KeycloakUtils {
 
 	private static final Logger log = Logger.getLogger(KeycloakUtils.class);
-
-	@Inject
-	EntityManager entityManager;
-
 	Jsonb jsonb = JsonbBuilder.create();
 
 	public KeycloakUtils() {};

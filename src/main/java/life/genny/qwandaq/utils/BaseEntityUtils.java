@@ -12,6 +12,7 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -27,14 +28,11 @@ import life.genny.qwandaq.entity.BaseEntity;
 public class BaseEntityUtils implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
 	private static final Logger log = Logger.getLogger(BaseEntityUtils.class);
-
 	private String token;
 	private String realm;
 	private GennyToken gennyToken;
 	private GennyToken serviceToken;
-
 
 	public BaseEntityUtils(GennyToken serviceToken, GennyToken userToken) {
 		this(userToken);
@@ -348,5 +346,16 @@ public class BaseEntityUtils implements Serializable {
 		} else {
 			return null;
 		}
+	}
+
+	public List<BaseEntity> convertCodesToBaseEntityArray(String strArr) {
+
+		String[] arr = strArr.replace("\"", "").replace("[", "").replace("]", "").replace(" ", "").split(",");
+        List<BaseEntity> entityList = Arrays.stream(arr)
+			.filter(item -> !item.isEmpty())
+			.map(item -> (BaseEntity) getBaseEntityByCode(item))
+			.collect(Collectors.toList());
+
+		return entityList;
 	}
 }
