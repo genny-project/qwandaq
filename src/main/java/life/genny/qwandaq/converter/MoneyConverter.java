@@ -29,6 +29,9 @@ public class MoneyConverter implements AttributeConverter<Money, String> {
 	@Override
 	public Money convertToEntityAttribute(String moneyStr) {
 
+		if (moneyStr.equals("null")) {
+			return null;
+		}
 		JsonReader reader = Json.createReader(new StringReader(moneyStr));
 		JsonObject obj = reader.readObject();
 
