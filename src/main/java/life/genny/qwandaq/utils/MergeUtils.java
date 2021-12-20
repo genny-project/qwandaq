@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.lang.invoke.MethodHandles;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -290,6 +291,14 @@ public class MergeUtils {
 	}
 	
 	public static String getFormattedDateTimeString(LocalDateTime dateToBeFormatted, String format) {
+		if(dateToBeFormatted != null && format != null) {
+			DateTimeFormatter dateformat = DateTimeFormatter.ofPattern(format);
+			return dateToBeFormatted.format(dateformat);
+		}
+		return null;
+	}
+
+	public static String getFormattedZonedDateTimeString(ZonedDateTime dateToBeFormatted, String format) {
 		if(dateToBeFormatted != null && format != null) {
 			DateTimeFormatter dateformat = DateTimeFormatter.ofPattern(format);
 			return dateToBeFormatted.format(dateformat);
