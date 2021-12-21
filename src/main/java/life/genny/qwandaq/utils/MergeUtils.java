@@ -127,9 +127,12 @@ public class MergeUtils {
 							BaseEntity be = (BaseEntity)value;
 							String attributeCode = entityArr[1];
 
+							if (attributeCode.equals("PRI_CODE")) {
+								return be.getCode();
+							}
+
 							Object attributeValue = be.getValue(attributeCode, null);
 							log.info("context: " + keyCode + ", attr: " + attributeCode + ", value: " + attributeValue);
-
 
 							Matcher matchFormat = null;
 							if (entityArr != null && entityArr.length > 2) {
@@ -151,34 +154,32 @@ public class MergeUtils {
 								/* If the date-related mergeString needs to formatter to a particultar format -> we split the date-time related merge text to merge into 3 components: BE.PRI.TimeDateformat... becomes [BE, PRI...] */
 								/* 1st component -> BaseEntity code ; 2nd component -> attribute code ; 3rd component -> (date-Format) */
 								if (matchFormat != null && matchFormat.find()) {
-									log.info("This datetime attribute code ::"+attributeCode+ " needs to be formatted and the format is ::"+entityArr[2]);
+									log.info("This datetime attribute code :: "+attributeCode+ " needs to be formatted and the format is ::" + entityArr[2]);
 										return getFormattedDateTimeString((LocalDateTime) attributeValue, matchFormat.group(1));
 								} else {
-									log.info("This DateTime attribute code ::"+attributeCode+ " needs no formatting");
+									log.info("This DateTime attribute code :: "+attributeCode+ " needs no formatting");
 									return (LocalDateTime) attributeValue;
 								}
 
 							} else if (attributeValue instanceof java.time.LocalDate) {
 
 								if (matchFormat != null && matchFormat.find()) {
-									log.info("This date attribute code ::"+attributeCode+ " needs to be formatted and the format is ::"+entityArr[2]);
+									log.info("This date attribute code :: "+attributeCode+ " needs to be formatted and the format is :: " + entityArr[2]);
 									return getFormattedDateString((LocalDate) attributeValue, matchFormat.group(1));
 								} else {
-									log.info("This Date attribute code ::"+attributeCode+ " needs no formatting");
+									log.info("This Date attribute code :: "+attributeCode+ " needs no formatting");
 									return (LocalDate) attributeValue;
 								}
 
-							} else if (attributeValue instanceof java.lang.String){
+							} else if (attributeValue instanceof java.lang.String) {
 								String result = null;
 								if (matchFormat != null && matchFormat.find()) {
 									result  =  getFormattedString((String) attributeValue, matchFormat.group(1));
-									log.info("This String attribute code ::" + attributeCode
-									+ " needs to be formatted " + "and the format is ::" + entityArr[2]
-									+ ", result is:" + result);
+									log.info("This String attribute code :: " + attributeCode + " needs to be formatted and the format is :: "
+											+ entityArr[2] + ", result is: " + result);
 								} else {
 									result =  getBaseEntityAttrValueAsString(be, attributeCode);
-									log.info("This String attribute code ::" + attributeCode
-									+ " needs no formatting, result is:" + result);
+									log.info("This String attribute code :: " + attributeCode + " needs no formatting, result is: " + result);
 								}
 								return result;
 							} else if (attributeValue instanceof java.lang.Boolean) {
@@ -200,7 +201,7 @@ public class MergeUtils {
 				}
 
 			} catch (Exception e) {
-				log.error("ERROR",e);
+				log.error("ERROR", e);
 			}
 		
 		}
