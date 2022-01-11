@@ -36,10 +36,16 @@ public class BaseEntityUtils implements Serializable {
 	private String token;
 	private String realm;
 	private GennyToken gennyToken;
+	private GennyToken serviceToken;
 
 	public BaseEntityUtils(String token, String realm) {
 		this(new GennyToken(token));
 		this.realm = realm;
+	}
+
+	public BaseEntityUtils(GennyToken serviceToken, GennyToken userToken) {
+		this(userToken);
+		this.serviceToken = serviceToken;
 	}
 
 	public BaseEntityUtils(GennyToken gennyToken) {
@@ -93,6 +99,25 @@ public class BaseEntityUtils implements Serializable {
 	public void setGennyToken(GennyToken gennyToken) {
 		this.gennyToken = gennyToken;
 	}
+
+	/**
+	 * Get the ServiceToken
+	 *
+	 * @return 	The serviceToken
+	 */
+	public GennyToken getServiceToken() {
+		return serviceToken;
+	}
+
+	/**
+	 * Set the ServiceToken
+	 *
+	 * @param serviceToken
+	 */
+	public void setServiceToken(GennyToken serviceToken) {
+		this.serviceToken = serviceToken;
+	}
+
 
 	/**
 	 * Get a string representation of the instance
