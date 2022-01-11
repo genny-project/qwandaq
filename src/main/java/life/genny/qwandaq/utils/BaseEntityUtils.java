@@ -162,15 +162,14 @@ public class BaseEntityUtils implements Serializable {
 	public List<BaseEntity> getBaseEntitys(SearchEntity searchBE) {
 
 		String fyodorUrl = "http://localhost:4242";
-
-		String uri = fyodorUrl + "/api/search";
-
+		String uri = fyodorUrl + "/api/search/fetch";
 		String json = jsonb.toJson(searchBE);
 
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
 			.uri(URI.create(uri))
 			.setHeader("Content-Type", "application/json")
+			.setHeader("Authorization", "Bearer " + this.token)
 			.POST(HttpRequest.BodyPublishers.ofString(json))
 			.build();
 
@@ -185,9 +184,11 @@ public class BaseEntityUtils implements Serializable {
 		if (body != null) {
 			try {
 				QSearchBeResult results = jsonb.fromJson(body, QSearchBeResult.class);
+				log.info(results.getTotal());
+				log.info(results.getEntities());
 				return Arrays.asList(results.getEntities());
 			} catch (Exception e) {
-				log.error(e.getStackTrace());
+				log.error(e);
 			}
 		}
 

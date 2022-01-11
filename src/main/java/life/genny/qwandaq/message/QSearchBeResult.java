@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
@@ -23,18 +24,16 @@ public class QSearchBeResult implements Serializable {
 	// Users may want to just return the Entities instead of 
 	// A list of codes
 	BaseEntity[] entities;
+
+	public QSearchBeResult() {}
 	
-	
-	/**
-	 * @param codes
-	 * @param total
-	 */
 	public QSearchBeResult(List<String> codes, Long total) {
 		this.codes = codes.toArray(new String[0]);
 		this.total = total;
 	}
 
 	public QSearchBeResult(BaseEntity[] entities, Long total) {
+		this.codes = Stream.of(entities).map(x -> x.getCode()).collect(Collectors.toList()).toArray(String[]::new);
 		this.entities = entities;
 		this.total = total;
 	}

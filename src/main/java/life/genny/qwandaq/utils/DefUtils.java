@@ -47,7 +47,6 @@ public class DefUtils {
 
 	public void initializeDefs() {
 
-		GennyToken gennyToken = this.beUtils.getGennyToken();
 		String realm = this.beUtils.getGennyToken().getRealm();
 
 		SearchEntity searchBE = new SearchEntity("SBE_DEF", "DEF check")
