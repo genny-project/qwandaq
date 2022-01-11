@@ -1,53 +1,62 @@
 package life.genny.qwandaq.utils;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-import javax.json.bind.JsonbConfig;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.attribute.Attribute;
-import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.models.GennyToken;
 import life.genny.qwandaq.models.GennySettings;
 
+@RegisterForReflection
 public class QwandaUtils implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(QwandaUtils.class);
 
-    static public Map<String,Map<String, Attribute>> attributes = new ConcurrentHashMap<>();
-    static public Map<String,Map<String,BaseEntity>> defs = new ConcurrentHashMap<>();
+    private Map<String, Map<String, Attribute>> attributes = new ConcurrentHashMap<>();
 
-	static Jsonb jsonb = JsonbBuilder.create();
+	private static Jsonb jsonb = JsonbBuilder.create();
+	private GennyToken gennyToken;
 
-    public static Attribute getAttribute(final String attributeCode, GennyToken gennyToken) {
+	public QwandaUtils() {}
 
-    	String realm = gennyToken.getRealm();
+	public QwandaUtils(GennyToken gennyToken) {
+		this.gennyToken = gennyToken;
+		loadAllAttributes();
+	}
 
-    	if (attributes.get(gennyToken.getRealm()) == null) {
-    		loadAllAttributes(gennyToken);
+	/**
+	* Get an attribute from the in memory attribute map. If realm not found, it 
+	* will try to fetch attributes from the DB.
+	*
+	* @param attributeCode
+	* @param gennyToken
+	* @return
+	 */
+    public Attribute getAttribute(final String attributeCode) {
+
+    	String realm = this.gennyToken.getRealm();
+
+    	if (this.attributes.get(gennyToken.getRealm()) == null) {
+    		loadAllAttributes();
     	}
 
-        Attribute attribute = attributes.get(realm).get(attributeCode);
+        Attribute attribute = this.attributes.get(realm).get(attributeCode);
 
 		if (attribute == null) {
 			log.error("Bad Attribute in Map for realm " +realm + " and code " + attributeCode);
@@ -56,9 +65,14 @@ public class QwandaUtils implements Serializable {
         return attribute;
     }
 
-	public static void loadAllAttributes(GennyToken gennyToken) {
+	/**
+	* Load all attributes into the in memory map.
+	*
+	* @return
+	 */
+	public void loadAllAttributes() {
 
-		String realm = gennyToken.getRealm();
+		String realm = this.gennyToken.getRealm();
 
 		log.info("About to load all attributes for realm " + realm);
 
@@ -70,10 +84,10 @@ public class QwandaUtils implements Serializable {
 		}
 
 		// Check for existing map
-		if (!attributes.containsKey(realm)) {
-			attributes.put(realm, new ConcurrentHashMap<String,Attribute>());
+		if (!this.attributes.containsKey(realm)) {
+			this.attributes.put(realm, new ConcurrentHashMap<String,Attribute>());
 		}
-		Map<String,Attribute> attributeMap = attributes.get(realm);
+		Map<String,Attribute> attributeMap = this.attributes.get(realm);
 
 		// Insert attributes into map
 		for (Attribute attribute : attributeList) {
@@ -86,8 +100,7 @@ public class QwandaUtils implements Serializable {
 	/**
 	* Fetch all attributes from the database
 	*
-	* @param code
-	* @return	The corresponding BaseEntity, or null if not found.
+	* @return	All {@link Attribute} objects found in the DB
 	 */
 	public static List<Attribute> fetchAttributesFromDB() {
 

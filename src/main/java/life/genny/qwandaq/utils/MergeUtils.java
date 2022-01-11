@@ -1,5 +1,7 @@
 package life.genny.qwandaq.utils;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.invoke.MethodHandles;
@@ -26,6 +28,7 @@ import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.utils.BaseEntityUtils;
 
+@RegisterForReflection
 public class MergeUtils {
 	
 	private static final Logger log = Logger.getLogger(MergeUtils.class);

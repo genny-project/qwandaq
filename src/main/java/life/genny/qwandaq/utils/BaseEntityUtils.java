@@ -1,5 +1,7 @@
 package life.genny.qwandaq.utils;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
@@ -16,7 +18,6 @@ import java.util.stream.Collectors;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-import javax.json.bind.JsonbConfig;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
@@ -24,20 +25,17 @@ import org.jboss.logging.Logger;
 import life.genny.qwandaq.models.GennyToken;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.entity.SearchEntity;
+import life.genny.qwandaq.message.QSearchBeResult;
 
+@RegisterForReflection
 public class BaseEntityUtils implements Serializable {
 
-	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(BaseEntityUtils.class);
+	private Jsonb jsonb = JsonbBuilder.create();
 	private String token;
 	private String realm;
 	private GennyToken gennyToken;
-	private GennyToken serviceToken;
-
-	public BaseEntityUtils(GennyToken serviceToken, GennyToken userToken) {
-		this(userToken);
-		this.serviceToken = serviceToken;
-	}
 
 	public BaseEntityUtils(String token, String realm) {
 		this(new GennyToken(token));
@@ -48,7 +46,6 @@ public class BaseEntityUtils implements Serializable {
 		this.token = gennyToken.getToken();
 		this.realm = gennyToken.getRealm();
 		this.gennyToken = gennyToken;
-		this.serviceToken = gennyToken;
 	}
 
 	/**
@@ -98,29 +95,6 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	 * Get The ServiceToken
-	 *
-	 * @return 	The serviceToken
-	 */
-	public GennyToken getServiceToken() {
-		return serviceToken;
-	}
-
-	/**
-	 * Set the ServiceToken
-	 *
-	 * @param serviceToken
-	 */
-	public void setServiceToken(GennyToken serviceToken) {
-		if (serviceToken == null) {
-			log.error("ServiceToken passed is NULL!");
-			this.serviceToken = this.gennyToken;
-			return;
-		}
-		this.serviceToken = serviceToken;
-	}
-
-	/**
 	 * Get a string representation of the instance
 	 *
 	 * @return Instance as string
@@ -132,10 +106,20 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	* Fetch A BaseEntity using the code
+	 * Update the {@link GennyToken} of this utils instance. Unlike the standard 
+	 * setter method, this will also update the token and the realm.
+	 */
+	public void updateGennyToken(GennyToken gennyToken) {
+		this.token = gennyToken.getToken();
+		this.realm = gennyToken.getRealm();
+		this.gennyToken = gennyToken;
+	}
+
+	/**
+	* Fetch A {@link BaseEntity} using a code.
 	*
-	* @param code
-	* @return	The corresponding BaseEntity, or null if not found.
+	* @param code	The code of the {@link BaseEntity} to fetch
+	* @return		The corresponding BaseEntity, or null if not found.
 	 */
 	public BaseEntity getBaseEntityByCode(String code) {
 
@@ -159,7 +143,6 @@ public class BaseEntityUtils implements Serializable {
 
 		if (body != null) {
 			try {
-				Jsonb jsonb = JsonbBuilder.create(new JsonbConfig());
 				BaseEntity be = jsonb.fromJson(body, BaseEntity.class);
 				return be;
 			} catch (Exception e) {
@@ -168,7 +151,47 @@ public class BaseEntityUtils implements Serializable {
 		}
 
 		return null;
+	}
 
+	/**
+	* Fetch a list of {@link BaseEntity} objects using a {@link SearchEntity} object.
+	*
+	* @param searchBE	A {@link SearchEntity} object used to determine the results
+	* @return			A list of {@link BaseEntity} objects
+	 */
+	public List<BaseEntity> getBaseEntitys(SearchEntity searchBE) {
+
+		String fyodorUrl = "http://localhost:4242";
+
+		String uri = fyodorUrl + "/api/search";
+
+		String json = jsonb.toJson(searchBE);
+
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+			.uri(URI.create(uri))
+			.setHeader("Content-Type", "application/json")
+			.POST(HttpRequest.BodyPublishers.ofString(json))
+			.build();
+
+		String body = null;
+		try {
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			body = response.body();
+		} catch (IOException | InterruptedException e) {
+			log.error(e.getLocalizedMessage());
+		}
+
+		if (body != null) {
+			try {
+				QSearchBeResult results = jsonb.fromJson(body, QSearchBeResult.class);
+				return Arrays.asList(results.getEntities());
+			} catch (Exception e) {
+				log.error(e.getStackTrace());
+			}
+		}
+
+		return null;
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package life.genny.qwandaq.utils;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -32,7 +34,7 @@ import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.models.GennyToken;
 import life.genny.qwandaq.models.ANSIColour;
 
-
+@RegisterForReflection
 public class KeycloakUtils {
 
 	private static final Logger log = Logger.getLogger(KeycloakUtils.class);

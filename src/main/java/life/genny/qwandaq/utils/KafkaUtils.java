@@ -1,5 +1,7 @@
 package life.genny.qwandaq.utils;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import java.io.Serializable;
 
 import javax.json.bind.Jsonb;
@@ -9,6 +11,7 @@ import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.intf.KafkaInterface;
 
+@RegisterForReflection
 public class KafkaUtils implements Serializable {
 
 	private static final long serialVersionUID = 1L;
