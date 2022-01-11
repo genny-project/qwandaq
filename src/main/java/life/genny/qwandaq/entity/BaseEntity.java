@@ -901,7 +901,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 			//	if (ea.getAttributeCode().startsWith("LNK_")) {
 					String value = ea.getValueString();
 					if (value != null) {
-						if (value.startsWith("[")) {
+						if (value.startsWith("[") && !value.equals("[]")) {
 							value = value.substring(2, value.length() - 2);
 						}
 						if (value.startsWith("PER")||(value.startsWith("CPY"))) {
