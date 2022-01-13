@@ -52,7 +52,7 @@ public class DefUtils {
 		SearchEntity searchBE = new SearchEntity("SBE_DEF", "DEF check")
 			.addSort("PRI_NAME", "Created", SearchEntity.Sort.ASC)
 			.addFilter("PRI_CODE", SearchEntity.StringFilter.LIKE, "DEF_%")
-			.addColumn("PRI_CODE", "Name")
+			.addColumn("*", "All Columns")
 			.setPageStart(0)
 			.setPageSize(1000);
 

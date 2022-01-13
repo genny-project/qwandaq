@@ -209,8 +209,6 @@ public class BaseEntityUtils implements Serializable {
 		if (body != null) {
 			try {
 				QSearchBeResult results = jsonb.fromJson(body, QSearchBeResult.class);
-				log.info(results.getTotal());
-				log.info(results.getEntities());
 				return Arrays.asList(results.getEntities());
 			} catch (Exception e) {
 				log.error(e);

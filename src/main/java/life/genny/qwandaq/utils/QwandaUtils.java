@@ -25,7 +25,6 @@ import life.genny.qwandaq.models.GennySettings;
 @RegisterForReflection
 public class QwandaUtils implements Serializable {
 
-	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(QwandaUtils.class);
 
     private Map<String, Map<String, Attribute>> attributes = new ConcurrentHashMap<>();
