@@ -26,15 +26,16 @@ import javax.json.bind.JsonbBuilder;
 
 import org.jboss.logging.Logger;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@RegisterForReflection
 public class GennyToken implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
@@ -47,28 +48,24 @@ public class GennyToken implements Serializable {
 	Set<String> userRoles = new HashSet<String>();
 
 	public GennyToken(final String token) {
+
 		if ((token != null) && (!token.isEmpty())) {
 			// Getting decoded token in Hash Map from QwandaUtils
 			adecodedTokenMap = getJsonMap(token);
+
 			if (adecodedTokenMap == null) {
-
 				log.error("Token is not able to be decoded in GennyToken ..");
+
 			} else {
-
 				// Extracting realm name from iss value
-
 				String realm = null;
 				if (adecodedTokenMap.get("iss") != null) {
 					String[] issArray = adecodedTokenMap.get("iss").toString().split("/");
 					realm = issArray[issArray.length - 1];
 				} else if (adecodedTokenMap.get("azp") != null) {
-					realm = (adecodedTokenMap.get("azp").toString()); // clientid
+					// clientid
+					realm = (adecodedTokenMap.get("azp").toString());
 				}
-//				if ((realm.equals("alyson"))) {
-//					String[] issArray = adecodedTokenMap.get("iss").toString().split("/");
-//					realm = issArray[issArray.length-1];
-//					//realm = (adecodedTokenMap.get("aud").toString()); // handle non Keycloak 6+
-//				}
 
 				// Adding realm name to the decoded token
 				adecodedTokenMap.put("realm", realm);
@@ -77,16 +74,15 @@ public class GennyToken implements Serializable {
 				String uuid = adecodedTokenMap.get("sub").toString();
 				String username = (String) adecodedTokenMap.get("preferred_username");
 				String normalisedUsername = getNormalisedUsername(username);
-				this.userUUID = "PER_" + this.getUuid().toUpperCase(); // normalisedUsername.toUpperCase();
+				this.userUUID = "PER_" + this.getUuid().toUpperCase();
+
 				if ("service".equals(username)) {
 					this.userCode = "PER_SERVICE";
 				} else {
-					this.userCode = userUUID; // "PER_" + normalisedUsername.toUpperCase();
-												// //normalisedUsername.toUpperCase();
+					this.userCode = userUUID;
 				}
 				setupRoles();
 			}
-
 		} else {
 			log.error("Token is null or zero length in GennyToken ..");
 		}
@@ -101,102 +97,6 @@ public class GennyToken implements Serializable {
 			this.userCode = code;
 		}
 	}
-
-//	public GennyToken(final String code, final String id, final String issuer, final String subject, final long ttl,
-//			final String secret, final String realm, final String username, final String name, final String role) {
-//
-//		this(code, id, issuer, subject, ttl, secret, realm, username, name, role,
-//				LocalDateTime.now().plusSeconds(24 * 60 * 60)); // 1 day expiry
-//	}
-
-//	public GennyToken(final String code, final String id, final String issuer, final String subject, final long ttl,
-//			final String secret, final String realm, final String username, final String name, final String role,
-//			final LocalDateTime expiryDateTime) {
-//		adecodedTokenMap = new HashMap<String, Object>();
-//		adecodedTokenMap.put("preferred_username", username);
-//		adecodedTokenMap.put("name", name);
-//		if (username.contains("@")) {
-//			adecodedTokenMap.put("email", username);
-//		} else {
-//			adecodedTokenMap.put("email", username + "@gmail.com");
-//		}
-//		String[] names = name.split(" ");
-//		adecodedTokenMap.put("given_name", names[0].trim());
-//		adecodedTokenMap.put("family_name", names[1].trim());
-//		adecodedTokenMap.put("jti", UUID.randomUUID().toString().substring(0, 20));
-//		adecodedTokenMap.put("sub", id);
-//		adecodedTokenMap.put("realm", realm);
-//		adecodedTokenMap.put("azp", realm);
-//		adecodedTokenMap.put("aud", realm);
-//		// adecodedTokenMap.put("realm_access", "{ \"roles\": [\"user\",\"" + role +
-//		// "\"] }");
-//		adecodedTokenMap.put("exp", expiryDateTime.atZone(ZoneId.of("UTC")).toEpochSecond());
-//		adecodedTokenMap.put("iat", LocalDateTime.now().atZone(ZoneId.of("UTC")).toEpochSecond());
-//		adecodedTokenMap.put("auth_time", LocalDateTime.now().atZone(ZoneId.of("UTC")).toEpochSecond());
-//		adecodedTokenMap.put("session_state", UUID.randomUUID().toString().substring(0, 32)); // TODO set size ot same
-//																								// as keycloak
-//
-//		userRoles = new HashSet<String>();
-////		  "realm_access": {
-////		    "roles": [
-////		      "test",
-////		      "dev",
-////		      "offline_access",
-////		      "admin",
-////		      "uma_authorization",
-////		      "user",
-////		      "supervisor"
-////		    ]
-////		  },
-//
-//		ArrayJson rj = new ArrayJson();
-//		userRoles.add("user");
-//		rj.roles.add("user");
-//		String[] roles = role.split(",:;");
-//		for (String r : roles) {
-//			userRoles.add(r);
-//			rj.roles.add(r);
-//		}
-//
-//		adecodedTokenMap.put("realm_access", rj);
-//
-//		String jwtToken = null;
-//
-//		jwtToken = SecurityUtils.createJwt(id, issuer, subject, ttl, secret, adecodedTokenMap);
-//		token = jwtToken;
-//		this.realm = realm;
-//		if ("service".equals(username)) {
-//			this.userCode = "PER_SERVICE";
-//		} else {
-////		String normalisedUsername = QwandaUtils.getNormalisedUsername(id);
-////		if (normalisedUsername.toUpperCase().startsWith("PER_")) {
-////			this.userCode = normalisedUsername.toUpperCase();
-////		} else {
-//			this.userCode = "PER_" + id.toUpperCase();
-////		}
-//		}
-//
-//		this.code = code;
-//		setupRoles();
-//	}
-
-//	public GennyToken(final String code, final String realm, final String username, final String name,
-//			final String role) {
-//		this(code, "ABBCD", "Genny Project", "Test JWT", 100000, "IamASecret", realm, username, name, role,
-//				LocalDateTime.now().plusSeconds(24 * 60 * 60));
-//	}
-//
-//	public GennyToken(final String uuid, final String code, final String realm, final String username,
-//			final String name, final String role, LocalDateTime expiryDateTime) {
-//		this(code, uuid, "Genny Project", "Test JWT", 100000, "IamASecret", realm, username, name, role,
-//				expiryDateTime);
-//	}
-//
-//	public GennyToken(final String code, final String realm, final String username, final String name,
-//			final String role, LocalDateTime expiryDateTime) {
-//		this(code, "ABBCD", "Genny Project", "Test JWT", 100000, "IamASecret", realm, username, name, role,
-//				expiryDateTime);
-//	}
 
 	public String getToken() {
 		return token;
@@ -269,7 +169,6 @@ public class GennyToken implements Serializable {
 			Integer port = uri.getPort();
 			return proto + "://" + domain + ":" + port;
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "http://keycloak.genny.life";
@@ -288,9 +187,14 @@ public class GennyToken implements Serializable {
 	 */
 	public String getUserCode() {
 		return userCode;
-		// return "PER_"+this.userUUID.toUpperCase();
 	}
 
+	/**
+	* Set the userCode
+	*
+	* @param userCode
+	* @return
+	 */
 	public String setUserCode(String userCode) {
 		return this.userCode = userCode;
 	}
@@ -332,8 +236,9 @@ public class GennyToken implements Serializable {
 		return diff.intValue();
 	}
 
-	// JWT Issue DateTime
-
+	/**
+	* @return 	the JWT Issue datetime object
+	 */
 	public LocalDateTime getiatDateTime() {
 		Long iat_timestamp = ((Number) adecodedTokenMap.get("iat")).longValue();
 		LocalDateTime iatTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(iat_timestamp),
@@ -341,8 +246,9 @@ public class GennyToken implements Serializable {
 		return iatTime;
 	}
 
-	// Unique token id
-
+	/**
+	* @return 	the unique token id
+	 */
 	public String getUniqueId() {
 		return (String) adecodedTokenMap.get("jti");
 	}
@@ -396,6 +302,9 @@ public class GennyToken implements Serializable {
 		return userRoles;
 	}
 
+	/**
+	* @return the realm and usercode concatenated
+	 */
 	public String getRealmUserCode() {
 		return getRealm() + "+" + getUserCode();
 	}

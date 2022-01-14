@@ -22,6 +22,7 @@ import javax.json.bind.JsonbBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 
+import life.genny.qwandaq.models.GennySettings;
 import life.genny.qwandaq.models.GennyToken;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.entity.BaseEntity;
@@ -186,8 +187,8 @@ public class BaseEntityUtils implements Serializable {
 	 */
 	public List<BaseEntity> getBaseEntitys(SearchEntity searchBE) {
 
-		String fyodorUrl = "http://localhost:4242";
-		String uri = fyodorUrl + "/api/search/fetch";
+		// String fyodorUrl = "http://localhost:4242";
+		String uri = GennySettings.fyodorServiceUrl + "/api/search/fetch";
 		String json = jsonb.toJson(searchBE);
 
 		HttpClient client = HttpClient.newHttpClient();

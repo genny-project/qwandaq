@@ -135,7 +135,7 @@ public class DefUtils {
 						});
 						// Check if contexts are present
 						if (MergeUtils.contextsArePresent(attrValStr, ctxMap)) {
-							// NOTE: HACK, mergeUtils should be taking care of this bracket replacement - Jasper (6/08/2021)
+							// TODO: mergeUtils should be taking care of this bracket replacement - Jasper (6/08/2021)
 							Object mergedObj = MergeUtils.wordMerge(attrValStr.replace("[[", "").replace("]]", ""), ctxMap);
 							// Ensure Dataype is Correct, then set Value
 							ea.setValue(mergedObj);
