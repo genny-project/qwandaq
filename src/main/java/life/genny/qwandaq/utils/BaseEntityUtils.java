@@ -149,9 +149,7 @@ public class BaseEntityUtils implements Serializable {
 	 */
 	public BaseEntity getBaseEntityByCode(String code) {
 
-		String fyodorUrl = "http://localhost:4242";
-
-		String uri = fyodorUrl + "/api/entity/" + code;
+		String uri = GennySettings.fyodorServiceUrl + "/api/entity/" + code;
 
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
@@ -164,7 +162,7 @@ public class BaseEntityUtils implements Serializable {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			body = response.body();
 		} catch (IOException | InterruptedException e) {
-			log.error(e.getLocalizedMessage());
+			e.printStackTrace();
 		}
 
 		if (body != null) {
@@ -187,7 +185,6 @@ public class BaseEntityUtils implements Serializable {
 	 */
 	public List<BaseEntity> getBaseEntitys(SearchEntity searchBE) {
 
-		// String fyodorUrl = "http://localhost:4242";
 		String uri = GennySettings.fyodorServiceUrl + "/api/search/fetch";
 		String json = jsonb.toJson(searchBE);
 
