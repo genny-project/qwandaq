@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
@@ -31,6 +32,9 @@ public class GennyCache {
 	@Inject GennyCache(RemoteCacheManager remoteCacheManager) {
        this.remoteCacheManager = remoteCacheManager;
     }
+
+	@PostConstruct
+	public void init() { }
 
 	/**
 	* Return a remote cache for the given realm.
