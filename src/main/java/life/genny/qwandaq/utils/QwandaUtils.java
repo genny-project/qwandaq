@@ -37,6 +37,17 @@ public class QwandaUtils {
 		loadAllAttributes();
 	}
 
+	public static void init(GennyToken token, List<Attribute> attributeList) {
+		gennyToken = token;
+
+		attributes.put(token.getRealm(), new ConcurrentHashMap<String,Attribute>());
+		Map<String,Attribute> attributeMap = attributes.get(token.getRealm());
+
+		for (Attribute attribute : attributeList) {
+			attributeMap.put(attribute.getCode(), attribute);
+		}
+	}
+
 	/**
 	* Get an attribute from the in memory attribute map. If realm not found, it 
 	* will try to fetch attributes from the DB.
