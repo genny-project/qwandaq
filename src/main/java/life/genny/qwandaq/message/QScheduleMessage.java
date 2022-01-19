@@ -4,38 +4,29 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-
-
-
 public class QScheduleMessage implements Serializable {
 
-	
-		/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
-		public LocalDateTime created = LocalDateTime.now(ZoneId.of("UTC"));
-		public LocalDateTime updated;
+	public LocalDateTime created = LocalDateTime.now(ZoneId.of("UTC"));
 
-		public String cron;
-		
-		public LocalDateTime triggertime;
-		
-		public String realm;
+	public LocalDateTime updated;
 
-		public String jsonMessage;
-		
-		public String sourceCode;
+	public String cron;
 
-		public String channel;
-		
-		public String code;
+	public LocalDateTime triggertime;
 
+	public String realm;
 
-	
-	public QScheduleMessage()
-	{}
+	public String jsonMessage;
+
+	public String sourceCode;
+
+	public String channel;
+
+	public String code;
+
+	public QScheduleMessage() {}
 	
 	public QScheduleMessage(final String code,final String jsonMessage, final String sourceCode, final String channel, final String cron, final String realm)
 	{

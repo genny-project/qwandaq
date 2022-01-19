@@ -36,7 +36,7 @@ public class KafkaUtils implements Serializable {
 	 */
 	public static void writeMsg(String channel, Object payload) {
 
-		// Jsonify the payload and write
+		// jsonify the payload and write
 		String json = jsonb.toJson(payload);
 		writeMsg(channel, json);
 	}
@@ -48,7 +48,7 @@ public class KafkaUtils implements Serializable {
 	* @param payload
 	 */
 	public static void writeMsg(String channel, String payload) {
-		// Write to kafka channel through interface
+		// write to kafka channel through interface
 		kafkaInterface.write(channel, payload);
 	}
 

@@ -9,6 +9,7 @@ public class GennySettings {
 	public static final String projectUrl = System.getenv("PROJECT_URL") != null ? System.getenv("PROJECT_URL") : "http://alyson7.genny.life";
 	public static final String bridgeServiceUrl = System.getenv("BRIDGE_SERVICE_API") != null ? System.getenv("BRIDGE_SERVICE_API") :  projectUrl+"/api/service/commands";
 	public static final String fyodorServiceUrl = System.getenv("FYODOR_SERVICE_API") != null ? System.getenv("FYODOR_SERVICE_API") : (projectUrl+":4242");
+	public static final String infinispanHost = System.getenv("INFINISPAN_HOST") != null ? System.getenv("INFINISPAN_HOST") : (projectUrl+":11222");
 
 	// RULES
 	public static final String realmDir = System.getenv("REALM_DIR") != null ? System.getenv("REALM_DIR") : "./realm" ;

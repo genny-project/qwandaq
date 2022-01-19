@@ -3,7 +3,6 @@ package life.genny.qwandaq.utils;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -23,19 +22,18 @@ import life.genny.qwandaq.models.GennyToken;
 import life.genny.qwandaq.models.GennySettings;
 
 @RegisterForReflection
-public class QwandaUtils implements Serializable {
+public class QwandaUtils {
 
-	private static final Logger log = Logger.getLogger(QwandaUtils.class);
+	static final Logger log = Logger.getLogger(QwandaUtils.class);
 
-    private Map<String, Map<String, Attribute>> attributes = new ConcurrentHashMap<>();
+    static Map<String, Map<String, Attribute>> attributes = new ConcurrentHashMap<>();
 
-	private static Jsonb jsonb = JsonbBuilder.create();
-	private GennyToken gennyToken;
+	static Jsonb jsonb = JsonbBuilder.create();
 
-	public QwandaUtils() {}
+	static GennyToken gennyToken;
 
-	public QwandaUtils(GennyToken gennyToken) {
-		this.gennyToken = gennyToken;
+	public static void init(GennyToken token) {
+		gennyToken = token;
 		loadAllAttributes();
 	}
 
@@ -47,15 +45,15 @@ public class QwandaUtils implements Serializable {
 	* @param gennyToken
 	* @return
 	 */
-    public Attribute getAttribute(final String attributeCode) {
+    public static Attribute getAttribute(final String attributeCode) {
 
-    	String realm = this.gennyToken.getRealm();
+    	String realm = gennyToken.getRealm();
 
-    	if (this.attributes.get(gennyToken.getRealm()) == null) {
+    	if (attributes.get(gennyToken.getRealm()) == null) {
     		loadAllAttributes();
     	}
 
-        Attribute attribute = this.attributes.get(realm).get(attributeCode);
+        Attribute attribute = attributes.get(realm).get(attributeCode);
 
 		if (attribute == null) {
 			log.error("Bad Attribute in Map for realm " +realm + " and code " + attributeCode);
@@ -69,9 +67,9 @@ public class QwandaUtils implements Serializable {
 	*
 	* @return
 	 */
-	public void loadAllAttributes() {
+	public static void loadAllAttributes() {
 
-		String realm = this.gennyToken.getRealm();
+		String realm = gennyToken.getRealm();
 
 		log.info("About to load all attributes for realm " + realm);
 
@@ -83,10 +81,10 @@ public class QwandaUtils implements Serializable {
 		}
 
 		// Check for existing map
-		if (!this.attributes.containsKey(realm)) {
-			this.attributes.put(realm, new ConcurrentHashMap<String,Attribute>());
+		if (!attributes.containsKey(realm)) {
+			attributes.put(realm, new ConcurrentHashMap<String,Attribute>());
 		}
-		Map<String,Attribute> attributeMap = this.attributes.get(realm);
+		Map<String,Attribute> attributeMap = attributes.get(realm);
 
 		// Insert attributes into map
 		for (Attribute attribute : attributeList) {
@@ -135,6 +133,78 @@ public class QwandaUtils implements Serializable {
 		return null;
 	}
 
+	/**
+	* Remove an atttribute from the in memory set using the code.
+	*
+	* @param code	Code of the attribute to remove.
+	 */
+	public static void removeAttributeFromMemory(String code) {
 
+    	String realm = gennyToken.getRealm();
+        attributes.get(realm).remove(code);
+	}
 
+	/**
+	* Delete an atttribute from the database.
+	*
+	* @param code	Code of the attribute to delete.
+	 */
+	public static void deleteAttribute(String code) {
+
+		String uri = GennySettings.fyodorServiceUrl + "/api/attribute/" + code;
+
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+			.uri(URI.create(uri))
+			.setHeader("Content-Type", "application/json")
+			.DELETE().build();
+
+		HttpResponse<String> response = null;
+
+		try {
+			response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		if (response != null) {
+			if (response.statusCode() != 201) {
+				log.error("Could not delete attribute " + code);
+			}
+		}
+	}
+
+	/**
+	* Save an attribute to the database.
+	*
+	* @param attribute	An {@link Attribute} object to save
+	 */
+	public static void saveAttribute(Attribute attribute) {
+
+		String uri = GennySettings.fyodorServiceUrl + "/api/attributes";
+		String json = jsonb.toJson(attribute);
+
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+			.uri(URI.create(uri))
+			.setHeader("Content-Type", "application/json")
+			.setHeader("Authorization", "Bearer " + gennyToken.getToken())
+			.POST(HttpRequest.BodyPublishers.ofString(json))
+			.build();
+
+		HttpResponse<String> response = null;
+
+		try {
+			response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		} catch (IOException | InterruptedException e) {
+			log.error(e.getLocalizedMessage());
+		}
+
+		if (response != null) {
+			if (response.statusCode() != 201) {
+				log.error("Could not save attribute " + attribute.getCode());
+			}
+		}
+	}
 }

@@ -82,7 +82,7 @@ public class MergeUtils {
 					}			
 				}
 				
-				/* duplicating this for now. ideally wordMerge should be a bit more flexible and allows all kind of data to be passed */
+				// duplicating this for now. ideally wordMerge should be a bit more flexible and allows all kind of data to be passed
 				while (matchVariables.find()) {
 					
 					Object mergedText = templateEntityMap.get(matchVariables.group(1));
@@ -109,7 +109,7 @@ public class MergeUtils {
 			
 			try {
 				
-				/* we split the text to merge into 2 components: BE.PRI... becomes [BE, PRI...] */
+				// we split the text to merge into 2 components: BE.PRI... becomes [BE, PRI...]
 				String[] entityArr = mergeText.split("\\.");
 				String keyCode = entityArr[0];
 				log.debug("looking for key in map: " + keyCode);
@@ -151,8 +151,14 @@ public class MergeUtils {
 								}
 
 							} else if (attributeValue instanceof java.time.LocalDateTime) {
-								/* If the date-related mergeString needs to formatter to a particultar format -> we split the date-time related merge text to merge into 3 components: BE.PRI.TimeDateformat... becomes [BE, PRI...] */
-								/* 1st component -> BaseEntity code ; 2nd component -> attribute code ; 3rd component -> (date-Format) */
+								/*
+								If the date-related mergeString needs to format to a particultar 
+								format -> we split the date-time related merge text to merge 
+								into 3 components: BE.PRI.TimeDateformat... becomes [BE, PRI...]
+								1st component -> BaseEntity code 
+								2nd component -> attribute code 
+								3rd component -> (date-Format)
+								*/
 								if (matchFormat != null && matchFormat.find()) {
 									log.info("This datetime attribute code ::"+attributeCode+ " needs to be formatted and the format is ::"+entityArr[2]);
 										return getFormattedDateTimeString((LocalDateTime) attributeValue, matchFormat.group(1));
@@ -205,7 +211,6 @@ public class MergeUtils {
 			} catch (Exception e) {
 				log.error("ERROR",e);
 			}
-		
 		}
 		
 		return DEFAULT;	
@@ -217,7 +222,7 @@ public class MergeUtils {
 	 */
 	public static Boolean contextsArePresent(String mergeStr, Map<String, Object> templateEntityMap) { 
 		
-		/* matching [OBJECT.ATTRIBUTE] patterns */
+		// matching [OBJECT.ATTRIBUTE] patterns
 		if (mergeStr != null) {
 
 			Matcher match = PATTERN_MATCHER.matcher(mergeStr);

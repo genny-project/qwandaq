@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,20 +25,24 @@ import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.models.GennySettings;
 import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.Answer;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.entity.SearchEntity;
+import life.genny.qwandaq.message.QDataAnswerMessage;
 import life.genny.qwandaq.message.QSearchBeResult;
 
 @RegisterForReflection
 public class BaseEntityUtils implements Serializable {
 
-	private static final Logger log = Logger.getLogger(BaseEntityUtils.class);
-	private Jsonb jsonb = JsonbBuilder.create();
-	private String token;
-	private String realm;
-	private GennyToken gennyToken;
-	private GennyToken serviceToken;
+	static final Logger log = Logger.getLogger(BaseEntityUtils.class);
+	Jsonb jsonb = JsonbBuilder.create();
+	String token;
+	String realm;
+	GennyToken gennyToken;
+	GennyToken serviceToken;
+
+	public BaseEntityUtils() {}
 
 	public BaseEntityUtils(String token, String realm) {
 		this(new GennyToken(token));
@@ -119,7 +124,6 @@ public class BaseEntityUtils implements Serializable {
 		this.serviceToken = serviceToken;
 	}
 
-
 	/**
 	 * Get a string representation of the instance
 	 *
@@ -142,12 +146,23 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	* Fetch A {@link BaseEntity} using a code.
+	* Fetch A {@link BaseEntity} from cache the using a code.
 	*
 	* @param code	The code of the {@link BaseEntity} to fetch
 	* @return		The corresponding BaseEntity, or null if not found.
 	 */
 	public BaseEntity getBaseEntityByCode(String code) {
+
+		return CacheUtils.getObject(this.realm, code, BaseEntity.class);
+	}
+
+	/**
+	* Fetch A {@link BaseEntity} from the database using the entity code.
+	*
+	* @param code	The code of the {@link BaseEntity} to fetch
+	* @return		The corresponding BaseEntity, or null if not found.
+	 */
+	public BaseEntity fetchBaseEntityFromDatabase(String code) {
 
 		String uri = GennySettings.fyodorServiceUrl + "/api/entity/" + code;
 
@@ -214,6 +229,39 @@ public class BaseEntityUtils implements Serializable {
 		}
 
 		return null;
+	}
+
+	/**
+	* Update a {@link BaseEntity} in the database.
+	*
+	* @param baseEntity
+	 */
+	public void updateBaseEntity(BaseEntity baseEntity) {
+
+		String uri = GennySettings.fyodorServiceUrl + "/api/baseentity";
+		String json = jsonb.toJson(baseEntity);
+
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+			.uri(URI.create(uri))
+			.setHeader("Content-Type", "application/json")
+			.setHeader("Authorization", "Bearer " + this.token)
+			.PUT(HttpRequest.BodyPublishers.ofString(json))
+			.build();
+
+		HttpResponse<String> response = null;
+
+		try {
+			response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		} catch (IOException | InterruptedException e) {
+			log.error(e.getLocalizedMessage());
+		}
+
+		if (response != null) {
+			if (response.statusCode() != 200) {
+				log.error("Unable to update " + baseEntity.getCode());
+			}
+		}
 	}
 
 	/**
@@ -402,5 +450,61 @@ public class BaseEntityUtils implements Serializable {
 			.collect(Collectors.toList());
 
 		return entityList;
+	}
+
+	public BaseEntity saveAnswer(Answer answer) {
+
+		// Check if target is valid
+		BaseEntity target = getBaseEntityByCode(answer.getTargetCode());
+		if (target == null) {
+			return null;
+		}
+
+		// Filter non-valid answers using DEF
+		if (DefUtils.answerValidForDEF(answer)) {
+
+			// Add the answer to our target to return
+			// TODO: Create this function
+			// target = addAnswer(answer);
+
+			QDataAnswerMessage msg = new QDataAnswerMessage(answer);
+			msg.setToken(this.token);
+
+			KafkaUtils.writeMsg("answers", msg);
+		}
+
+		return target;
+	}
+
+	public void saveAnswers(List<Answer> answers) {
+
+		// sort answers into target BaseEntitys
+		Map<String, List<Answer>> answersPerTargetCodeMap = answers.stream()
+			.collect(Collectors.groupingBy(Answer::getTargetCode));
+
+		for (String targetCode : answersPerTargetCodeMap.keySet()) {
+
+			// check if target is valid
+			BaseEntity target = getBaseEntityByCode(targetCode);
+			if (target == null) {
+				log.error(targetCode +  " does not exist!");
+				continue;
+			}
+
+			// fetch the DEF for this target
+			BaseEntity defBE = DefUtils.getDEF(target);
+
+			// filter Non-valid answers using def
+			List<Answer> group = answersPerTargetCodeMap.get(targetCode);
+			List<Answer> validAnswers = group.stream()
+				.filter(item -> DefUtils.answerValidForDEF(defBE, item))
+				.collect(Collectors.toList());
+
+			// send valid answers for this target
+			QDataAnswerMessage msg = new QDataAnswerMessage(validAnswers);
+			msg.setToken(this.token);
+
+			KafkaUtils.writeMsg("answers", msg);
+		}
 	}
 }

@@ -38,6 +38,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.jboss.logging.Logger;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import life.genny.qwandaq.converter.ValidationListConverter;
 import life.genny.qwandaq.validation.Validation;
@@ -70,15 +72,12 @@ import org.javamoney.moneta.Money;
  */
 
 @Embeddable
+@RegisterForReflection
 public class DataType implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private static final Logger log = Logger.getLogger(DataType.class);
-
 
 	public static final String DTT_LINK = "LNK_ATTRIBUTE"; // This datatype classname indicates the datatype belongs to
 															// the BaseEntity set with parent

@@ -69,6 +69,10 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
     </dependency>
+	<dependency>
+		<groupId>io.quarkus</groupId>
+		<artifactId>quarkus-infinispan-client</artifactId>
+	</dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
@@ -151,7 +155,20 @@
 			</execution>
 		  </executions>
 		</plugin>
-    </plugins>
+		<plugin>
+			<groupId>org.jboss.jandex</groupId>
+			<artifactId>jandex-maven-plugin</artifactId>
+			<version>1.2.1</version>
+			<executions>
+				<execution>
+					<id>make-index</id>
+					<goals>
+						<goal>jandex</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+	</plugins>
   </build>
   <profiles>
     <profile>

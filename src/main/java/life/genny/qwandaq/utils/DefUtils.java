@@ -16,6 +16,7 @@ import javax.json.bind.JsonbBuilder;
 import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.Answer;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.attribute.AttributeText;
 import life.genny.qwandaq.attribute.EntityAttribute;
@@ -29,25 +30,22 @@ import life.genny.qwandaq.models.ANSIColour;
 @RegisterForReflection
 public class DefUtils {
 
-	private static final Logger log = Logger.getLogger(DefUtils.class);
+	static final Logger log = Logger.getLogger(DefUtils.class);
 
-	public Map<String, Map<String, BaseEntity>> defs = new ConcurrentHashMap<>();
+	static Map<String, Map<String, BaseEntity>> defs = new ConcurrentHashMap<>();
 
-	public Jsonb jsonb = JsonbBuilder.create();
+	Jsonb jsonb = JsonbBuilder.create();
 
-	private BaseEntityUtils beUtils;
-	private QwandaUtils qwandaUtils;
+	static BaseEntityUtils beUtils;
 
-	public DefUtils() {}
-
-	public DefUtils(BaseEntityUtils beUtils, QwandaUtils qwandaUtils) {
-		this.beUtils = beUtils;
-		this.qwandaUtils = qwandaUtils;
+	public static void init(BaseEntityUtils baseEntityUtils) {
+		beUtils = baseEntityUtils;
+		initializeDefs();
 	}
 
-	public void initializeDefs() {
+	public static void initializeDefs() {
 
-		String realm = this.beUtils.getGennyToken().getRealm();
+		String realm = beUtils.getGennyToken().getRealm();
 
 		SearchEntity searchBE = new SearchEntity("SBE_DEF", "DEF check")
 			.addSort("PRI_NAME", "Created", SearchEntity.Sort.ASC)
@@ -58,13 +56,13 @@ public class DefUtils {
 
 		searchBE.setRealm(realm);
 
-		List<BaseEntity> items = this.beUtils.getBaseEntitys(searchBE);
+		List<BaseEntity> items = beUtils.getBaseEntitys(searchBE);
 
-		this.defs.put(realm, new ConcurrentHashMap<String, BaseEntity>());
+		defs.put(realm, new ConcurrentHashMap<String, BaseEntity>());
 
 		for (BaseEntity item : items) {
 
-			// If the item is a def appointment, then add a default datetime for the start (Mandatory)
+			// if the item is a def appointment, then add a default datetime for the start (Mandatory)
 			if (item.getCode().equals("DEF_APPOINTMENT")) {
 
 				Attribute attribute = new AttributeText("DFT_PRI_START_DATETIME", "Default Start Time");
@@ -89,77 +87,21 @@ public class DefUtils {
 		}
 	}
 
-	public Map<String, BaseEntity> getDefMap(final GennyToken userToken) {
+	public static Map<String, BaseEntity> getDefMap(final GennyToken userToken) {
 		return getDefMap(userToken.getRealm());
 	}
 		
-	public Map<String, BaseEntity> getDefMap(final String realm) {
+	public static Map<String, BaseEntity> getDefMap(final String realm) {
 		if ((defs == null) || (defs.isEmpty())) {
 			initializeDefs();
 			return defs.get(realm);
 		}
 		return defs.get(realm);
 	}
-	
-	public SearchEntity mergeFilterValueVariables(SearchEntity searchBE, Map<String, Object> ctxMap) {
-
-		for (EntityAttribute ea : searchBE.getBaseEntityAttributes()) {
-			// Iterate all Filters
-			if (ea.getAttributeCode().startsWith("PRI_") || ea.getAttributeCode().startsWith("LNK_")) {
-
-				// Grab the Attribute for this Code, using array in case this is an associated filter
-				String[] attributeCodeArray = ea.getAttributeCode().split("\\.");
-				String attributeCode = attributeCodeArray[attributeCodeArray.length-1];
-				// Fetch the corresponding attribute
-				Attribute att = this.qwandaUtils.getAttribute(attributeCode);
-				DataType dataType = att.getDataType();
-
-				Object attributeFilterValue = ea.getValue();
-				if (attributeFilterValue != null) {
-					// Ensure EntityAttribute Dataype is Correct for Filter
-					Attribute searchAtt = new Attribute(ea.getAttributeCode(), ea.getAttributeName(), dataType);
-					ea.setAttribute(searchAtt);
-					String attrValStr = attributeFilterValue.toString();
-
-					// First Check if Merge is required
-					Boolean requiresMerging = MergeUtils.requiresMerging(attrValStr);
-
-					if (requiresMerging != null && requiresMerging) {
-						// update Map with latest baseentity
-						ctxMap.keySet().forEach(key -> {
-							Object value = ctxMap.get(key);
-							if (value.getClass().equals(BaseEntity.class)) {
-								BaseEntity baseEntity = (BaseEntity) value;
-								ctxMap.put(key, this.beUtils.getBaseEntityByCode(baseEntity.getCode()));
-							}
-						});
-						// Check if contexts are present
-						if (MergeUtils.contextsArePresent(attrValStr, ctxMap)) {
-							// TODO: mergeUtils should be taking care of this bracket replacement - Jasper (6/08/2021)
-							Object mergedObj = MergeUtils.wordMerge(attrValStr.replace("[[", "").replace("]]", ""), ctxMap);
-							// Ensure Dataype is Correct, then set Value
-							ea.setValue(mergedObj);
-						} else {
-							log.error(ANSIColour.RED + "Not all contexts are present for " + attrValStr + ANSIColour.RESET);
-							return null;
-						}
-					} else {
-						// This should filter out any values of incorrect datatype
-						ea.setValue(attributeFilterValue);
-					}
-				} else {
-					log.error(ANSIColour.RED + "Value is NULL for entity attribute " + attributeCode + ANSIColour.RESET);
-					return null;
-				}
-			}
-		}
-
-		return searchBE;
-	}
 		
-	public BaseEntity getDEF(final BaseEntity be) {
+	public static BaseEntity getDEF(final BaseEntity be) {
 
-		GennyToken gennyToken = this.beUtils.getGennyToken();
+		GennyToken gennyToken = beUtils.getGennyToken();
 		String realm = gennyToken.getRealm();
 
 		if (be == null) {
@@ -175,7 +117,7 @@ public class DefUtils {
 		if (be.getCode().startsWith("DEF_")) {
 			return be;
 		}
-		// Some quick ones
+		// some quick ones
 		if (be.getCode().startsWith("PRJ_")) {
 			BaseEntity defBe = getDefMap(realm).get("DEF_PROJECT");
 			return defBe;
@@ -272,11 +214,11 @@ public class DefUtils {
 			if (mergedBe == null) {
 
 				log.info("Detected NEW Combination DEF - " + mergedCode);
-				// Get primary PRI_IS
+				// get primary PRI_IS
 				Optional<EntityAttribute> topDog = be.getHighestEA("PRI_IS_");
 				if (topDog.isPresent()) {
 
-					// So this combination DEF inherits top dogs name
+					// so this combination DEF inherits top dogs name
 					String topCode = topDog.get().getAttributeCode().substring("PRI_IS_".length());
 					BaseEntity defTopDog = getDefMap(realm).get("DEF_" + topCode);
 					mergedBe = new BaseEntity(mergedCode, mergedCode);
@@ -309,6 +251,115 @@ public class DefUtils {
 				return mergedBe;
 			}
 		}
+	}
 
+	/**
+	* A function to determine the whether or not an attribute is allowed to be
+	* saved to a {@link BaseEntity}.
+	*
+	* @param defBE
+	* @param answer
+	* @return
+	 */
+	public static Boolean answerValidForDEF(Answer answer) {
+		BaseEntity target = beUtils.getBaseEntityByCode(answer.getTargetCode());
+		if (target == null) {
+			log.error("TargetCode " + answer.getTargetCode() + " does not exist");
+			return false;
+		}
+		BaseEntity defBE = getDEF(target);
+
+		return answerValidForDEF(defBE, answer);
+	}
+
+	/**
+	* A function to determine the whether or not an attribute is allowed to be
+	* saved to a {@link BaseEntity}
+	*
+	* @param defBE
+	* @param answer
+	* @return
+	 */
+	public static Boolean answerValidForDEF(BaseEntity defBE, Answer answer) {
+		String targetCode = answer.getTargetCode();
+		String attributeCode = answer.getAttributeCode();
+
+		// allow if it is Capability saved to a Role
+		if (targetCode.startsWith("ROL_") && attributeCode.startsWith("PRM_")) {
+			return true;
+		} else if (targetCode.startsWith("SBE_")
+				&& (attributeCode.startsWith("COL_") || attributeCode.startsWith("CAL_")
+						|| attributeCode.startsWith("SRT_") || attributeCode.startsWith("ACT_"))) {
+			return true;
+		}
+
+		if (defBE == null) {
+			log.error("Cannot work out DEF " + answer.getTargetCode());
+			return true;
+		}
+
+		// just make use of the faster attribute lookup
+		if (!defBE.containsEntityAttribute("ATT_" + attributeCode)) {
+			log.error(ANSIColour.RED + "Invalid attribute " + attributeCode + " for " + answer.getTargetCode()
+					+ " with def= " + defBE.getCode() + ANSIColour.RESET);
+			return false;
+		}
+		return true;
+	}
+
+	public static SearchEntity mergeFilterValueVariables(SearchEntity searchBE, Map<String, Object> ctxMap) {
+
+		for (EntityAttribute ea : searchBE.getBaseEntityAttributes()) {
+			// iterate all Filters
+			if (ea.getAttributeCode().startsWith("PRI_") || ea.getAttributeCode().startsWith("LNK_")) {
+
+				// grab the Attribute for this Code, using array in case this is an associated filter
+				String[] attributeCodeArray = ea.getAttributeCode().split("\\.");
+				String attributeCode = attributeCodeArray[attributeCodeArray.length-1];
+				// fetch the corresponding attribute
+				Attribute att = QwandaUtils.getAttribute(attributeCode);
+				DataType dataType = att.getDataType();
+
+				Object attributeFilterValue = ea.getValue();
+				if (attributeFilterValue != null) {
+					// ensure EntityAttribute Dataype is Correct for Filter
+					Attribute searchAtt = new Attribute(ea.getAttributeCode(), ea.getAttributeName(), dataType);
+					ea.setAttribute(searchAtt);
+					String attrValStr = attributeFilterValue.toString();
+
+					// first check if merge is required
+					Boolean requiresMerging = MergeUtils.requiresMerging(attrValStr);
+
+					if (requiresMerging != null && requiresMerging) {
+						// update Map with latest baseentity
+						ctxMap.keySet().forEach(key -> {
+							Object value = ctxMap.get(key);
+							if (value.getClass().equals(BaseEntity.class)) {
+								BaseEntity baseEntity = (BaseEntity) value;
+								ctxMap.put(key, beUtils.getBaseEntityByCode(baseEntity.getCode()));
+							}
+						});
+						// check if contexts are present
+						if (MergeUtils.contextsArePresent(attrValStr, ctxMap)) {
+							// TODO: mergeUtils should be taking care of this bracket replacement - Jasper (6/08/2021)
+							Object mergedObj = MergeUtils.wordMerge(attrValStr.replace("[[", "").replace("]]", ""), ctxMap);
+							// Ensure Dataype is Correct, then set Value
+							ea.setValue(mergedObj);
+						} else {
+							log.error(ANSIColour.RED + "Not all contexts are present for " + attrValStr + ANSIColour.RESET);
+							return null;
+						}
+					} else {
+						// this should filter out any values of incorrect datatype
+						ea.setValue(attributeFilterValue);
+					}
+				} else {
+					log.error(ANSIColour.RED + "Value is NULL for entity attribute " + attributeCode + ANSIColour.RESET);
+					return null;
+				}
+			}
+		}
+
+		return searchBE;
 	}
 }
