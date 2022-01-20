@@ -1,32 +1,62 @@
 package life.genny.qwandaq.message;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import javax.json.bind.annotation.JsonbTypeAdapter;
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
-public class QScheduleMessage implements Serializable {
+import org.jboss.logging.Logger;
 
-	private static final long serialVersionUID = 1L;
-	
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import life.genny.qwandaq.datatype.PanacheLocalDateTimeAdapter;
+
+import com.querydsl.core.annotations.QueryExclude;
+
+@Entity
+@Cacheable
+@Table(name = "schedulemessage")
+@RegisterForReflection
+@QueryExclude
+public class QScheduleMessage extends PanacheEntity {
+
+	 private static final Logger log = Logger.getLogger(QScheduleMessage.class);	
+	 private static final String DEFAULT_TAG = "default";
+
+	@JsonbTypeAdapter(PanacheLocalDateTimeAdapter.class)
 	public LocalDateTime created = LocalDateTime.now(ZoneId.of("UTC"));
-
+	@JsonbTypeAdapter(PanacheLocalDateTimeAdapter.class)
 	public LocalDateTime updated;
 
 	public String cron;
 
 	public LocalDateTime triggertime;
-
+		
+	@NotEmpty
 	public String realm;
 
+	@NotEmpty
+	@Column(name = "jsonMessage", columnDefinition = "LONGTEXT")
 	public String jsonMessage;
-
+	
+	@NotEmpty
 	public String sourceCode;
 
+	@NotEmpty
 	public String channel;
-
+	
+	@Column(name = "token", columnDefinition = "MEDIUMTEXT")
+	public String token;
+	
 	public String code;
 
-	public QScheduleMessage() {}
+
+	public QScheduleMessage()
+	{}
 	
 	public QScheduleMessage(final String code,final String jsonMessage, final String sourceCode, final String channel, final String cron, final String realm)
 	{
@@ -46,4 +76,19 @@ public class QScheduleMessage implements Serializable {
 		this.sourceCode = sourceCode;
 	}
 	
+	public static QScheduleMessage findById(Long id) {
+		return find("id", id).firstResult();
+	}
+
+	public static QScheduleMessage findByCode(String code) {
+		return find("code", code).firstResult();
+	}
+
+	public static long deleteById(final Long id) {
+		return delete("id", id);
+	}
+
+	public static long deleteByCode(final String code) {
+		return delete("code", code);
+	}
 }
