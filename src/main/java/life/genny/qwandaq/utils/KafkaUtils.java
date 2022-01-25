@@ -24,7 +24,7 @@ public class KafkaUtils implements Serializable {
 	*
 	* @param kInterface
 	 */
-	public void init(KafkaInterface kInterface) {
+	public static void init(KafkaInterface kInterface) {
 		kafkaInterface = kInterface;
 	}
 

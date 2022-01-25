@@ -130,6 +130,11 @@ public class MergeUtils {
 							BaseEntity be = (BaseEntity)value;
 							String attributeCode = entityArr[1];
 
+							if (attributeCode.equals("PRI_CODE")) {
+								log.info("context: " + keyCode + ", attr: " + attributeCode + ", value: " + be.getCode());
+								return be.getCode();
+							}
+
 							Object attributeValue = be.getValue(attributeCode, null);
 							log.info("context: " + keyCode + ", attr: " + attributeCode + ", value: " + attributeValue);
 

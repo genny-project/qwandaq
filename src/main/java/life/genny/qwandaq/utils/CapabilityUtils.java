@@ -289,6 +289,30 @@ public class CapabilityUtils implements Serializable {
 		}
 	}
 
+	public Boolean conditionMet(String condition) {
+
+		if (condition == null) {
+			log.error("condition is NULL!");
+			return false;
+		}
+
+		log.info("Testing condition with value: " + condition);
+		String[] conditionArray = condition.split(":");
+
+		String capability = conditionArray[0];
+		String mode = conditionArray[1];
+
+		// check for NOT operator
+		Boolean not = capability.startsWith("!");
+		capability = not ? capability.substring(1) : capability;
+
+		// check for Capability
+		Boolean hasCap = hasCapabilityThroughPriIs(capability, CapabilityMode.getMode(mode));
+
+		// XNOR operator
+		return hasCap ^ not;
+	}
+
 	/**
 	 * Generate a list of {@link Allowed} objects for the user.
 	 *

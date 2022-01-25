@@ -20,13 +20,14 @@ public class SearchUtils {
 		List<String> shouldRemove = new ArrayList<>();
 
 		for (EntityAttribute ea : searchBE.getBaseEntityAttributes()) {
+
 			if (!ea.getAttributeCode().startsWith("CND_")) {
 				// find Conditional Filters
 				EntityAttribute cnd = searchBE.findEntityAttribute("CND_"+ea.getAttributeCode()).orElse(null);
 
 				if (cnd != null) {
 
-					log.info("Condition found for " + ea.getAttributeCode());
+					log.info("Condition found for " + ea.getAttributeCode() + " with value: " + cnd.getValue().toString());
 					String[] condition = cnd.getValue().toString().split(":");
 
 					String capability = condition[0];
@@ -52,4 +53,5 @@ public class SearchUtils {
 
 		return searchBE;
 	}
+
 }

@@ -1124,7 +1124,6 @@ public class SearchEntity extends BaseEntity {
 		} else {
 			AttributeText attribute = new AttributeText("CND_"+attributeCode, "CND_"+attributeCode);
 			try {
-				log.info("Adding a CND = " + attributeCode);
 				addAttribute(attribute, 1.0, condition);
 				filterIndex += 1.0;
 			} catch (BadDataException e) {
