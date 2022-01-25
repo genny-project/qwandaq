@@ -1,20 +1,35 @@
 package life.genny.qwandaq.test;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.UUID;
+
+import life.genny.qwandaq.entity.SearchEntity;
 
 public class TestJob {
 
-	Integer id;
+	String uuid;
 	String code;
-	LocalDateTime start;
-	LocalDateTime end;
+	Instant start;
+	Instant end;
 
-	public Integer getId() {
-		return id;
+	/**
+	 * Creates a new TestJob and adds it to a {@link LoadTestJobs} ConcurrentHashMap
+	 * @param jobLoader - {@link LoadTestJobs} to use
+	 * @param code - {@link SearchEntity#code}
+	 */
+	public TestJob(LoadTestJobs jobLoader, String code) {
+		this.start = Instant.now();
+		this.uuid = UUID.randomUUID().toString();
+		
+		jobLoader.putJob(this);
+	}
+	
+	public String getUuid() {
+		return uuid;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public String getCode() {
@@ -25,19 +40,19 @@ public class TestJob {
 		this.code = code;
 	}
 
-	public LocalDateTime getStart() {
+	public Instant getStart() {
 		return start;
 	}
 
-	public void setStart(LocalDateTime start) {
+	public void setStart(Instant start) {
 		this.start = start;
 	}
 
-	public LocalDateTime getEnd() {
+	public Instant getEnd() {
 		return end;
 	}
 
-	public void setEnd(LocalDateTime end) {
+	public void setEnd(Instant end) {
 		this.end = end;
 	}
 }

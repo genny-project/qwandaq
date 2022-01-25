@@ -10,8 +10,8 @@ public class QSearchMessage extends QMessage implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	private static final String MESSAGE_TYPE = "SCH_MSG";
-	public SearchEntity searchEntity;
-	public String destination;
+	private SearchEntity searchEntity;
+	private String destination;
 
 	public QSearchMessage() {
 		super(MESSAGE_TYPE);
