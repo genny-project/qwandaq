@@ -7,10 +7,10 @@ import life.genny.qwandaq.entity.SearchEntity;
 
 public class TestJob {
 
-	String uuid;
-	String code;
-	Instant start;
-	Instant end;
+	final String uuid;
+	final String code;
+	Instant start = null;
+	Instant end = null;
 
 	/**
 	 * Creates a new TestJob and adds it to a {@link LoadTestJobs} ConcurrentHashMap
@@ -20,7 +20,7 @@ public class TestJob {
 	public TestJob(LoadTestJobs jobLoader, String code) {
 		this.start = Instant.now();
 		this.uuid = UUID.randomUUID().toString();
-		
+		this.code = code;
 		jobLoader.putJob(this);
 	}
 	
@@ -28,18 +28,10 @@ public class TestJob {
 		return uuid;
 	}
 
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-
 	public String getCode() {
 		return code;
 	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
+	
 	public Instant getStart() {
 		return start;
 	}
@@ -54,5 +46,9 @@ public class TestJob {
 
 	public void setEnd(Instant end) {
 		this.end = end;
+	}
+	
+	public Boolean isComplete() {
+		return end != null;
 	}
 }
