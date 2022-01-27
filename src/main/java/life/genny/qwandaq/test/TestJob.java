@@ -10,7 +10,7 @@ public class TestJob {
 
 	final String uuid;
 	final String code;
-	Instant start = null;
+	final Instant start;
 	Instant end = null;
 
 	/**
@@ -21,6 +21,7 @@ public class TestJob {
 	public TestJob(LoadTestJobs jobLoader, SearchEntity entity) {
 		this.start = Instant.now();
 		this.uuid = UUID.randomUUID().toString().toUpperCase();
+    	entity.setCode(entity.getCode() + "_" + this.getUuid());
 		this.code = entity.getCode();
 		jobLoader.putJob(entity, this);
 	}
@@ -36,11 +37,7 @@ public class TestJob {
 	public Instant getStart() {
 		return start;
 	}
-
-	public void setStart(Instant start) {
-		this.start = start;
-	}
-
+	
 	public Instant getEnd() {
 		return end;
 	}
@@ -56,4 +53,15 @@ public class TestJob {
 	public Long getDuration() {
 		return Duration.between(start, end).toMillis();
 	}
+
+	@Override
+	public String toString() {
+		return "TestJob ["
+				+ "code=" + code 
+				+ ", start=" + start 
+				+ (end != null ? ", end=" + end : "")
+				+ (end != null ? ", duration=" + getDuration() : "")
+				+ "]";
+	}
+	
 }
