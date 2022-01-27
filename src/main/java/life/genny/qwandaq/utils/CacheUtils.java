@@ -59,4 +59,17 @@ public class CacheUtils {
 		Object object = jsonb.fromJson(data, c);
 		return (T) object;
 	}
+
+	/**
+	* Put an object into the cache.
+	*
+	* @param realm
+	* @param key
+	* @param obj
+	 */
+	public static void putObject(String realm, String key, Object obj) {
+
+		String json = jsonb.toJson(obj);
+		cache.getRemoteCache(realm).put(key, json);
+	}
 }

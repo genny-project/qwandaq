@@ -1,7 +1,5 @@
 package life.genny.qwandaq.utils;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
-
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +25,6 @@ import life.genny.qwandaq.exception.BadDataException;
 import life.genny.qwandaq.exception.DebugException;
 import life.genny.qwandaq.models.ANSIColour;
 
-@RegisterForReflection
 public class DefUtils {
 
 	static final Logger log = Logger.getLogger(DefUtils.class);

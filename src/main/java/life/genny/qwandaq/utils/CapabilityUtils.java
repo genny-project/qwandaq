@@ -81,7 +81,7 @@ public class CapabilityUtils implements Serializable {
 		} else {
 			// create new attribute and save it
 			attribute = new AttributeText(fullCapabilityCode, name);
-			QwandaUtils.saveAttribute(attribute);
+			DatabaseUtils.saveAttribute(attribute);
 			capabilityManifest.add(attribute);
 		}
 
@@ -273,7 +273,7 @@ public class CapabilityUtils implements Serializable {
 		for (Attribute toBeRemovedCapability : existingCapability) {
 
 			QwandaUtils.removeAttributeFromMemory(toBeRemovedCapability.getCode());
-			QwandaUtils.deleteAttribute(toBeRemovedCapability.getCode());
+			DatabaseUtils.deleteAttribute(toBeRemovedCapability.getCode());
 
 			// update all the roles that use this attribute by reloading them into cache
 			QDataBaseEntityMessage msg = CacheUtils.getObject(realm, "ROLES_"+realm, QDataBaseEntityMessage.class);

@@ -1,10 +1,6 @@
 package life.genny.qwandaq.utils;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
-
-import java.io.IOException;
 import java.io.StringReader;
-import java.lang.invoke.MethodHandles;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -23,12 +19,9 @@ import javax.json.JsonReader;
 import org.jboss.logging.Logger;
 import org.javamoney.moneta.Money;
 
-import life.genny.qwandaq.Link;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.entity.BaseEntity;
-import life.genny.qwandaq.utils.BaseEntityUtils;
 
-@RegisterForReflection
 public class MergeUtils {
 	
 	private static final Logger log = Logger.getLogger(MergeUtils.class);

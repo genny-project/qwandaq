@@ -29,6 +29,7 @@ import life.genny.qwandaq.Answer;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.entity.SearchEntity;
+import life.genny.qwandaq.exception.BadDataException;
 import life.genny.qwandaq.message.QDataAnswerMessage;
 import life.genny.qwandaq.message.QSearchBeResult;
 
@@ -157,43 +158,8 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	* Fetch A {@link BaseEntity} from the database using the entity code.
-	*
-	* @param code	The code of the {@link BaseEntity} to fetch
-	* @return		The corresponding BaseEntity, or null if not found.
-	 */
-	public BaseEntity fetchBaseEntityFromDatabase(String code) {
-
-		String uri = GennySettings.fyodorServiceUrl + "/api/entity/" + code;
-
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-			.uri(URI.create(uri))
-			.setHeader("Content-Type", "application/json")
-			.GET().build();
-
-		String body = null;
-		try {
-			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			body = response.body();
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		if (body != null) {
-			try {
-				BaseEntity be = jsonb.fromJson(body, BaseEntity.class);
-				return be;
-			} catch (Exception e) {
-				log.error(e.getStackTrace());
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	* Fetch a list of {@link BaseEntity} objects using a {@link SearchEntity} object.
+	* Call the Fyodor API to fetch a list of {@link BaseEntity} 
+	* objects using a {@link SearchEntity} object.
 	*
 	* @param searchBE	A {@link SearchEntity} object used to determine the results
 	* @return			A list of {@link BaseEntity} objects
@@ -232,36 +198,14 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	* Update a {@link BaseEntity} in the database.
+	* Update a {@link BaseEntity} in the database and the cache.
 	*
 	* @param baseEntity
 	 */
 	public void updateBaseEntity(BaseEntity baseEntity) {
 
-		String uri = GennySettings.fyodorServiceUrl + "/api/baseentity";
-		String json = jsonb.toJson(baseEntity);
-
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-			.uri(URI.create(uri))
-			.setHeader("Content-Type", "application/json")
-			.setHeader("Authorization", "Bearer " + this.token)
-			.PUT(HttpRequest.BodyPublishers.ofString(json))
-			.build();
-
-		HttpResponse<String> response = null;
-
-		try {
-			response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		} catch (IOException | InterruptedException e) {
-			log.error(e.getLocalizedMessage());
-		}
-
-		if (response != null) {
-			if (response.statusCode() != 200) {
-				log.error("Unable to update " + baseEntity.getCode());
-			}
-		}
+		DatabaseUtils.saveBaseEntity(baseEntity);
+		CacheUtils.putObject(this.realm, baseEntity.getCode(), baseEntity);
 	}
 
 	/**
@@ -454,18 +398,24 @@ public class BaseEntityUtils implements Serializable {
 
 	public BaseEntity saveAnswer(Answer answer) {
 
-		// Check if target is valid
+		// check if target is valid
 		BaseEntity target = getBaseEntityByCode(answer.getTargetCode());
 		if (target == null) {
 			return null;
 		}
 
-		// Filter non-valid answers using DEF
+		// filter non-valid answers using DEF
 		if (DefUtils.answerValidForDEF(answer)) {
 
-			// Add the answer to our target to return
-			// TODO: Create this function
-			// target = addAnswer(answer);
+			// add the answer to our target to return
+			try {
+				target.addAnswer(answer);
+			} catch (BadDataException e) {
+				log.error(e);
+			}
+
+			// update target in the cache
+			CacheUtils.putObject(realm, target.getCode(), target);
 
 			QDataAnswerMessage msg = new QDataAnswerMessage(answer);
 			msg.setToken(this.token);
