@@ -29,7 +29,6 @@ public class LoadTestJobs {
 	}
 
 	void putJob(SearchEntity entity, TestJob job) {
-		log.info(entity.getCode() + "_" + job.getUuid());	
 		jobs.put(entity.getCode() + "_" + job.getUuid(), job);
 	}
 }
