@@ -1,8 +1,14 @@
 package life.genny.qwandaq.utils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -10,6 +16,9 @@ import javax.json.bind.JsonbBuilder;
 import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.attribute.Attribute;
+import life.genny.qwandaq.message.QEventMessage;
+import life.genny.qwandaq.message.QScheduleMessage;
+import life.genny.qwandaq.models.GennySettings;
 import life.genny.qwandaq.models.GennyToken;
 
 public class QwandaUtils {
@@ -106,4 +115,66 @@ public class QwandaUtils {
         attributes.get(realm).remove(code);
 	}
 
+	/**
+	* Send a {@link QEventMessage} to shleemy for scheduling.
+	*
+	* @param userToken
+	* @param eventMsgCode
+	* @param scheduleMsgCode
+	* @param triggertime
+	* @param targetCode
+	 */
+	public static void scheduleEvent(GennyToken userToken, String eventMsgCode, String scheduleMsgCode, LocalDateTime triggertime, String targetCode) {
+
+		// create the event message
+		QEventMessage evtMsg = new QEventMessage("SCHEDULE_EVT", eventMsgCode);
+		evtMsg.setToken(userToken.getToken());
+		evtMsg.getData().setTargetCode(targetCode);
+
+		// create a recipient list
+		String[] rxList = new String[2];
+		rxList[0] = "SUPERUSER";
+		rxList[1] = userToken.getUserCode();
+		evtMsg.setRecipientCodeArray(rxList);
+
+		log.info("Scheduling event: " + eventMsgCode + ", Trigger time: " + triggertime.toString());
+
+		// create schedule message
+		QScheduleMessage scheduleMessage = new QScheduleMessage(scheduleMsgCode, jsonb.toJson(evtMsg), userToken.getUserCode(), "project", triggertime, userToken.getRealm());
+		log.info("Sending message " + scheduleMessage.getCode() + " to shleemy for scheduling");
+
+		// send msg to shleemy
+		String json = jsonb.toJson(scheduleMessage);
+		KafkaUtils.writeMsg("schedule", json);
+	}
+
+	/**
+	* Delete a currently scheduled message via shleemy.
+	*
+	* @param userToken
+	* @param code
+	 */
+	public static void deleteSchedule(GennyToken userToken, String code) {
+
+		String uri = GennySettings.shleemyServiceUrl + "/api/schedule/code/" + code;
+
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+			.uri(URI.create(uri))
+			.setHeader("Content-Type", "application/json")
+			.setHeader("Authorization", "Bearer " + userToken.getToken())
+			.DELETE().build();
+
+		try {
+
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+			if (response.statusCode() != 200) {
+				log.error("Unable to delete scheduled message " + code);
+			}
+
+		} catch (IOException | InterruptedException e) {
+			log.error(e);
+		}
+	}
 }

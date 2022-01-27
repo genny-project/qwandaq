@@ -182,7 +182,7 @@ public class BaseEntityUtils implements Serializable {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			body = response.body();
 		} catch (IOException | InterruptedException e) {
-			log.error(e.getLocalizedMessage());
+			log.error(e);
 		}
 
 		if (body != null) {
