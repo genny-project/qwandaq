@@ -1552,8 +1552,7 @@ public class SearchEntity extends BaseEntity {
 	 */
 	@Override
 	public String toString() {
-		// return QwandaJsonUtils.toJson(this);
-		return this.toString();
+		return "SearchEntity[ code = " + this.getCode() + "]";
 	}
 
 	public Integer getPageStart(Integer defaultPageSize) {
