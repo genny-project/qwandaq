@@ -5,8 +5,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.jboss.logging.Logger;
+
+import life.genny.qwandaq.entity.SearchEntity;
+
 @ApplicationScoped
 public class LoadTestJobs {
+	private static final Logger log = Logger.getLogger(LoadTestJobs.class);
 
 	static Map<String, TestJob> jobs = new ConcurrentHashMap<String, TestJob>();
 
@@ -14,11 +19,17 @@ public class LoadTestJobs {
 		return jobs;
 	}
 	
-	public TestJob getJob(String uuid) {
-		return jobs.get(uuid);
+	/**
+	 * Retrieve a {@link TestJob} from the job cache.<lb>
+	 * Expecting Base Entity code + "_" + {@link TestJob#uuid}
+	 * @return
+	 */
+	public TestJob getJob(String uniqueCode) {
+		return jobs.get(uniqueCode);
 	}
 
-	void putJob(TestJob job) {
-		jobs.put(job.getUuid(), job);
+	void putJob(SearchEntity entity, TestJob job) {
+		log.info(entity.getCode() + "_" + job.getUuid());	
+		jobs.put(entity.getCode() + "_" + job.getUuid(), job);
 	}
 }

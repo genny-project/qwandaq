@@ -18,11 +18,11 @@ public class TestJob {
 	 * @param jobLoader - {@link LoadTestJobs} to use
 	 * @param code - {@link SearchEntity#code}
 	 */
-	public TestJob(LoadTestJobs jobLoader, String code) {
+	public TestJob(LoadTestJobs jobLoader, SearchEntity entity) {
 		this.start = Instant.now();
-		this.uuid = UUID.randomUUID().toString();
-		this.code = code;
-		jobLoader.putJob(this);
+		this.uuid = UUID.randomUUID().toString().toUpperCase();
+		this.code = entity.getCode();
+		jobLoader.putJob(entity, this);
 	}
 	
 	public String getUuid() {
