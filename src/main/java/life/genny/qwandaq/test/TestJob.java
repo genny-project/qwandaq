@@ -1,5 +1,6 @@
 package life.genny.qwandaq.test;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -50,5 +51,9 @@ public class TestJob {
 	
 	public Boolean isComplete() {
 		return end != null;
+	}
+	
+	public Long getDuration() {
+		return Duration.between(start, end).toMillis();
 	}
 }

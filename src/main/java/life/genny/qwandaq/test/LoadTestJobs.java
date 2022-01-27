@@ -10,8 +10,12 @@ public class LoadTestJobs {
 
 	static Map<String, TestJob> jobs = new ConcurrentHashMap<String, TestJob>();
 
-	TestJob getJob(String id) {
-		return jobs.get(id);
+	public Map<String, TestJob> getJobs() {
+		return jobs;
+	}
+	
+	public TestJob getJob(String uuid) {
+		return jobs.get(uuid);
 	}
 
 	void putJob(TestJob job) {
