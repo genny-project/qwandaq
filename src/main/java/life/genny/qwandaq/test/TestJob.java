@@ -1,5 +1,6 @@
 package life.genny.qwandaq.test;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -9,7 +10,7 @@ public class TestJob {
 
 	final String uuid;
 	final String code;
-	Instant start = null;
+	final Instant start;
 	Instant end = null;
 
 	/**
@@ -17,11 +18,12 @@ public class TestJob {
 	 * @param jobLoader - {@link LoadTestJobs} to use
 	 * @param code - {@link SearchEntity#code}
 	 */
-	public TestJob(LoadTestJobs jobLoader, String code) {
+	public TestJob(LoadTestJobs jobLoader, SearchEntity entity) {
 		this.start = Instant.now();
-		this.uuid = UUID.randomUUID().toString();
-		this.code = code;
-		jobLoader.putJob(this);
+		this.uuid = UUID.randomUUID().toString().toUpperCase();
+    	entity.setCode(entity.getCode() + "_" + this.getUuid());
+		this.code = entity.getCode();
+		jobLoader.putJob(entity, this);
 	}
 	
 	public String getUuid() {
@@ -35,11 +37,7 @@ public class TestJob {
 	public Instant getStart() {
 		return start;
 	}
-
-	public void setStart(Instant start) {
-		this.start = start;
-	}
-
+	
 	public Instant getEnd() {
 		return end;
 	}
@@ -51,4 +49,19 @@ public class TestJob {
 	public Boolean isComplete() {
 		return end != null;
 	}
+	
+	public Long getDuration() {
+		return Duration.between(start, end).toMillis();
+	}
+
+	@Override
+	public String toString() {
+		return "TestJob ["
+				+ "code=" + code 
+				+ ", start=" + start 
+				+ (end != null ? ", end=" + end : "")
+				+ (end != null ? ", duration=" + getDuration() : "")
+				+ "]";
+	}
+	
 }
