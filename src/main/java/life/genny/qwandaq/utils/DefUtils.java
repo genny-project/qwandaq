@@ -95,7 +95,13 @@ public class DefUtils {
 		}
 		return defs.get(realm);
 	}
-		
+
+	/**
+	* Find the corresponding definition for a given {@link BaseEntity}.
+	*
+	* @param be		The {@link BaseEntity} to check
+	* @return		The corresponding definition {@link BaseEntity}
+	 */
 	public static BaseEntity getDEF(final BaseEntity be) {
 
 		GennyToken gennyToken = beUtils.getGennyToken();
@@ -104,7 +110,7 @@ public class DefUtils {
 		if (be == null) {
 			log.error("be param is NULL");
 			try {
-				throw new DebugException("BaseEntityUtils: getDEF: The passed BaseEntity is NULL, supplying trace");
+				throw new DebugException("DefUtils.getDEF: The passed BaseEntity is NULL, supplying trace");
 			} catch (DebugException e) {
 				e.printStackTrace();
 			}
@@ -123,10 +129,6 @@ public class DefUtils {
 		List<EntityAttribute> isAs = be.findPrefixEntityAttributes("PRI_IS_");
 
 		// remove the non DEF ones
-		/*
-		 * PRI_IS_DELETED PRI_IS_EXPANDABLE PRI_IS_FULL PRI_IS_INHERITABLE PRI_IS_PHONE
-		 * (?) PRI_IS_SKILLS
-		 */
 		Iterator<EntityAttribute> i = isAs.iterator();
 		while (i.hasNext()) {
 			EntityAttribute ea = i.next();
@@ -304,6 +306,13 @@ public class DefUtils {
 		return true;
 	}
 
+	/**
+	* Ensure any filter values requiring merging have been handled.
+	*
+	* @param searchBE	The {@link SearchEntity} to process
+	* @param ctxMap		Map of merge contexts
+	* @return			The updated {@link SearchEntity}
+	 */
 	public static SearchEntity mergeFilterValueVariables(SearchEntity searchBE, Map<String, Object> ctxMap) {
 
 		for (EntityAttribute ea : searchBE.getBaseEntityAttributes()) {
