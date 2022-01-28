@@ -1,13 +1,14 @@
 package life.genny.qwandaq.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import java.util.Optional;
+import java.util.UUID;
 
+import org.jboss.logging.Logger;
+
+import life.genny.qwandaq.EEntityStatus;
 import life.genny.qwandaq.attribute.AttributeBoolean;
 import life.genny.qwandaq.attribute.AttributeDate;
 import life.genny.qwandaq.attribute.AttributeDateTime;
@@ -17,10 +18,7 @@ import life.genny.qwandaq.attribute.AttributeLong;
 import life.genny.qwandaq.attribute.AttributeText;
 import life.genny.qwandaq.attribute.AttributeTime;
 import life.genny.qwandaq.attribute.EntityAttribute;
-import life.genny.qwandaq.EEntityStatus;
 import life.genny.qwandaq.exception.BadDataException;
-
-import org.jboss.logging.Logger;
 
 /* SearchEntity class implements the search of base entities applying different filters/search to the
  * baseEntity and its attributes

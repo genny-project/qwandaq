@@ -4,13 +4,24 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
 
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
+import javax.json.bind.annotation.JsonbTransient;
+
 import life.genny.qwandaq.entity.SearchEntity;
+import life.genny.qwandaq.message.QSearchMessage;
 
 public class TestJob {
+
+	@JsonbTransient
+	Jsonb jsonBuilder = JsonbBuilder.create();
 
 	final String uuid;
 	final String code;
 	final Instant start;
+	
+	public final String searchJSON;
+	
 	Instant end = null;
 
 	/**
@@ -18,10 +29,15 @@ public class TestJob {
 	 * @param jobLoader - {@link LoadTestJobs} to use
 	 * @param code - {@link SearchEntity#code}
 	 */
-	public TestJob(LoadTestJobs jobLoader, SearchEntity entity) {
+	public TestJob(LoadTestJobs jobLoader, QSearchMessage searchMessage) {
 		this.start = Instant.now();
 		this.uuid = UUID.randomUUID().toString().toUpperCase();
+		
+		SearchEntity entity = searchMessage.getSearchEntity();
     	entity.setCode(entity.getCode() + "_" + this.getUuid());
+    	
+    	searchJSON = jsonBuilder.toJson(searchMessage);
+    	
 		this.code = entity.getCode();
 		jobLoader.putJob(entity, this);
 	}
@@ -51,17 +67,24 @@ public class TestJob {
 	}
 	
 	public Long getDuration() {
-		return Duration.between(start, end).toMillis();
+		if(end != null) {
+			return Duration.between(start, end).toMillis();
+		} else return 0L;
 	}
 
-	@Override
-	public String toString() {
+	public String toString(boolean showJson) {
 		return "TestJob ["
 				+ "code=" + code 
 				+ ", start=" + start 
 				+ (end != null ? ", end=" + end : "")
 				+ (end != null ? ", duration=" + getDuration() : "")
+				+ ", json=" + searchJSON
 				+ "]";
+	}
+	
+	@Override
+	public String toString() {
+		return toString(false);		
 	}
 	
 }
