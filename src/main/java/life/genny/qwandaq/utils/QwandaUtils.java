@@ -83,7 +83,7 @@ public class QwandaUtils {
 
 		log.info("About to load all attributes for realm " + realm);
 
-		List<Attribute> attributeList = DatabaseUtils.fetchAttributesFromDB(realm);
+		List<Attribute> attributeList = DatabaseUtils.fetchAttributes(realm);
 
 		if (attributeList == null) {
 			log.error("Null attributeList, not putting in map!!!");

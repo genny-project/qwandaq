@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 
 import org.jboss.logging.Logger;
 
+import life.genny.qwandaq.Question;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.entity.BaseEntity;
 
@@ -36,7 +37,7 @@ public class DatabaseUtils implements Serializable {
 	* @return	All {@link Attribute} objects found in the DB
 	 */
 	@Transactional
-	public static List<Attribute> fetchAttributesFromDB(String realm) {
+	public static List<Attribute> fetchAttributes(String realm) {
 
 		if (entityManager == null) {
 			log.error("EntityManager must be initialised first!!!");
@@ -64,7 +65,7 @@ public class DatabaseUtils implements Serializable {
 	* @return		The corresponding BaseEntity, or null if not found.
 	 */
 	@Transactional
-	public static BaseEntity fetchBaseEntityFromDB(String realm, String code) {
+	public static BaseEntity fetchBaseEntity(String realm, String code) {
 
 		if (entityManager == null) {
 			log.error("EntityManager must be initialised first!!!");
@@ -73,7 +74,7 @@ public class DatabaseUtils implements Serializable {
 
         try {
 
-			return entityManager.createQuery("SELECT be FROM BaseEntity be where be.realm=:realmStr and be.code = :code", BaseEntity.class)
+			return entityManager.createQuery("SELECT * FROM BaseEntity where realm=:realmStr and code = :code", BaseEntity.class)
 					.setParameter("realmStr", realm)
 					.setParameter("code", code)
 					.getSingleResult();
@@ -142,6 +143,27 @@ public class DatabaseUtils implements Serializable {
 		} catch (Exception e) {
 			log.error(e);
 		}
+	}
+
+	@Transactional
+	public static Question fetchQuestion(String realm, String code) {
+
+		if (entityManager == null) {
+			log.error("EntityManager must be initialised first!!!");
+			return null;
+		}
+
+        try {
+
+			return entityManager.createQuery("SELECT * FROM Question where realm=:realmStr and code = :code", Question.class)
+					.setParameter("realmStr", realm)
+					.setParameter("code", code)
+					.getSingleResult();
+
+        } catch (NoResultException e) {
+            log.error("No Question found in DB for " + code);
+		}
+		return null;
 	}
 
 }

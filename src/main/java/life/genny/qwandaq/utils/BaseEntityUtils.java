@@ -85,7 +85,7 @@ public class BaseEntityUtils implements Serializable {
 	*
 	* @return 	The realm
 	 */
-	private String getRealm() {
+	public String getRealm() {
 		return gennyToken.getRealm();
 	}
 

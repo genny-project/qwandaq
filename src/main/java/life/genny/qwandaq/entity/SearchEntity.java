@@ -1664,6 +1664,32 @@ public class SearchEntity extends BaseEntity {
 	}
 
 	/*
+	 * This method will update the column index.
+	 */
+	public void updateColumnIndex() {
+		Integer index = 1;
+		for (EntityAttribute ea : this.getBaseEntityAttributes()) {
+			if (ea.getAttributeCode().startsWith("COL_")) {
+				index++;
+			}
+		}
+		setColIndex(index.doubleValue());
+	}
+
+	/*
+	 * This method will update the action index.
+	 */
+	public void updateActionIndex() {
+		Integer index = 1;
+		for (EntityAttribute ea : this.getBaseEntityAttributes()) {
+			if (ea.getAttributeCode().startsWith("ACT_")) {
+				index++;
+			}
+		}
+		setActionIndex(index.doubleValue());
+	}
+
+	/*
 	 * This method helps calculate the index of an OR filter
 	 * 
 	 * @param attributeCode - the attributeCode for which to count
