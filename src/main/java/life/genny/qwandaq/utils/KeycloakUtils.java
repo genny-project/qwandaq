@@ -4,19 +4,25 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+
+import java.net.URL;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Base64;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.net.URL;
-import java.net.URI;
-import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.io.StringReader;
 
@@ -26,6 +32,11 @@ import javax.json.Json;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.net.ssl.HttpsURLConnection;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
@@ -233,5 +244,64 @@ public class KeycloakUtils {
 		return token;
 
 	}
+
+	public static JsonObject getDecodedToken(final String bearerToken) {
+		final String[] chunks = bearerToken.split("\\.");
+		Base64.Decoder decoder = Base64.getDecoder();
+		// String header = new String(decoder.decode(chunks[0]));
+		String payload = new String(decoder.decode(chunks[1]));
+		JsonObject json = jsonb.fromJson(payload, JsonObject.class);
+		return json;
+	}
+
+	// Send the decoded Json token in the map
+	public static Map<String, Object> getJsonMap(final String json) {
+		final JsonObject jsonObj = getDecodedToken(json);
+		return getJsonMap(jsonObj);
+	}
+
+	public static Map<String, Object> getJsonMap(final JsonObject jsonObj) {
+		final String json = jsonObj.toString();
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			final ObjectMapper mapper = new ObjectMapper();
+			// convert JSON string to Map
+			final TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {
+			};
+
+			map = mapper.readValue(json, typeRef);
+
+		} catch (final JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (final JsonMappingException e) {
+			e.printStackTrace();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+
+		return map;
+	}
+
+	/*
+	 * Return the Set of access roles of the user logged in based on the keycloak
+	 * access_roles
+	 */
+	public static HashSet<String> getRoleSet(final String role) {
+		String accessRole = role.substring(role.indexOf("[") + 1, role.indexOf("]"));
+		String[] strs = accessRole.trim().split("\\s*,\\s*");
+		HashSet<String> roles = new HashSet<String>(Arrays.asList(strs));
+		return roles;
+
+	}
+
+	private static String getKeycloakUrlFromToken(String token) {
+		String keycloakUrl = (new GennyToken(token)).getKeycloakUrl();
+		keycloakUrl = keycloakUrl.replaceAll(":-1", ""); // get rid of weird -1
+		return keycloakUrl;
+	}
+
+
+
+	
 
 }
