@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.json.bind.Jsonb;
@@ -26,6 +27,7 @@ import org.jboss.logging.Logger;
 import life.genny.qwandaq.models.GennySettings;
 import life.genny.qwandaq.models.GennyToken;
 import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.entity.SearchEntity;
@@ -456,5 +458,177 @@ public class BaseEntityUtils implements Serializable {
 
 			KafkaUtils.writeMsg("answers", msg);
 		}
+	}
+
+	public BaseEntity create(final String defCode) throws Exception {
+
+		String realm = this.getGennyToken().getRealm();
+		BaseEntity defBE = DefUtils.getDefMap(realm).get(defCode);
+
+		return create(defBE);
+	}
+
+	public BaseEntity create(final BaseEntity defBE) throws Exception {
+		return create(defBE, null, null);
+	}
+
+	public BaseEntity create(final BaseEntity defBE, String name) throws Exception {
+		return create(defBE, name, null);
+	}
+
+	public BaseEntity create(final BaseEntity defBE, String name, String code) throws Exception {
+
+		if (defBE == null) {
+			String errorMsg = "defBE is NULL";
+			log.error(errorMsg);
+			throw new Exception(errorMsg);
+		}
+
+		if (code != null && code.charAt(3) != '_') {
+			String errorMsg = "Code parameter " + code + " is not a valid BE code!";
+			log.error(errorMsg);
+			throw new Exception(errorMsg);
+		}
+
+		BaseEntity item = null;
+		Optional<EntityAttribute> uuidEA = defBE.findEntityAttribute("ATT_PRI_UUID");
+
+		if (uuidEA.isPresent()) {
+			// if the defBE is a user without an email provided, create a keycloak acc using a unique random uuid
+			String randomEmail = "random+" + UUID.randomUUID().toString().substring(0, 20) + "@gada.io";
+			item = createUser(defBE, randomEmail);
+		}
+
+		if (item == null) {
+			String prefix = defBE.getValueAsString("PRI_PREFIX");
+			if (StringUtils.isBlank(prefix)) {
+				log.error("No prefix set for the def: " + defBE.getCode());
+				throw new Exception("No prefix set for the def: " + defBE.getCode());
+			}
+			if (StringUtils.isBlank(code)) {
+				code = prefix + "_" + UUID.randomUUID().toString().substring(0, 32).toUpperCase();
+			}
+
+			if (StringUtils.isBlank(name)) {
+				name = defBE.getName();
+			}
+			item = new BaseEntity(code.toUpperCase(), name);
+
+			item.setRealm(getRealm());
+		}
+
+		if (item != null) {
+			// Establish all mandatory base entity attributes
+			for (EntityAttribute ea : defBE.getBaseEntityAttributes()) {
+				if (ea.getAttributeCode().startsWith("ATT_")) {
+
+					String attrCode = ea.getAttributeCode().substring("ATT_".length());
+					Attribute attribute = QwandaUtils.getAttribute(attrCode);
+
+					if (attribute != null) {
+
+						// if not already filled in
+						if (!item.containsEntityAttribute(attribute.getCode())) {
+							// Find any default val for this Attr
+							String defaultDefValueAttr = "DFT_" + attrCode;
+							Object defaultVal = defBE.getValue(defaultDefValueAttr, attribute.getDefaultValue());
+
+							// Only process mandatory attributes, or defaults
+							Boolean mandatory = ea.getValueBoolean();
+							if (mandatory==null) {
+								mandatory = false;
+								log.warn("**** DEF attribute ATT_"+attrCode+" has no mandatory boolean set in "+defBE.getCode());
+							}
+							// Only process mandatory attributes, or defaults
+							if (mandatory || defaultVal != null) {
+								EntityAttribute newEA = new EntityAttribute(item, attribute, ea.getWeight(),
+										defaultVal);
+								item.addAttribute(newEA);
+
+							}
+						} else {
+							log.info(item.getCode() + " already has value for " + attribute.getCode());
+						}
+
+					} else {
+						log.warn("No Attribute found for def attr " + attrCode);
+					}
+				}
+			}
+		}
+
+		// update in DB and cache
+		updateBaseEntity(item);
+
+		// force the type of baseentity
+		Attribute attributeDEF = QwandaUtils.getAttribute("PRI_IS_" + defBE.getCode().substring("DEF_".length()));
+		item = saveAnswer(new Answer(item, item, attributeDEF, "TRUE"));
+
+		return item;
+	}
+
+	public BaseEntity createUser(final BaseEntity defBE, final String email) throws Exception {
+
+		BaseEntity item = null;
+		String uuid = null;
+		Optional<EntityAttribute> uuidEA = defBE.findEntityAttribute("ATT_PRI_UUID");
+
+		if (uuidEA.isPresent()) {
+
+			if (!StringUtils.isBlank(email)) {
+               // TODO: run a regexp check to see if the email is valid
+
+				if (!email.startsWith("random+")) {
+					// TODO: check to see if the email exists in the database and keycloak
+				}
+			}
+			// this is a user, generate keycloak id
+			uuid = KeycloakUtils.createDummyUser(serviceToken.getToken(), serviceToken.getRealm());
+			Optional<String> optCode = defBE.getValue("PRI_PREFIX");
+			if (optCode.isPresent()) {
+				String name = defBE.getName();
+				String code = optCode.get() + "_" + uuid.toUpperCase();
+				item = new BaseEntity(code, name);
+				item.setRealm(getRealm());
+				// item = QwandaUtils.createBaseEntityByCode(code, name, qwandaServiceUrl,
+				// this.token);
+				if (item != null) {
+					// Add PRI_EMAIL
+					if (!email.startsWith("random+")) {
+						// Check to see if the email exists
+						// TODO: check to see if the email exists in the database and keycloak
+						Attribute emailAttribute = QwandaUtils.getAttribute("PRI_EMAIL");
+						item.addAnswer(new Answer(item, item, emailAttribute, email));
+						Attribute usernameAttribute = QwandaUtils.getAttribute("PRI_USERNAME");
+						item.addAnswer(new Answer(item, item, usernameAttribute, email));
+					}
+
+					// Add PRI_UUID
+					Attribute uuidAttribute = QwandaUtils.getAttribute("PRI_UUID");
+					item.addAnswer(new Answer(item, item, uuidAttribute, uuid.toUpperCase()));
+
+					// Keycloak UUID
+					Attribute keycloakAttribute = QwandaUtils.getAttribute("PRI_KEYCLOAK_UUID");
+					item.addAnswer(new Answer(item, item, keycloakAttribute, uuid.toUpperCase()));
+
+					// Author of the BE
+					// NOTE: Maybe should be moved to run for all BEs
+					Attribute lnkAuthorAttr = QwandaUtils.getAttribute("LNK_AUTHOR");
+					item.addAnswer(
+							new Answer(item, item, lnkAuthorAttr, "[\"" + getGennyToken().getUserCode() + "\"]"));
+				} else {
+					log.error("create BE returned NULL for " + code);
+				}
+
+			} else {
+				log.error("Prefix not provided");
+				throw new Exception("Prefix not provided" + defBE.getCode());
+			}
+		} else {
+			log.error("Passed defBE is not a user def!");
+			throw new Exception("Passed defBE is not a user def!" + defBE.getCode());
+		}
+
+		return item;
 	}
 }

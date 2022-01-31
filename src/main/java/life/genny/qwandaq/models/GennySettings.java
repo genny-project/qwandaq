@@ -15,7 +15,7 @@ public class GennySettings {
 	// RULES
 	public static final String realmDir = System.getenv("REALM_DIR") != null ? System.getenv("REALM_DIR") : "./realm" ;
 	public static final String rulesDir = System.getenv("RULES_DIR") != null ? System.getenv("RULES_DIR") : "/rules" ;
-    public static final String keycloakUrl = System.getenv("KEYCLOAKURL") != null ? System.getenv("KEYCLOAKURL") : "http://keycloak.genny.life";
+    public static final String keycloakUrl = System.getenv("KEYCLOAK_URL") != null ? System.getenv("KEYCLOAK_URL") : "http://keycloak.genny.life";
 
 	// UI Defaults
     public static final Integer defaultPageSize  = System.getenv("DEFAULT_PAGE_SIZE")==null?10:(Integer.parseInt(System.getenv("DEFAULT_PAGE_SIZE")));
