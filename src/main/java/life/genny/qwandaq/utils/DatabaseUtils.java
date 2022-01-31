@@ -16,7 +16,7 @@ import life.genny.qwandaq.Question;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.entity.BaseEntity;
 
-public class DatabaseUtils implements Serializable {
+public class DatabaseUtils {
 
 	private static final Logger log = Logger.getLogger(DatabaseUtils.class);
 	private static Jsonb jsonb = JsonbBuilder.create();
