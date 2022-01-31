@@ -20,6 +20,7 @@
 	<commons-text.version>1.8</commons-text.version>
 	<jackson-datatype-money.version>1.0.0</jackson-datatype-money.version>
 	<version.moneta>1.1</version.moneta>
+	<jwt.version>0.10.7</jwt.version>
   </properties>
 
 	<distributionManagement>
@@ -107,6 +108,31 @@
 		<groupId>org.javamoney</groupId>
 		<artifactId>moneta</artifactId>
 		<version>${version.moneta}</version>
+	</dependency>
+	<dependency>
+		<groupId>io.jsonwebtoken</groupId>
+		<artifactId>jjwt-api</artifactId>
+		<version>${jwt.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>io.jsonwebtoken</groupId>
+		<artifactId>jjwt-impl</artifactId>
+		<version>${jwt.version}</version>
+		<scope>runtime</scope>
+	</dependency>
+	<dependency>
+		<groupId>io.jsonwebtoken</groupId>
+		<artifactId>jjwt-jackson</artifactId>
+		<version>${jwt.version}</version>
+		<scope>runtime</scope>
+	</dependency>
+	<dependency>
+		<groupId>io.quarkus</groupId>
+		<artifactId>quarkus-oidc</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>io.quarkus</groupId>
+		<artifactId>quarkus-keycloak-authorization</artifactId>
 	</dependency>
   </dependencies>
   <build>

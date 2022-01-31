@@ -75,6 +75,22 @@ public class QScheduleMessage extends PanacheEntity {
 		this.channel = channel;
 		this.sourceCode = sourceCode;
 	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getToken() {
+		return token;
+	}
 	
 	public static QScheduleMessage findById(Long id) {
 		return find("id", id).firstResult();

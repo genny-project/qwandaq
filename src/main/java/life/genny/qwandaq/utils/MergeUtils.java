@@ -1,10 +1,6 @@
 package life.genny.qwandaq.utils;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
-
-import java.io.IOException;
 import java.io.StringReader;
-import java.lang.invoke.MethodHandles;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -23,12 +19,9 @@ import javax.json.JsonReader;
 import org.jboss.logging.Logger;
 import org.javamoney.moneta.Money;
 
-import life.genny.qwandaq.Link;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.entity.BaseEntity;
-import life.genny.qwandaq.utils.BaseEntityUtils;
 
-@RegisterForReflection
 public class MergeUtils {
 	
 	private static final Logger log = Logger.getLogger(MergeUtils.class);
@@ -63,7 +56,6 @@ public class MergeUtils {
     
 	public static String merge(String mergeStr, Map<String, Object> templateEntityMap) { 
 		
-		/* matching [OBJECT.ATTRIBUTE] patterns */
 		if (mergeStr != null) {
 
 			Matcher match = PATTERN_MATCHER.matcher(mergeStr);
@@ -82,7 +74,7 @@ public class MergeUtils {
 					}			
 				}
 				
-				// duplicating this for now. ideally wordMerge should be a bit more flexible and allows all kind of data to be passed
+				// NOTE: duplicating this for now. ideally wordMerge should be a bit more flexible and allows all kind of data to be passed
 				while (matchVariables.find()) {
 					
 					Object mergedText = templateEntityMap.get(matchVariables.group(1));
@@ -102,13 +94,11 @@ public class MergeUtils {
 		return mergeStr;
 	}
 	
-	@SuppressWarnings("unused")
 	public static Object wordMerge(String mergeText, Map<String, Object> entitymap) {
 		
 		if(mergeText != null && !mergeText.isEmpty()) {
 			
 			try {
-				
 				// we split the text to merge into 2 components: BE.PRI... becomes [BE, PRI...]
 				String[] entityArr = mergeText.split("\\.");
 				String keyCode = entityArr[0];
@@ -221,13 +211,15 @@ public class MergeUtils {
 		return DEFAULT;	
 	}
 
-
 	/**
-	 * Check to see if all contexts are present
+	* Check to see if all contexts are present.
+	*
+	* @param mergeStr
+	* @param templateEntityMap
+	* @return
 	 */
 	public static Boolean contextsArePresent(String mergeStr, Map<String, Object> templateEntityMap) { 
 		
-		// matching [OBJECT.ATTRIBUTE] patterns
 		if (mergeStr != null) {
 
 			Matcher match = PATTERN_MATCHER.matcher(mergeStr);

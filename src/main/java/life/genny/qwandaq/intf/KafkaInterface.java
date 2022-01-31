@@ -19,6 +19,6 @@ public interface KafkaInterface {
 	* @param payload
 	 */
 	public default void write(String channel, String payload) {
-		log.error("Default KafkaInterface... not writing Message!!!");
+		log.error("No KafkaInterface set up... not writing Message!!!");
 	}
 }

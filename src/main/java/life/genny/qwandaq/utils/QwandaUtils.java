@@ -1,16 +1,14 @@
 package life.genny.qwandaq.utils;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
-
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -18,10 +16,11 @@ import javax.json.bind.JsonbBuilder;
 import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.attribute.Attribute;
-import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.message.QEventMessage;
+import life.genny.qwandaq.message.QScheduleMessage;
 import life.genny.qwandaq.models.GennySettings;
+import life.genny.qwandaq.models.GennyToken;
 
-@RegisterForReflection
 public class QwandaUtils {
 
 	static final Logger log = Logger.getLogger(QwandaUtils.class);
@@ -84,7 +83,7 @@ public class QwandaUtils {
 
 		log.info("About to load all attributes for realm " + realm);
 
-		List<Attribute> attributeList = fetchAttributesFromDB();
+		List<Attribute> attributeList = DatabaseUtils.fetchAttributes(realm);
 
 		if (attributeList == null) {
 			log.error("Null attributeList, not putting in map!!!");
@@ -106,45 +105,6 @@ public class QwandaUtils {
     }
 
 	/**
-	* Fetch all attributes from the database
-	*
-	* @return	All {@link Attribute} objects found in the DB
-	 */
-	public static List<Attribute> fetchAttributesFromDB() {
-
-		String uri = GennySettings.fyodorServiceUrl + "/api/attributes";
-
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-			.uri(URI.create(uri))
-			.setHeader("Content-Type", "application/json")
-			.GET().build();
-
-		String body = null;
-		try {
-			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			body = response.body();
-		} catch (IOException | InterruptedException e) {
-			log.error(e.getLocalizedMessage());
-		}
-
-		if (body != null) {
-
-			try {
-
-				List<Attribute> attributeList = jsonb.fromJson(body, new ArrayList<Attribute>(){}.getClass().getGenericSuperclass());
-
-				return attributeList;
-
-			} catch (Exception e) {
-				log.error(e.getStackTrace());
-			}
-		}
-
-		return null;
-	}
-
-	/**
 	* Remove an atttribute from the in memory set using the code.
 	*
 	* @param code	Code of the attribute to remove.
@@ -156,66 +116,65 @@ public class QwandaUtils {
 	}
 
 	/**
-	* Delete an atttribute from the database.
+	* Send a {@link QEventMessage} to shleemy for scheduling.
 	*
-	* @param code	Code of the attribute to delete.
+	* @param userToken
+	* @param eventMsgCode
+	* @param scheduleMsgCode
+	* @param triggertime
+	* @param targetCode
 	 */
-	public static void deleteAttribute(String code) {
+	public static void scheduleEvent(GennyToken userToken, String eventMsgCode, String scheduleMsgCode, LocalDateTime triggertime, String targetCode) {
 
-		String uri = GennySettings.fyodorServiceUrl + "/api/attribute/" + code;
+		// create the event message
+		QEventMessage evtMsg = new QEventMessage("SCHEDULE_EVT", eventMsgCode);
+		evtMsg.setToken(userToken.getToken());
+		evtMsg.getData().setTargetCode(targetCode);
 
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-			.uri(URI.create(uri))
-			.setHeader("Content-Type", "application/json")
-			.DELETE().build();
+		// create a recipient list
+		String[] rxList = new String[2];
+		rxList[0] = "SUPERUSER";
+		rxList[1] = userToken.getUserCode();
+		evtMsg.setRecipientCodeArray(rxList);
 
-		HttpResponse<String> response = null;
+		log.info("Scheduling event: " + eventMsgCode + ", Trigger time: " + triggertime.toString());
 
-		try {
-			response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		// create schedule message
+		QScheduleMessage scheduleMessage = new QScheduleMessage(scheduleMsgCode, jsonb.toJson(evtMsg), userToken.getUserCode(), "project", triggertime, userToken.getRealm());
+		log.info("Sending message " + scheduleMessage.getCode() + " to shleemy for scheduling");
 
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		if (response != null) {
-			if (response.statusCode() != 201) {
-				log.error("Could not delete attribute " + code);
-			}
-		}
+		// send msg to shleemy
+		String json = jsonb.toJson(scheduleMessage);
+		KafkaUtils.writeMsg("schedule", json);
 	}
 
 	/**
-	* Save an attribute to the database.
+	* Delete a currently scheduled message via shleemy.
 	*
-	* @param attribute	An {@link Attribute} object to save
+	* @param userToken
+	* @param code
 	 */
-	public static void saveAttribute(Attribute attribute) {
+	public static void deleteSchedule(GennyToken userToken, String code) {
 
-		String uri = GennySettings.fyodorServiceUrl + "/api/attributes";
-		String json = jsonb.toJson(attribute);
+		String uri = GennySettings.shleemyServiceUrl + "/api/schedule/code/" + code;
 
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
 			.uri(URI.create(uri))
 			.setHeader("Content-Type", "application/json")
-			.setHeader("Authorization", "Bearer " + gennyToken.getToken())
-			.POST(HttpRequest.BodyPublishers.ofString(json))
-			.build();
-
-		HttpResponse<String> response = null;
+			.setHeader("Authorization", "Bearer " + userToken.getToken())
+			.DELETE().build();
 
 		try {
-			response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		} catch (IOException | InterruptedException e) {
-			log.error(e.getLocalizedMessage());
-		}
 
-		if (response != null) {
-			if (response.statusCode() != 201) {
-				log.error("Could not save attribute " + attribute.getCode());
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+			if (response.statusCode() != 200) {
+				log.error("Unable to delete scheduled message " + code);
 			}
+
+		} catch (IOException | InterruptedException e) {
+			log.error(e);
 		}
 	}
 }
