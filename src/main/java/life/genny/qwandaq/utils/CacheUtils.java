@@ -56,6 +56,9 @@ public class CacheUtils {
 	public static <T> T getObject(String realm, String key, Class c) {
 
         String data = (String) readCache(realm, key);
+		if (data == null) {
+			return null;
+		}
 		Object object = jsonb.fromJson(data, c);
 		return (T) object;
 	}
