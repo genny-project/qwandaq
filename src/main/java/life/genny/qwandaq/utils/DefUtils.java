@@ -55,6 +55,11 @@ public class DefUtils {
 
 		List<BaseEntity> items = beUtils.getBaseEntitys(searchBE);
 
+		if (items == null) {
+			log.error("Could not fetch DEFS!");
+			return;
+		}
+
 		defs.put(realm, new ConcurrentHashMap<String, BaseEntity>());
 
 		for (BaseEntity item : items) {
