@@ -11,6 +11,9 @@ public class TestJob {
 	final String uuid;
 	final String code;
 	final Instant start;
+
+	final String searchJson;
+
 	Instant end = null;
 
 	/**
@@ -23,6 +26,7 @@ public class TestJob {
 		this.uuid = UUID.randomUUID().toString().toUpperCase();
     	entity.setCode(entity.getCode() + "_" + this.getUuid());
 		this.code = entity.getCode();
+		this.searchJson = jobLoader.jsonb.toJson(entity);
 		jobLoader.putJob(entity, this);
 	}
 	
@@ -62,6 +66,10 @@ public class TestJob {
 				+ (end != null ? ", end=" + end : "")
 				+ (end != null ? ", duration=" + getDuration() : "")
 				+ "]";
+	}
+
+	public String getSearchJSON() {
+		return searchJson;
 	}
 	
 }

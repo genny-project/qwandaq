@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
 
 import org.jboss.logging.Logger;
 
@@ -14,6 +16,8 @@ public class LoadTestJobs {
 	private static final Logger log = Logger.getLogger(LoadTestJobs.class);
 
 	static Map<String, TestJob> jobs = new ConcurrentHashMap<String, TestJob>();
+
+	public final Jsonb jsonb = JsonbBuilder.create();
 
 	public Map<String, TestJob> getJobs() {
 		return jobs;
