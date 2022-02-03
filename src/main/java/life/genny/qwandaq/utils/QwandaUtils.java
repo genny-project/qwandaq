@@ -96,6 +96,7 @@ public class QwandaUtils {
 		}
 		Map<String,Attribute> attributeMap = attributes.get(realm);
 
+
 		// Insert attributes into map
 		for (Attribute attribute : attributeList) {
 			attributeMap.put(attribute.getCode(), attribute);
