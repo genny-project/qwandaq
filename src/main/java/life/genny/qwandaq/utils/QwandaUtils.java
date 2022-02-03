@@ -98,14 +98,8 @@ public class QwandaUtils {
 
 
 		// Insert attributes into map
-		// start debug
-		log.info("DEBUG, Fill attributeMap for realm:" + realm);
-		int total = attributeList.size();
-		int index = 1;
-		//end debug
 		for (Attribute attribute : attributeList) {
 			attributeMap.put(attribute.getCode(), attribute);
-			log.info("DEBUG, processing status"  + index + "/" + total);
 		}
 
 		log.info("All attributes have been loaded: " + attributeMap.size() + " attributes");

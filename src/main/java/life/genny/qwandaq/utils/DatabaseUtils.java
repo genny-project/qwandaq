@@ -44,7 +44,6 @@ public class DatabaseUtils {
 			return null;
 		}
 
-		log.info("DEBUG, start fetchAttributes for realm:" + realm);
         try {
 
 			return entityManager.createQuery("SELECT a FROM Attribute a where a.realm=:realmStr and a.name not like 'App\\_%'", Attribute.class)
@@ -55,7 +54,6 @@ public class DatabaseUtils {
             log.error("No attributes found from DB search");
             log.error(e.getStackTrace());
 		}
-		log.info("DEBUG, fetchAttributes return NULL for realm:" + realm);
 		return null;
 	}
 
