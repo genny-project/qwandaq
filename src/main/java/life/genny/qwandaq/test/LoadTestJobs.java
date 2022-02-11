@@ -32,6 +32,11 @@ public class LoadTestJobs {
 		return jobs.get(uniqueCode);
 	}
 
+	/**
+	 * Put a new {@link TestJob} in the jobs store with a {@link SearchEntity} code as the key
+	 * @param entity - {@link SearchEntity} pertaining to the {@link TestJob}
+	 * @param job - {@link TestJob} to add
+	 */
 	void putJob(SearchEntity entity, TestJob job) {
 		jobs.put(entity.getCode(), job);
 	}
