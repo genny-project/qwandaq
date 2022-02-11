@@ -13,8 +13,8 @@ public class TestJob {
 	final String code;
 	final Instant start;
 
-	final String QSearchMessageJson;
-
+	final String qSearchMessageJson;
+	final String searchEntityJson;
 	Instant end = null;
 
 	/**
@@ -31,7 +31,9 @@ public class TestJob {
 
 		entity.setCode(entity.getCode() + "_" + this.getUuid());
 		this.code = entity.getCode();
-		this.QSearchMessageJson = jobLoader.jsonb.toJson(searchMessage);
+		
+		this.searchEntityJson = jobLoader.jsonb.toJson(entity);
+		this.qSearchMessageJson = jobLoader.jsonb.toJson(searchMessage);
 		jobLoader.putJob(entity, this);
 	}
 
@@ -74,12 +76,16 @@ public class TestJob {
 				+ ", start=" + start
 				+ (end != null ? ", end=" + end : "")
 				+ (end != null ? ", duration=" + getDuration() : "")
-				+ (qSearchMessageJson ? "\n" + getQSearchMessageJSON() : "")
+				+ (qSearchMessageJson ? "====QSearchMessage====\n" + getQSearchMessageJSON() : "")
 				+ "]";
 	}
 
+	public String getSearchJSON() {
+		return searchEntityJson;
+	}
+	
 	public String getQSearchMessageJSON() {
-		return QSearchMessageJson;
+		return qSearchMessageJson;
 	}
 
 }
