@@ -60,11 +60,16 @@ public class TestJob {
 
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+
+	public String toString(boolean searchEntityJson) {
 		return "TestJob ["
 				+ "code=" + code 
 				+ ", start=" + start 
 				+ (end != null ? ", end=" + end : "")
 				+ (end != null ? ", duration=" + getDuration() : "")
+				+ (searchEntityJson ? "\n" + getSearchJSON() :"")
 				+ "]";
 	}
 
