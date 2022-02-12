@@ -25,7 +25,7 @@ public class QwandaUtils {
 
 	static final Logger log = Logger.getLogger(QwandaUtils.class);
 
-    static Map<String, Map<String, Attribute>> attributes = new ConcurrentHashMap<>();
+	static Map<String, Map<String, Attribute>> attributes = new ConcurrentHashMap<>();
 
 	static Jsonb jsonb = JsonbBuilder.create();
 
@@ -39,8 +39,8 @@ public class QwandaUtils {
 	public static void init(GennyToken token, List<Attribute> attributeList) {
 		gennyToken = token;
 
-		attributes.put(token.getRealm(), new ConcurrentHashMap<String,Attribute>());
-		Map<String,Attribute> attributeMap = attributes.get(token.getRealm());
+		attributes.put(token.getRealm(), new ConcurrentHashMap<String, Attribute>());
+		Map<String, Attribute> attributeMap = attributes.get(token.getRealm());
 
 		for (Attribute attribute : attributeList) {
 			attributeMap.put(attribute.getCode(), attribute);
@@ -48,34 +48,34 @@ public class QwandaUtils {
 	}
 
 	/**
-	* Get an attribute from the in memory attribute map. If realm not found, it 
-	* will try to fetch attributes from the DB.
-	*
-	* @param attributeCode
-	* @param gennyToken
-	* @return
+	 * Get an attribute from the in memory attribute map. If realm not found, it
+	 * will try to fetch attributes from the DB.
+	 *
+	 * @param attributeCode
+	 * @param gennyToken
+	 * @return
 	 */
-    public static Attribute getAttribute(final String attributeCode) {
+	public static Attribute getAttribute(final String attributeCode) {
 
-    	String realm = gennyToken.getRealm();
+		String realm = gennyToken.getRealm();
 
-    	if (attributes.get(gennyToken.getRealm()) == null) {
-    		loadAllAttributes();
-    	}
-
-        Attribute attribute = attributes.get(realm).get(attributeCode);
-
-		if (attribute == null) {
-			log.error("Bad Attribute in Map for realm " +realm + " and code " + attributeCode);
+		if (attributes.get(gennyToken.getRealm()) == null) {
+			loadAllAttributes();
 		}
 
-        return attribute;
-    }
+		Attribute attribute = attributes.get(realm).get(attributeCode);
+
+		if (attribute == null) {
+			log.error("Bad Attribute in Map for realm " + realm + " and code " + attributeCode);
+		}
+
+		return attribute;
+	}
 
 	/**
-	* Load all attributes into the in memory map.
-	*
-	* @return
+	 * Load all attributes into the in memory map.
+	 *
+	 * @return
 	 */
 	public static void loadAllAttributes() {
 
@@ -83,49 +83,56 @@ public class QwandaUtils {
 
 		log.info("About to load all attributes for realm " + realm);
 
-		List<Attribute> attributeList = DatabaseUtils.fetchAttributes(realm);
+		List<Attribute> attributeList = null;
 
-		if (attributeList == null) {
-			log.error("Null attributeList, not putting in map!!!");
-			return;
+		try {
+			attributeList = DatabaseUtils.fetchAttributes(realm);
+			log.info("Loaded all attributes for realm " + realm);
+			if (attributeList == null) {
+				log.error("Null attributeList, not putting in map!!!");
+				return;
+			}
+
+			// Check for existing map
+			if (!attributes.containsKey(realm)) {
+				attributes.put(realm, new ConcurrentHashMap<String, Attribute>());
+			}
+			Map<String, Attribute> attributeMap = attributes.get(realm);
+
+			// Insert attributes into map
+			for (Attribute attribute : attributeList) {
+				attributeMap.put(attribute.getCode(), attribute);
+			}
+
+			log.info("All attributes have been loaded: " + attributeMap.size() + " attributes");
+		} catch (Exception e) {
+			log.error("Error loading attributes for realm " + realm);
 		}
 
-		// Check for existing map
-		if (!attributes.containsKey(realm)) {
-			attributes.put(realm, new ConcurrentHashMap<String,Attribute>());
-		}
-		Map<String,Attribute> attributeMap = attributes.get(realm);
-
-
-		// Insert attributes into map
-		for (Attribute attribute : attributeList) {
-			attributeMap.put(attribute.getCode(), attribute);
-		}
-
-		log.info("All attributes have been loaded: " + attributeMap.size() + " attributes");
-    }
-
-	/**
-	* Remove an atttribute from the in memory set using the code.
-	*
-	* @param code	Code of the attribute to remove.
-	 */
-	public static void removeAttributeFromMemory(String code) {
-
-    	String realm = gennyToken.getRealm();
-        attributes.get(realm).remove(code);
 	}
 
 	/**
-	* Send a {@link QEventMessage} to shleemy for scheduling.
-	*
-	* @param userToken
-	* @param eventMsgCode
-	* @param scheduleMsgCode
-	* @param triggertime
-	* @param targetCode
+	 * Remove an atttribute from the in memory set using the code.
+	 *
+	 * @param code Code of the attribute to remove.
 	 */
-	public static void scheduleEvent(GennyToken userToken, String eventMsgCode, String scheduleMsgCode, LocalDateTime triggertime, String targetCode) {
+	public static void removeAttributeFromMemory(String code) {
+
+		String realm = gennyToken.getRealm();
+		attributes.get(realm).remove(code);
+	}
+
+	/**
+	 * Send a {@link QEventMessage} to shleemy for scheduling.
+	 *
+	 * @param userToken
+	 * @param eventMsgCode
+	 * @param scheduleMsgCode
+	 * @param triggertime
+	 * @param targetCode
+	 */
+	public static void scheduleEvent(GennyToken userToken, String eventMsgCode, String scheduleMsgCode,
+			LocalDateTime triggertime, String targetCode) {
 
 		// create the event message
 		QEventMessage evtMsg = new QEventMessage("SCHEDULE_EVT", eventMsgCode);
@@ -141,7 +148,8 @@ public class QwandaUtils {
 		log.info("Scheduling event: " + eventMsgCode + ", Trigger time: " + triggertime.toString());
 
 		// create schedule message
-		QScheduleMessage scheduleMessage = new QScheduleMessage(scheduleMsgCode, jsonb.toJson(evtMsg), userToken.getUserCode(), "project", triggertime, userToken.getRealm());
+		QScheduleMessage scheduleMessage = new QScheduleMessage(scheduleMsgCode, jsonb.toJson(evtMsg),
+				userToken.getUserCode(), "project", triggertime, userToken.getRealm());
 		log.info("Sending message " + scheduleMessage.getCode() + " to shleemy for scheduling");
 
 		// send msg to shleemy
@@ -150,10 +158,10 @@ public class QwandaUtils {
 	}
 
 	/**
-	* Delete a currently scheduled message via shleemy.
-	*
-	* @param userToken
-	* @param code
+	 * Delete a currently scheduled message via shleemy.
+	 *
+	 * @param userToken
+	 * @param code
 	 */
 	public static void deleteSchedule(GennyToken userToken, String code) {
 
@@ -161,10 +169,10 @@ public class QwandaUtils {
 
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
-			.uri(URI.create(uri))
-			.setHeader("Content-Type", "application/json")
-			.setHeader("Authorization", "Bearer " + userToken.getToken())
-			.DELETE().build();
+				.uri(URI.create(uri))
+				.setHeader("Content-Type", "application/json")
+				.setHeader("Authorization", "Bearer " + userToken.getToken())
+				.DELETE().build();
 
 		try {
 
