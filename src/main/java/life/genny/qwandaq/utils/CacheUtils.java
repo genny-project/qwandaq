@@ -113,12 +113,12 @@ public class CacheUtils {
 
 		List<BaseEntity> result = new ArrayList<BaseEntity>();
 
-		BaseEntity parent = VertxUtils.readFromDDT(realm, beCode, token);
+		BaseEntity parent = getObject(realm, beCode, BaseEntity.class);
 
 		if (parent != null) {
 			for (EntityEntity ee : parent.getLinks()) {
 				String childCode = ee.getLink().getTargetCode();
-				BaseEntity child = VertxUtils.readFromDDT(realm, childCode, token);
+				BaseEntity child = getObject(realm, childCode, BaseEntity.class);
 				result.add(child);
 			}
 		}

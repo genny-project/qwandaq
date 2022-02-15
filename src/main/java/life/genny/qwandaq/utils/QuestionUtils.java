@@ -121,46 +121,39 @@ public class QuestionUtils implements Serializable {
 	public static QDataAskMessage getAsks(String sourceCode, String targetCode, String questionCode, String token) {
 
 		String json;
-		try {
+		json = QwandaUtils.apiGet(GennySettings.qwandaServiceUrl + "/qwanda/baseentitys/" + sourceCode + "/asks2/"
+				+ questionCode + "/" + targetCode, token);
+		if (json != null) {
+			if (!json.contains("<title>Error")) {
+				QDataAskMessage msg = jsonb.fromJson(json, QDataAskMessage.class);
 
-			json = QwandaUtils.apiGet(GennySettings.qwandaServiceUrl + "/qwanda/baseentitys/" + sourceCode + "/asks2/"
-					+ questionCode + "/" + targetCode, token);
-			if (json != null) {
-				if (!json.contains("<title>Error")) {
-					QDataAskMessage msg = jsonb.fromJson(json, QDataAskMessage.class);
+				if (true) {
+					// Identify all the attributeCodes and build up a working active Set
+					Set<String> activeAttributeCodes = new HashSet<String>();
+					for (Ask ask : msg.getItems()) {
+						activeAttributeCodes.addAll(getAttributeCodes(ask));
 
-					if (true) {
-						// Identify all the attributeCodes and build up a working active Set
-						Set<String> activeAttributeCodes = new HashSet<String>();
-						for (Ask ask : msg.getItems()) {
-							activeAttributeCodes.addAll(getAttributeCodes(ask));
-
-							// Go down through the child asks and get cached questions
-							setCachedQuestionsRecursively(ask, token);
-						}
-						// Now fetch the set from cache and add it....
-						Type type = new TypeToken<Set<String>>() {
-						}.getType();
-						GennyToken gToken = new GennyToken(token);
-						Set<String> activeAttributesSet = CacheUtils.getObject(gToken.getRealm(),
-								"ACTIVE_ATTRIBUTES", type);
-
-						if (activeAttributesSet == null) {
-							activeAttributesSet = new HashSet<String>();
-						}
-						activeAttributesSet.addAll(activeAttributeCodes);
-
-						CacheUtils.putObject(gToken.getRealm(), "ACTIVE_ATTRIBUTES", activeAttributesSet);
-
-						log.debug("Total Active AttributeCodes = " + activeAttributesSet.size());
+						// Go down through the child asks and get cached questions
+						setCachedQuestionsRecursively(ask, token);
 					}
-					return msg;
+					// Now fetch the set from cache and add it....
+					Type type = new TypeToken<Set<String>>() {
+					}.getType();
+					GennyToken gToken = new GennyToken(token);
+					Set<String> activeAttributesSet = CacheUtils.getObject(gToken.getRealm(),
+							"ACTIVE_ATTRIBUTES", type);
+
+					if (activeAttributesSet == null) {
+						activeAttributesSet = new HashSet<String>();
+					}
+					activeAttributesSet.addAll(activeAttributeCodes);
+
+					CacheUtils.putObject(gToken.getRealm(), "ACTIVE_ATTRIBUTES", activeAttributesSet);
+
+					log.debug("Total Active AttributeCodes = " + activeAttributesSet.size());
 				}
+				return msg;
 			}
-		} catch (ClientProtocolException e) {
-			log.info(e.getMessage());
-		} catch (IOException e) {
-			log.info(e.getMessage());
 		}
 
 		return null;
@@ -520,24 +513,15 @@ public class QuestionUtils implements Serializable {
 		if (q == null) {
 			log.warn("COULD NOT READ " + questionCode + " from cache!!! Aborting (after having tried 2 times");
 			String qJson;
-			try {
-				qJson = QwandaUtils.apiGet(GennySettings.qwandaServiceUrl + "/qwanda/questioncodes/" + questionCode,
-						userToken.getToken());
-				if (!StringUtils.isBlank(qJson)) {
-					q = jsonb.fromJson(qJson, Question.class);
-					CacheUtils.writeCache(userToken.getRealm(), questionCode, jsonb.toJson(q));
-					log.info("WRITTEN " + questionCode + " tocache!!! Fetched from database");
-					return q;
-				} else {
-					log.error("Questionutils could not find question " + questionCode + " in database");
-				}
-
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			qJson = QwandaUtils.apiGet(GennySettings.qwandaServiceUrl + "/qwanda/questioncodes/" + questionCode,
+					userToken.getToken());
+			if (!StringUtils.isBlank(qJson)) {
+				q = jsonb.fromJson(qJson, Question.class);
+				CacheUtils.writeCache(userToken.getRealm(), questionCode, jsonb.toJson(q));
+				log.info("WRITTEN " + questionCode + " tocache!!! Fetched from database");
+				return q;
+			} else {
+				log.error("Questionutils could not find question " + questionCode + " in database");
 			}
 
 			return null;
