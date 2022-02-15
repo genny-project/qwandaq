@@ -9,11 +9,13 @@ import javax.json.bind.JsonbBuilder;
 
 import org.jboss.logging.Logger;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.data.GennyCache;
 import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.entity.EntityEntity;
 import life.genny.qwandaq.models.GennyToken;
 
+@RegisterForReflection
 public class CacheUtils {
 
 	static final Logger log = Logger.getLogger(CacheUtils.class);
