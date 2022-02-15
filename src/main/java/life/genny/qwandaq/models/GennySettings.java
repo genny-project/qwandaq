@@ -6,25 +6,47 @@ package life.genny.qwandaq.models;
 public class GennySettings {
 
 	// URLs
-	public static final String projectUrl = System.getenv("PROJECT_URL") != null ? System.getenv("PROJECT_URL") : "http://alyson7.genny.life";
-	public static final String bridgeServiceUrl = System.getenv("BRIDGE_SERVICE_API") != null ? System.getenv("BRIDGE_SERVICE_API") :  projectUrl+"/api/service/commands";
-	public static final String fyodorServiceUrl = System.getenv("FYODOR_SERVICE_API") != null ? System.getenv("FYODOR_SERVICE_API") : (projectUrl+":4242");
-	public static final String shleemyServiceUrl = System.getenv("SHLEEMY_SERVICE_API") != null ? System.getenv("SHLEEMY_SERVICE_API") : (projectUrl+":4242");
-	public static final String infinispanHost = System.getenv("INFINISPAN_HOST") != null ? System.getenv("INFINISPAN_HOST") : (projectUrl+":11222");
+	public static final String projectUrl = System.getenv("PROJECT_URL") != null ? System.getenv("PROJECT_URL")
+			: "http://alyson7.genny.life";
+	public static final String qwandaServiceUrl = System.getenv("GENNY_API_URL") != null
+			? System.getenv("GENNY_API_URL")
+			: projectUrl + ":8280";
+	public static final String bridgeServiceUrl = System.getenv("BRIDGE_SERVICE_API") != null
+			? System.getenv("BRIDGE_SERVICE_API")
+			: projectUrl + "/api/service/commands";
+	public static final String fyodorServiceUrl = System.getenv("FYODOR_SERVICE_API") != null
+			? System.getenv("FYODOR_SERVICE_API")
+			: (projectUrl + ":4242");
+	public static final String shleemyServiceUrl = System.getenv("SHLEEMY_SERVICE_API") != null
+			? System.getenv("SHLEEMY_SERVICE_API")
+			: (projectUrl + ":4242");
+	public static final String infinispanHost = System.getenv("INFINISPAN_HOST") != null
+			? System.getenv("INFINISPAN_HOST")
+			: (projectUrl + ":11222");
 
 	// RULES
-	public static final String realmDir = System.getenv("REALM_DIR") != null ? System.getenv("REALM_DIR") : "./realm" ;
-	public static final String rulesDir = System.getenv("RULES_DIR") != null ? System.getenv("RULES_DIR") : "/rules" ;
-    public static final String keycloakUrl = System.getenv("KEYCLOAK_URL") != null ? System.getenv("KEYCLOAK_URL") : "http://keycloak.genny.life";
+	public static final String realmDir = System.getenv("REALM_DIR") != null ? System.getenv("REALM_DIR") : "./realm";
+	public static final String rulesDir = System.getenv("RULES_DIR") != null ? System.getenv("RULES_DIR") : "/rules";
+	public static final String keycloakUrl = System.getenv("KEYCLOAK_URL") != null ? System.getenv("KEYCLOAK_URL")
+			: "http://keycloak.genny.life";
 
 	// UI Defaults
-    public static final Integer defaultPageSize  = System.getenv("DEFAULT_PAGE_SIZE")==null?10:(Integer.parseInt(System.getenv("DEFAULT_PAGE_SIZE")));
-    public static final Integer defaultDropDownPageSize  = System.getenv("DEFAULT_DROPDOWN_PAGE_SIZE")==null?25:(Integer.parseInt(System.getenv("DEFAULT_DROPDOWN_PAGE_SIZE")));
-    public static final Integer defaultBucketSize  = System.getenv("DEFAULT_BUCKET_SIZE")==null?8:(Integer.parseInt(System.getenv("DEFAULT_BUCKET_SIZE")));
+	public static final Integer defaultPageSize = System.getenv("DEFAULT_PAGE_SIZE") == null ? 10
+			: (Integer.parseInt(System.getenv("DEFAULT_PAGE_SIZE")));
+	public static final Integer defaultDropDownPageSize = System.getenv("DEFAULT_DROPDOWN_PAGE_SIZE") == null ? 25
+			: (Integer.parseInt(System.getenv("DEFAULT_DROPDOWN_PAGE_SIZE")));
+	public static final Integer defaultBucketSize = System.getenv("DEFAULT_BUCKET_SIZE") == null ? 8
+			: (Integer.parseInt(System.getenv("DEFAULT_BUCKET_SIZE")));
 
 	// TWILIO
-    public static final String twilioAccountSid = System.getenv("TWILIO_ACCOUNT_SID") != null ? System.getenv("TWILIO_ACCOUNT_SID") : "TWILIO_ACCOUNT_SID"; 
-    public static final String twilioAuthToken = System.getenv("TWILIO_AUTH_TOKEN") != null ? System.getenv("TWILIO_AUTH_TOKEN") : "TWILIO_AUTH_TOKEN";   
-    public static final String twilioSenderMobile = System.getenv("TWILIO_SENDER_MOBILE") != null ? System.getenv("TWILIO_SENDER_MOBILE") : "TWILIO_SENDER_MOBILE";
+	public static final String twilioAccountSid = System.getenv("TWILIO_ACCOUNT_SID") != null
+			? System.getenv("TWILIO_ACCOUNT_SID")
+			: "TWILIO_ACCOUNT_SID";
+	public static final String twilioAuthToken = System.getenv("TWILIO_AUTH_TOKEN") != null
+			? System.getenv("TWILIO_AUTH_TOKEN")
+			: "TWILIO_AUTH_TOKEN";
+	public static final String twilioSenderMobile = System.getenv("TWILIO_SENDER_MOBILE") != null
+			? System.getenv("TWILIO_SENDER_MOBILE")
+			: "TWILIO_SENDER_MOBILE";
 
 }

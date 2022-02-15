@@ -1,11 +1,18 @@
 package life.genny.qwandaq.utils;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
 import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.data.GennyCache;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.entity.EntityEntity;
+import life.genny.qwandaq.models.GennyToken;
 
 public class CacheUtils {
 
@@ -20,11 +27,11 @@ public class CacheUtils {
 	}
 
 	/**
-	* Read a stringified item from a realm cache.
-	*
-	* @param realm
-	* @param key
-	* @return
+	 * Read a stringified item from a realm cache.
+	 *
+	 * @param realm
+	 * @param key
+	 * @return
 	 */
 	public static Object readCache(String realm, String key) {
 
@@ -33,11 +40,11 @@ public class CacheUtils {
 	}
 
 	/**
-	* Write a stringified item to a realm cache.
-	*
-	* @param realm	The realm cache to use.
-	* @param key	The key to save under.
-	* @param value	The value to save.
+	 * Write a stringified item to a realm cache.
+	 *
+	 * @param realm The realm cache to use.
+	 * @param key   The key to save under.
+	 * @param value The value to save.
 	 */
 	public static void writeCache(String realm, String key, String value) {
 
@@ -45,17 +52,17 @@ public class CacheUtils {
 	}
 
 	/**
-	* Get an object from a realm cache.
-	*
-	* @param <T>
-	* @param realm
-	* @param key
-	* @param c
-	* @return
+	 * Get an object from a realm cache.
+	 *
+	 * @param <T>
+	 * @param realm
+	 * @param key
+	 * @param c
+	 * @return
 	 */
 	public static <T> T getObject(String realm, String key, Class c) {
 
-        String data = (String) readCache(realm, key);
+		String data = (String) readCache(realm, key);
 		if (data == null) {
 			return null;
 		}
@@ -64,15 +71,58 @@ public class CacheUtils {
 	}
 
 	/**
-	* Put an object into the cache.
-	*
-	* @param realm
-	* @param key
-	* @param obj
+	 * Get an object from a realm cache.
+	 *
+	 * @param <T>
+	 * @param realm
+	 * @param key
+	 * @param type
+	 * @return
+	 */
+	public static <T> T getObject(String realm, String key, Type c) {
+
+		String data = (String) readCache(realm, key);
+		if (data == null) {
+			return null;
+		}
+		Object object = jsonb.fromJson(data, c);
+		return (T) object;
+	}
+
+	/**
+	 * Put an object into the cache.
+	 *
+	 * @param realm
+	 * @param key
+	 * @param obj
 	 */
 	public static void putObject(String realm, String key, Object obj) {
 
 		String json = jsonb.toJson(obj);
 		cache.getRemoteCache(realm).put(key, json);
+	}
+
+	public static List<BaseEntity> getChildren(String beCode, Integer level, String token) {
+
+		if (level == 0) {
+			return null; // exit point;
+		}
+
+		GennyToken gennyToken = new GennyToken(token);
+		final String realm = gennyToken.getRealm();
+
+		List<BaseEntity> result = new ArrayList<BaseEntity>();
+
+		BaseEntity parent = VertxUtils.readFromDDT(realm, beCode, token);
+
+		if (parent != null) {
+			for (EntityEntity ee : parent.getLinks()) {
+				String childCode = ee.getLink().getTargetCode();
+				BaseEntity child = VertxUtils.readFromDDT(realm, childCode, token);
+				result.add(child);
+			}
+		}
+
+		return result;
 	}
 }
