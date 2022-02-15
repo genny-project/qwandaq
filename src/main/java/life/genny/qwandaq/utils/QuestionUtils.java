@@ -50,235 +50,223 @@ public class QuestionUtils implements Serializable {
 	private QuestionUtils() {
 	}
 
-	// public static Boolean doesQuestionGroupExist(String sourceCode, String
-	// targetCode, final String questionCode,
-	// String token) {
+	public static Boolean doesQuestionGroupExist(String sourceCode, String targetCode, final String questionCode,
+			String token) {
 
-	// /* we grab the question group using the questionCode */
-	// QDataAskMessage questions = getAsks(sourceCode, targetCode, questionCode,
-	// token);
+		/* we grab the question group using the questionCode */
+		QDataAskMessage questions = getAsks(sourceCode, targetCode, questionCode,
+				token);
 
-	// /* we check if the question payload is not empty */
-	// if (questions != null) {
+		/* we check if the question payload is not empty */
+		if (questions != null) {
 
-	// /* we check if the question group contains at least one question */
-	// if (questions.getItems() != null && questions.getItems().length > 0) {
+			/* we check if the question group contains at least one question */
+			if (questions.getItems() != null && questions.getItems().length > 0) {
 
-	// Ask firstQuestion = questions.getItems()[0];
+				Ask firstQuestion = questions.getItems()[0];
 
-	// /* we check if the question is a question group */
-	// if
-	// (firstQuestion.getAttributeCode().contains("QQQ_QUESTION_GROUP_BUTTON_SUBMIT"))
-	// {
+				/* we check if the question is a question group */
+				if (firstQuestion.getAttributeCode().contains("QQQ_QUESTION_GROUP_BUTTON_SUBMIT")) {
 
-	// /* we see if this group contains at least one question */
-	// return firstQuestion.getChildAsks().length > 0;
-	// } else {
+					/* we see if this group contains at least one question */
+					return firstQuestion.getChildAsks().length > 0;
+				} else {
 
-	// /* if it is an ask we return true */
-	// return true;
-	// }
-	// }
-	// }
+					/* if it is an ask we return true */
+					return true;
+				}
+			}
+		}
 
-	// /* we return false otherwise */
-	// return false;
-	// }
+		/* we return false otherwise */
+		return false;
+	}
 
-	// private static JsonObject toJson(String jsonStr) // do exception
-	// {
-	// JsonReader jsonReader = Json.createReader(new StringReader(jsonStr));
-	// JsonObject jsonObject = jsonReader.readObject();
-	// jsonReader.close();
-	// return jsonObject;
-	// }
+	private static JsonObject toJson(String jsonStr) // do exception
+	{
+		JsonReader jsonReader = Json.createReader(new StringReader(jsonStr));
+		JsonObject jsonObject = jsonReader.readObject();
+		jsonReader.close();
+		return jsonObject;
+	}
 
-	// public static void setCachedQuestionsRecursively(Ask ask, String token) {
-	// // if (((ask.getChildAsks() != null) && (ask.getChildAsks().length > 0))
-	// // || (ask.getAttributeCode().equals("QQQ_QUESTION_GROUP"))) {
+	public static void setCachedQuestionsRecursively(Ask ask, String token) {
+		// if (((ask.getChildAsks() != null) && (ask.getChildAsks().length > 0))
+		// || (ask.getAttributeCode().equals("QQQ_QUESTION_GROUP"))) {
 
-	// if (ask.getAttributeCode().equals("QQQ_QUESTION_GROUP")) {
-	// for (Ask childAsk : ask.getChildAsks()) {
-	// setCachedQuestionsRecursively(childAsk, token);
-	// }
-	// } else {
-	// Question question = ask.getQuestion();
-	// String questionCode = question.getCode();
-	// GennyToken gToken = new GennyToken(token);
-	// String jsonQuestionStr = (String) CacheUtils.readCache(gToken.getRealm(),
-	// questionCode);
-	// JsonObject jsonQuestion = toJson(jsonQuestionStr);
+		if (ask.getAttributeCode().equals("QQQ_QUESTION_GROUP")) {
+			for (Ask childAsk : ask.getChildAsks()) {
+				setCachedQuestionsRecursively(childAsk, token);
+			}
+		} else {
+			Question question = ask.getQuestion();
+			String questionCode = question.getCode();
+			GennyToken gToken = new GennyToken(token);
+			String jsonQuestionStr = (String) CacheUtils.readCache(gToken.getRealm(),
+					questionCode);
+			JsonObject jsonQuestion = toJson(jsonQuestionStr);
 
-	// if ("ok".equalsIgnoreCase(jsonQuestion.getString("status"))) {
-	// Question cachedQuestion = jsonb.fromJson(jsonQuestion.getString("value"),
-	// Question.class);
-	// // Make sure we grab the icon too
-	// if (question.getIcon() != null) {
-	// if (!question.getIcon().equals(cachedQuestion.getIcon())) {
-	// cachedQuestion.setIcon(question.getIcon());
-	// }
-	// }
-	// ask.setQuestion(cachedQuestion);
-	// ask.setContextList(cachedQuestion.getContextList());
-	// }
-	// }
-	// }
+			if ("ok".equalsIgnoreCase(jsonQuestion.getString("status"))) {
+				Question cachedQuestion = jsonb.fromJson(jsonQuestion.getString("value"),
+						Question.class);
+				// Make sure we grab the icon too
+				if (question.getIcon() != null) {
+					if (!question.getIcon().equals(cachedQuestion.getIcon())) {
+						cachedQuestion.setIcon(question.getIcon());
+					}
+				}
+				ask.setQuestion(cachedQuestion);
+				ask.setContextList(cachedQuestion.getContextList());
+			}
+		}
+	}
 
-	// public static QDataAskMessage getAsks(String sourceCode, String targetCode,
-	// String questionCode, String token) {
+	public static QDataAskMessage getAsks(String sourceCode, String targetCode,
+			String questionCode, String token) {
 
-	// String json;
-	// json = QwandaUtils.apiGet(GennySettings.qwandaServiceUrl +
-	// "/qwanda/baseentitys/" + sourceCode + "/asks2/"
-	// + questionCode + "/" + targetCode, token);
-	// if (json != null) {
-	// if (!json.contains("<title>Error")) {
-	// QDataAskMessage msg = jsonb.fromJson(json, QDataAskMessage.class);
+		String json;
+		json = QwandaUtils.apiGet(GennySettings.qwandaServiceUrl +
+				"/qwanda/baseentitys/" + sourceCode + "/asks2/"
+				+ questionCode + "/" + targetCode, token);
+		if (json != null) {
+			if (!json.contains("<title>Error")) {
+				QDataAskMessage msg = jsonb.fromJson(json, QDataAskMessage.class);
 
-	// if (true) {
-	// // Identify all the attributeCodes and build up a working active Set
-	// Set<String> activeAttributeCodes = new HashSet<String>();
-	// for (Ask ask : msg.getItems()) {
-	// activeAttributeCodes.addAll(getAttributeCodes(ask));
+				if (true) {
+					// Identify all the attributeCodes and build up a working active Set
+					Set<String> activeAttributeCodes = new HashSet<String>();
+					for (Ask ask : msg.getItems()) {
+						activeAttributeCodes.addAll(getAttributeCodes(ask));
 
-	// // Go down through the child asks and get cached questions
-	// setCachedQuestionsRecursively(ask, token);
-	// }
-	// // Now fetch the set from cache and add it....
-	// Type type = new TypeToken<Set<String>>() {
-	// }.getType();
-	// GennyToken gToken = new GennyToken(token);
-	// Set<String> activeAttributesSet = CacheUtils.getObject(gToken.getRealm(),
-	// "ACTIVE_ATTRIBUTES", type);
+						// Go down through the child asks and get cached questions
+						setCachedQuestionsRecursively(ask, token);
+					}
+					// Now fetch the set from cache and add it....
+					Type type = new TypeToken<Set<String>>() {
+					}.getType();
+					GennyToken gToken = new GennyToken(token);
+					Set<String> activeAttributesSet = CacheUtils.getObject(gToken.getRealm(),
+							"ACTIVE_ATTRIBUTES", type);
 
-	// if (activeAttributesSet == null) {
-	// activeAttributesSet = new HashSet<String>();
-	// }
-	// activeAttributesSet.addAll(activeAttributeCodes);
+					if (activeAttributesSet == null) {
+						activeAttributesSet = new HashSet<String>();
+					}
+					activeAttributesSet.addAll(activeAttributeCodes);
 
-	// CacheUtils.putObject(gToken.getRealm(), "ACTIVE_ATTRIBUTES",
-	// activeAttributesSet);
+					CacheUtils.putObject(gToken.getRealm(), "ACTIVE_ATTRIBUTES",
+							activeAttributesSet);
 
-	// log.debug("Total Active AttributeCodes = " + activeAttributesSet.size());
-	// }
-	// return msg;
-	// }
-	// }
+					log.debug("Total Active AttributeCodes = " + activeAttributesSet.size());
+				}
+				return msg;
+			}
+		}
 
-	// return null;
-	// }
+		return null;
+	}
 
-	// private static Set<String> getAttributeCodes(Ask ask) {
-	// Set<String> activeCodes = new HashSet<String>();
-	// activeCodes.add(ask.getAttributeCode());
-	// if ((ask.getChildAsks() != null) && (ask.getChildAsks().length > 0)) {
-	// for (Ask childAsk : ask.getChildAsks()) {
-	// activeCodes.addAll(getAttributeCodes(childAsk));
-	// }
-	// }
-	// return activeCodes;
-	// }
+	private static Set<String> getAttributeCodes(Ask ask) {
+		Set<String> activeCodes = new HashSet<String>();
+		activeCodes.add(ask.getAttributeCode());
+		if ((ask.getChildAsks() != null) && (ask.getChildAsks().length > 0)) {
+			for (Ask childAsk : ask.getChildAsks()) {
+				activeCodes.addAll(getAttributeCodes(childAsk));
+			}
+		}
+		return activeCodes;
+	}
 
-	// public static QwandaMessage getQuestions(String sourceCode, String
-	// targetCode, String questionCode, String token)
-	// throws ClientProtocolException, IOException {
-	// return getQuestions(sourceCode, targetCode, questionCode, token, null, true);
-	// }
+	public static QwandaMessage getQuestions(String sourceCode, String targetCode, String questionCode, String token)
+			throws ClientProtocolException, IOException {
+		return getQuestions(sourceCode, targetCode, questionCode, token, null, true);
+	}
 
-	// public static QwandaMessage getQuestions(String sourceCode, String
-	// targetCode, String questionCode, String token,
-	// String stakeholderCode, Boolean pushSelection) throws
-	// ClientProtocolException, IOException {
+	public static QwandaMessage getQuestions(String sourceCode, String targetCode, String questionCode, String token,
+			String stakeholderCode, Boolean pushSelection) throws ClientProtocolException, IOException {
 
-	// QBulkMessage bulk = new QBulkMessage();
-	// QwandaMessage qwandaMessage = new QwandaMessage();
+		QBulkMessage bulk = new QBulkMessage();
+		QwandaMessage qwandaMessage = new QwandaMessage();
 
-	// long startTime2 = System.nanoTime();
+		long startTime2 = System.nanoTime();
 
-	// QDataAskMessage questions = getAsks(sourceCode, targetCode, questionCode,
-	// token);
-	// long endTime2 = System.nanoTime();
-	// double difference2 = (endTime2 - startTime2) / 1e6; // get ms
-	// log.info("getAsks fetch Time = " + difference2 + " ms");
+		QDataAskMessage questions = getAsks(sourceCode, targetCode, questionCode,
+				token);
+		long endTime2 = System.nanoTime();
+		double difference2 = (endTime2 - startTime2) / 1e6; // get ms
+		log.info("getAsks fetch Time = " + difference2 + " ms");
 
-	// if (questions != null) {
+		if (questions != null) {
 
-	// /*
-	// * if we have the questions, we loop through the asks and send the required
-	// data
-	// * to front end
-	// */
-	// long startTime = System.nanoTime();
-	// Ask[] asks = questions.getItems();
-	// if (asks != null && pushSelection) {
-	// QBulkMessage askData = sendAsksRequiredData(asks, token, stakeholderCode);
-	// for (QDataBaseEntityMessage message : askData.getMessages()) {
-	// bulk.add(message);
-	// }
-	// }
-	// long endTime = System.nanoTime();
-	// double difference = (endTime - startTime) / 1e6; // get ms
-	// log.info("sendAsksRequiredData fetch Time = " + difference + " ms");
+			/*
+			 * if we have the questions, we loop through the asks and send the required
+			 * data
+			 * to front end
+			 */
+			long startTime = System.nanoTime();
+			Ask[] asks = questions.getItems();
+			if (asks != null && pushSelection) {
+				QBulkMessage askData = sendAsksRequiredData(asks, token, stakeholderCode);
+				for (QDataBaseEntityMessage message : askData.getMessages()) {
+					bulk.add(message);
+				}
+			}
+			long endTime = System.nanoTime();
+			double difference = (endTime - startTime) / 1e6; // get ms
+			log.info("sendAsksRequiredData fetch Time = " + difference + " ms");
 
-	// qwandaMessage.askData = bulk;
-	// qwandaMessage.asks = questions;
+			qwandaMessage.askData = bulk;
+			qwandaMessage.asks = questions;
 
-	// return qwandaMessage;
+			return qwandaMessage;
 
-	// } else {
-	// log.error("Questions Msg is null " + sourceCode + "/asks2/" + questionCode +
-	// "/" + targetCode);
-	// }
+		} else {
+			log.error("Questions Msg is null " + sourceCode + "/asks2/" + questionCode +
+					"/" + targetCode);
+		}
 
-	// return null;
-	// }
+		return null;
+	}
 
-	// public static QwandaMessage askQuestions(final String sourceCode, final
-	// String targetCode,
-	// final String questionGroupCode, String token) {
-	// return askQuestions(sourceCode, targetCode, questionGroupCode, token, null,
-	// true);
-	// }
+	public static QwandaMessage askQuestions(final String sourceCode, final String targetCode,
+			final String questionGroupCode, String token) {
+		return askQuestions(sourceCode, targetCode, questionGroupCode, token, null,
+				true);
+	}
 
-	// public static QwandaMessage askQuestions(final String sourceCode, final
-	// String targetCode,
-	// final String questionGroupCode, String token, String stakeholderCode) {
-	// return askQuestions(sourceCode, targetCode, questionGroupCode, token,
-	// stakeholderCode, true);
-	// }
+	public static QwandaMessage askQuestions(final String sourceCode, final String targetCode,
+			final String questionGroupCode, String token, String stakeholderCode) {
+		return askQuestions(sourceCode, targetCode, questionGroupCode, token,
+				stakeholderCode, true);
+	}
 
-	// public static QwandaMessage askQuestions(final String sourceCode, final
-	// String targetCode,
-	// final String questionGroupCode, Boolean pushSelection) {
-	// return askQuestions(sourceCode, targetCode, questionGroupCode, null, null,
-	// pushSelection);
-	// }
+	public static QwandaMessage askQuestions(final String sourceCode, final String targetCode,
+			final String questionGroupCode, Boolean pushSelection) {
+		return askQuestions(sourceCode, targetCode, questionGroupCode, null, null,
+				pushSelection);
+	}
 
-	// public static QwandaMessage askQuestions(final String sourceCode, final
-	// String targetCode,
-	// final String questionGroupCode, String token, Boolean pushSelection) {
-	// return askQuestions(sourceCode, targetCode, questionGroupCode, token, null,
-	// pushSelection);
-	// }
+	public static QwandaMessage askQuestions(final String sourceCode, final String targetCode,
+			final String questionGroupCode, String token, Boolean pushSelection) {
+		return askQuestions(sourceCode, targetCode, questionGroupCode, token, null,
+				pushSelection);
+	}
 
-	// public static QwandaMessage askQuestions(final String sourceCode, final
-	// String targetCode,
-	// final String questionGroupCode, final String token, final String
-	// stakeholderCode,
-	// final Boolean pushSelection) {
+	public static QwandaMessage askQuestions(final String sourceCode, final String targetCode,
+			final String questionGroupCode, final String token, final String stakeholderCode,
+			final Boolean pushSelection) {
 
-	// try {
+		try {
 
-	// /* if sending the questions worked, we ask user */
-	// return getQuestions(sourceCode, targetCode, questionGroupCode, token,
-	// stakeholderCode, pushSelection);
+			/* if sending the questions worked, we ask user */
+			return getQuestions(sourceCode, targetCode, questionGroupCode, token,
+					stakeholderCode, pushSelection);
 
-	// } catch (Exception e) {
-	// log.info("Ask questions exception: ");
-	// e.printStackTrace();
-	// return null;
-	// }
-	// }
+		} catch (Exception e) {
+			log.info("Ask questions exception: ");
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	// public static QwandaMessage setCustomQuestion(QwandaMessage questions, String
 	// questionAttributeCode,
@@ -542,72 +530,71 @@ public class QuestionUtils implements Serializable {
 	// // return question;
 	// // }
 
-	// static public Question getQuestion(String questionCode, GennyToken userToken)
-	// {
+	static public Question getQuestion(String questionCode, GennyToken userToken)
+	{
 
-	// Question q = null;
-	// Integer retry = 2;
-	// while (retry >= 0) { // Sometimes q is read properly from cache
-	// String qJsonStr = (String) CacheUtils.readCache(userToken.getRealm(),
-	// questionCode);
-	// JsonObject jsonQ = toJson(qJsonStr);
-	// q = jsonb.fromJson(jsonQ.getString("value"), Question.class);
-	// if (q == null) {
-	// retry--;
+	Question q = null;
+	Integer retry = 2;
+	while (retry >= 0) { // Sometimes q is read properly from cache
+	String qJsonStr = (String) CacheUtils.readCache(userToken.getRealm(),
+	questionCode);
+	JsonObject jsonQ = toJson(qJsonStr);
+	q = jsonb.fromJson(jsonQ.getString("value"), Question.class);
+	if (q == null) {
+	retry--;
 
-	// } else {
-	// break;
-	// }
+	} else {
+	break;
+	}
 
-	// }
+	}
 
-	// if (q == null) {
-	// log.warn("COULD NOT READ " + questionCode + " from cache!!! Aborting (after
-	// having tried 2 times");
-	// String qJson;
-	// qJson = QwandaUtils.apiGet(GennySettings.qwandaServiceUrl +
-	// "/qwanda/questioncodes/" + questionCode,
-	// userToken.getToken());
-	// if (!StringUtils.isBlank(qJson)) {
-	// q = jsonb.fromJson(qJson, Question.class);
-	// CacheUtils.writeCache(userToken.getRealm(), questionCode, jsonb.toJson(q));
-	// log.info("WRITTEN " + questionCode + " tocache!!! Fetched from database");
-	// return q;
-	// } else {
-	// log.error("Questionutils could not find question " + questionCode + " in
-	// database");
-	// }
+	if (q == null) {
+	log.warn("COULD NOT READ " + questionCode + " from cache!!! Aborting (after having tried 2 times");
+	String qJson;
+	qJson = QwandaUtils.apiGet(GennySettings.qwandaServiceUrl +
+	"/qwanda/questioncodes/" + questionCode,
+	userToken.getToken());
+	if (!StringUtils.isBlank(qJson)) {
+	q = jsonb.fromJson(qJson, Question.class);
+	CacheUtils.writeCache(userToken.getRealm(), questionCode, jsonb.toJson(q));
+	log.info("WRITTEN " + questionCode + " tocache!!! Fetched from database");
+	return q;
+	} else {
+	log.error("Questionutils could not find question " + questionCode + " in
+	database");
+	}
 
-	// return null;
-	// } else {
-	// return q;
-	// }
-	// }
+	return null;
+	} else {
+	return q;
+	}
+	}
 
-	// public static List<BaseEntity> getChildren(String beCode, Integer level,
-	// String token) {
+	public static List<BaseEntity> getChildren(String beCode, Integer level,
+			String token) {
 
-	// if (level == 0) {
-	// return null; // exit point;
-	// }
-	// GennyToken gennyToken = new GennyToken(token);
+		if (level == 0) {
+			return null; // exit point;
+		}
+		GennyToken gennyToken = new GennyToken(token);
 
-	// final String realm = gennyToken.getRealm();
+		final String realm = gennyToken.getRealm();
 
-	// List<BaseEntity> result = new ArrayList<BaseEntity>();
+		List<BaseEntity> result = new ArrayList<BaseEntity>();
 
-	// BaseEntity parent = CacheUtils.getObject(gennyToken.getRealm(),
-	// beCode, BaseEntity.class);
+		BaseEntity parent = CacheUtils.getObject(gennyToken.getRealm(),
+				beCode, BaseEntity.class);
 
-	// if (parent != null) {
-	// for (EntityEntity ee : parent.getLinks()) {
-	// String childCode = ee.getLink().getTargetCode();
-	// BaseEntity child = CacheUtils.getObject(gennyToken.getRealm(), childCode,
-	// BaseEntity.class);
-	// result.add(child);
-	// }
-	// }
+		if (parent != null) {
+			for (EntityEntity ee : parent.getLinks()) {
+				String childCode = ee.getLink().getTargetCode();
+				BaseEntity child = CacheUtils.getObject(gennyToken.getRealm(), childCode,
+						BaseEntity.class);
+				result.add(child);
+			}
+		}
 
-	// return result;
-	// }
+		return result;
+	}
 }
