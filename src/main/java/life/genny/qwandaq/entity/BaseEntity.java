@@ -49,6 +49,9 @@ import org.hibernate.annotations.FilterDefs;
 import org.hibernate.annotations.Filters;
 import org.hibernate.annotations.ParamDef;
 
+import org.infinispan.protostream.annotations.ProtoFactory;
+import org.infinispan.protostream.annotations.ProtoField;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -148,7 +151,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	@JsonIgnore
 	@XmlTransient
 	@Transient
-	private Map<String,EntityAttribute> attributeMap = null;
+	private transient Map<String,EntityAttribute> attributeMap = null;
 	
 	
 	
@@ -156,7 +159,9 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		return attributeMap;
 	}
 
-	
+	public void setAttributeMap(Map<String, EntityAttribute> attributeMap) {
+		this.attributeMap = attributeMap;
+	}
 
 	/**
 	 * Constructor.
@@ -164,7 +169,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @param none
 	 */
 	@SuppressWarnings("unused")
-	protected BaseEntity() {
+	public BaseEntity() {
 		super();
 		// dummy
 	}
@@ -185,6 +190,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @param Code the unique code of the core entity
 	 * @param Name the summary name of the core entity
 	 */
+	@ProtoFactory
 	public BaseEntity(final String aCode, final String aName) {
 		super(aCode, aName);
 
@@ -204,6 +210,10 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		this.answers = answers;
 	}
 
+	public void setAnswers(final List<AnswerLink> answers) {
+		this.answers.addAll(answers);
+	}
+
 	/**
 	 * @return the baseEntityAttributes
 	 */
@@ -217,6 +227,10 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 */
 	public void setBaseEntityAttributes(final Set<EntityAttribute> baseEntityAttributes) {
 		this.baseEntityAttributes = baseEntityAttributes;
+	}
+
+	public void setBaseEntityAttributes(final List<EntityAttribute> baseEntityAttributes) {
+		this.baseEntityAttributes.addAll(baseEntityAttributes);
 	}
 
 	/**
@@ -237,6 +251,10 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		this.links = links;
 	}
 
+	public void setLinks(final List<EntityEntity> links) {
+		this.links.addAll(links);
+	}
+
 	/**
 	 * @return the questions
 	 */
@@ -252,6 +270,10 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 */
 	public void setQuestions(final Set<EntityQuestion> questions) {
 		this.questions = questions;
+	}
+
+	public void setQuestions(final List<EntityQuestion> questions) {
+		this.questions.addAll(questions);
 	}
 
 	/**
@@ -875,6 +897,10 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 */
 	public Boolean getFromCache() {
 		return fromCache;
+	}
+
+	public Boolean isFromCache() {
+		return getFromCache();
 	}
 
 	/**

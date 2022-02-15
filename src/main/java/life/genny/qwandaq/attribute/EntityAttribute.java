@@ -212,9 +212,9 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	@Column
 	private String valueString;
 
-	@Column(name = "money", length = 128)
-	@Convert(converter = MoneyConverter.class)
-	Money valueMoney;
+	// @Column(name = "money", length = 128)
+	// @Convert(converter = MoneyConverter.class)
+	// Money valueMoney;
 	
 	/**
 	 * Store the relative importance of the attribute for the baseEntity
@@ -342,6 +342,26 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		getPk().setAttribute(attribute);
 		this.attributeCode = attribute.getCode();
 		this.attributeName = attribute.getName();
+	}
+
+	public Boolean isConfirmationFlag() {
+		return getConfirmationFlag();
+	}
+
+	public Boolean isInferred() {
+		return getInferred();
+	}
+
+	public Boolean isPrivacyFlag() {
+		return getPrivacyFlag();
+	}
+
+	public Boolean isReadonly() {
+		return getReadonly();
+	}
+
+	public Boolean isValueBoolean() {
+		return getValueBoolean();
 	}
 
 	/**
@@ -530,16 +550,16 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	/**
 	 * @return the valueMoney
 	 */
-	public Money getValueMoney() {
-		return valueMoney;
-	}
+	// public Money getValueMoney() {
+	// 	return valueMoney;
+	// }
 
 	/**
 	 * @param valueMoney the valueMoney to set
 	 */
-	public void setValueMoney(Money valueMoney) {
-		this.valueMoney = valueMoney;
-	}
+	// public void setValueMoney(Money valueMoney) {
+	// 	this.valueMoney = valueMoney;
+	// }
 
 	/**
 	 * @return the privacyFlag
@@ -678,9 +698,9 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		case "java.time.LocalDate":
 		case "LocalDate":
 			return (T) getValueDate();
-		case "org.javamoney.moneta.Money":
-		case "Money":
-			return (T) getValueMoney();
+		// case "org.javamoney.moneta.Money":
+		// case "Money":
+		// 	return (T) getValueMoney();
 //		case "range.LocalDate":
 //			return (T) getValueDateRange();
 		case "java.lang.String":
@@ -754,16 +774,16 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 					final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 					final LocalTime date = LocalTime.parse(result, formatter);
 					setValueTime(date);
-				} else if (getAttribute().getDataType().getClassName()
-						.equalsIgnoreCase(Money.class.getCanonicalName())) {
-					JsonReader reader = Json.createReader(new StringReader(result));
-					JsonObject obj = reader.readObject();
+				// } else if (getAttribute().getDataType().getClassName()
+				// 		.equalsIgnoreCase(Money.class.getCanonicalName())) {
+				// 	JsonReader reader = Json.createReader(new StringReader(result));
+				// 	JsonObject obj = reader.readObject();
 
-					CurrencyUnit currency = Monetary.getCurrency(obj.getString("currency"));
-					Double amount = Double.valueOf(obj.getString("amount"));
+				// 	CurrencyUnit currency = Monetary.getCurrency(obj.getString("currency"));
+				// 	Double amount = Double.valueOf(obj.getString("amount"));
 
-					Money money = Money.of(amount, currency);
-					setValueMoney(money);
+				// 	Money money = Money.of(amount, currency);
+				// 	setValueMoney(money);
 				} else if (getAttribute().getDataType().getClassName()
 						.equalsIgnoreCase(Integer.class.getCanonicalName())) {
 					final Integer integer = Integer.parseInt(result);
@@ -816,10 +836,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 			case "LocalTime":
 				setValueTime((LocalTime) value);
 				break;
-			case "org.javamoney.moneta.Money":
-			case "Money":
-				setValueMoney((Money) value);
-				break;
+			// case "org.javamoney.moneta.Money":
+			// case "Money":
+			// 	setValueMoney((Money) value);
+			// 	break;
 			case "java.lang.Double":
 			case "Double":
 				if (value instanceof BigDecimal)
@@ -870,9 +890,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 			return; 
 		}
 
-		if (value instanceof Money)
-			setValueMoney((Money) value);
-		else if (value instanceof Integer)
+		// if (value instanceof Money)
+		// 	setValueMoney((Money) value);
+		// else 
+		if (value instanceof Integer)
 			setValueInteger((Integer) value);
 		else if (value instanceof LocalDateTime)
 			setValueDateTime((LocalDateTime) value);
@@ -935,11 +956,11 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 			DateFormat df2 = new SimpleDateFormat("HH:mm");			
 			String dout2 = df2.format(getValueTime());
 			return dout2;
-		case "org.javamoney.moneta.Money":
-		case "Money":
-			   DecimalFormat decimalFormat = new DecimalFormat("###############0.00");		        
-		    	String amount = decimalFormat.format(getValueMoney().getNumber().doubleValue());
-				return "{\"amount\":"+amount+",\"currency\":\""+getValueMoney().getCurrency().getCurrencyCode()+"\"}";
+		// case "org.javamoney.moneta.Money":
+		// case "Money":
+		// 	   DecimalFormat decimalFormat = new DecimalFormat("###############0.00");		        
+		//     	String amount = decimalFormat.format(getValueMoney().getNumber().doubleValue());
+		// 		return "{\"amount\":"+amount+",\"currency\":\""+getValueMoney().getCurrency().getCurrencyCode()+"\"}";
 		case "java.lang.Double":
 		case "Double":
 			return getValueDouble().toString();
@@ -969,11 +990,11 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		if( getValueString() != null) {
 			return getValueString();
 		}
-		if(getValueMoney() != null) {
-			   DecimalFormat decimalFormat = new DecimalFormat("###############0.00");		        
-		    	String amount = decimalFormat.format(getValueMoney().getNumber().doubleValue());
-				return "{\"amount\":"+amount+",\"currency\":\""+getValueMoney().getCurrency().getCurrencyCode()+"\"}";
-		}
+		// if(getValueMoney() != null) {
+		// 	   DecimalFormat decimalFormat = new DecimalFormat("###############0.00");		        
+		//     	String amount = decimalFormat.format(getValueMoney().getNumber().doubleValue());
+		// 		return "{\"amount\":"+amount+",\"currency\":\""+getValueMoney().getCurrency().getCurrencyCode()+"\"}";
+		// }
 		if(getValueInteger() != null) {
 			return getValueInteger().toString();
 		}
@@ -1027,9 +1048,9 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 			return (T)  getValueInteger();
 		}else if(getValueDate() != null) {
 			return  (T) getValueDate();
-		} else if(getValueMoney() != null) {
-			//return  (T) ("{\"amount\":"+getValueMoney().getNumber()+",\"currency\":\""+getValueMoney().getCurrency().getCurrencyCode()+"\"}");
-			return (T) getValueMoney();
+		// } else if(getValueMoney() != null) {
+		// 	//return  (T) ("{\"amount\":"+getValueMoney().getNumber()+",\"currency\":\""+getValueMoney().getCurrency().getCurrencyCode()+"\"}");
+		// 	return (T) getValueMoney();
 		} else if(getValueTime() != null) {
 			return  (T) getValueTime();
 		} else if(getValueLong() != null) {
@@ -1089,9 +1110,9 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		case "java.time.LocalDate":
 		case "LocalDate":
 			return new CompareToBuilder().append(this.getValueDate(), myClass.getValueDate()).toComparison();
-		case "org.javamoney.moneta.Money":
-		case "Money":
-			return new CompareToBuilder().append(this.getValueMoney(), myClass.getValueMoney()).toComparison();
+		// case "org.javamoney.moneta.Money":
+		// case "Money":
+		// 	return new CompareToBuilder().append(this.getValueMoney(), myClass.getValueMoney()).toComparison();
 //		case "range.LocalDate":
 //			return new CompareToBuilder().append(this.getValueDateRange(), myClass.getValueDateRange()).toComparison();
 		case "java.lang.String":
@@ -1252,9 +1273,9 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 			return (T) getValueString();
 		}
 
-		if (getValueMoney() != null) {
-			return (T) getValueMoney();
-		}
+		// if (getValueMoney() != null) {
+		// 	return (T) getValueMoney();
+		// }
 		
 //		if (getValueDateRange() != null) {
 //			return (T) getValueDateRange();
@@ -1280,11 +1301,11 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 			return dout;
 		}
 
-		if (getValueMoney() != null) {
-			   DecimalFormat decimalFormat = new DecimalFormat("###############0.00");		        
-		    	String amount = decimalFormat.format(getValueMoney().getNumber().doubleValue());
-				return "{\"amount\":"+amount+",\"currency\":\""+getValueMoney().getCurrency().getCurrencyCode()+"\"}";
-		}
+		// if (getValueMoney() != null) {
+		// 	   DecimalFormat decimalFormat = new DecimalFormat("###############0.00");		        
+		//     	String amount = decimalFormat.format(getValueMoney().getNumber().doubleValue());
+		// 		return "{\"amount\":"+amount+",\"currency\":\""+getValueMoney().getCurrency().getCurrencyCode()+"\"}";
+		// }
 		
 		if (getValueLong() != null) {
 			return "" + getValueLong();

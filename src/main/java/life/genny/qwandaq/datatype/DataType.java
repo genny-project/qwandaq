@@ -123,7 +123,7 @@ public class DataType implements Serializable {
 	 * @param none
 	 */
 	@SuppressWarnings("unused")
-	protected DataType() {
+	public DataType() {
 		super();
 		// dummy for hibernate
 	}
