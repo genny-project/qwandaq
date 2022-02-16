@@ -35,6 +35,7 @@ public class DatabaseUtils {
 	/**
 	 * Fetch all attributes from the database
 	 *
+	 * @param realm
 	 * @return All {@link Attribute} objects found in the DB
 	 */
 	@Transactional
