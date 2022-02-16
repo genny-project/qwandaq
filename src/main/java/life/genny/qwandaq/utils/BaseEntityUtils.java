@@ -2,7 +2,12 @@ package life.genny.qwandaq.utils;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -166,7 +171,22 @@ public class BaseEntityUtils implements Serializable {
 		String uri = GennySettings.fyodorServiceUrl + "/api/search/fetch";
 		String json = jsonb.toJson(searchBE);
 
-		String body = HttpUtils.post(uri, json, this.token);
+		// String body = HttpUtils.post(uri, json, this.token);
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+			.uri(URI.create(uri))
+			.setHeader("Content-Type", "application/json")
+			.setHeader("Authorization", "Bearer " + this.token)
+			.POST(HttpRequest.BodyPublishers.ofString(json))
+			.build();
+
+		String body = null;
+		try {
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			body = response.body();
+		} catch (IOException | InterruptedException e) {
+			log.error(e);
+		}
 
 		if (body != null) {
 			try {
