@@ -2,12 +2,7 @@ package life.genny.qwandaq.utils;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -171,21 +166,7 @@ public class BaseEntityUtils implements Serializable {
 		String uri = GennySettings.fyodorServiceUrl + "/api/search/fetch";
 		String json = jsonb.toJson(searchBE);
 
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-			.uri(URI.create(uri))
-			.setHeader("Content-Type", "application/json")
-			.setHeader("Authorization", "Bearer " + this.token)
-			.POST(HttpRequest.BodyPublishers.ofString(json))
-			.build();
-
-		String body = null;
-		try {
-			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			body = response.body();
-		} catch (IOException | InterruptedException e) {
-			log.error(e);
-		}
+		String body = HttpUtils.post(uri, json, this.token);
 
 		if (body != null) {
 			try {
@@ -398,6 +379,12 @@ public class BaseEntityUtils implements Serializable {
 		return entityList;
 	}
 
+	/**
+	* Save an {@link Answer} object.
+	*
+	* @param answer
+	* @return
+	 */
 	public BaseEntity saveAnswer(Answer answer) {
 
 		// check if target is valid
@@ -428,6 +415,11 @@ public class BaseEntityUtils implements Serializable {
 		return target;
 	}
 
+	/**
+	* Save a List of {@link Answer} objects.
+	*
+	* @param answers
+	 */
 	public void saveAnswers(List<Answer> answers) {
 
 		// sort answers into target BaseEntitys
@@ -460,6 +452,13 @@ public class BaseEntityUtils implements Serializable {
 		}
 	}
 
+	/**
+	* Create a new {@link BaseEntity} using a DEF entity code.
+	*
+	* @param defCode
+	* @return
+	* @throws Exception
+	 */
 	public BaseEntity create(final String defCode) throws Exception {
 
 		String realm = this.getGennyToken().getRealm();
@@ -468,14 +467,38 @@ public class BaseEntityUtils implements Serializable {
 		return create(defBE);
 	}
 
+	/**
+	* Create a new {@link BaseEntity} using a DEF entity.
+	*
+	* @param defBE
+	* @return
+	* @throws Exception
+	 */
 	public BaseEntity create(final BaseEntity defBE) throws Exception {
 		return create(defBE, null, null);
 	}
 
+	/**
+	* Create a new {@link BaseEntity} using a DEF entity and a name.
+	*
+	* @param defBE
+	* @param name
+	* @return
+	* @throws Exception
+	 */
 	public BaseEntity create(final BaseEntity defBE, String name) throws Exception {
 		return create(defBE, name, null);
 	}
 
+	/**
+	* Create a new {@link BaseEntity} using a name and code.
+	*
+	* @param defBE
+	* @param name
+	* @param code
+	* @return
+	* @throws Exception
+	 */
 	public BaseEntity create(final BaseEntity defBE, String name, String code) throws Exception {
 
 		if (defBE == null) {
@@ -567,6 +590,14 @@ public class BaseEntityUtils implements Serializable {
 		return item;
 	}
 
+	/**
+	* Create a new user {@link BaseEntity} using a DEF entity.
+	*
+	* @param defBE
+	* @param email
+	* @return
+	* @throws Exception
+	 */
 	public BaseEntity createUser(final BaseEntity defBE, final String email) throws Exception {
 
 		BaseEntity item = null;
