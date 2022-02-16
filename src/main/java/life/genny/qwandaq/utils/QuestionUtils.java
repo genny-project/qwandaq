@@ -295,128 +295,123 @@ public class QuestionUtils implements Serializable {
 	}
 
 	private static QBulkMessage sendAsksRequiredData(Ask[] asks, String token,
-	String stakeholderCode) {
-	// GennyToken gennyToken = new GennyToken(token);
-	// QBulkMessage bulk = new QBulkMessage();
+			String stakeholderCode) {
+		GennyToken gennyToken = new GennyToken(token);
+		QBulkMessage bulk = new QBulkMessage();
 
-	// /* we loop through the asks and send the required data if necessary */
-	// for (Ask ask : asks) {
+		// /* we loop through the asks and send the required data if necessary */
+		for (Ask ask : asks) {
 
-	// /*
-	// * we get the attribute code. if it starts with "LNK_" it means it is a
-	// dropdown
-	// * selection.
-	// */
+			/*
+			 * we get the attribute code. if it starts with "LNK_" it means it is a
+			 * dropdown
+			 * selection.
+			 */
 
-	// String attributeCode = ask.getAttributeCode();
-	// if (attributeCode != null && attributeCode.startsWith("LNK_")) {
+			String attributeCode = ask.getAttributeCode();
+			if (attributeCode != null && attributeCode.startsWith("LNK_")) {
 
-	// /* we get the attribute validation to get the group code */
-	// Attribute attribute = QwandaUtils.getAttribute(attributeCode);
+				/* we get the attribute validation to get the group code */
+				Attribute attribute = QwandaUtils.getAttribute(attributeCode);
 
-	// if (attribute != null) {
+				if (attribute != null) {
 
-	// /* grab the group in the validation */
-	// DataType attributeDataType = attribute.getDataType();
-	// if (attributeDataType != null) {
+					/* grab the group in the validation */
+					DataType attributeDataType = attribute.getDataType();
+					if (attributeDataType != null) {
 
-	// List<Validation> validations = attributeDataType.getValidationList();
+						List<Validation> validations = attributeDataType.getValidationList();
 
-	// /* we loop through the validations */
-	// for (Validation validation : validations) {
+						/* we loop through the validations */
+						for (Validation validation : validations) {
 
-	// List<String> validationStrings =
-	// validation.getSelectionBaseEntityGroupList();
+							List<String> validationStrings = validation.getSelectionBaseEntityGroupList();
 
-	// if (validationStrings != null) {
-	// for (String validationString : validationStrings) {
+							if (validationStrings != null) {
+								for (String validationString : validationStrings) {
 
-	// if (validationString.startsWith("GRP_")) {
+									if (validationString.startsWith("GRP_")) {
 
-	// /* Grab the parent */
-	// BaseEntity parent = CacheUtils.getObject(gennyToken.getRealm(),
-	// validationString, BaseEntity.class);
+										/* Grab the parent */
+										BaseEntity parent = CacheUtils.getObject(gennyToken.getRealm(),
+												validationString, BaseEntity.class);
 
-	// /* we have a GRP. we push it to FE */
-	// List<BaseEntity> bes = CacheUtils.getChildren(validationString, 2, token);
-	// List<BaseEntity> filteredBes = null;
+										/* we have a GRP. we push it to FE */
+										List<BaseEntity> bes = CacheUtils.getChildren(validationString, 2, token);
+										List<BaseEntity> filteredBes = null;
 
-	// if (bes != null && bes.isEmpty() == false) {
+										if (bes != null && bes.isEmpty() == false) {
 
-	// /* hard coding this for now. sorry */
-	// if ("LNK_LOAD_LISTS".equals(attributeCode) && stakeholderCode != null) {
+											/* hard coding this for now. sorry */
+											if ("LNK_LOAD_LISTS".equals(attributeCode) && stakeholderCode != null) {
 
-	// /* we filter load you only are a stakeholder of */
-	// filteredBes = bes.stream().filter(baseEntity -> {
-	// return baseEntity.getValue("PRI_AUTHOR", "")
-	// .equals(stakeholderCode);
-	// }).collect(Collectors.toList());
-	// } else {
-	// filteredBes = bes;
-	// }
+												/* we filter load you only are a stakeholder of */
+												filteredBes = bes.stream().filter(baseEntity -> {
+													return baseEntity.getValue("PRI_AUTHOR", "")
+															.equals(stakeholderCode);
+												}).collect(Collectors.toList());
+											} else {
+												filteredBes = bes;
+											}
 
-	// /* create message for base entities required for the validation */
-	// QDataBaseEntityMessage beMessage = new QDataBaseEntityMessage(filteredBes);
-	// beMessage.setLinkCode("LNK_CORE");
-	// beMessage.setParentCode(validationString);
-	// beMessage.setReplace(true);
-	// bulk.add(beMessage);
+											/* create message for base entities required for the validation */
+											QDataBaseEntityMessage beMessage = new QDataBaseEntityMessage(filteredBes);
+											beMessage.setLinkCode("LNK_CORE");
+											beMessage.setParentCode(validationString);
+											beMessage.setReplace(true);
+											bulk.add(beMessage);
 
-	// /* create message for parent */
-	// QDataBaseEntityMessage parentMessage = new QDataBaseEntityMessage(parent);
-	// bulk.add(parentMessage);
-	// }
-	// }
-	// }
-	// }
-	// }
-	// }
-	// }
-	// }
+											/* create message for parent */
+											QDataBaseEntityMessage parentMessage = new QDataBaseEntityMessage(parent);
+											bulk.add(parentMessage);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 
-	// /* recursive call */
-	// Ask[] childAsks = ask.getChildAsks();
-	// if (childAsks != null && childAsks.length > 0) {
+			/* recursive call */
+			Ask[] childAsks = ask.getChildAsks();
+			if (childAsks != null && childAsks.length > 0) {
 
-	// QBulkMessage newBulk = sendAsksRequiredData(childAsks, token,
-	// stakeholderCode);
-	// for (QDataBaseEntityMessage msg : newBulk.getMessages()) {
-	// bulk.add(msg);
-	// }
-	// }
-	// }
+				QBulkMessage newBulk = sendAsksRequiredData(childAsks, token,
+						stakeholderCode);
+				for (QDataBaseEntityMessage msg : newBulk.getMessages()) {
+					bulk.add(msg);
+				}
+			}
+		}
 
-	// return bulk;
-	// }
+		return bulk;
+	}
 
-	// public static Ask createQuestionForBaseEntity(BaseEntity be, Boolean
-	// isQuestionGroup, String token) {
+	public static Ask createQuestionForBaseEntity(BaseEntity be, Boolean isQuestionGroup, String token) {
 
-	// /* creating attribute code according to the value of isQuestionGroup */
-	// String attributeCode = isQuestionGroup ? "QQQ_QUESTION_GROUP_INPUT" :
-	// "PRI_EVENT";
+		/* creating attribute code according to the value of isQuestionGroup */
+		String attributeCode = isQuestionGroup ? "QQQ_QUESTION_GROUP_INPUT" : "PRI_EVENT";
 
-	// /* Get the on-the-fly question attribute */
-	// Attribute attribute = QwandaUtils.getAttribute(attributeCode);
-	// // log.debug("createQuestionForBaseEntity method, attribute ::" +
-	// // json.toJson(attribute));
+		/* Get the on-the-fly question attribute */
+		Attribute attribute = QwandaUtils.getAttribute(attributeCode);
+		// log.debug("createQuestionForBaseEntity method, attribute ::" +
+		// json.toJson(attribute));
 
-	// /*
-	// * creating suffix according to value of isQuestionGroup. If it is a
-	// * question-group, suffix "_GRP" is required"
-	// */
-	// String questionSuffix = isQuestionGroup ? "_GRP" : "";
+		/*
+		 * creating suffix according to value of isQuestionGroup. If it is a
+		 * question-group, suffix "_GRP" is required"
+		 */
+		String questionSuffix = isQuestionGroup ? "_GRP" : "";
 
-	// /* We generate the question */
-	// Question newQuestion = new Question("QUE_" + be.getCode() + questionSuffix,
-	// be.getName(), attribute, false);
-	// // log.debug("createQuestionForBaseEntity method, newQuestion ::" +
-	// // JsonUtils.toJson(newQuestion));
+		/* We generate the question */
+		Question newQuestion = new Question("QUE_" + be.getCode() + questionSuffix, be.getName(), attribute, false);
+		// log.debug("createQuestionForBaseEntity method, newQuestion ::" +
+		// JsonUtils.toJson(newQuestion));
 
-	// /* We generate the ask */
-	// return new Ask(newQuestion, be.getCode(), be.getCode(), false, 1.0, false,
-	// false, true);
-		return null;
+		/* We generate the ask */
+		return new Ask(newQuestion, be.getCode(), be.getCode(), false, 1.0, false, false, true);
+
 	}
 
 	public static Ask createQuestionForBaseEntity(BaseEntity be, Boolean isQuestionGroup, GennyToken serviceToken) {
@@ -522,44 +517,43 @@ public class QuestionUtils implements Serializable {
 	// // return question;
 	// // }
 
-	static public Question getQuestion(String questionCode, GennyToken userToken)
-	{
+	static public Question getQuestion(String questionCode, GennyToken userToken) {
 
-	Question q = null;
-	Integer retry = 2;
-	while (retry >= 0) { // Sometimes q is read properly from cache
-	String qJsonStr = (String) CacheUtils.readCache(userToken.getRealm(),
-	questionCode);
-	JsonObject jsonQ = toJson(qJsonStr);
-	q = jsonb.fromJson(jsonQ.getString("value"), Question.class);
-	if (q == null) {
-	retry--;
+		Question q = null;
+		Integer retry = 2;
+		while (retry >= 0) { // Sometimes q is read properly from cache
+			String qJsonStr = (String) CacheUtils.readCache(userToken.getRealm(),
+					questionCode);
+			JsonObject jsonQ = toJson(qJsonStr);
+			q = jsonb.fromJson(jsonQ.getString("value"), Question.class);
+			if (q == null) {
+				retry--;
 
-	} else {
-	break;
-	}
+			} else {
+				break;
+			}
 
-	}
+		}
 
-	if (q == null) {
-	log.warn("COULD NOT READ " + questionCode + " from cache!!! Aborting (after having tried 2 times");
-	String qJson;
-	qJson = QwandaUtils.apiGet(GennySettings.qwandaServiceUrl +
-	"/qwanda/questioncodes/" + questionCode,
-	userToken.getToken());
-	if (!StringUtils.isBlank(qJson)) {
-	q = jsonb.fromJson(qJson, Question.class);
-	CacheUtils.writeCache(userToken.getRealm(), questionCode, jsonb.toJson(q));
-	log.info("WRITTEN " + questionCode + " tocache!!! Fetched from database");
-	return q;
-	} else {
-	log.error("Questionutils could not find question " + questionCode + " in database");
-	}
+		if (q == null) {
+			log.warn("COULD NOT READ " + questionCode + " from cache!!! Aborting (after having tried 2 times");
+			String qJson;
+			qJson = QwandaUtils.apiGet(GennySettings.qwandaServiceUrl +
+					"/qwanda/questioncodes/" + questionCode,
+					userToken.getToken());
+			if (!StringUtils.isBlank(qJson)) {
+				q = jsonb.fromJson(qJson, Question.class);
+				CacheUtils.writeCache(userToken.getRealm(), questionCode, jsonb.toJson(q));
+				log.info("WRITTEN " + questionCode + " tocache!!! Fetched from database");
+				return q;
+			} else {
+				log.error("Questionutils could not find question " + questionCode + " in database");
+			}
 
-	return null;
-	} else {
-	return q;
-	}
+			return null;
+		} else {
+			return q;
+		}
 	}
 
 	public static List<BaseEntity> getChildren(String beCode, Integer level,
