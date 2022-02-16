@@ -416,7 +416,8 @@ public class QuestionUtils implements Serializable {
 	// /* We generate the ask */
 	// return new Ask(newQuestion, be.getCode(), be.getCode(), false, 1.0, false,
 	// false, true);
-	// }
+		return null;
+	}
 
 	public static Ask createQuestionForBaseEntity(BaseEntity be, Boolean isQuestionGroup, GennyToken serviceToken) {
 
