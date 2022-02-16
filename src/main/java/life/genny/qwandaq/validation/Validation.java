@@ -147,7 +147,7 @@ public class Validation extends CodedEntity implements Serializable {
 	  * @param none
 	  */
 	@SuppressWarnings("unused")
-	protected Validation()
+	public Validation()
 	{
 		super();
 		// dummy for hibernate
@@ -262,6 +262,14 @@ public class Validation extends CodedEntity implements Serializable {
 	 */
 	public Boolean getMultiAllowed() {
 		return multiAllowed;
+	}
+
+	public Boolean isMultiAllowed() {
+		return getMultiAllowed();
+	}
+
+	public Boolean isRecursiveGroup() {
+		return getRecursiveGroup();
 	}
 
 	/**

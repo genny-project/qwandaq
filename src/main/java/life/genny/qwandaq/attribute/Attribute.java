@@ -118,7 +118,7 @@ public class Attribute extends CodedEntity implements Serializable {
 	  * @param none
 	  */
 	@SuppressWarnings("unused")
-	protected Attribute()
+	public Attribute()
 	{
 		super();
 		// dummy for hibernate
@@ -166,6 +166,10 @@ public class Attribute extends CodedEntity implements Serializable {
 	 */
 	public Boolean getDefaultPrivacyFlag() {
 		return defaultPrivacyFlag;
+	}
+
+	public Boolean isDefaultPrivacyFlag() {
+		return getDefaultPrivacyFlag();
 	}
 
 

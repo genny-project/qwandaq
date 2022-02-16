@@ -268,33 +268,31 @@ public class QuestionUtils implements Serializable {
 		}
 	}
 
-	// public static QwandaMessage setCustomQuestion(QwandaMessage questions, String
-	// questionAttributeCode,
-	// String customTemporaryQuestion) {
+	public static QwandaMessage setCustomQuestion(QwandaMessage questions, String questionAttributeCode,
+			String customTemporaryQuestion) {
 
-	// if (questions != null && questionAttributeCode != null) {
-	// Ask[] askArr = questions.asks.getItems();
-	// if (askArr != null && askArr.length > 0) {
-	// for (Ask ask : askArr) {
-	// Ask[] childAskArr = ask.getChildAsks();
-	// if (childAskArr != null && childAskArr.length > 0) {
-	// for (Ask childAsk : childAskArr) {
-	// log.info("child ask code :: " + childAsk.getAttributeCode() + ", child ask
-	// name :: "
-	// + childAsk.getName());
-	// if (childAsk.getAttributeCode().equals(questionAttributeCode)) {
-	// if (customTemporaryQuestion != null) {
-	// childAsk.getQuestion().setName(customTemporaryQuestion);
-	// return questions;
-	// }
-	// }
-	// }
-	// }
-	// }
-	// }
-	// }
-	// return questions;
-	// }
+		if (questions != null && questionAttributeCode != null) {
+			Ask[] askArr = questions.asks.getItems();
+			if (askArr != null && askArr.length > 0) {
+				for (Ask ask : askArr) {
+					Ask[] childAskArr = ask.getChildAsks();
+					if (childAskArr != null && childAskArr.length > 0) {
+						for (Ask childAsk : childAskArr) {
+							log.info("child ask code :: " + childAsk.getAttributeCode() + ", child askname :: "
+									+ childAsk.getName());
+							if (childAsk.getAttributeCode().equals(questionAttributeCode)) {
+								if (customTemporaryQuestion != null) {
+									childAsk.getQuestion().setName(customTemporaryQuestion);
+									return questions;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return questions;
+	}
 
 	// private static QBulkMessage sendAsksRequiredData(Ask[] asks, String token,
 	// String stakeholderCode) {
@@ -420,92 +418,85 @@ public class QuestionUtils implements Serializable {
 	// false, true);
 	// }
 
-	// public static Ask createQuestionForBaseEntity(BaseEntity be, Boolean
-	// isQuestionGroup, GennyToken serviceToken) {
+	public static Ask createQuestionForBaseEntity(BaseEntity be, Boolean isQuestionGroup, GennyToken serviceToken) {
 
-	// /* creating attribute code according to the value of isQuestionGroup */
-	// String attributeCode = isQuestionGroup ? "QQQ_QUESTION_GROUP_INPUT" :
-	// "PRI_EVENT";
+		/* creating attribute code according to the value of isQuestionGroup */
+		String attributeCode = isQuestionGroup ? "QQQ_QUESTION_GROUP_INPUT" : "PRI_EVENT";
 
-	// /* Get the on-the-fly question attribute */
-	// Attribute attribute = QwandaUtils.getAttribute(attributeCode);
-	// // log.debug("createQuestionForBaseEntity method, attribute ::" +
-	// // JsonUtils.toJson(attribute));
+		/* Get the on-the-fly question attribute */
+		Attribute attribute = QwandaUtils.getAttribute(attributeCode);
+		// log.debug("createQuestionForBaseEntity method, attribute ::" +
+		// JsonUtils.toJson(attribute));
 
-	// /*
-	// * creating suffix according to value of isQuestionGroup. If it is a
-	// * question-group, suffix "_GRP" is required"
-	// */
-	// String questionSuffix = isQuestionGroup ? "_GRP" : "";
+		/*
+		 * creating suffix according to value of isQuestionGroup. If it is a
+		 * question-group, suffix "_GRP" is required"
+		 */
+		String questionSuffix = isQuestionGroup ? "_GRP" : "";
 
-	// /* We generate the question */
-	// Question newQuestion = new Question("QUE_" + be.getCode() + questionSuffix,
-	// be.getName(), attribute, false);
-	// // log.debug("createQuestionForBaseEntity method, newQuestion ::" +
-	// // JsonUtils.toJson(newQuestion));
+		/* We generate the question */
+		Question newQuestion = new Question("QUE_" + be.getCode() + questionSuffix,
+				be.getName(), attribute, false);
+		// log.debug("createQuestionForBaseEntity method, newQuestion ::" +
+		// JsonUtils.toJson(newQuestion));
 
-	// /* We generate the ask */
-	// return new Ask(newQuestion, be.getCode(), be.getCode(), false, 1.0, false,
-	// false, true);
-	// }
+		/* We generate the ask */
+		return new Ask(newQuestion, be.getCode(), be.getCode(), false, 1.0, false,
+				false, true);
+	}
 
-	// public static Ask createQuestionForBaseEntity2(BaseEntity be, Boolean
-	// isQuestionGroup, GennyToken serviceToken,
-	// final String sourceAlias, final String targetAlias) {
+	public static Ask createQuestionForBaseEntity2(BaseEntity be, Boolean isQuestionGroup, GennyToken serviceToken,
+			final String sourceAlias, final String targetAlias) {
 
-	// /* creating attribute code according to the value of isQuestionGroup */
-	// String attributeCode = isQuestionGroup ? "QQQ_QUESTION_GROUP_INPUT" :
-	// "PRI_EVENT";
+		/* creating attribute code according to the value of isQuestionGroup */
+		String attributeCode = isQuestionGroup ? "QQQ_QUESTION_GROUP_INPUT" : "PRI_EVENT";
 
-	// /* Get the on-the-fly question attribute */
-	// Attribute attribute = null;
+		/* Get the on-the-fly question attribute */
+		Attribute attribute = null;
 
-	// attribute = QwandaUtils.getAttribute(attributeCode);
-	// // log.debug("createQuestionForBaseEntity method, attribute ::" +
-	// // JsonUtils.toJson(attribute));
+		attribute = QwandaUtils.getAttribute(attributeCode);
+		// log.debug("createQuestionForBaseEntity method, attribute ::" +
+		// JsonUtils.toJson(attribute));
 
-	// if (attribute == null) {
-	// log.error("Attribute DOES NOT EXIST! " + attributeCode + " creating temp");
-	// // ugly
-	// attribute = new Attribute(attributeCode, attributeCode, new
-	// DataType("DTT_THEME")); // this helps junit
-	// // testing
+		if (attribute == null) {
+			log.error("Attribute DOES NOT EXIST! " + attributeCode + " creating temp");
+			// ugly
+			attribute = new Attribute(attributeCode, attributeCode, new DataType("DTT_THEME")); // this helps junit
+			// testing
 
-	// }
+		}
 
-	// /* We generate the question */
-	// Question newQuestion = new Question(be.getCode(), be.getName(), attribute,
-	// false);
-	// // log.debug("createQuestionForBaseEntity method, newQuestion ::" +
-	// // JsonUtils.toJson(newQuestion));
+		/* We generate the question */
+		Question newQuestion = new Question(be.getCode(), be.getName(), attribute,
+				false);
+		// log.debug("createQuestionForBaseEntity method, newQuestion ::" +
+		// JsonUtils.toJson(newQuestion));
 
-	// /* We generate the ask */
-	// Ask ask = new Ask(newQuestion, (sourceAlias != null ? sourceAlias :
-	// be.getCode()),
-	// (targetAlias != null ? targetAlias : be.getCode()), false, 1.0, false, false,
-	// true);
-	// ask.setRealm(serviceToken.getRealm());
-	// return ask;
+		/* We generate the ask */
+		Ask ask = new Ask(newQuestion, (sourceAlias != null ? sourceAlias : be.getCode()),
+				(targetAlias != null ? targetAlias : be.getCode()), false, 1.0, false, false,
+				true);
+		ask.setRealm(serviceToken.getRealm());
+		return ask;
 
-	// }
+	}
 
-	// public static BaseEntity createVirtualLink(BaseEntity source, Ask ask, String
-	// linkCode, String linkValue) {
+	public static BaseEntity createVirtualLink(BaseEntity source, Ask ask, String linkCode, String linkValue) {
 
-	// if (source != null) {
+		if (source != null) {
 
-	// Set<EntityQuestion> entityQuestionList = source.getQuestions();
+			Set<EntityQuestion> entityQuestionList = source.getQuestions();
 
-	// Link link = new Link(source.getCode(), ask.getQuestion().getCode(), linkCode,
-	// linkValue);
-	// link.setWeight(ask.getWeight());
-	// EntityQuestion ee = new EntityQuestion(link);
-	// entityQuestionList.add(ee);
+			Link link = new Link(source.getCode(), ask.getQuestion().getCode(), linkCode,
+					linkValue);
+			link.setWeight(ask.getWeight());
+			EntityQuestion ee = new EntityQuestion(link);
+			entityQuestionList.add(ee);
 
-	// source.setQuestions(entityQuestionList);
-	// }
-	// return source;
-	// }
+			source.setQuestions(entityQuestionList);
+		}
+		return source;
+	}
 
 	// // public static Question upsertQuestion(Question question, GennyToken token)
 	// {

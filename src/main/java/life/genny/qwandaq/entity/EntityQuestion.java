@@ -29,4 +29,28 @@ public class EntityQuestion implements java.io.Serializable, Comparable<Object> 
 	public int compareTo(Object o) {
 		return 0;
 	}
+
+	public Link getLink() {
+		return link;
+	}
+
+	public void setLink(Link link) {
+		this.link = link;
+	}
+
+	public Double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Double weight) {
+		this.weight = weight;
+	}
+
+	public String getValueString() {
+		return valueString;
+	}
+
+	public void setValueString(String valueString) {
+		this.valueString = valueString;
+	}
 }
