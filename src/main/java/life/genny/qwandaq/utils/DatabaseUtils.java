@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.Question;
+import life.genny.qwandaq.QuestionQuestion;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.entity.BaseEntity;
 
@@ -166,6 +167,53 @@ public class DatabaseUtils {
 
 		} catch (NoResultException e) {
 			log.error("No Question found in DB for " + code);
+		}
+		return null;
+	}
+
+	@Transactional
+	public static QuestionQuestion fetchQuestionQuestion(String realm, String sourceCode, String targetCode) {
+
+		if (entityManager == null) {
+			log.error("EntityManager must be initialised first!!!");
+			return null;
+		}
+
+		try {
+
+			return entityManager
+					.createQuery("SELECT * FROM QuestionQuestion where realm=:realmStr and sourceCode = :sourceCode and targetCode = :targetCode"
+							, QuestionQuestion.class)
+					.setParameter("realmStr", realm)
+					.setParameter("sourceCode", sourceCode)
+					.setParameter("targetCode", targetCode)
+					.getSingleResult();
+
+		} catch (NoResultException e) {
+			log.error("No QuestionQuestion found in DB for " + sourceCode + ":" + targetCode);
+		}
+		return null;
+	}
+
+	@Transactional
+	public static List<QuestionQuestion> fetchQuestionQuestionList(String realm, String sourceCode) {
+
+		if (entityManager == null) {
+			log.error("EntityManager must be initialised first!!!");
+			return null;
+		}
+
+		try {
+
+			return entityManager
+					.createQuery("SELECT * FROM QuestionQuestion where realm=:realmStr and sourceCode = :sourceCode"
+							, QuestionQuestion.class)
+					.setParameter("realmStr", realm)
+					.setParameter("sourceCode", sourceCode)
+					.getResultList();
+
+		} catch (NoResultException e) {
+			log.error("No QuestionQuestion found in DB for " + sourceCode);
 		}
 		return null;
 	}

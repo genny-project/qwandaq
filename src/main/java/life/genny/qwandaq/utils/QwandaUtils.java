@@ -1,26 +1,11 @@
 package life.genny.qwandaq.utils;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-// import java.net.http.HttpClient;
-// import java.net.http.HttpRequest;
-// import java.net.http.HttpResponse;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -28,6 +13,7 @@ import javax.json.bind.JsonbBuilder;
 import org.jboss.logging.Logger;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import life.genny.qwandaq.Question;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.message.QEventMessage;
 import life.genny.qwandaq.message.QScheduleMessage;
@@ -39,10 +25,6 @@ public class QwandaUtils {
 
 	static final Logger log = Logger.getLogger(QwandaUtils.class);
 	private static final ExecutorService executorService = Executors.newFixedThreadPool(200);
-
-	// private static HttpClient httpClient =
-	// HttpClient.newBuilder().executor(executorService)
-	// .version(HttpClient.Version.HTTP_2).connectTimeout(Duration.ofSeconds(20)).build();
 
 	static Map<String, Map<String, Attribute>> attributes = new ConcurrentHashMap<>();
 
@@ -142,6 +124,45 @@ public class QwandaUtils {
 	}
 
 	/**
+	* Get a Question using a code.
+	*
+	* @param code
+	* @param userToken
+	* @return
+	 */
+	static public Question getQuestion(String code, GennyToken userToken) {
+
+		if (code == null) {
+			log.error("Code must not be null!");
+			return null;
+		}
+
+		Question question = CacheUtils.getObject(userToken.getRealm(), code, Question.class);
+
+		if (question == null) {
+			log.warn("COULD NOT READ " + code + " from cache!!!");
+
+			String uri = GennySettings.qwandaServiceUrl + "/qwanda/questioncodes/" + code;
+			String json = HttpUtils.get(uri, userToken.getToken());
+
+			if (!json.isBlank()) {
+
+				question = jsonb.fromJson(json, Question.class);
+
+				CacheUtils.writeCache(userToken.getRealm(), code, jsonb.toJson(question));
+				log.info(question.getCode() + " written to cache!");
+
+			} else {
+				log.error("Could not find question " + code + " in database!");
+				return null;
+			}
+		}
+
+		return question;
+	}
+
+
+	/**
 	 * Send a {@link QEventMessage} to shleemy for scheduling.
 	 *
 	 * @param userToken
@@ -184,86 +205,20 @@ public class QwandaUtils {
 	 */
 	public static void deleteSchedule(GennyToken userToken, String code) {
 
-		// String uri = GennySettings.shleemyServiceUrl + "/api/schedule/code/" + code;
-
-		// HttpClient client = HttpClient.newHttpClient();
-		// HttpRequest request = HttpRequest.newBuilder()
-		// .uri(URI.create(uri))
-		// .setHeader("Content-Type", "application/json")
-		// .setHeader("Authorization", "Bearer " + userToken.getToken())
-		// .DELETE().build();
-
-		// try {
-
-		// HttpResponse<String> response = client.send(request,
-		// HttpResponse.BodyHandlers.ofString());
-
-		// if (response.statusCode() != 200) {
-		// log.error("Unable to delete scheduled message " + code);
-		// }
-
-		// } catch (IOException | InterruptedException e) {
-		// log.error(e);
-		// }
+		String uri = GennySettings.shleemyServiceUrl + "/api/schedule/code/" + code;
+		HttpUtils.delete(uri, userToken.getToken());
 	}
 
+	/**
+	* NOTE: This method should be deleted. Anything referencing it 
+	* should directly reference the HttpUtils.get() method instead.
+	*
+	* @param url
+	* @param authToken
+	* @return
+	 */
 	static public String apiGet(String url, String authToken) {
 
-		// HttpRequest.Builder requestBuilder = Optional.ofNullable(authToken)
-		// .map(token -> HttpRequest.newBuilder()
-		// .GET()
-		// .uri(URI.create(url))
-		// .setHeader("Content-Type", "application/json")
-		// .setHeader("Authorization", "Bearer " + token))
-		// .orElse(
-		// HttpRequest.newBuilder()
-		// .GET()
-		// .uri(URI.create(url)));
-
-		// if (url.contains("genny.life")) { // Hack for local server not having http2
-		// requestBuilder = requestBuilder.version(HttpClient.Version.HTTP_1_1);
-		// }
-
-		// HttpRequest request = requestBuilder.build();
-
-		// String result = null;
-		// Boolean done = false;
-		// int count = 5;
-		// while ((!done) && (count > 0)) {
-
-		// CompletableFuture<java.net.http.HttpResponse<String>> response =
-		// httpClient.sendAsync(request,
-		// java.net.http.HttpResponse.BodyHandlers.ofString());
-
-		// try {
-		// result = response.thenApply(java.net.http.HttpResponse::body).get(20,
-		// TimeUnit.SECONDS);
-		// done = true;
-		// } catch (InterruptedException | ExecutionException | TimeoutException e) {
-		// // TODO Auto-generated catch block
-		// log.error("Count:" + count + ", Exception occurred when post to URL: " + url
-		// + ",Body is authToken:"
-		// + authToken + ", Exception details:" + e.getCause());
-		// httpClient =
-		// HttpClient.newBuilder().executor(executorService).version(HttpClient.Version.HTTP_2)
-		// .connectTimeout(Duration.ofSeconds(20)).build();
-		// if (count <= 0) {
-		// done = true;
-		// }
-
-		// }
-		// count--;
-		// }
-		// // System.out.println(result);
-		// // can't find
-		// if (result.equals("<html><head><title>Error</title></head><body>Not
-		// Found</body></html>")) {
-		// log.error("Can't find result for request:" + url + ", set returned result to
-		// NULL");
-		// result = null;
-		// }
-
-		// return result;
-		return null;
+		return HttpUtils.get(url, authToken);
 	}
 }

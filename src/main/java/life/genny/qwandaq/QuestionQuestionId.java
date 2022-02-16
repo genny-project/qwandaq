@@ -10,19 +10,13 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import life.genny.qwandaq.entity.EntityEntityId;
-
 import com.querydsl.core.annotations.QueryExclude;
 
 @Embeddable
 @QueryExclude
 public class QuestionQuestionId implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JsonBackReference(value="questionQuestion")
@@ -31,12 +25,8 @@ public class QuestionQuestionId implements java.io.Serializable {
 	
 	private String targetCode;
 	private String sourceCode;
-	
 
-	
-
-
-/**
+	/**
 	 * @return the targetCode
 	 */
 	public String getTargetCode() {

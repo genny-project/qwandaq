@@ -296,8 +296,8 @@ public class QuestionUtils implements Serializable {
 	// return questions;
 	// }
 
-	// private static QBulkMessage sendAsksRequiredData(Ask[] asks, String token,
-	// String stakeholderCode) {
+	private static QBulkMessage sendAsksRequiredData(Ask[] asks, String token,
+	String stakeholderCode) {
 	// GennyToken gennyToken = new GennyToken(token);
 	// QBulkMessage bulk = new QBulkMessage();
 
@@ -487,7 +487,8 @@ public class QuestionUtils implements Serializable {
 	// ask.setRealm(serviceToken.getRealm());
 	// return ask;
 
-	// }
+		return null;
+	}
 
 	// public static BaseEntity createVirtualLink(BaseEntity source, Ask ask, String
 	// linkCode, String linkValue) {
@@ -561,8 +562,7 @@ public class QuestionUtils implements Serializable {
 	log.info("WRITTEN " + questionCode + " tocache!!! Fetched from database");
 	return q;
 	} else {
-	log.error("Questionutils could not find question " + questionCode + " in
-	database");
+	log.error("Questionutils could not find question " + questionCode + " in database");
 	}
 
 	return null;

@@ -3,13 +3,11 @@ package life.genny.qwandaq;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Index;
@@ -24,9 +22,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import life.genny.qwandaq.converter.StringListConverter;
-import life.genny.qwandaq.entity.EntityEntity;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
@@ -48,9 +43,6 @@ indexes = {
 @Cacheable
 public class QuestionQuestion implements java.io.Serializable, Comparable<Object> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
@@ -72,27 +64,26 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 	private Double weight;
 
 	private Long version = 1L;
-	
+
 	Boolean mandatory = false;
-	  
-	  // If this is set to true then attribute needs to be set to readonly after value set.
-	  Boolean oneshot = false;
-	  
 
-	  private Boolean disabled=false;
-	  private Boolean hidden = false;
+	// If this is set to true then attribute needs to be set to readonly after value set.
+	Boolean oneshot = false;
 
-	  private Boolean readonly = false;
-	  
-	  private String realm;
-	  
-	  private Boolean formTrigger;
-	  
-	  private Boolean createOnTrigger;
+	private Boolean disabled=false;
+	private Boolean hidden = false;
+
+	private Boolean readonly = false;
+
+	private String realm;
+
+	private Boolean formTrigger;
+
+	private Boolean createOnTrigger;
 
 	private String dependency;
 
-    private String icon;
+	private String icon;
 
 	public QuestionQuestion() {
 	}
