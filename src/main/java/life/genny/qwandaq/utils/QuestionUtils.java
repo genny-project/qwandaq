@@ -125,7 +125,7 @@ public class QuestionUtils implements Serializable {
 			String questionCode, String token) {
 
 		String json;
-		json = QwandaUtils.apiGet(GennySettings.qwandaServiceUrl +
+		json = HttpUtils.get(GennySettings.qwandaServiceUrl +
 				"/qwanda/baseentitys/" + sourceCode + "/asks2/"
 				+ questionCode + "/" + targetCode, token);
 		if (json != null) {
@@ -499,7 +499,7 @@ public class QuestionUtils implements Serializable {
 	// // if (question != null) {
 	// // String json = null;
 	// // try {
-	// // json = QwandaUtils.apiPostEntity(GennySettings.qwandaServiceUrl +
+	// // json = HttpUtils.post(GennySettings.qwandaServiceUrl +
 	// // "/qwanda/questions",
 	// // JsonUtils.toJson(question), token.getToken());
 	// // } catch (IOException e) {
@@ -538,7 +538,7 @@ public class QuestionUtils implements Serializable {
 		if (q == null) {
 			log.warn("COULD NOT READ " + questionCode + " from cache!!! Aborting (after having tried 2 times");
 			String qJson;
-			qJson = QwandaUtils.apiGet(GennySettings.qwandaServiceUrl +
+			qJson = HttpUtils.get(GennySettings.qwandaServiceUrl +
 					"/qwanda/questioncodes/" + questionCode,
 					userToken.getToken());
 			if (!StringUtils.isBlank(qJson)) {
