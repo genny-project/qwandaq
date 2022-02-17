@@ -8,8 +8,6 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
 
 import org.jboss.logging.Logger;
 
@@ -34,7 +32,9 @@ public class GennyCache {
     }
 
 	@PostConstruct
-	public void init() { }
+	public void init() { 
+		log.info("Cache Initialized!");
+	}
 
 	/**
 	* Return a remote cache for the given realm.
