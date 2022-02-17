@@ -173,6 +173,7 @@ public class BaseEntityUtils implements Serializable {
 		log.info("FYODOR_SERVICE_API = " + System.getenv("FYODOR_SERVICE_API"));
 		log.info("GENNYSETTING FYODOR URL = " + GennySettings.fyodorServiceUrl);
 		log.info("GENNY_API_URL = " + System.getenv("GENNY_API_URL"));
+		log.info("GENNYSETTING API URL = " + GennySettings.qwandaServiceUrl);
 		String json = jsonb.toJson(searchBE);
 
 		// String body = HttpUtils.post(uri, json, this.token);
