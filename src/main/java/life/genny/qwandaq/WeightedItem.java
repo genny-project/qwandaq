@@ -11,6 +11,9 @@ public class WeightedItem implements Serializable, Comparable<Object> {
 	
 	private BaseEntity item;
 	private Double weight;
+
+	public WeightedItem() {
+	}
 	
 	/**
 	 * @param item
