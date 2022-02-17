@@ -171,22 +171,22 @@ public class BaseEntityUtils implements Serializable {
 		String uri = GennySettings.fyodorServiceUrl + "/api/search/fetch";
 		String json = jsonb.toJson(searchBE);
 
-		String body = HttpUtils.post(uri, json, this.token);
-		// HttpClient client = HttpClient.newHttpClient();
-		// HttpRequest request = HttpRequest.newBuilder()
-		// 	.uri(URI.create(uri))
-		// 	.setHeader("Content-Type", "application/json")
-		// 	.setHeader("Authorization", "Bearer " + this.token)
-		// 	.POST(HttpRequest.BodyPublishers.ofString(json))
-		// 	.build();
+		// String body = HttpUtils.post(uri, json, this.token);
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+			.uri(URI.create(uri))
+			.setHeader("Content-Type", "application/json")
+			.setHeader("Authorization", "Bearer " + this.token)
+			.POST(HttpRequest.BodyPublishers.ofString(json))
+			.build();
 
-		// String body = null;
-		// try {
-		// 	HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		// 	body = response.body();
-		// } catch (IOException | InterruptedException e) {
-		// 	log.error(e);
-		// }
+		String body = null;
+		try {
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			body = response.body();
+		} catch (IOException | InterruptedException e) {
+			log.error(e);
+		}
 
 		if (body != null) {
 			try {
