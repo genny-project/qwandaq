@@ -49,4 +49,21 @@ public class GennySettings {
 			? System.getenv("TWILIO_SENDER_MOBILE")
 			: "TWILIO_SENDER_MOBILE";
 
+
+	// URL methods
+	public static String projectUrl() {
+		return System.getenv("PROJECT_URL") != null ? System.getenv("PROJECT_URL")
+			: "http://alyson7.genny.life";
+	}
+
+	public static String qwandaServiceUrl() {
+		return System.getenv("GENNY_API_URL") != null ? System.getenv("GENNY_API_URL") 
+			: projectUrl + ":8280";
+	}
+
+	public static String fyodorServiceUrl() {
+		return System.getenv("FYODOR_SERVICE_API") != null ? System.getenv("FYODOR_SERVICE_API") 
+			: projectUrl + ":4242";
+	}
+
 }

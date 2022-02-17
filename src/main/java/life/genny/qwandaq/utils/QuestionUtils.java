@@ -337,7 +337,7 @@ public class QuestionUtils implements Serializable {
 												validationString, BaseEntity.class);
 
 										/* we have a GRP. we push it to FE */
-										List<BaseEntity> bes = CacheUtils.getChildren(validationString, 2, token);
+										List<BaseEntity> bes = getChildren(validationString, 2, token);
 										List<BaseEntity> filteredBes = null;
 
 										if (bes != null && bes.isEmpty() == false) {

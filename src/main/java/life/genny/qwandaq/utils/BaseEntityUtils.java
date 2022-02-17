@@ -169,29 +169,14 @@ public class BaseEntityUtils implements Serializable {
 	public List<BaseEntity> getBaseEntitys(SearchEntity searchBE) {
 
 		String uri = GennySettings.fyodorServiceUrl + "/api/search/fetch";
+		String json = jsonb.toJson(searchBE);
+		String body = HttpUtils.post(uri, json, this.token);
+
 		log.info("uri = " + uri);
 		log.info("FYODOR_SERVICE_API = " + System.getenv("FYODOR_SERVICE_API"));
-		log.info("GENNYSETTING FYODOR URL = " + GennySettings.fyodorServiceUrl);
+		log.info("GENNYSETTING FYODOR URL = " + GennySettings.fyodorServiceUrl());
 		log.info("GENNY_API_URL = " + System.getenv("GENNY_API_URL"));
-		log.info("GENNYSETTING API URL = " + GennySettings.qwandaServiceUrl);
-		String json = jsonb.toJson(searchBE);
-
-		String body = HttpUtils.post(uri, json, this.token);
-		// HttpClient client = HttpClient.newHttpClient();
-		// HttpRequest request = HttpRequest.newBuilder()
-		// 	.uri(URI.create(uri))
-		// 	.setHeader("Content-Type", "application/json")
-		// 	.setHeader("Authorization", "Bearer " + this.token)
-		// 	.POST(HttpRequest.BodyPublishers.ofString(json))
-		// 	.build();
-
-		// String body = null;
-		// try {
-		// 	HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		// 	body = response.body();
-		// } catch (IOException | InterruptedException e) {
-		// 	log.error(e);
-		// }
+		log.info("GENNYSETTING API URL = " + GennySettings.qwandaServiceUrl());
 
 		if (body != null) {
 			try {

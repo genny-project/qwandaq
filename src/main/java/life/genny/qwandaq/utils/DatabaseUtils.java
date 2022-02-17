@@ -47,15 +47,12 @@ public class DatabaseUtils {
 		}
 
 		try {
-			log.info("about to query");
-			List<Attribute> list = entityManager
+			return entityManager
 					.createQuery("SELECT a FROM Attribute a where a.realm=:realmStr and a.name not like 'App\\_%'",
 							Attribute.class)
 					.setParameter("realmStr", realm)
 					.getResultList();
 
-			log.info("Finished query with " + list.size() + " attributes");
-			return list;
 
 		} catch (NoResultException e) {
 			log.error("No attributes found from DB search");

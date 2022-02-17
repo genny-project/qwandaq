@@ -103,28 +103,4 @@ public class CacheUtils {
 		String json = jsonb.toJson(obj);
 		cache.getRemoteCache(realm).put(key, json);
 	}
-
-	public static List<BaseEntity> getChildren(String beCode, Integer level, String token) {
-
-		if (level == 0) {
-			return null; // exit point;
-		}
-
-		GennyToken gennyToken = new GennyToken(token);
-		final String realm = gennyToken.getRealm();
-
-		List<BaseEntity> result = new ArrayList<BaseEntity>();
-
-		BaseEntity parent = getObject(realm, beCode, BaseEntity.class);
-
-		if (parent != null) {
-			for (EntityEntity ee : parent.getLinks()) {
-				String childCode = ee.getLink().getTargetCode();
-				BaseEntity child = getObject(realm, childCode, BaseEntity.class);
-				result.add(child);
-			}
-		}
-
-		return result;
-	}
 }
