@@ -169,6 +169,7 @@ public class BaseEntityUtils implements Serializable {
 	public List<BaseEntity> getBaseEntitys(SearchEntity searchBE) {
 
 		String uri = GennySettings.fyodorServiceUrl + "/api/search/fetch";
+		log.info("uri = " + uri);
 		String json = jsonb.toJson(searchBE);
 
 		// String body = HttpUtils.post(uri, json, this.token);
