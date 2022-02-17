@@ -168,18 +168,14 @@ public class BaseEntityUtils implements Serializable {
 	 */
 	public List<BaseEntity> getBaseEntitys(SearchEntity searchBE) {
 
-		String uri = GennySettings.fyodorServiceUrl + "/api/search/fetch";
+		// build uri, serialize payload and fetch data from fyodor
+		String uri = GennySettings.fyodorServiceUrl() + "/api/search/fetch";
 		String json = jsonb.toJson(searchBE);
 		String body = HttpUtils.post(uri, json, this.token);
 
-		log.info("uri = " + uri);
-		log.info("FYODOR_SERVICE_API = " + System.getenv("FYODOR_SERVICE_API"));
-		log.info("GENNYSETTING FYODOR URL = " + GennySettings.fyodorServiceUrl());
-		log.info("GENNY_API_URL = " + System.getenv("GENNY_API_URL"));
-		log.info("GENNYSETTING API URL = " + GennySettings.qwandaServiceUrl());
-
 		if (body != null) {
 			try {
+				// deserialise and grab entities
 				QSearchBeResult results = jsonb.fromJson(body, QSearchBeResult.class);
 				return Arrays.asList(results.getEntities());
 			} catch (Exception e) {
