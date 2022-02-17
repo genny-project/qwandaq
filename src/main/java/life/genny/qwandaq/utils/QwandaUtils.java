@@ -34,6 +34,7 @@ public class QwandaUtils {
 
 	public static void init(GennyToken token) {
 		gennyToken = token;
+		log.info("GENNY_API_URL = " + System.getenv("GENNY_API_URL"));
 		loadAllAttributes();
 	}
 
