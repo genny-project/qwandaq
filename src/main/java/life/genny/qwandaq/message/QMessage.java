@@ -1,6 +1,8 @@
 package life.genny.qwandaq.message;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -51,7 +53,7 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 
 	private Boolean redirect;
 	
-	 private String[] recipientCodeArray;
+	 private List<String> recipientCodeArray = new ArrayList<>();
 	
 
 	public String getMsg_type() {
@@ -97,6 +99,10 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 	 */
 	public void setOption(MsgOption option) {
 		this.option = option.toString();
+	}
+
+	public void setOption(String option) {
+		this.option = option;
 	}
 
 	/**
@@ -171,6 +177,10 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		return redirect;
 	}
 
+	public Boolean isRedirect() {
+		return getRedirect();
+	}
+
 	public void setRedirect(Boolean redirect) {
 		this.redirect = redirect;
 	}
@@ -178,7 +188,7 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 	/**
 	 * @return the recipientCodeArray
 	 */
-	public String[] getRecipientCodeArray() {
+	public List<String> getRecipientCodeArray() {
 		return recipientCodeArray;
 	}
 
@@ -186,6 +196,10 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 	 * @param recipientCodeArray the recipientCodeArray to set
 	 */
 	public void setRecipientCodeArray(String[] recipientCodeArray) {
+		this.recipientCodeArray = Arrays.asList(recipientCodeArray);
+	}
+
+	public void setRecipientCodeArray(List<String> recipientCodeArray) {
 		this.recipientCodeArray = recipientCodeArray;
 	}
 

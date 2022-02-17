@@ -194,10 +194,10 @@ public class SearchUtils {
 				QDataBaseEntityMessage msg = bulkMsg.getMessages()[0];
 
 				// Check if msg is not empty
-				if (msg.getItems().length > 0) {
+				if (!msg.getItems().isEmpty()) {
 
 					// Extract the baseEntityAttributes from the first BaseEntity
-					Set<EntityAttribute> filtersSet = msg.getItems()[0].getBaseEntityAttributes();
+					Set<EntityAttribute> filtersSet = msg.getItems().get(0).getBaseEntityAttributes();
 					filters.addAll(filtersSet);
 				}
 			}

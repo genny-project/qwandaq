@@ -1,6 +1,7 @@
 package life.genny.qwandaq.message;
 
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -13,9 +14,9 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 
 	private static final long serialVersionUID = 1L;
 	
-	private BaseEntity[] items;
+	private List<BaseEntity> items;
 
-	private WeightedItem[] weightedItems;
+	private List<WeightedItem> weightedItems;
 
 	private static final String DATATYPE_BASEENTITY = BaseEntity.class.getSimpleName();
 	private String parentCode;
@@ -35,7 +36,7 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 		 * */
 		
 		if(this.parentCode.equals(o.getParentCode()) == false) return 0;
-		if(this.getItems().length != o.getItems().length) return 0;
+		if(this.getItems().size() != o.getItems().size()) return 0;
 		
 		for(BaseEntity be: this.getItems()) {
 			
@@ -55,8 +56,8 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 
 	public QDataBaseEntityMessage(final BaseEntity item, final String alias) {
 		super(DATATYPE_BASEENTITY);
-		items = new BaseEntity[1];
-		items[0] = item;
+		items = new ArrayList<>();
+		items.add(item);
 		setItems(items);
 		setAliasCode(alias);
 		setTotal(1L);
@@ -146,8 +147,8 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 
 	public QDataBaseEntityMessage(final WeightedItem item, final String alias) {
 		super(DATATYPE_BASEENTITY);
-		weightedItems = new WeightedItem[1];
-		weightedItems[0] = item;
+		weightedItems = new ArrayList<>();
+		weightedItems.add(item);
 		setAliasCode(alias);
 		setTotal(1L);
 	}
@@ -178,26 +179,29 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 
 	public void add(BaseEntity item) {
 		
-		List<BaseEntity> bes = this.getItems() != null ? new CopyOnWriteArrayList<>(Arrays.asList(this.getItems())) : new CopyOnWriteArrayList<>();
+		List<BaseEntity> bes = this.getItems() != null ? new CopyOnWriteArrayList<>(this.getItems()) : new CopyOnWriteArrayList<>();
 		bes.add(item);
 		this.setItems(bes.toArray(new BaseEntity[0]));
 	}
 
 	public void add(List<BaseEntity> items) {
-
-		List<BaseEntity> existingList = Arrays.asList(this.getItems());
-		List<BaseEntity> bes = new CopyOnWriteArrayList<>(existingList);
+		List<BaseEntity> bes = new CopyOnWriteArrayList<>(this.getItems());
 		bes.addAll(items);
 		this.setItems(bes.toArray(new BaseEntity[0]));
 	}
 
-	public BaseEntity[] getItems() {
+	public List<BaseEntity> getItems() {
 		return items;
 	}
 
 	public void setItems(final BaseEntity[] items) {
-		this.items = items;
+		this.items = Arrays.asList(items);
 		setReturnCount(new Long(items.length));
+	}
+
+	public void setItems(final List<BaseEntity> items) {
+		this.items = items;
+		setReturnCount(new Long(items.size()));
 	}
 
 	/**
@@ -259,7 +263,7 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 	 /**
 	  * @return the weightedItems
 	  */
-	 public WeightedItem[] getWeightedItems() {
+	 public List<WeightedItem> getWeightedItems() {
 		 return weightedItems;
 	 }
 
@@ -267,8 +271,12 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 	  * @param weightedItems the weightedItems to set
 	  */
 	 public void setWeightedItems(WeightedItem[] weightedItems) {
-		 this.weightedItems = weightedItems;
+		 this.weightedItems = Arrays.asList(weightedItems);
 	 }
+
+	 public void setWeightedItems(List<WeightedItem> weightedItems) {
+		this.weightedItems = weightedItems;
+	}
 
 	 /**
 	  * @return the sum
@@ -293,6 +301,14 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 		 super.setDelete(delete);
 		 this.parentCode = parentCode;
 	 }
+
+	 public boolean isDelete() {
+		 return super.getDelete();
+	 }
+
+	 public boolean isReplace() {
+		return super.getReplace();
+	}
 	 
 	 /**
 	  * @return the linkValue
@@ -313,7 +329,7 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 		return "QDataBaseEntityMessage [" + (parentCode != null ? "parentCode=" + parentCode + ", " : "")
 				+ (total != null ? "total=" + total + ", " : "")
 				+ (returnCount != null ? "returnCount=" + returnCount : "") 
-				+ (items != null ? "item count =" + items.length + ", " : " = 0")
+				+ (items != null ? "item count =" + items.size() + ", " : " = 0")
 				+ "]";
 	}
 
