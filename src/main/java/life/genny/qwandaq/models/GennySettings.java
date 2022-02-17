@@ -14,7 +14,9 @@ public class GennySettings {
 	public static final String bridgeServiceUrl = System.getenv("BRIDGE_SERVICE_API") != null
 			? System.getenv("BRIDGE_SERVICE_API")
 			: projectUrl + "/api/service/commands";
-	public static final String fyodorServiceUrl = System.getenv("FYODOR_SERVICE_API") != null ? System.getenv("FYODOR_SERVICE_API") : (projectUrl + ":4242");
+	public static final String fyodorServiceUrl = System.getenv("FYODOR_SERVICE_API") != null 
+			? System.getenv("FYODOR_SERVICE_API") 
+			: "http://erstwhile-wolf-genny-fyodor-svc:4242";
 	public static final String shleemyServiceUrl = System.getenv("SHLEEMY_SERVICE_API") != null
 			? System.getenv("SHLEEMY_SERVICE_API")
 			: (projectUrl + ":4242");
