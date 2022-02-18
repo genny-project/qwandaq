@@ -1,8 +1,11 @@
 package life.genny.qwandaq.models;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 /**
  * Various Settings to be used in the Genny System
  **/
+@RegisterForReflection
 public class GennySettings {
 
 	// URLs
