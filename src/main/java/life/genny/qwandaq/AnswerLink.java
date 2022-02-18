@@ -131,8 +131,8 @@ public class AnswerLink implements java.io.Serializable {
 	 */
 
 	// @Column(name = "money", length = 128)
-	// @Convert(converter = MoneyConverter.class)
-	// Money valueMoney;
+	@Convert(converter = MoneyConverter.class)
+	Money valueMoney;
 
 	/**
 	 * Store the BaseEntity Code value of the attribute for the baseEntity
@@ -358,23 +358,23 @@ public class AnswerLink implements java.io.Serializable {
 			} 
 
 			break;
-		// case "org.javamoney.moneta.Money":
-		// case "Money":
-		// 	result = answer.getValue();
-		// 	if (!StringUtils.isBlank(result)) {
-		// 		JsonReader reader = Json.createReader(new StringReader(result));
-		// 		JsonObject obj = reader.readObject();
+		case "org.javamoney.moneta.Money":
+		case "Money":
+			result = answer.getValue();
+			if (!StringUtils.isBlank(result)) {
+				JsonReader reader = Json.createReader(new StringReader(result));
+				JsonObject obj = reader.readObject();
 
-		// 		CurrencyUnit currency = Monetary.getCurrency(obj.getString("currency"));
-		// 		Double amount = Double.valueOf(obj.getString("amount"));
+				CurrencyUnit currency = Monetary.getCurrency(obj.getString("currency"));
+				Double amount = Double.valueOf(obj.getString("amount"));
 
-		// 		Money money = Money.of(amount, currency);
-		// 		setValueMoney(money);
-		// 	} else {
-		// 		setValueMoney(Money.zero(null));
-		// 	}
+				Money money = Money.of(amount, currency);
+				setValueMoney(money);
+			} else {
+				setValueMoney(Money.zero(null));
+			}
 
-		// 	break;
+			break;
 		case "java.lang.String":
 		default:
 			setValueString(answer.getValue());
@@ -649,16 +649,16 @@ public class AnswerLink implements java.io.Serializable {
 	/**
 	 * @return the valueMoney
 	 */
-	// public Money getValueMoney() {
-	// 	return valueMoney;
-	// }
+	public Money getValueMoney() {
+		return valueMoney;
+	}
 
 	/**
 	 * @param valueMoney the valueMoney to set
 	 */
-	// public void setValueMoney(Money valueMoney) {
-	// 	this.valueMoney = valueMoney;
-	// }
+	public void setValueMoney(Money valueMoney) {
+		this.valueMoney = valueMoney;
+	}
 
 	/**
 	 * @return the valueBaseEntityCode
@@ -813,9 +813,9 @@ public class AnswerLink implements java.io.Serializable {
 		case "java.lang.Boolean":
 		case "Boolean":
 			return (T) getValueBoolean();
-		// case "org.javamoney.moneta.Money":
-		// case "Money":
-		// 	return (T) getValueMoney();
+		case "org.javamoney.moneta.Money":
+		case "Money":
+			return (T) getValueMoney();
 		case "java.lang.String":
 		default:
 			return (T) getValueString();
@@ -869,9 +869,9 @@ public class AnswerLink implements java.io.Serializable {
 			setValueBoolean((Boolean) value);
 			break;
 		case "org.javamoney.moneta.Money":
-		// case "Money":
-		// 	setValueMoney((Money) value);
-		// 	break;
+		case "Money":
+			setValueMoney((Money) value);
+			break;
 		case "java.lang.String":
 		default:
 			setValueString((String) value);

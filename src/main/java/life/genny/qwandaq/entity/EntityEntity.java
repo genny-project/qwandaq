@@ -149,9 +149,9 @@ public class EntityEntity implements java.io.Serializable, Comparable<Object> {
 //  @XmlJavaTypeAdapter(LocalTimeAdapter.class)
   private LocalTime valueTime;
  
-	// @Column(name = "money", length = 128)
-	// @Convert(converter = MoneyConverter.class)
-	// Money valueMoney;
+	@Column(name = "money", length = 128)
+	@Convert(converter = MoneyConverter.class)
+	Money valueMoney;
 
   /**
    * Store the String value of the attribute for the baseEntity
@@ -405,16 +405,16 @@ public void setValueTime(LocalTime valueTime) {
 /**
  * @return the valueMoney
  */
-// public Money getValueMoney() {
-// 	return valueMoney;
-// }
+public Money getValueMoney() {
+	return valueMoney;
+}
 
 /**
  * @param valueMoney the valueMoney to set
  */
-// public void setValueMoney(Money valueMoney) {
-// 	this.valueMoney = valueMoney;
-// }
+public void setValueMoney(Money valueMoney) {
+	this.valueMoney = valueMoney;
+}
 
 /**
  * @param link the link to set
@@ -469,7 +469,7 @@ public void setLink(Link link) {
 @Override
 	public int hashCode() {
 		return Objects.hash(link, realm, valueBoolean, valueDate, valueDateTime, valueDouble, valueInteger,
-				valueLong, /*valueMoney,*/ valueString, valueTime, weight);
+				valueLong, valueMoney, valueString, valueTime, weight);
 	}
 
 	@Override
@@ -488,7 +488,7 @@ public void setLink(Link link) {
 				&& Objects.equals(realm, other.realm) && Objects.equals(valueBoolean, other.valueBoolean)
 				&& Objects.equals(valueDate, other.valueDate) && Objects.equals(valueDateTime, other.valueDateTime)
 				&& Objects.equals(valueDouble, other.valueDouble) && Objects.equals(valueInteger, other.valueInteger)
-				// && Objects.equals(valueLong, other.valueLong) && Objects.equals(valueMoney, other.valueMoney)
+				&& Objects.equals(valueLong, other.valueLong) && Objects.equals(valueMoney, other.valueMoney)
 				&& Objects.equals(valueString, other.valueString) && Objects.equals(valueTime, other.valueTime)
 				&& Objects.equals(weight, other.weight);
 	}
@@ -654,10 +654,10 @@ public <T> void setValue(final Object value) {
 		case "LocalTime":
 			setValueTime((LocalTime) value);
 			break;
-		// case "org.javamoney.moneta.Money":
-		// case "Money":
-		// 	setValueMoney((Money) value);
-		// 	break;
+		case "org.javamoney.moneta.Money":
+		case "Money":
+			setValueMoney((Money) value);
+			break;
 		case "java.lang.Double":
 		case "Double":
 			setValueDouble((Double) value);
@@ -698,8 +698,8 @@ public String getAsString() {
 		return "" + getValueLong();
 	case "java.time.LocalTime":
 		return getValueTime().toString();
-	// case "org.javamoney.moneta.Money":
-	// 	return getValueMoney().toString();
+	case "org.javamoney.moneta.Money":
+		return getValueMoney().toString();
 
 	case "java.lang.Double":
 		return getValueDouble().toString();
