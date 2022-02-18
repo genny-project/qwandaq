@@ -75,4 +75,9 @@ public class GennySettings {
 			: projectUrl + ":4242";
 	}
 
+	public static String keycloakUrl() {
+		return System.getenv("KEYCLOAK_URL") != null ? System.getenv("KEYCLOAK_URL")
+			: "http://keycloak.genny.life";
+	}
+
 }
