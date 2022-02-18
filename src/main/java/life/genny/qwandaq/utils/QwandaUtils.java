@@ -96,13 +96,13 @@ public class QwandaUtils {
 				return;
 			}
 
-			// Check for existing map
+			// check for existing map
 			if (!attributes.containsKey(realm)) {
 				attributes.put(realm, new ConcurrentHashMap<String, Attribute>());
 			}
 			Map<String, Attribute> attributeMap = attributes.get(realm);
 
-			// Insert attributes into map
+			// insert attributes into map
 			for (Attribute attribute : attributeList) {
 				attributeMap.put(attribute.getCode(), attribute);
 			}
@@ -139,25 +139,23 @@ public class QwandaUtils {
 			return null;
 		}
 
+		// fetch from cache
 		Question question = CacheUtils.getObject(userToken.getRealm(), code, Question.class);
 
 		if (question == null) {
-			log.warn("COULD NOT READ " + code + " from cache!!!");
 
-			String uri = GennySettings.qwandaServiceUrl + "/qwanda/questioncodes/" + code;
-			String json = HttpUtils.get(uri, userToken.getToken());
+			// fetch from database if not found in cache
+			log.warn("Could NOT read " + code + " from cache! Checking Database...");
+			question = DatabaseUtils.fetchQuestion(userToken.getRealm(), code);
 
-			if (!json.isBlank()) {
-
-				question = jsonb.fromJson(json, Question.class);
-
-				CacheUtils.writeCache(userToken.getRealm(), code, jsonb.toJson(question));
-				log.info(question.getCode() + " written to cache!");
-
-			} else {
+			if (question == null) {
 				log.error("Could not find question " + code + " in database!");
 				return null;
 			}
+
+			// cache the fetched question for quicker access
+			CacheUtils.writeCache(userToken.getRealm(), code, jsonb.toJson(question));
+			log.info(question.getCode() + " written to cache!");
 		}
 
 		return question;
@@ -207,20 +205,8 @@ public class QwandaUtils {
 	 */
 	public static void deleteSchedule(GennyToken userToken, String code) {
 
-		String uri = GennySettings.shleemyServiceUrl + "/api/schedule/code/" + code;
+		String uri = GennySettings.shleemyServiceUrl() + "/api/schedule/code/" + code;
 		HttpUtils.delete(uri, userToken.getToken());
 	}
 
-	/**
-	* NOTE: This method should be deleted. Anything referencing it 
-	* should directly reference the HttpUtils.get() method instead.
-	*
-	* @param url
-	* @param authToken
-	* @return
-	 */
-	static public String apiGet(String url, String authToken) {
-
-		return HttpUtils.get(url, authToken);
-	}
 }

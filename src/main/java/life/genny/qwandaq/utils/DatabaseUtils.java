@@ -100,6 +100,11 @@ public class DatabaseUtils {
 
 		log.info("Saving BaseEntity " + entity.getCode());
 
+		if (entityManager == null) {
+			log.error("EntityManager must be initialised first!!!");
+			return;
+		}
+
 		try {
 			entityManager.persist(entity);
 			log.info("Successfully saved BaseEntity " + entity.getCode());
@@ -119,6 +124,11 @@ public class DatabaseUtils {
 
 		log.info("Saving Attribute " + attribute.getCode());
 
+		if (entityManager == null) {
+			log.error("EntityManager must be initialised first!!!");
+			return;
+		}
+
 		try {
 			entityManager.persist(attribute);
 			log.info("Successfully saved attribute " + attribute.getCode());
@@ -137,6 +147,11 @@ public class DatabaseUtils {
 	public static void deleteAttribute(String code) {
 
 		log.info("Deleting Attribute " + code);
+
+		if (entityManager == null) {
+			log.error("EntityManager must be initialised first!!!");
+			return;
+		}
 
 		try {
 			Query q = entityManager.createQuery("DELETE Attribute WHERE code = :code");
@@ -161,7 +176,7 @@ public class DatabaseUtils {
 		try {
 
 			return entityManager
-					.createQuery("SELECT * FROM Question where realm=:realmStr and code = :code", Question.class)
+					.createQuery("SELECT * FROM Question WHERE realm=:realmStr AND code = :code", Question.class)
 					.setParameter("realmStr", realm)
 					.setParameter("code", code)
 					.getSingleResult();
@@ -183,7 +198,7 @@ public class DatabaseUtils {
 		try {
 
 			return entityManager
-					.createQuery("SELECT * FROM QuestionQuestion where realm=:realmStr and sourceCode = :sourceCode and targetCode = :targetCode"
+					.createQuery("SELECT * FROM QuestionQuestion WHERE realm=:realmStr AND sourceCode = :sourceCode AND targetCode = :targetCode"
 							, QuestionQuestion.class)
 					.setParameter("realmStr", realm)
 					.setParameter("sourceCode", sourceCode)
@@ -207,7 +222,7 @@ public class DatabaseUtils {
 		try {
 
 			return entityManager
-					.createQuery("SELECT * FROM QuestionQuestion where realm=:realmStr and sourceCode = :sourceCode"
+					.createQuery("SELECT * FROM QuestionQuestion WHERE realm=:realmStr AND sourceCode = :sourceCode"
 							, QuestionQuestion.class)
 					.setParameter("realmStr", realm)
 					.setParameter("sourceCode", sourceCode)

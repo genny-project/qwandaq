@@ -3,12 +3,10 @@ package life.genny.qwandaq.utils;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,10 +43,9 @@ import life.genny.qwandaq.validation.Validation;
 public class QuestionUtils implements Serializable {
 	private static final Logger log = Logger.getLogger(QuestionUtils.class);
 
-	static Jsonb jsonb = JsonbBuilder.create(); // fix
+	static Jsonb jsonb = JsonbBuilder.create();
 
-	private QuestionUtils() {
-	}
+	private QuestionUtils() {}
 
 	public static Boolean doesQuestionGroupExist(String sourceCode, String targetCode, final String questionCode,
 			String token) {
@@ -556,16 +553,21 @@ public class QuestionUtils implements Serializable {
 		}
 	}
 
-	public static List<BaseEntity> getChildren(String beCode, Integer level,
-			String token) {
+	/**
+	* Fetch linked children entities of a given {@link BaseEntity} using its code.
+	*
+	* @param beCode
+	* @param level
+	* @param token
+	* @return
+	 */
+	public static List<BaseEntity> getChildren(String beCode, Integer level, String token) {
 
 		if (level == 0) {
-			return null; // exit point;
+			return null;
 		}
+
 		GennyToken gennyToken = new GennyToken(token);
-
-		final String realm = gennyToken.getRealm();
-
 		List<BaseEntity> result = new ArrayList<BaseEntity>();
 
 		BaseEntity parent = CacheUtils.getObject(gennyToken.getRealm(),

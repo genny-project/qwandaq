@@ -1,8 +1,11 @@
 package life.genny.qwandaq.models;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 /**
  * Various Settings to be used in the Genny System
  **/
+@RegisterForReflection
 public class GennySettings {
 
 	// URLs
@@ -64,12 +67,27 @@ public class GennySettings {
 
 	public static String qwandaServiceUrl() {
 		return System.getenv("GENNY_API_URL") != null ? System.getenv("GENNY_API_URL") 
-			: projectUrl + ":8280";
+			: (projectUrl() + ":8280");
 	}
 
 	public static String fyodorServiceUrl() {
 		return System.getenv("FYODOR_SERVICE_API") != null ? System.getenv("FYODOR_SERVICE_API") 
-			: projectUrl + ":4242";
+			: (projectUrl() + ":4242");
+	}
+
+	public static String shleemyServiceUrl() {
+		return System.getenv("SHLEEMY_SERVICE_API") != null ? System.getenv("SHLEEMY_SERVICE_API")
+			: (projectUrl() + ":4242");
+	}
+
+	public static String infinispanHost() {
+		return System.getenv("INFINISPAN_HOST") != null ? System.getenv("INFINISPAN_HOST")
+			: (projectUrl() + ":11222");
+	}
+
+	public static String keycloakUrl() {
+		return System.getenv("KEYCLOAK_URL") != null ? System.getenv("KEYCLOAK_URL")
+			: "http://keycloak.genny.life";
 	}
 
 }

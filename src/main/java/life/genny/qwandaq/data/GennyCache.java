@@ -8,16 +8,17 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
 
 import org.jboss.logging.Logger;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import org.infinispan.client.hotrod.DefaultTemplate;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.commons.api.CacheContainerAdmin;
 
+@RegisterForReflection
 @ApplicationScoped
 public class GennyCache {
 	
@@ -34,7 +35,9 @@ public class GennyCache {
     }
 
 	@PostConstruct
-	public void init() { }
+	public void init() { 
+		log.info("Cache Initialized!");
+	}
 
 	/**
 	* Return a remote cache for the given realm.

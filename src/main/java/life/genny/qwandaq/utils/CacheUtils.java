@@ -1,8 +1,6 @@
 package life.genny.qwandaq.utils;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -11,9 +9,6 @@ import org.jboss.logging.Logger;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.data.GennyCache;
-import life.genny.qwandaq.entity.BaseEntity;
-import life.genny.qwandaq.entity.EntityEntity;
-import life.genny.qwandaq.models.GennyToken;
 
 @RegisterForReflection
 public class CacheUtils {
