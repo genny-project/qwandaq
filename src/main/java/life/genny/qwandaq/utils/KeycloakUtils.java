@@ -251,7 +251,7 @@ public class KeycloakUtils {
 
         // build parameter map
         HashMap<String, String> params = new HashMap<>();
-        params.put("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange");
+        params.put("grant_type", URLEncoder.encode("urn:ietf:params:oauth:grant-type:token-exchange", StandardCharsets.UTF_8));
         params.put("client_id", clientId);
         params.put("subject_token", exchangedToken);
         params.put("requested_subject", username);
