@@ -261,7 +261,7 @@ public class KeycloakUtils {
      */
     public static String getImpersonatedToken(String keycloakUrl, String realm, String clientId, String secret, String username, String exchangedToken) throws IOException {
 
-        String uri = keycloakUrl + ":-1/auth/realms/" + realm + "/protocol/openid-connect/token";
+        String uri = keycloakUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token";
 
         // build parameter map
         HashMap<String, String> params = new HashMap<>();
