@@ -283,12 +283,8 @@ public class KeycloakUtils {
 			log.error(e.getLocalizedMessage());
 		}
 
-		if (statusCode == null || statusCode != 200) {
-			throw new IOException(statusCode + " : " + body);
-		}
-
 		if (body == null) {
-			throw new IOException("Null Body");
+			throw new IOException("Null Body Received : statusCode = " + statusCode);
 		}
 
 		log.info("IMPERSONATION content = " + body);
