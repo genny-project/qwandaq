@@ -265,7 +265,8 @@ public class KeycloakUtils {
         log.info("requestBody = " + requestBody);
 
         // build new http request
-        HttpClient client = HttpClient.newHttpClient();
+        log.info("url: " + uri);
+
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri))
                 .setHeader("Content-Type", "application/x-www-form-urlencoded")
                 .setHeader("Authorization", "Bearer " + exchangedToken)
