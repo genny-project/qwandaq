@@ -33,11 +33,6 @@ public class KeycloakUtils {
     private static final Logger log = Logger.getLogger(KeycloakUtils.class);
     private static Jsonb jsonb = JsonbBuilder.create();
 
-    public KeycloakUtils() {
-    }
-
-    ;
-
     /**
      * Fetch an access token for a user.
      *
@@ -50,7 +45,7 @@ public class KeycloakUtils {
      * @param refreshToken
      * @return
      */
-    public GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret, String username,
+    public static GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret, String username,
                                String password, String refreshToken) {
 
         HashMap<String, String> postDataParams = new HashMap<>();
@@ -95,7 +90,7 @@ public class KeycloakUtils {
      * @param postDataParams
      * @return
      */
-    public String performPostCall(String requestURL, HashMap<String, String> postDataParams) {
+    public static String performPostCall(String requestURL, HashMap<String, String> postDataParams) {
 
         URL url;
         String response = "";
@@ -141,7 +136,7 @@ public class KeycloakUtils {
      * @param params
      * @return
      */
-    private String getPostDataString(HashMap<String, String> params) {
+    public static String getPostDataString(HashMap<String, String> params) {
         StringBuilder result = new StringBuilder();
         boolean first = true;
 
@@ -247,60 +242,27 @@ public class KeycloakUtils {
      */
     public static String getImpersonatedToken(String keycloakUrl, String realm, String clientId, String secret, String username, String exchangedToken) throws IOException {
 
-        String uri = keycloakUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token";
-
-        // build parameter map
         HashMap<String, String> params = new HashMap<>();
-        params.put("grant_type", URLEncoder.encode("urn:ietf:params:oauth:grant-type:token-exchange", StandardCharsets.UTF_8));
-        params.put("client_id", URLEncoder.encode(clientId, StandardCharsets.UTF_8));
-        params.put("subject_token", URLEncoder.encode(exchangedToken, StandardCharsets.UTF_8));
-        params.put("requested_subject", URLEncoder.encode(username, StandardCharsets.UTF_8));
 
-        if (secret != null) {
-			params.put("client_secret", URLEncoder.encode(secret, StandardCharsets.UTF_8));
+		params.put("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange");
+		params.put("subject_token", exchangedToken);
+		params.put("requested_subject", username);
+        params.put("client_id", clientId);
+
+        if (secret != null && !StringUtils.isBlank(secret)) {
+            params.put("client_secret", secret);
         }
 
-        // serialize params to json
-        String requestBody = jsonb.toJson(params);
-        log.info("requestBody = " + requestBody);
+        String requestURL = keycloakUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token";
 
-        // build new http request
-        HttpClient client = HttpClient.newHttpClient();
-        log.info("uri: "+ uri);
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri))
-                .setHeader("Content-Type", "application/x-www-form-urlencoded")
-                .setHeader("Authorization", "Bearer " + exchangedToken)
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                .build();
+        String str = performPostCall(requestURL, params);
 
-        String body = null;
-        Integer statusCode = null;
+        log.debug("keycloak auth url = " + requestURL);
+        log.debug(username + " token= " + str);
 
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            body = response.body();
-            statusCode = response.statusCode();
-
-            log.info("body: " + body);
-            log.info("status: " + statusCode);
-
-        } catch (IOException | InterruptedException e) {
-            log.error(e.getLocalizedMessage());
-        }
-
-        if (body == null) {
-            throw new IOException("Null Body Received : statusCode = " + statusCode);
-        }
-
-        log.info("StatusCode = " + statusCode + ", Body = " + body);
-
-        JsonReader reader = Json.createReader(new StringReader(body));
-        JsonObject jsonToken = reader.readObject();
-        reader.close();
-        String token = jsonToken.getString("access_token");
-
-        return token;
-
+        JsonObject json = jsonb.fromJson(str, JsonObject.class);
+        String accessToken = json.getString("access_token");
+        return accessToken;
     }
 
     /**
