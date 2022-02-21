@@ -52,11 +52,22 @@ public class KeycloakUtils {
 
 	public KeycloakUtils() {};
 
+	/**
+	* Fetch an access token for a user.
+	*
+	* @param keycloakUrl
+	* @param realm
+	* @param clientId
+	* @param secret
+	* @param username
+	* @param password
+	* @param refreshToken
+	* @return
+	 */
 	public GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret, String username,
 			String password, String refreshToken) {
 
 		HashMap<String, String> postDataParams = new HashMap<>();
-		// postDataParams.put("Content-Type", "application/x-www-form-urlencoded");
 
 		if (refreshToken == null) {
 			postDataParams.put("username", username);
@@ -80,8 +91,6 @@ public class KeycloakUtils {
 
 		String requestURL = keycloakUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token";
 
-		String postDataStr = getPostDataString(postDataParams);
-		// String str =keycloakService.getAccessToken(realm, postDataStr);
 		String str = performPostCall(requestURL, postDataParams);
 
 		log.debug("keycloak auth url = " + requestURL);
@@ -93,6 +102,13 @@ public class KeycloakUtils {
 		return token;
 	}
 
+	/**
+	* Custom POST request for keycloak connection.
+	*
+	* @param requestURL
+	* @param postDataParams
+	* @return
+	 */
 	public String performPostCall(String requestURL, HashMap<String, String> postDataParams) {
 
 		URL url;
@@ -133,6 +149,12 @@ public class KeycloakUtils {
 		return response;
 	}
 
+	/**
+	* Build a POST query.
+	*
+	* @param params
+	* @return
+	 */
 	private String getPostDataString(HashMap<String, String> params) {
 		StringBuilder result = new StringBuilder();
 		boolean first = true;
@@ -156,7 +178,20 @@ public class KeycloakUtils {
 		return result.toString();
 	}
 
-	public static String getImpersonatedToken(String keycloakUrl, String realm, BaseEntity project, BaseEntity userBE, String exchangedToken) throws IOException {
+
+	/**
+	* Fetch an Impersonated Token for a user.
+	*
+	* @param keycloakUrl
+	* @param realm
+	* @param project
+	* @param userBE
+	* @param exchangedToken
+	* @return
+	* @throws IOException
+	 */
+	public static String getImpersonatedToken(String keycloakUrl, String realm, BaseEntity project, 
+			BaseEntity userBE, String exchangedToken) throws IOException {
 
 		if (userBE == null) {
 			log.error(ANSIColour.RED+"User BE is NULL"+ANSIColour.RESET);
@@ -176,6 +211,17 @@ public class KeycloakUtils {
 		return getImpersonatedToken(keycloakUrl, realm, project, uuid, exchangedToken);
 	}
 	
+	/**
+	* Fetch an Impersonated Token for a user.
+	* 
+	* @param keycloakUrl
+	* @param realm
+	* @param project
+	* @param uuid
+	* @param exchangedToken
+	* @return
+	* @throws IOException
+	 */
 	public static String getImpersonatedToken(String keycloakUrl, String realm, BaseEntity project, String uuid, String exchangedToken) throws IOException {
 
 		String keycloakJson = project.getValueAsString("ENV_KEYCLOAK_JSON");
@@ -189,6 +235,18 @@ public class KeycloakUtils {
 		
 	}
 	
+	/**
+	* Fetch an Impersonated Token for a user.
+	* 
+	* @param keycloakUrl
+	* @param realm
+	* @param clientId
+	* @param secret
+	* @param username
+	* @param exchangedToken
+	* @return
+	* @throws IOException
+	 */
 	public static String getImpersonatedToken(String keycloakUrl, String realm, String clientId, String secret, String username, String exchangedToken) throws IOException {
 
 		String uri = keycloakUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token";
@@ -244,7 +302,13 @@ public class KeycloakUtils {
 
 	}
 
-	// This is the one called from rules to create a keycloak user
+	/**
+	* Initialise a Dummy User in keycloak.
+	*
+	* @param token
+	* @param realm
+	* @return
+	 */
 	public static String createDummyUser(String token, String realm) {
 
 		String randomCode = UUID.randomUUID().toString().substring(0, 18);
@@ -309,16 +373,33 @@ public class KeycloakUtils {
 		return null;
 	}
 
+	/**
+	* Fetch a keycloak users Id using a username.
+	*
+	* @param token
+	* @param realm
+	* @param username
+	* @return
+	* @throws IOException
+	 */
 	public static String getKeycloakUserId(final String token, final String realm, final String username) throws IOException {
 
-		final List<LinkedHashMap> users = fetchKeycloakUsers(token, realm, username);
+		final List<LinkedHashMap> users = fetchKeycloakUser(token, realm, username);
 		if(!users.isEmpty()) {
 			return (String) users.get(0).get("id");
 		}
 		return null;
 	}
 
-	public static List<LinkedHashMap> fetchKeycloakUsers(final String token, final String realm, final String username) {
+	/**
+	* Fetch a keycloak user using a username.
+	*
+	* @param token
+	* @param realm
+	* @param username
+	* @return
+	 */
+	public static List<LinkedHashMap> fetchKeycloakUser(final String token, final String realm, final String username) {
 
 		String uri = GennySettings.keycloakUrl + "/auth/admin/realms/" + realm + "/users?username=" + username;
 

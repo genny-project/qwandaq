@@ -49,7 +49,7 @@ public class CacheUtils {
 	}
 
 	/**
-	 * Get an object from a realm cache.
+	 * Get an object from a realm cache using a {@link Class}.
 	 *
 	 * @param <T>
 	 * @param realm
@@ -68,7 +68,7 @@ public class CacheUtils {
 	}
 
 	/**
-	 * Get an object from a realm cache.
+	 * Get an object from a realm cache using a {@link Type}.
 	 *
 	 * @param <T>
 	 * @param realm
@@ -76,13 +76,13 @@ public class CacheUtils {
 	 * @param type
 	 * @return
 	 */
-	public static <T> T getObject(String realm, String key, Type c) {
+	public static <T> T getObject(String realm, String key, Type t) {
 
 		String data = (String) readCache(realm, key);
 		if (data == null) {
 			return null;
 		}
-		Object object = jsonb.fromJson(data, c);
+		Object object = jsonb.fromJson(data, t);
 		return (T) object;
 	}
 
