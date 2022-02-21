@@ -198,19 +198,26 @@ public class KeycloakUtils {
 			return null;
 		}
 
-		String uuid = userBE.getValue("PRI_UUID", null);
-		if (uuid == null) {
-			log.warn(ANSIColour.YELLOW+"No PRI_UUID found for user " + userBE.getCode()+", attempting to use PRI_EMAIL instead"+ANSIColour.RESET);
-			uuid = userBE.getValue("PRI_EMAIL", null);
-			if (uuid == null) {
-				log.error(ANSIColour.RED+"No PRI_EMAIL found for user " + userBE.getCode()+ANSIColour.RESET);
-				return null;
-			}
-		} else {
-			uuid = uuid.toLowerCase();
+		// // grab uuid to fetch token
+		// String uuid = userBE.getValue("PRI_UUID", null);
+
+		// if (uuid != null) {
+		// 	// use lowercase UUID
+		// 	uuid = uuid.toLowerCase();
+		// 	return getImpersonatedToken(keycloakUrl, realm, project, uuid, exchangedToken);
+		// }
+
+		// log.warn(ANSIColour.YELLOW+"No PRI_UUID found for user " + userBE.getCode()+", attempting to use PRI_EMAIL instead"+ANSIColour.RESET);
+
+		// grab email to fetch token
+		String email = userBE.getValue("PRI_EMAIL", null);
+
+		if (email != null) {
+			return getImpersonatedToken(keycloakUrl, realm, project, email, exchangedToken);
 		}
 
-		return getImpersonatedToken(keycloakUrl, realm, project, uuid, exchangedToken);
+		log.error(ANSIColour.RED+"No PRI_EMAIL found for user " + userBE.getCode()+ANSIColour.RESET);
+		return null;
 	}
 	
 	/**
@@ -226,9 +233,12 @@ public class KeycloakUtils {
 	 */
 	public static String getImpersonatedToken(String keycloakUrl, String realm, BaseEntity project, String uuid, String exchangedToken) throws IOException {
 
+		// fetch keycloak json from porject entity
 		String keycloakJson = project.getValueAsString("ENV_KEYCLOAK_JSON");
 		JsonReader reader = Json.createReader(new StringReader(keycloakJson));
 		JsonObject json = reader.readObject();
+
+		// grab client secret
 		JsonObject credentials = json.getJsonObject("credentials");
 		String secret = credentials.getString("secret");
 		reader.close();
@@ -253,6 +263,7 @@ public class KeycloakUtils {
 
 		String uri = keycloakUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token";
 
+		// build parameter map
 		HashMap<String, String> params = new HashMap<>();
 		params.put("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange");
 		params.put("client_id", clientId);
@@ -263,9 +274,11 @@ public class KeycloakUtils {
 			params.put("client_secret", secret);
 		}
 
+		// serialize params to json
 		String requestBody = jsonb.toJson(params);
 		log.info("requestBody = " + requestBody);
 
+		// build new http request
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder() .uri(URI.create(uri))
 			.setHeader("Content-Type", "application/x-www-form-urlencoded")
