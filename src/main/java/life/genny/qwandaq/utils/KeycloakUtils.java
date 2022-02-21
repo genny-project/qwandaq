@@ -1,48 +1,31 @@
 package life.genny.qwandaq.utils;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.net.URL;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.io.StringReader;
-
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.Json;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
-import javax.net.ssl.HttpsURLConnection;
-
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.models.ANSIColour;
+import life.genny.qwandaq.models.GennySettings;
+import life.genny.qwandaq.models.GennyToken;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 import org.keycloak.representations.account.UserRepresentation;
 import org.keycloak.util.JsonSerialization;
 
-import life.genny.qwandaq.entity.BaseEntity;
-import life.genny.qwandaq.models.GennyToken;
-import life.genny.qwandaq.models.ANSIColour;
-import life.genny.qwandaq.models.GennySettings;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
+import javax.net.ssl.HttpsURLConnection;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 @RegisterForReflection
 public class KeycloakUtils {
@@ -50,7 +33,10 @@ public class KeycloakUtils {
     private static final Logger log = Logger.getLogger(KeycloakUtils.class);
     private static Jsonb jsonb = JsonbBuilder.create();
 
-    public KeycloakUtils() {};
+    public KeycloakUtils() {
+    }
+
+    ;
 
     /**
      * Fetch an access token for a user.
@@ -194,7 +180,7 @@ public class KeycloakUtils {
                                               BaseEntity userBE, String exchangedToken) throws IOException {
 
         if (userBE == null) {
-            log.error(ANSIColour.RED+"User BE is NULL"+ANSIColour.RESET);
+            log.error(ANSIColour.RED + "User BE is NULL" + ANSIColour.RESET);
             return null;
         }
 
@@ -207,7 +193,7 @@ public class KeycloakUtils {
             return getImpersonatedToken(keycloakUrl, realm, project, uuid, exchangedToken);
         }
 
-        log.warn(ANSIColour.YELLOW+"No PRI_UUID found for user " + userBE.getCode()+", attempting to use PRI_EMAIL instead"+ANSIColour.RESET);
+        log.warn(ANSIColour.YELLOW + "No PRI_UUID found for user " + userBE.getCode() + ", attempting to use PRI_EMAIL instead" + ANSIColour.RESET);
 
         // grab email to fetch token
         String email = userBE.getValue("PRI_EMAIL", null);
@@ -216,7 +202,7 @@ public class KeycloakUtils {
             return getImpersonatedToken(keycloakUrl, realm, project, email, exchangedToken);
         }
 
-        log.error(ANSIColour.RED+"No PRI_EMAIL found for user " + userBE.getCode()+ANSIColour.RESET);
+        log.error(ANSIColour.RED + "No PRI_EMAIL found for user " + userBE.getCode() + ANSIColour.RESET);
         return null;
     }
 
@@ -280,7 +266,7 @@ public class KeycloakUtils {
 
         // build new http request
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder() .uri(URI.create(uri))
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri))
                 .setHeader("Content-Type", "application/x-www-form-urlencoded")
                 .setHeader("Authorization", "Bearer " + exchangedToken)
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
@@ -291,9 +277,11 @@ public class KeycloakUtils {
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
             body = response.body();
             statusCode = response.statusCode();
+
+            log.info("body: " + body);
+            log.info("status: " + statusCode);
 
         } catch (IOException | InterruptedException e) {
             log.error(e.getLocalizedMessage());
@@ -326,21 +314,21 @@ public class KeycloakUtils {
         String randomCode = UUID.randomUUID().toString().substring(0, 18);
         String defaultPassword = "password1";
 
-        String json = "{ " +"\"username\" : \"" + randomCode + "\"," + "\"email\" : \"" + randomCode + "@gmail.com\" , "
+        String json = "{ " + "\"username\" : \"" + randomCode + "\"," + "\"email\" : \"" + randomCode + "@gmail.com\" , "
                 + "\"enabled\" : true, " + "\"emailVerified\" : true, " + "\"firstName\" : \"" + randomCode + "\", "
                 + "\"lastName\" : \"" + randomCode + "\", " + "\"groups\" : [" + " \"users\" " + "], "
                 + "\"requiredActions\" : [\"terms_and_conditions\"], "
                 + "\"realmRoles\" : [\"user\"],\"credentials\": [{"
-                +  "\"type\":\"password\","
-                +  "\"value\":\""+defaultPassword+"\","
+                + "\"type\":\"password\","
+                + "\"value\":\"" + defaultPassword + "\","
                 + "\"temporary\":true }]}";
 
         log.debug("CreateUserjsonDummy = " + json);
 
-        String uri =  GennySettings.keycloakUrl + "/auth/admin/realms/" + realm + "/users";
+        String uri = GennySettings.keycloakUrl + "/auth/admin/realms/" + realm + "/users";
 
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder() .uri(URI.create(uri))
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri))
                 .setHeader("Content-Type", "application/json")
                 .setHeader("Authorization", "Bearer " + token)
                 .POST(HttpRequest.BodyPublishers.ofString(json))
@@ -361,13 +349,13 @@ public class KeycloakUtils {
             log.info("StatusCode: " + statusCode);
 
             if (statusCode == 409) {
-                log.warn("Email is already taken for "+randomCode);
+                log.warn("Email is already taken for " + randomCode);
                 // fetch existing email user
                 String userId = getKeycloakUserId(token, realm, randomCode);
                 return userId;
 
             } else if (statusCode == 401) {
-                log.warn("Unauthorized token used to create "+randomCode);
+                log.warn("Unauthorized token used to create " + randomCode);
                 // fetch existing email user
                 String userId = getKeycloakUserId(token, realm, randomCode);
                 return userId;
@@ -397,7 +385,7 @@ public class KeycloakUtils {
     public static String getKeycloakUserId(final String token, final String realm, final String username) throws IOException {
 
         final List<LinkedHashMap> users = fetchKeycloakUser(token, realm, username);
-        if(!users.isEmpty()) {
+        if (!users.isEmpty()) {
             return (String) users.get(0).get("id");
         }
         return null;
@@ -416,7 +404,7 @@ public class KeycloakUtils {
         String uri = GennySettings.keycloakUrl + "/auth/admin/realms/" + realm + "/users?username=" + username;
 
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder() .uri(URI.create(uri))
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri))
                 .setHeader("Content-Type", "application/json")
                 .setHeader("Authorization", "Bearer " + token)
                 .GET().build();
