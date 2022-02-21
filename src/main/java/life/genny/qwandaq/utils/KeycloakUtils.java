@@ -262,6 +262,7 @@ public class KeycloakUtils {
 		}
 
 		String requestBody = jsonb.toJson(params);
+		log.info("requestBody = " + requestBody);
 
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder() .uri(URI.create(uri))
@@ -287,7 +288,7 @@ public class KeycloakUtils {
 			throw new IOException("Null Body Received : statusCode = " + statusCode);
 		}
 
-		log.info("IMPERSONATION content = " + body);
+		log.info("StatusCode = " + statusCode + ", Body = " + body);
 
 		JsonReader reader = Json.createReader(new StringReader(body));
 		JsonObject jsonToken = reader.readObject();
