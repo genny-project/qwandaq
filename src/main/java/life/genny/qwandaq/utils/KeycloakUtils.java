@@ -206,6 +206,8 @@ public class KeycloakUtils {
 				log.error(ANSIColour.RED+"No PRI_EMAIL found for user " + userBE.getCode()+ANSIColour.RESET);
 				return null;
 			}
+		} else {
+			uuid = uuid.toLowerCase();
 		}
 
 		return getImpersonatedToken(keycloakUrl, realm, project, uuid, exchangedToken);
