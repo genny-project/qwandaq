@@ -198,16 +198,16 @@ public class KeycloakUtils {
 			return null;
 		}
 
-		// // grab uuid to fetch token
-		// String uuid = userBE.getValue("PRI_UUID", null);
+		// grab uuid to fetch token
+		String uuid = userBE.getValue("PRI_UUID", null);
 
-		// if (uuid != null) {
-		// 	// use lowercase UUID
-		// 	uuid = uuid.toLowerCase();
-		// 	return getImpersonatedToken(keycloakUrl, realm, project, uuid, exchangedToken);
-		// }
+		if (uuid != null) {
+			// use lowercase UUID
+			uuid = uuid.toLowerCase();
+			return getImpersonatedToken(keycloakUrl, realm, project, uuid, exchangedToken);
+		}
 
-		// log.warn(ANSIColour.YELLOW+"No PRI_UUID found for user " + userBE.getCode()+", attempting to use PRI_EMAIL instead"+ANSIColour.RESET);
+		log.warn(ANSIColour.YELLOW+"No PRI_UUID found for user " + userBE.getCode()+", attempting to use PRI_EMAIL instead"+ANSIColour.RESET);
 
 		// grab email to fetch token
 		String email = userBE.getValue("PRI_EMAIL", null);
@@ -261,7 +261,7 @@ public class KeycloakUtils {
 	 */
 	public static String getImpersonatedToken(String keycloakUrl, String realm, String clientId, String secret, String username, String exchangedToken) throws IOException {
 
-		String uri = keycloakUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token";
+		String uri = keycloakUrl + ":-1/auth/realms/" + realm + "/protocol/openid-connect/token";
 
 		// build parameter map
 		HashMap<String, String> params = new HashMap<>();
