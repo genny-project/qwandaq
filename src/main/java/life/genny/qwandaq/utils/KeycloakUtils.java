@@ -6,9 +6,6 @@ import life.genny.qwandaq.models.ANSIColour;
 import life.genny.qwandaq.models.GennySettings;
 import life.genny.qwandaq.models.GennyToken;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.message.BasicNameValuePair;
 import org.jboss.logging.Logger;
 import org.keycloak.representations.account.UserRepresentation;
 import org.keycloak.util.JsonSerialization;
@@ -255,31 +252,16 @@ public class KeycloakUtils {
         // build parameter map
         HashMap<String, String> params = new HashMap<>();
         params.put("grant_type", URLEncoder.encode("urn:ietf:params:oauth:grant-type:token-exchange", StandardCharsets.UTF_8));
-        params.put("client_id", clientId);
-        params.put("subject_token", exchangedToken);
-        params.put("requested_subject", username);
+        params.put("client_id", URLEncoder.encode(clientId, StandardCharsets.UTF_8));
+        params.put("subject_token", URLEncoder.encode(exchangedToken, StandardCharsets.UTF_8));
+        params.put("requested_subject", URLEncoder.encode(username, StandardCharsets.UTF_8));
 
         if (secret != null) {
-            params.put("client_secret", secret);
+			params.put("client_secret", URLEncoder.encode(secret, StandardCharsets.UTF_8));
         }
 
-
-
-		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-		postParameters.add(new BasicNameValuePair("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange"));
-		postParameters.add(new BasicNameValuePair("client_id", clientId));
-		postParameters.add(new BasicNameValuePair("subject_token", exchangedToken));
-		postParameters.add(new BasicNameValuePair("requested_subject", username));
-		if (secret != null) {
-			postParameters.add(new BasicNameValuePair("client_secret", secret));
-		}
-
-		// post.setEntity(new UrlEncodedFormEntity(postParameters, "UTF-8"));
-
-
         // serialize params to json
-        // String requestBody = jsonb.toJson(params);
-        String requestBody = jsonb.toJson(new UrlEncodedFormEntity(postParameters, "UTF-8"));
+        String requestBody = jsonb.toJson(params);
         log.info("requestBody = " + requestBody);
 
         // build new http request
