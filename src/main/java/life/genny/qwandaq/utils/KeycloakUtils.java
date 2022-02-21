@@ -251,13 +251,13 @@ public class KeycloakUtils {
 
         // build parameter map
         HashMap<String, String> params = new HashMap<>();
-        params.put("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange");
-        params.put("client_id", clientId);
-        params.put("subject_token", exchangedToken);
-        params.put("requested_subject", username);
+        params.put("grant_type", URLEncoder.encode("urn:ietf:params:oauth:grant-type:token-exchange", StandardCharsets.UTF_8));
+        params.put("client_id", URLEncoder.encode(clientId, StandardCharsets.UTF_8));
+        params.put("subject_token", URLEncoder.encode(exchangedToken, StandardCharsets.UTF_8));
+        params.put("requested_subject", URLEncoder.encode(username, StandardCharsets.UTF_8));
 
         if (secret != null) {
-            params.put("client_secret", secret);
+			params.put("client_secret", URLEncoder.encode(secret, StandardCharsets.UTF_8));
         }
 
         // serialize params to json
@@ -266,6 +266,7 @@ public class KeycloakUtils {
 
         // build new http request
         HttpClient client = HttpClient.newHttpClient();
+        log.info("uri: "+ uri);
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri))
                 .setHeader("Content-Type", "application/x-www-form-urlencoded")
                 .setHeader("Authorization", "Bearer " + exchangedToken)
