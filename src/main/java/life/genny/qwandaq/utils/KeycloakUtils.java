@@ -6,6 +6,9 @@ import life.genny.qwandaq.models.ANSIColour;
 import life.genny.qwandaq.models.GennySettings;
 import life.genny.qwandaq.models.GennyToken;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.message.BasicNameValuePair;
 import org.jboss.logging.Logger;
 import org.keycloak.representations.account.UserRepresentation;
 import org.keycloak.util.JsonSerialization;
@@ -260,8 +263,23 @@ public class KeycloakUtils {
             params.put("client_secret", secret);
         }
 
+
+
+		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+		postParameters.add(new BasicNameValuePair("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange"));
+		postParameters.add(new BasicNameValuePair("client_id", clientId));
+		postParameters.add(new BasicNameValuePair("subject_token", exchangedToken));
+		postParameters.add(new BasicNameValuePair("requested_subject", username));
+		if (secret != null) {
+			postParameters.add(new BasicNameValuePair("client_secret", secret));
+		}
+
+		// post.setEntity(new UrlEncodedFormEntity(postParameters, "UTF-8"));
+
+
         // serialize params to json
-        String requestBody = jsonb.toJson(params);
+        // String requestBody = jsonb.toJson(params);
+        String requestBody = jsonb.toJson(new UrlEncodedFormEntity(postParameters, "UTF-8"));
         log.info("requestBody = " + requestBody);
 
         // build new http request
