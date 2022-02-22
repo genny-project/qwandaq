@@ -25,83 +25,174 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RegisterForReflection
 public class KeycloakUtils {
 
-    private static final Logger log = Logger.getLogger(KeycloakUtils.class);
-    private static Jsonb jsonb = JsonbBuilder.create();
+    static final Logger log = Logger.getLogger(KeycloakUtils.class);
+    static Jsonb jsonb = JsonbBuilder.create();
 
-    public KeycloakUtils() {
+	/**
+    * Fetch an access token for a user using a username and password.
+	* 
+	* @param keycloakUrl
+	* @param realm
+	* @param clientId
+	* @param secret
+	* @param username
+	* @param password
+	* @return
+	 */
+    public static GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret, String username, String password) {
+
+        HashMap<String, String> params = new HashMap<>();
+
+		params.put("username", username);
+		params.put("password", password);
+		params.put("grant_type", "password");
+        params.put("client_id", clientId);
+
+        if (!StringUtils.isBlank(secret)) {
+            params.put("client_secret", secret);
+        }
+
+		String token = fetchOIDCToken(keycloakUrl, realm, params);
+
+        GennyToken gennyToken = new GennyToken(token);
+        return gennyToken;
     }
 
-    ;
+	/**
+	* Fetch an access token for a user using a refresh token.
+	* 
+	* @param keycloakUrl
+	* @param realm
+	* @param clientId
+	* @param secret
+	* @param refreshToken
+	* @return
+	 */
+    public static GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret, String refreshToken) {
 
-    /**
-     * Fetch an access token for a user.
-     *
-     * @param keycloakUrl
-     * @param realm
-     * @param clientId
-     * @param secret
-     * @param username
-     * @param password
-     * @param refreshToken
-     * @return
-     */
-    public GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret, String username,
-                               String password, String refreshToken) {
+        HashMap<String, String> params = new HashMap<>();
 
-        HashMap<String, String> postDataParams = new HashMap<>();
+		params.put("refresh_token", refreshToken);
+		params.put("grant_type", "refresh_token");
+		params.put("client_id", clientId);
 
-        if (refreshToken == null) {
-            postDataParams.put("username", username);
-            postDataParams.put("password", password);
-            log.debug("using username " + username);
-            log.debug("using password " + password);
-            log.debug("using client_id " + clientId);
-            log.debug("using client_secret " + secret);
-            postDataParams.put("grant_type", "password");
+		if (!StringUtils.isBlank(secret)) {
+			params.put("client_secret", secret);
+		}
+
+		String token = fetchOIDCToken(keycloakUrl, realm, params);
+
+        GennyToken gennyToken = new GennyToken(token);
+        return gennyToken;
+	}
+
+	/**
+	* Fetch an Impersonated Token for a user.
+	*
+	* @param userBE
+	* @param gennyToken
+	* @param project
+	* @return
+	 */
+    public static String getImpersonatedToken(BaseEntity userBE, GennyToken gennyToken, BaseEntity project) {
+
+		String realm = gennyToken.getRealm();
+		String token = gennyToken.getToken();
+		String keycloakUrl = gennyToken.getKeycloakUrl();
+
+        if (userBE == null) {
+            log.error(ANSIColour.RED + "User BE is NULL" + ANSIColour.RESET);
+            return null;
+        }
+
+        // grab uuid to fetch token
+        String uuid = userBE.getValue("PRI_UUID", null);
+
+        if (uuid == null) {
+
+			log.warn(ANSIColour.YELLOW + "No PRI_UUID found for user " + userBE.getCode() + ", attempting to use PRI_EMAIL instead" + ANSIColour.RESET);
+
+			// grab email to fetch token
+			String email = userBE.getValue("PRI_EMAIL", null);
+
+			if (email == null) {
+				log.error(ANSIColour.RED + "No PRI_EMAIL found for user " + userBE.getCode() + ANSIColour.RESET);
+				return null;
+			}
+
+			// use email as backup
+			uuid = email;
         } else {
-            postDataParams.put("refresh_token", refreshToken);
-            postDataParams.put("grant_type", "refresh_token");
-            log.debug("using refresh token");
-            log.debug(refreshToken);
+			// use lowercase UUID
+			uuid = uuid.toLowerCase();
+		}
+
+
+        // fetch keycloak json from porject entity
+        String keycloakJson = project.getValueAsString("ENV_KEYCLOAK_JSON");
+        JsonReader reader = Json.createReader(new StringReader(keycloakJson));
+        String secret = reader.readObject().getJsonObject("credentials").getString("secret");
+        reader.close();
+
+		// setup param map
+        HashMap<String, String> params = new HashMap<>();
+		params.put("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange");
+		params.put("subject_token", token);
+		params.put("requested_subject", uuid);
+        params.put("client_id", realm);
+
+        if (secret != null && !StringUtils.isBlank(secret)) {
+            params.put("client_secret", secret);
         }
 
-        postDataParams.put("client_id", clientId);
-        if (!StringUtils.isBlank(secret)) {
-            postDataParams.put("client_secret", secret);
-        }
+		return fetchOIDCToken(keycloakUrl, realm, params);
+    }
 
-        String requestURL = keycloakUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token";
+	/**
+	* Fetch an OIDC access token from keycloak.
+	*
+	* @param keycloakUrl
+	* @param realm
+	* @param params
+	* @return
+	 */
+	public static String fetchOIDCToken(String keycloakUrl, String realm, HashMap<String, String> params) {
 
-        String str = performPostCall(requestURL, postDataParams);
+        String uri = keycloakUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token";
+		log.debug("Fetching OIDC Token from " + uri);
 
-        log.debug("keycloak auth url = " + requestURL);
-        log.debug(username + " token= " + str);
+        String str = executeEncodedPostRequest(uri, params);
 
         JsonObject json = jsonb.fromJson(str, JsonObject.class);
-        String accessToken = json.getString("access_token");
-        GennyToken token = new GennyToken(accessToken);
+        String token = json.getString("access_token");
+
         return token;
-    }
+	}
+
 
     /**
-     * Custom POST request for keycloak connection.
+     * Perform Custom encoded POST request.
      *
-     * @param requestURL
+     * @param uri
      * @param postDataParams
      * @return
      */
-    public String performPostCall(String requestURL, HashMap<String, String> postDataParams) {
+    public static String executeEncodedPostRequest(String uri, HashMap<String, String> postDataParams) {
 
-        URL url;
-        String response = "";
         try {
-            url = new URL(requestURL);
 
+			// setup connection
+			URL url = new URL(uri);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
@@ -114,10 +205,12 @@ public class KeycloakUtils {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
             writer.write(getPostDataString(postDataParams));
 
+			// flush and close
             writer.flush();
             writer.close();
             os.close();
 
+			String response = "";
             String line;
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while ((line = br.readLine()) != null) {
@@ -125,6 +218,7 @@ public class KeycloakUtils {
             }
             if (conn.getResponseCode() == HttpsURLConnection.HTTP_OK) {
                 log.info("Successful Token Request!");
+				return response;
             } else {
                 log.error("Bad Token Request: " + conn.getResponseCode() + " " + conn.getResponseMessage());
             }
@@ -132,16 +226,16 @@ public class KeycloakUtils {
             e.printStackTrace();
         }
 
-        return response;
+		return null;
     }
 
     /**
-     * Build a POST query.
+     * Build POST query data string.
      *
      * @param params
      * @return
      */
-    private String getPostDataString(HashMap<String, String> params) {
+    public static String getPostDataString(HashMap<String, String> params) {
         StringBuilder result = new StringBuilder();
         boolean first = true;
 
@@ -162,145 +256,6 @@ public class KeycloakUtils {
         }
 
         return result.toString();
-    }
-
-
-    /**
-     * Fetch an Impersonated Token for a user.
-     *
-     * @param keycloakUrl
-     * @param realm
-     * @param project
-     * @param userBE
-     * @param exchangedToken
-     * @return
-     * @throws IOException
-     */
-    public static String getImpersonatedToken(String keycloakUrl, String realm, BaseEntity project,
-                                              BaseEntity userBE, String exchangedToken) throws IOException {
-
-        if (userBE == null) {
-            log.error(ANSIColour.RED + "User BE is NULL" + ANSIColour.RESET);
-            return null;
-        }
-
-        // grab uuid to fetch token
-        String uuid = userBE.getValue("PRI_UUID", null);
-
-        if (uuid != null) {
-            // use lowercase UUID
-            uuid = uuid.toLowerCase();
-            return getImpersonatedToken(keycloakUrl, realm, project, uuid, exchangedToken);
-        }
-
-        log.warn(ANSIColour.YELLOW + "No PRI_UUID found for user " + userBE.getCode() + ", attempting to use PRI_EMAIL instead" + ANSIColour.RESET);
-
-        // grab email to fetch token
-        String email = userBE.getValue("PRI_EMAIL", null);
-
-        if (email != null) {
-            return getImpersonatedToken(keycloakUrl, realm, project, email, exchangedToken);
-        }
-
-        log.error(ANSIColour.RED + "No PRI_EMAIL found for user " + userBE.getCode() + ANSIColour.RESET);
-        return null;
-    }
-
-    /**
-     * Fetch an Impersonated Token for a user.
-     *
-     * @param keycloakUrl
-     * @param realm
-     * @param project
-     * @param uuid
-     * @param exchangedToken
-     * @return
-     * @throws IOException
-     */
-    public static String getImpersonatedToken(String keycloakUrl, String realm, BaseEntity project, String uuid, String exchangedToken) throws IOException {
-
-        // fetch keycloak json from porject entity
-        String keycloakJson = project.getValueAsString("ENV_KEYCLOAK_JSON");
-        JsonReader reader = Json.createReader(new StringReader(keycloakJson));
-        JsonObject json = reader.readObject();
-
-        // grab client secret
-        JsonObject credentials = json.getJsonObject("credentials");
-        String secret = credentials.getString("secret");
-        reader.close();
-
-        return getImpersonatedToken(keycloakUrl, realm, realm, secret, uuid, exchangedToken);
-
-    }
-
-    /**
-     * Fetch an Impersonated Token for a user.
-     *
-     * @param keycloakUrl
-     * @param realm
-     * @param clientId
-     * @param secret
-     * @param username
-     * @param exchangedToken
-     * @return
-     * @throws IOException
-     */
-    public static String getImpersonatedToken(String keycloakUrl, String realm, String clientId, String secret, String username, String exchangedToken) throws IOException {
-
-        String uri = keycloakUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token";
-
-        // build parameter map
-        HashMap<String, String> params = new HashMap<>();
-        params.put("grant_type", URLEncoder.encode("urn:ietf:params:oauth:grant-type:token-exchange", StandardCharsets.UTF_8));
-        params.put("client_id", URLEncoder.encode(clientId, StandardCharsets.UTF_8));
-        params.put("subject_token", URLEncoder.encode(exchangedToken, StandardCharsets.UTF_8));
-        params.put("requested_subject", URLEncoder.encode(username, StandardCharsets.UTF_8));
-
-        if (secret != null) {
-			params.put("client_secret", URLEncoder.encode(secret, StandardCharsets.UTF_8));
-        }
-
-        // serialize params to json
-        String requestBody = jsonb.toJson(params);
-        log.info("requestBody = " + requestBody);
-
-        // build new http request
-        HttpClient client = HttpClient.newHttpClient();
-        log.info("uri: "+ uri);
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri))
-                .setHeader("Content-Type", "application/x-www-form-urlencoded")
-                .setHeader("Authorization", "Bearer " + exchangedToken)
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                .build();
-
-        String body = null;
-        Integer statusCode = null;
-
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            body = response.body();
-            statusCode = response.statusCode();
-
-            log.info("body: " + body);
-            log.info("status: " + statusCode);
-
-        } catch (IOException | InterruptedException e) {
-            log.error(e.getLocalizedMessage());
-        }
-
-        if (body == null) {
-            throw new IOException("Null Body Received : statusCode = " + statusCode);
-        }
-
-        log.info("StatusCode = " + statusCode + ", Body = " + body);
-
-        JsonReader reader = Json.createReader(new StringReader(body));
-        JsonObject jsonToken = reader.readObject();
-        reader.close();
-        String token = jsonToken.getString("access_token");
-
-        return token;
-
     }
 
     /**
