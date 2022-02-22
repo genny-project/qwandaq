@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Type;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -57,8 +59,7 @@ public class QuestionUtils implements Serializable {
 			String token) {
 
 		// we grab the question group using the questionCode
-		QDataAskMessage questions = getAsks(sourceCode, targetCode, questionCode,
-				token);
+		QDataAskMessage questions = getAsks(sourceCode, targetCode, questionCode, token);
 
 		// we check if the question payload is not empty
 		if (questions != null) {
@@ -78,7 +79,6 @@ public class QuestionUtils implements Serializable {
 			}
 		}
 
-		// we return false oth
 		return false;
 	}
 
@@ -174,11 +174,23 @@ public class QuestionUtils implements Serializable {
 		return null;
 	}
 
+	/**
+	* Get all attributes used by an {@link Ask} and its children.
+	*
+	* @param ask The ask to traverse.
+	* @return A set of Strings containing the attribute codes.
+	 */
 	private static Set<String> getAttributeCodes(Ask ask) {
+
+		// grab attribute code of current ask
 		Set<String> activeCodes = new HashSet<String>();
 		activeCodes.add(ask.getAttributeCode());
+
 		if ((ask.getChildAsks() != null) && (ask.getChildAsks().length > 0)) {
+
+			// grab all child ask attribute codes
 			for (Ask childAsk : ask.getChildAsks()) {
+
 				activeCodes.addAll(getAttributeCodes(childAsk));
 			}
 		}
@@ -196,22 +208,19 @@ public class QuestionUtils implements Serializable {
 		QBulkMessage bulk = new QBulkMessage();
 		QwandaMessage qwandaMessage = new QwandaMessage();
 
-		long startTime2 = System.nanoTime();
+		Instant start = Instant.now();
 
-		QDataAskMessage questions = getAsks(sourceCode, targetCode, questionCode,
-				token);
-		long endTime2 = System.nanoTime();
-		double difference2 = (endTime2 - startTime2) / 1e6;
-		log.info("getAsks fetch Time = " + difference2 + " ms");
+		// get the ask data
+		QDataAskMessage questions = getAsks(sourceCode, targetCode, questionCode, token);
+
+		Instant end = Instant.now();
+		log.info("getAsks duration = " + Duration.between(start, end).toMillis() + " ms");
 
 		if (questions != null) {
 
-			/*
-			 * if we have the questions, we loop through the asks and send the required
-			 * data
-			 * to front end
-			 */
-			long startTime = System.nanoTime();
+			// if we have the questions, loop through the asks and send required data to front end
+			start = Instant.now();
+
 			Ask[] asks = questions.getItems();
 			if (asks != null && pushSelection) {
 				QBulkMessage askData = sendAsksRequiredData(asks, token, stakeholderCode);
@@ -219,9 +228,9 @@ public class QuestionUtils implements Serializable {
 					bulk.add(message);
 				}
 			}
-			long endTime = System.nanoTime();
-			double difference = (endTime - startTime) / 1e6;
-			log.info("sendAsksRequiredData fetch Time = " + difference + " ms");
+
+			end = Instant.now();
+			log.info("sendAsksRequiredData duration = " + Duration.between(start, end).toMillis() + " ms");
 
 			qwandaMessage.askData = bulk;
 			qwandaMessage.asks = questions;
@@ -229,8 +238,7 @@ public class QuestionUtils implements Serializable {
 			return qwandaMessage;
 
 		} else {
-			log.error("Questions Msg is null " + sourceCode + "/asks2/" + questionCode +
-					"/" + targetCode);
+			log.error("Questions Msg is null "+sourceCode+"/asks2/"+questionCode+"/"+targetCode);
 		}
 
 		return null;
