@@ -18,7 +18,6 @@ import javax.json.bind.JsonbBuilder;
 
 import com.google.common.reflect.TypeToken;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.jboss.logging.Logger;
 
@@ -45,72 +44,89 @@ public class QuestionUtils implements Serializable {
 
 	static Jsonb jsonb = JsonbBuilder.create();
 
-	private QuestionUtils() {}
-
+	/**
+	* Check if a Question group exists in the database and cache.
+	*
+	* @param sourceCode
+	* @param targetCode
+	* @param questionCode
+	* @param token
+	* @return
+	 */
 	public static Boolean doesQuestionGroupExist(String sourceCode, String targetCode, final String questionCode,
 			String token) {
 
-		/* we grab the question group using the questionCode */
+		// we grab the question group using the questionCode
 		QDataAskMessage questions = getAsks(sourceCode, targetCode, questionCode,
 				token);
 
-		/* we check if the question payload is not empty */
+		// we check if the question payload is not empty
 		if (questions != null) {
 
-			/* we check if the question group contains at least one question */
+			// we check if the question group contains at least one question
 			if (questions.getItems() != null && questions.getItems().length > 0) {
 
 				Ask firstQuestion = questions.getItems()[0];
 
-				/* we check if the question is a question group */
+				// we check if the question is a question group and contains at least one question
 				if (firstQuestion.getAttributeCode().contains("QQQ_QUESTION_GROUP_BUTTON_SUBMIT")) {
-
-					/* we see if this group contains at least one question */
 					return firstQuestion.getChildAsks().length > 0;
 				} else {
-
-					/* if it is an ask we return true */
+					// if it is an ask we return true
 					return true;
 				}
 			}
 		}
 
-		/* we return false otherwise */
+		// we return false otherwise
 		return false;
 	}
 
-	private static JsonObject toJson(String jsonStr) // do exception
+	/**
+	* Serialize a json {@link String} to a {@link JsonObject}.
+	*
+	* @param jsonStr
+	* @return
+	 */
+	public static JsonObject toJson(String string)
 	{
-		JsonReader jsonReader = Json.createReader(new StringReader(jsonStr));
+		// open a reader and feed in the string
+		JsonReader jsonReader = Json.createReader(new StringReader(string));
 		JsonObject jsonObject = jsonReader.readObject();
 		jsonReader.close();
+
 		return jsonObject;
 	}
 
+	/**
+	* Recuresively run through ask children and update the question 
+	* using what is stored in the cache.
+	*
+	* @param ask
+	* @param token
+	 */
 	public static void setCachedQuestionsRecursively(Ask ask, String token) {
-		// if (((ask.getChildAsks() != null) && (ask.getChildAsks().length > 0))
-		// || (ask.getAttributeCode().equals("QQQ_QUESTION_GROUP"))) {
 
+		// call recursively if ask represents a question group
 		if (ask.getAttributeCode().equals("QQQ_QUESTION_GROUP")) {
+
 			for (Ask childAsk : ask.getChildAsks()) {
 				setCachedQuestionsRecursively(childAsk, token);
 			}
-		} else {
-			Question question = ask.getQuestion();
-			String questionCode = question.getCode();
-			GennyToken gToken = new GennyToken(token);
-			String jsonQuestionStr = (String) CacheUtils.readCache(gToken.getRealm(),
-					questionCode);
-			JsonObject jsonQuestion = toJson(jsonQuestionStr);
 
-			if ("ok".equalsIgnoreCase(jsonQuestion.getString("status"))) {
-				Question cachedQuestion = jsonb.fromJson(jsonQuestion.getString("value"),
-						Question.class);
-				// Make sure we grab the icon too
+		} else {
+
+			// otherwise we fetch the question and update the ask
+			Question question = ask.getQuestion();
+			GennyToken gennyToken = new GennyToken(token);
+
+			Question cachedQuestion = CacheUtils.getObject(gennyToken.getRealm(), question.getCode(), Question.class);
+
+			if (cachedQuestion != null) {
+
+				// grab the icon too
 				if (question.getIcon() != null) {
-					if (!question.getIcon().equals(cachedQuestion.getIcon())) {
-						cachedQuestion.setIcon(question.getIcon());
-					}
+					cachedQuestion.setIcon(question.getIcon());
 				}
 				ask.setQuestion(cachedQuestion);
 				ask.setContextList(cachedQuestion.getContextList());
@@ -118,13 +134,11 @@ public class QuestionUtils implements Serializable {
 		}
 	}
 
-	public static QDataAskMessage getAsks(String sourceCode, String targetCode,
-			String questionCode, String token) {
+	public static QDataAskMessage getAsks(String sourceCode, String targetCode, String questionCode, String token) {
 
-		String json;
-		json = HttpUtils.get(GennySettings.qwandaServiceUrl +
-				"/qwanda/baseentitys/" + sourceCode + "/asks2/"
-				+ questionCode + "/" + targetCode, token);
+		String json = HttpUtils.get(GennySettings.qwandaServiceUrl + "/qwanda/baseentitys/" 
+				+ sourceCode + "/asks2/" + questionCode + "/" + targetCode, token);
+
 		if (json != null) {
 			if (!json.contains("<title>Error")) {
 				QDataAskMessage msg = jsonb.fromJson(json, QDataAskMessage.class);
@@ -139,19 +153,17 @@ public class QuestionUtils implements Serializable {
 						setCachedQuestionsRecursively(ask, token);
 					}
 					// Now fetch the set from cache and add it....
-					Type type = new TypeToken<Set<String>>() {
-					}.getType();
+					Type type = new TypeToken<Set<String>>() {}.getType();
 					GennyToken gToken = new GennyToken(token);
-					Set<String> activeAttributesSet = CacheUtils.getObject(gToken.getRealm(),
-							"ACTIVE_ATTRIBUTES", type);
+
+					Set<String> activeAttributesSet = CacheUtils.getObject(gToken.getRealm(), "ACTIVE_ATTRIBUTES", type);
 
 					if (activeAttributesSet == null) {
 						activeAttributesSet = new HashSet<String>();
 					}
 					activeAttributesSet.addAll(activeAttributeCodes);
 
-					CacheUtils.putObject(gToken.getRealm(), "ACTIVE_ATTRIBUTES",
-							activeAttributesSet);
+					CacheUtils.putObject(gToken.getRealm(), "ACTIVE_ATTRIBUTES", activeAttributesSet);
 
 					log.debug("Total Active AttributeCodes = " + activeAttributesSet.size());
 				}
@@ -189,7 +201,7 @@ public class QuestionUtils implements Serializable {
 		QDataAskMessage questions = getAsks(sourceCode, targetCode, questionCode,
 				token);
 		long endTime2 = System.nanoTime();
-		double difference2 = (endTime2 - startTime2) / 1e6; // get ms
+		double difference2 = (endTime2 - startTime2) / 1e6;
 		log.info("getAsks fetch Time = " + difference2 + " ms");
 
 		if (questions != null) {
@@ -208,7 +220,7 @@ public class QuestionUtils implements Serializable {
 				}
 			}
 			long endTime = System.nanoTime();
-			double difference = (endTime - startTime) / 1e6; // get ms
+			double difference = (endTime - startTime) / 1e6;
 			log.info("sendAsksRequiredData fetch Time = " + difference + " ms");
 
 			qwandaMessage.askData = bulk;
@@ -254,7 +266,7 @@ public class QuestionUtils implements Serializable {
 
 		try {
 
-			/* if sending the questions worked, we ask user */
+			// if sending the questions worked, we ask user
 			return getQuestions(sourceCode, targetCode, questionGroupCode, token,
 					stakeholderCode, pushSelection);
 
@@ -291,35 +303,39 @@ public class QuestionUtils implements Serializable {
 		return questions;
 	}
 
-	private static QBulkMessage sendAsksRequiredData(Ask[] asks, String token,
-			String stakeholderCode) {
+	/**
+	* Send out the required entity data for a set of asks.
+	*
+	* @param asks
+	* @param token
+	* @param stakeholderCode
+	* @return
+	 */
+	private static QBulkMessage sendAsksRequiredData(Ask[] asks, String token, String stakeholderCode) {
+
 		GennyToken gennyToken = new GennyToken(token);
 		QBulkMessage bulk = new QBulkMessage();
 
-		// /* we loop through the asks and send the required data if necessary */
+		// we loop through the asks and send the required data if necessary
 		for (Ask ask : asks) {
 
-			/*
-			 * we get the attribute code. if it starts with "LNK_" it means it is a
-			 * dropdown
-			 * selection.
-			 */
+			// if attribute code starts with "LNK_", then it is a dropdown selection.
 
 			String attributeCode = ask.getAttributeCode();
 			if (attributeCode != null && attributeCode.startsWith("LNK_")) {
 
-				/* we get the attribute validation to get the group code */
+				// we get the attribute validation to get the group code
 				Attribute attribute = QwandaUtils.getAttribute(attributeCode);
 
 				if (attribute != null) {
 
-					/* grab the group in the validation */
+					// grab the group in the validation
 					DataType attributeDataType = attribute.getDataType();
 					if (attributeDataType != null) {
 
 						List<Validation> validations = attributeDataType.getValidationList();
 
-						/* we loop through the validations */
+						// we loop through the validations
 						for (Validation validation : validations) {
 
 							List<String> validationStrings = validation.getSelectionBaseEntityGroupList();
@@ -329,20 +345,20 @@ public class QuestionUtils implements Serializable {
 
 									if (validationString.startsWith("GRP_")) {
 
-										/* Grab the parent */
+										// Grab the parent
 										BaseEntity parent = CacheUtils.getObject(gennyToken.getRealm(),
 												validationString, BaseEntity.class);
 
-										/* we have a GRP. we push it to FE */
+										// we have a GRP. we push it to FE
 										List<BaseEntity> bes = getChildren(validationString, 2, token);
 										List<BaseEntity> filteredBes = null;
 
 										if (bes != null && bes.isEmpty() == false) {
 
-											/* hard coding this for now. sorry */
+											// hard coding this for now. sorry
 											if ("LNK_LOAD_LISTS".equals(attributeCode) && stakeholderCode != null) {
 
-												/* we filter load you only are a stakeholder of */
+												// we filter load you only are a stakeholder of
 												filteredBes = bes.stream().filter(baseEntity -> {
 													return baseEntity.getValue("PRI_AUTHOR", "")
 															.equals(stakeholderCode);
@@ -351,14 +367,14 @@ public class QuestionUtils implements Serializable {
 												filteredBes = bes;
 											}
 
-											/* create message for base entities required for the validation */
+											// create message for base entities required for the validation
 											QDataBaseEntityMessage beMessage = new QDataBaseEntityMessage(filteredBes);
 											beMessage.setLinkCode("LNK_CORE");
 											beMessage.setParentCode(validationString);
 											beMessage.setReplace(true);
 											bulk.add(beMessage);
 
-											/* create message for parent */
+											// create message for parent
 											QDataBaseEntityMessage parentMessage = new QDataBaseEntityMessage(parent);
 											bulk.add(parentMessage);
 										}
@@ -370,7 +386,7 @@ public class QuestionUtils implements Serializable {
 				}
 			}
 
-			/* recursive call */
+			// recursive call to add nested entities
 			Ask[] childAsks = ask.getChildAsks();
 			if (childAsks != null && childAsks.length > 0) {
 
@@ -385,15 +401,19 @@ public class QuestionUtils implements Serializable {
 		return bulk;
 	}
 
+	/**
+	* Create a question for a BaseEntity.
+	* 
+	* @param be
+	* @param isQuestionGroup
+	* @param token
+	* @return
+	 */
 	public static Ask createQuestionForBaseEntity(BaseEntity be, Boolean isQuestionGroup, String token) {
 
-		/* creating attribute code according to the value of isQuestionGroup */
+		// create attribute code using isQuestionGroup and fetch attribute
 		String attributeCode = isQuestionGroup ? "QQQ_QUESTION_GROUP_INPUT" : "PRI_EVENT";
-
-		/* Get the on-the-fly question attribute */
 		Attribute attribute = QwandaUtils.getAttribute(attributeCode);
-		// log.debug("createQuestionForBaseEntity method, attribute ::" +
-		// json.toJson(attribute));
 
 		/*
 		 * creating suffix according to value of isQuestionGroup. If it is a
@@ -401,25 +421,25 @@ public class QuestionUtils implements Serializable {
 		 */
 		String questionSuffix = isQuestionGroup ? "_GRP" : "";
 
-		/* We generate the question */
+		// generate question then return ask
 		Question newQuestion = new Question("QUE_" + be.getCode() + questionSuffix, be.getName(), attribute, false);
-		// log.debug("createQuestionForBaseEntity method, newQuestion ::" +
-		// JsonUtils.toJson(newQuestion));
 
-		/* We generate the ask */
 		return new Ask(newQuestion, be.getCode(), be.getCode(), false, 1.0, false, false, true);
-
 	}
 
+	/**
+	* Create a question for a BaseEntity.
+	*
+	* @param be
+	* @param isQuestionGroup
+	* @param serviceToken
+	* @return
+	 */
 	public static Ask createQuestionForBaseEntity(BaseEntity be, Boolean isQuestionGroup, GennyToken serviceToken) {
 
-		/* creating attribute code according to the value of isQuestionGroup */
+		// create attribute code using isQuestionGroup and fetch attribute
 		String attributeCode = isQuestionGroup ? "QQQ_QUESTION_GROUP_INPUT" : "PRI_EVENT";
-
-		/* Get the on-the-fly question attribute */
 		Attribute attribute = QwandaUtils.getAttribute(attributeCode);
-		// log.debug("createQuestionForBaseEntity method, attribute ::" +
-		// JsonUtils.toJson(attribute));
 
 		/*
 		 * creating suffix according to value of isQuestionGroup. If it is a
@@ -427,53 +447,59 @@ public class QuestionUtils implements Serializable {
 		 */
 		String questionSuffix = isQuestionGroup ? "_GRP" : "";
 
-		/* We generate the question */
+		// We generate the question
 		Question newQuestion = new Question("QUE_" + be.getCode() + questionSuffix,
 				be.getName(), attribute, false);
-		// log.debug("createQuestionForBaseEntity method, newQuestion ::" +
-		// JsonUtils.toJson(newQuestion));
 
-		/* We generate the ask */
+		// generate and return the ask
 		return new Ask(newQuestion, be.getCode(), be.getCode(), false, 1.0, false,
 				false, true);
 	}
 
+	/**
+	* Create a question for a BaseEntity.
+	* 
+	* @param be
+	* @param isQuestionGroup
+	* @param serviceToken
+	* @param sourceAlias
+	* @param targetAlias
+	* @return
+	 */
 	public static Ask createQuestionForBaseEntity2(BaseEntity be, Boolean isQuestionGroup, GennyToken serviceToken,
 			final String sourceAlias, final String targetAlias) {
 
-		/* creating attribute code according to the value of isQuestionGroup */
+		// create attribute code using isQuestionGroup and fetch attribute
 		String attributeCode = isQuestionGroup ? "QQQ_QUESTION_GROUP_INPUT" : "PRI_EVENT";
+		Attribute attribute = QwandaUtils.getAttribute(attributeCode);
 
-		/* Get the on-the-fly question attribute */
-		Attribute attribute = null;
-
-		attribute = QwandaUtils.getAttribute(attributeCode);
-		// log.debug("createQuestionForBaseEntity method, attribute ::" +
-		// JsonUtils.toJson(attribute));
-
+		// create temporary attribute if not fetched
 		if (attribute == null) {
 			log.error("Attribute DOES NOT EXIST! " + attributeCode + " creating temp");
-			// ugly
-			attribute = new Attribute(attributeCode, attributeCode, new DataType("DTT_THEME")); // this helps junit
-			// testing
-
+			attribute = new Attribute(attributeCode, attributeCode, new DataType("DTT_THEME"));
 		}
 
-		/* We generate the question */
-		Question newQuestion = new Question(be.getCode(), be.getName(), attribute,
-				false);
-		// log.debug("createQuestionForBaseEntity method, newQuestion ::" +
-		// JsonUtils.toJson(newQuestion));
+		// generate the question
+		Question newQuestion = new Question(be.getCode(), be.getName(), attribute, false);
 
-		/* We generate the ask */
+		// generate question and return
 		Ask ask = new Ask(newQuestion, (sourceAlias != null ? sourceAlias : be.getCode()),
-				(targetAlias != null ? targetAlias : be.getCode()), false, 1.0, false, false,
-				true);
+				(targetAlias != null ? targetAlias : be.getCode()), false, 1.0, false, false, true);
 		ask.setRealm(serviceToken.getRealm());
+
 		return ask;
 
 	}
 
+	/**
+	* Create a virtual link between a {@link BaseEntity} and an {@link Ask}.
+	*
+	* @param source
+	* @param ask
+	* @param linkCode
+	* @param linkValue
+	* @return
+	 */
 	public static BaseEntity createVirtualLink(BaseEntity source, Ask ask, String linkCode, String linkValue) {
 
 		if (source != null) {
@@ -491,66 +517,35 @@ public class QuestionUtils implements Serializable {
 		return source;
 	}
 
-	// // public static Question upsertQuestion(Question question, GennyToken token)
-	// {
-	// // if (question != null) {
-	// // String json = null;
-	// // try {
-	// // json = HttpUtils.post(GennySettings.qwandaServiceUrl +
-	// // "/qwanda/questions",
-	// // JsonUtils.toJson(question), token.getToken());
-	// // } catch (IOException e) {
-	// // log.info("Caught IOException trying to upsert question: " +
-	// // question.getCode());
-	// // }
-	// // if (json != null) {
-	// // if (!json.contains("<title>Error")) {
-	// // log.info("Error upserting question: " + question.getCode());
-	// // }
-	// // }
-	// // } else {
-	// // log.info("Question must not be null!");
-	// // }
-	// // return question;
-	// // }
+	/**
+	* Fetch a question from the cache using the code. This will use 
+	* the database as a backup if not found in cache.
+	*
+	* @param code
+	* @param userToken
+	* @return
+	 */
+	static public Question getQuestion(String code, GennyToken userToken) {
 
-	static public Question getQuestion(String questionCode, GennyToken userToken) {
+		String realm = userToken.getRealm();
 
-		Question q = null;
-		Integer retry = 2;
-		while (retry >= 0) { // Sometimes q is read properly from cache
-			String qJsonStr = (String) CacheUtils.readCache(userToken.getRealm(),
-					questionCode);
-			JsonObject jsonQ = toJson(qJsonStr);
-			q = jsonb.fromJson(jsonQ.getString("value"), Question.class);
-			if (q == null) {
-				retry--;
+		// fetch from cache
+		Question question = CacheUtils.getObject(realm, code, Question.class);
 
-			} else {
-				break;
-			}
-
+		if (question != null) {
+			return question;
 		}
 
-		if (q == null) {
-			log.warn("COULD NOT READ " + questionCode + " from cache!!! Aborting (after having tried 2 times");
-			String qJson;
-			qJson = HttpUtils.get(GennySettings.qwandaServiceUrl +
-					"/qwanda/questioncodes/" + questionCode,
-					userToken.getToken());
-			if (!StringUtils.isBlank(qJson)) {
-				q = jsonb.fromJson(qJson, Question.class);
-				CacheUtils.writeCache(userToken.getRealm(), questionCode, jsonb.toJson(q));
-				log.info("WRITTEN " + questionCode + " tocache!!! Fetched from database");
-				return q;
-			} else {
-				log.error("Questionutils could not find question " + questionCode + " in database");
-			}
+		log.warn("No Question in cache for " + code + ", trying to grab from database...");
 
-			return null;
-		} else {
-			return q;
+		// fetch from DB
+		question = DatabaseUtils.fetchQuestion(realm, code);
+
+		if (question == null) {
+			log.error("No Question found in database for " + code + " either!!!!");
 		}
+
+		return question;
 	}
 
 	/**
