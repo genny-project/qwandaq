@@ -42,7 +42,8 @@ import life.genny.qwandaq.validation.Validation;
 
 @RegisterForReflection
 public class QuestionUtils implements Serializable {
-	private static final Logger log = Logger.getLogger(QuestionUtils.class);
+
+	static final Logger log = Logger.getLogger(QuestionUtils.class);
 
 	static Jsonb jsonb = JsonbBuilder.create();
 
@@ -202,6 +203,19 @@ public class QuestionUtils implements Serializable {
 		return getQuestions(sourceCode, targetCode, questionCode, token, null, true);
 	}
 
+	/**
+	* Get Questions for a given souce, target and code.
+	*
+	* @param sourceCode
+	* @param targetCode
+	* @param questionCode
+	* @param token
+	* @param stakeholderCode
+	* @param pushSelection
+	* @return
+	* @throws ClientProtocolException
+	* @throws IOException
+	 */
 	public static QwandaMessage getQuestions(String sourceCode, String targetCode, String questionCode, String token,
 			String stakeholderCode, Boolean pushSelection) throws ClientProtocolException, IOException {
 
@@ -213,35 +227,30 @@ public class QuestionUtils implements Serializable {
 		// get the ask data
 		QDataAskMessage questions = getAsks(sourceCode, targetCode, questionCode, token);
 
-		Instant end = Instant.now();
-		log.info("getAsks duration = " + Duration.between(start, end).toMillis() + " ms");
+		Instant middle = Instant.now();
+		log.info("getAsks duration = " + Duration.between(start, middle).toMillis() + " ms");
 
-		if (questions != null) {
-
-			// if we have the questions, loop through the asks and send required data to front end
-			start = Instant.now();
-
-			Ask[] asks = questions.getItems();
-			if (asks != null && pushSelection) {
-				QBulkMessage askData = sendAsksRequiredData(asks, token, stakeholderCode);
-				for (QDataBaseEntityMessage message : askData.getMessages()) {
-					bulk.add(message);
-				}
-			}
-
-			end = Instant.now();
-			log.info("sendAsksRequiredData duration = " + Duration.between(start, end).toMillis() + " ms");
-
-			qwandaMessage.askData = bulk;
-			qwandaMessage.asks = questions;
-
-			return qwandaMessage;
-
-		} else {
+		if (questions == null) {
 			log.error("Questions Msg is null "+sourceCode+"/asks2/"+questionCode+"/"+targetCode);
+			return null;
 		}
 
-		return null;
+		// if we have the questions, loop through the asks and send required data to front end
+		Ask[] asks = questions.getItems();
+		if (asks != null && pushSelection) {
+			QBulkMessage askData = sendAsksRequiredData(asks, token, stakeholderCode);
+			for (QDataBaseEntityMessage message : askData.getMessages()) {
+				bulk.add(message);
+			}
+		}
+
+		Instant end = Instant.now();
+		log.info("sendAsksRequiredData duration = " + Duration.between(middle, end).toMillis() + " ms");
+
+		qwandaMessage.askData = bulk;
+		qwandaMessage.asks = questions;
+
+		return qwandaMessage;
 	}
 
 	public static QwandaMessage askQuestions(final String sourceCode, final String targetCode,
@@ -328,7 +337,6 @@ public class QuestionUtils implements Serializable {
 		for (Ask ask : asks) {
 
 			// if attribute code starts with "LNK_", then it is a dropdown selection.
-
 			String attributeCode = ask.getAttributeCode();
 			if (attributeCode != null && attributeCode.startsWith("LNK_")) {
 
@@ -398,8 +406,8 @@ public class QuestionUtils implements Serializable {
 			Ask[] childAsks = ask.getChildAsks();
 			if (childAsks != null && childAsks.length > 0) {
 
-				QBulkMessage newBulk = sendAsksRequiredData(childAsks, token,
-						stakeholderCode);
+				QBulkMessage newBulk = sendAsksRequiredData(childAsks, token, stakeholderCode);
+
 				for (QDataBaseEntityMessage msg : newBulk.getMessages()) {
 					bulk.add(msg);
 				}
