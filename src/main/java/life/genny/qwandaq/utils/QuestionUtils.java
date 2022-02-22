@@ -78,15 +78,15 @@ public class QuestionUtils implements Serializable {
 			}
 		}
 
-		// we return false otherwise
+		// we return false oth
 		return false;
 	}
 
 	/**
-	* Serialize a json {@link String} to a {@link JsonObject}.
+	* Deserialize a json {@link String} to a {@link JsonObject}.
 	*
-	* @param jsonStr
-	* @return
+	* @param string The string to deserialize.
+	* @return The equivalent JsonObject
 	 */
 	public static JsonObject toJson(String string)
 	{
