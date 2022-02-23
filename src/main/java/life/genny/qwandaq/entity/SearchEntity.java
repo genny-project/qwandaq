@@ -22,9 +22,12 @@ import life.genny.qwandaq.exception.BadDataException;
 
 import org.jboss.logging.Logger;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 /* SearchEntity class implements the search of base entities applying different filters/search to the
  * baseEntity and its attributes
  */
+@RegisterForReflection
 public class SearchEntity extends BaseEntity {
 
 	private static final Logger log = Logger.getLogger(SearchEntity.class);
