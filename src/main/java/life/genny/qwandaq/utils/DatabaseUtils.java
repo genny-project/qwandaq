@@ -1,8 +1,8 @@
 package life.genny.qwandaq.utils;
 
-import java.io.Serializable;
 import java.util.List;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
@@ -12,16 +12,19 @@ import javax.transaction.Transactional;
 
 import org.jboss.logging.Logger;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.Question;
 import life.genny.qwandaq.QuestionQuestion;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.entity.BaseEntity;
 
+@RegisterForReflection
+@ApplicationScoped
 public class DatabaseUtils {
 
-	private static final Logger log = Logger.getLogger(DatabaseUtils.class);
-	private static Jsonb jsonb = JsonbBuilder.create();
-	private static EntityManager entityManager;
+	static final Logger log = Logger.getLogger(DatabaseUtils.class);
+	static Jsonb jsonb = JsonbBuilder.create();
+	static EntityManager entityManager;
 
 	/**
 	 * Initialise the EntityManager interface
