@@ -267,43 +267,56 @@ public class QuestionUtils implements Serializable {
 			String questionCode,
 			BaseEntityUtils beUtils) {
 
-		String json = HttpUtils.get(GennySettings.qwandaServiceUrl + "/qwanda/baseentitys/"
-				+ sourceCode + "/asks2/" + questionCode + "/" + targetCode, beUtils.getGennyToken().getToken());
+		List<Ask> asks = null;
 
-		if (json != null) {
-			if (!json.contains("<title>Error")) {
-				QDataAskMessage msg = jsonb.fromJson(json, QDataAskMessage.class);
+		asks = createAsksByQuestionCode2(entityManager, questionCode, sourceCode, targetCode, beUtils);
+		log.info("Number of asks=" + asks.size());
+		log.info("Number of asks=" + asks);
+		final QDataAskMessage askMsgs = new QDataAskMessage(asks.toArray(new Ask[0]));
+		askMsgs.setToken(beUtils.getToken());
+		return askMsgs;
 
-				if (true) {
-					// Identify all the attributeCodes and build up a working active Set
-					Set<String> activeAttributeCodes = new HashSet<String>();
-					for (Ask ask : msg.getItems()) {
-						activeAttributeCodes.addAll(getAttributeCodes(ask));
+		// String json = HttpUtils.get(GennySettings.qwandaServiceUrl +
+		// "/qwanda/baseentitys/"
+		// + sourceCode + "/asks2/" + questionCode + "/" + targetCode,
+		// beUtils.getGennyToken().getToken());
 
-						// Go down through the child asks and get cached questions
-						setCachedQuestionsRecursively(ask, beUtils);
-					}
-					// Now fetch the set from cache and add it....
-					Type type = new TypeToken<Set<String>>() {
-					}.getType();
+		// if (json != null) {
+		// if (!json.contains("<title>Error")) {
+		// QDataAskMessage msg = jsonb.fromJson(json, QDataAskMessage.class);
 
-					Set<String> activeAttributesSet = CacheUtils.getObject(beUtils.getRealm(), "ACTIVE_ATTRIBUTES",
-							type);
+		// if (true) {
+		// // Identify all the attributeCodes and build up a working active Set
+		// Set<String> activeAttributeCodes = new HashSet<String>();
+		// for (Ask ask : msg.getItems()) {
+		// activeAttributeCodes.addAll(getAttributeCodes(ask));
 
-					if (activeAttributesSet == null) {
-						activeAttributesSet = new HashSet<String>();
-					}
-					activeAttributesSet.addAll(activeAttributeCodes);
+		// // Go down through the child asks and get cached questions
+		// setCachedQuestionsRecursively(ask, beUtils);
+		// }
+		// // Now fetch the set from cache and add it....
+		// Type type = new TypeToken<Set<String>>() {
+		// }.getType();
 
-					CacheUtils.putObject(beUtils.getRealm(), "ACTIVE_ATTRIBUTES", activeAttributesSet);
+		// Set<String> activeAttributesSet = CacheUtils.getObject(beUtils.getRealm(),
+		// "ACTIVE_ATTRIBUTES",
+		// type);
 
-					log.debug("Total Active AttributeCodes = " + activeAttributesSet.size());
-				}
-				return msg;
-			}
-		}
+		// if (activeAttributesSet == null) {
+		// activeAttributesSet = new HashSet<String>();
+		// }
+		// activeAttributesSet.addAll(activeAttributeCodes);
 
-		return null;
+		// CacheUtils.putObject(beUtils.getRealm(), "ACTIVE_ATTRIBUTES",
+		// activeAttributesSet);
+
+		// log.debug("Total Active AttributeCodes = " + activeAttributesSet.size());
+		// }
+		// return msg;
+		// }
+		// }
+
+		// return null;
 	}
 
 	/**
