@@ -52,6 +52,8 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 	private String message;
 
 	private Boolean redirect;
+
+	private String bridgeId;
 	
 	 private List<String> recipientCodeArray = new ArrayList<>();
 	
@@ -210,8 +212,12 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 	public void setAttributeCode(String attributeCode) {
 		this.attributeCode = attributeCode;
 	}
-	
 
+	public String getBridgeId() {
+		return bridgeId;
+	}
 	
-	
+	public void setBridgeId(String bridgeId) {
+		this.bridgeId = bridgeId;
+	}
 }
