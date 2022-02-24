@@ -38,7 +38,7 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 	private String triggerCode; // This can be used to trigger any option
 
 	private List<String> targetCodes;
-	
+
 	private String sourceAddress;
 
 	private String sourceCode;
@@ -55,8 +55,7 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 
 	private String bridgeId;
 	
-	 private List<String> recipientCodeArray = new ArrayList<>();
-	
+	private List<String> recipientCodeArray = new ArrayList<>();
 
 	public String getMsg_type() {
 		return msg_type;
@@ -66,14 +65,12 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		this.msg_type = msg_type;
 	}
 
-	private QMessage() {
+	public QMessage() {
 	}
 
 	public QMessage(String msg_type) {
 		this.msg_type = msg_type;
 	}
-
-
 
 	/**
 	 * @return the token

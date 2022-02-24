@@ -10,13 +10,9 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
     return data_type;
   }
 
-
-
   public void setData_type(final String data_type) {
     this.data_type = data_type;
   }
-
-
 
   /**
    *
@@ -28,9 +24,9 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
   private boolean shouldDeleteLinkedBaseEntities;
   private String aliasCode;
 
-
-
-
+  public QDataMessage() {
+    super();
+  }
 
   public QDataMessage(final String data_type) {
     super(MESSAGE_TYPE);
@@ -38,27 +34,19 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
 
   }
 
-
-
   @Override
   public Boolean getDelete() {
     return delete;
   }
 
-
-
   public void setDelete(final Boolean delete) {
     this.delete = delete;
   }
-
-
 
   @Override
   public String toString() {
     return "QDataMessage [data_type=" + data_type + ", delete=" + delete + "]";
   }
-
-
 
   /**
    * @return the aliasCode
@@ -67,8 +55,6 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
     return aliasCode;
   }
 
-
-
   /**
    * @param aliasCode the aliasCode to set
    */
@@ -76,42 +62,37 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
     this.aliasCode = aliasCode;
   }
 
+  /**
+   * @return the replace
+   */
+  public Boolean getReplace() {
+    return replace;
+  }
 
+  /**
+   * @param replace the replace to set
+   */
+  public void setReplace(Boolean replace) {
+    this.replace = replace;
+  }
 
+  /**
+   * @return the shouldDeleteLinkedBaseEntities
+   */
+  public Object getShouldDeleteLinkedBaseEntities() {
+    return shouldDeleteLinkedBaseEntities;
+  }
 
+  public boolean isShouldDeleteLinkedBaseEntities() {
+    return (boolean) getShouldDeleteLinkedBaseEntities();
+  }
 
-/**
- * @return the replace
- */
-public Boolean getReplace() {
-	return replace;
-}
-
-
-
-/**
- * @param replace the replace to set
- */
-public void setReplace(Boolean replace) {
-	this.replace = replace;
-}
-
-/**
- * @return the shouldDeleteLinkedBaseEntities
- */
-public Object getShouldDeleteLinkedBaseEntities() {
-	return shouldDeleteLinkedBaseEntities;
-}
-
-public boolean isShouldDeleteLinkedBaseEntities() {
-	return (boolean) getShouldDeleteLinkedBaseEntities();
-}
-
-/**
- * @param shouldDeleteLinkedBaseEntities the shouldDeleteLinkedBaseEntities to set
- */
-public void setShouldDeleteLinkedBaseEntities(Object shouldDeleteLinkedBaseEntities) {
-	this.shouldDeleteLinkedBaseEntities = (Boolean) shouldDeleteLinkedBaseEntities;
-}
+  /**
+   * @param shouldDeleteLinkedBaseEntities the shouldDeleteLinkedBaseEntities to
+   *                                       set
+   */
+  public void setShouldDeleteLinkedBaseEntities(Object shouldDeleteLinkedBaseEntities) {
+    this.shouldDeleteLinkedBaseEntities = (Boolean) shouldDeleteLinkedBaseEntities;
+  }
 
 }
