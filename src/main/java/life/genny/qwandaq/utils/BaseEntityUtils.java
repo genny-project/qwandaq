@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import org.jboss.logging.Logger;
 import life.genny.qwandaq.models.GennySettings;
 import life.genny.qwandaq.models.GennyToken;
 import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.entity.BaseEntity;
@@ -388,32 +390,23 @@ public class BaseEntityUtils implements Serializable {
 	 */
 	public BaseEntity saveAnswer(Answer answer) {
 
-		// check if target is valid
-		BaseEntity target = getBaseEntityByCode(answer.getTargetCode());
-		if (target == null) {
-			return null;
+		List<BaseEntity> targets = saveAnswers(Arrays.asList(answer));
+
+		if (targets != null && targets.size() > 0) {
+			return targets.get(0);
 		}
 
-		// filter non-valid answers using DEF
-		if (DefUtils.answerValidForDEF(answer)) {
+		return null;
+	}
 
-			// add the answer to our target to return
-			try {
-				target.addAnswer(answer);
-			} catch (BadDataException e) {
-				log.error(e);
-			}
+	/**
+	* Save {@link Answers}.
+	* 
+	* @param answers
+	 */
+	public void saveAnswers(Answers answers) {
 
-			// update target in the cache
-			CacheUtils.putObject(realm, target.getCode(), target);
-
-			QDataAnswerMessage msg = new QDataAnswerMessage(answer);
-			msg.setToken(this.token);
-
-			KafkaUtils.writeMsg("answers", msg);
-		}
-
-		return target;
+		saveAnswers(answers.getAnswers());
 	}
 
 	/**
@@ -421,7 +414,9 @@ public class BaseEntityUtils implements Serializable {
 	*
 	* @param answers
 	 */
-	public void saveAnswers(List<Answer> answers) {
+	public List<BaseEntity> saveAnswers(List<Answer> answers) {
+
+		List<BaseEntity> targets = new ArrayList<>();
 
 		// sort answers into target BaseEntitys
 		Map<String, List<Answer>> answersPerTargetCodeMap = answers.stream()
@@ -445,12 +440,25 @@ public class BaseEntityUtils implements Serializable {
 				.filter(item -> DefUtils.answerValidForDEF(defBE, item))
 				.collect(Collectors.toList());
 
-			// send valid answers for this target
-			QDataAnswerMessage msg = new QDataAnswerMessage(validAnswers);
-			msg.setToken(this.token);
+			// update target using valid answers
+			for (Answer answer : validAnswers) {
+				try {
+					target.addAnswer(answer);
+				} catch (BadDataException e) {
+					log.error(e);
+				}
+			}
 
-			KafkaUtils.writeMsg("answers", msg);
+			// update target in the cache
+			CacheUtils.putObject(realm, target.getCode(), target);
+
+			// update target in the DB
+			DatabaseUtils.saveBaseEntity(target);
+
+			targets.add(target);
 		}
+
+		return targets;
 	}
 
 	/**
