@@ -267,9 +267,7 @@ public class SearchEntity extends BaseEntity {
 	}
 
 	/* Constructor to create SearchEntity with code and name */
-	public SearchEntity() {
-		this("SBE_" + UUID.randomUUID().toString().substring(0, 15), "Or Search");
-	}
+	public SearchEntity() { }
 
 	/* Constructor to create SearchEntity with code and name */
 	public SearchEntity(final String code, final String name) {
