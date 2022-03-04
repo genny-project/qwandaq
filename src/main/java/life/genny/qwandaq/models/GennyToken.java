@@ -159,6 +159,9 @@ public class GennyToken implements Serializable {
 		return getString("preferred_username");
 	}
 
+	public String getJti() {
+		return getString("jti");
+	}
 	public String getKeycloakUrl() {
 		String fullUrl = getString("iss");
 		URI uri;
