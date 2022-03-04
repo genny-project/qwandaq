@@ -28,7 +28,7 @@ public class HttpUtils {
 	* @param token
 	* @return
 	 */
-	public static String put(String uri, String body, String token) {
+	public static HttpResponse<String> put(String uri, String body, String token) {
 
 		HttpClient client = HttpClient.newHttpClient();
 
@@ -41,7 +41,7 @@ public class HttpUtils {
 
 		try {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			return response.body();
+			return response;
 		} catch (IOException | InterruptedException e) {
 			log.error(e);
 		}
@@ -57,7 +57,7 @@ public class HttpUtils {
 	* @param token
 	* @return
 	 */
-	public static String post(String uri, String body, String token) {
+	public static HttpResponse<String> post(String uri, String body, String token) {
 
 		HttpClient client = HttpClient.newHttpClient();
 
@@ -70,7 +70,7 @@ public class HttpUtils {
 
 		try {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			return response.body();
+			return response;
 		} catch (IOException | InterruptedException e) {
 			log.error(e);
 		}
@@ -85,7 +85,7 @@ public class HttpUtils {
 	* @param token
 	* @return
 	 */
-	public static String get(String uri, String token) {
+	public static HttpResponse<String> get(String uri, String token) {
 
 		HttpClient client = HttpClient.newHttpClient();
 
@@ -96,7 +96,7 @@ public class HttpUtils {
 
 		try {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			return response.body();
+			return response;
 		} catch (IOException | InterruptedException e) {
 			log.error(e);
 		}
@@ -111,7 +111,7 @@ public class HttpUtils {
 	* @param token
 	* @return
 	 */
-	public static String delete(String uri, String token) {
+	public static HttpResponse<String> delete(String uri, String token) {
 
 		HttpClient client = HttpClient.newHttpClient();
 
@@ -122,7 +122,7 @@ public class HttpUtils {
 
 		try {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			return response.body();
+			return response;
 		} catch (IOException | InterruptedException e) {
 			log.error(e);
 		}

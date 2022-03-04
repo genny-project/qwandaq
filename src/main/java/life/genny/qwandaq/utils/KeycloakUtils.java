@@ -400,4 +400,49 @@ public class KeycloakUtils {
         return null;
     }
 
+	/**
+	* Update a keycloak user field.
+	*
+	* @param userToken
+	* @param user
+	* @param field
+	* @param value
+	* @return
+	 */
+	public static int updateUserField(GennyToken userToken, BaseEntity user, String field, String value) {
+
+		String realm = userToken.getRealm();
+		String token = userToken.getToken();
+
+		String uuid = user.getValue("PRI_UUID", null);
+
+		String json = "{\""  + field  + "\":\"" + value + "\"}";
+        String uri = GennySettings.keycloakUrl + "/auth/admin/realms/" + realm + "/users/" + uuid;
+		HttpResponse<String> response = HttpUtils.put(uri, json, token);
+
+		return response.statusCode();
+	}
+
+	/**
+	* Update a keycloak user email.
+	*
+	* @param userToken
+	* @param user
+	* @param email
+	* @return
+	 */
+	public static int updateUserEmail(GennyToken userToken, BaseEntity user, String email) {
+
+		String realm = userToken.getRealm();
+		String token = userToken.getToken();
+
+		String uuid = user.getValue("PRI_UUID", null);
+
+		String json = "{ \"email\" : \"" + email + "\" , \"enabled\" : true, \"emailVerified\" : true}";
+        String uri = GennySettings.keycloakUrl + "/auth/admin/realms/" + realm + "/users/" + uuid;
+		HttpResponse<String> response = HttpUtils.put(uri, json, token);
+
+		return response.statusCode();
+	}
+
 }
