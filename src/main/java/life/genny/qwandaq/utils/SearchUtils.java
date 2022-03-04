@@ -227,7 +227,7 @@ public class SearchUtils {
 		log.error("Function not complete!");
 	}
 
-	public Answer getAssociatedColumnValue(BaseEntityUtils beUtils, BaseEntity baseBE, String calEACode) {
+	public static Answer getAssociatedColumnValue(BaseEntityUtils beUtils, BaseEntity baseBE, String calEACode) {
 		log.error("Function not complete!");
 		return null;
 	}
@@ -237,7 +237,7 @@ public class SearchUtils {
 		return null;
 	}
 
-	public void performQuickSearch(BaseEntityUtils beUtils, String dropdownValue) {
+	public static void performQuickSearch(BaseEntityUtils beUtils, String dropdownValue) {
 
 		Instant start = Instant.now();
 

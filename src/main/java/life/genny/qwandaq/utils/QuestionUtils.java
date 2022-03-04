@@ -21,9 +21,6 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.validation.constraints.NotNull;
 
 import com.google.common.reflect.TypeToken;
 
@@ -65,12 +62,12 @@ public class QuestionUtils implements Serializable {
 	 * @param token
 	 * @return
 	 */
-	public static Boolean doesQuestionGroupExist(EntityManager entityManager, String sourceCode, String targetCode,
+	public static Boolean doesQuestionGroupExist(String sourceCode, String targetCode,
 			final String questionCode,
 			BaseEntityUtils beUtils) {
 
 		// we grab the question group using the questionCode
-		QDataAskMessage questions = getAsks(entityManager, sourceCode, targetCode, questionCode, beUtils);
+		QDataAskMessage questions = getAsks(sourceCode, targetCode, questionCode, beUtils);
 
 		// we check if the question payload is not empty
 		if (questions != null) {
@@ -144,13 +141,13 @@ public class QuestionUtils implements Serializable {
 		}
 	}
 
-	public static List<Ask> findAsks2(EntityManager entityManager, final Question rootQuestion, final BaseEntity source,
+	public static List<Ask> findAsks2(final Question rootQuestion, final BaseEntity source,
 			final BaseEntity target,
 			BaseEntityUtils beUtils) {
-		return findAsks2(entityManager, rootQuestion, source, target, false, false, false, false, beUtils);
+		return findAsks2(rootQuestion, source, target, false, false, false, false, beUtils);
 	}
 
-	public static List<Ask> findAsks2(EntityManager entityManager, final Question rootQuestion, final BaseEntity source,
+	public static List<Ask> findAsks2(final Question rootQuestion, final BaseEntity source,
 			final BaseEntity target,
 			Boolean childQuestionIsMandatory, Boolean childQuestionIsReadonly, Boolean childQuestionIsFormTrigger,
 			Boolean childQuestionIsCreateOnTrigger, BaseEntityUtils beUtils) {
@@ -164,7 +161,7 @@ public class QuestionUtils implements Serializable {
 		Boolean readonly = rootQuestion.getReadonly() || childQuestionIsReadonly;
 		Ask ask = null;
 		// check if this already exists?
-		List<Ask> myAsks = findAsksByQuestion(entityManager, rootQuestion, source, target, beUtils);
+		List<Ask> myAsks = DatabaseUtils.findAsksByQuestionCode(beUtils.getRealm(), rootQuestion.getCode(), source.getCode(), target.getCode());
 		if (!(myAsks == null || myAsks.isEmpty())) {
 			ask = myAsks.get(0);
 			ask.setMandatory(mandatory);
@@ -192,13 +189,13 @@ public class QuestionUtils implements Serializable {
 			for (QuestionQuestion qq : qqList) {
 				String qCode = qq.getPk().getTargetCode();
 				log.info(qq.getPk().getSourceCode() + " -> Child Question -> " + qCode);
-				Question childQuestion = findQuestionByCode(entityManager, qCode, beUtils);
+				Question childQuestion = DatabaseUtils.findQuestion(beUtils.getRealm(), qCode);
 				// Grab whatever icon the QuestionQuestion has set
 				childQuestion.setIcon(qq.getIcon());
 				if (childQuestion != null) {
 					List<Ask> askChildren = null;
 					try {
-						askChildren = findAsks2(entityManager, childQuestion, source, target, qq.getMandatory(),
+						askChildren = findAsks2(childQuestion, source, target, qq.getMandatory(),
 								qq.getReadonly(),
 								qq.getFormTrigger(), qq.getCreateOnTrigger(), beUtils);
 						for (Ask child : askChildren) {
@@ -228,19 +225,19 @@ public class QuestionUtils implements Serializable {
 		return asks;
 	}
 
-	public static List<Ask> createAsksByQuestion2(EntityManager entityManager, final Question rootQuestion,
-			final BaseEntity source,
+	public static List<Ask> createAsksByQuestion2(final Question rootQuestion, final BaseEntity source,
 			final BaseEntity target, BaseEntityUtils beUtils) {
-		List<Ask> asks = findAsks2(entityManager, rootQuestion, source, target, beUtils);
+		List<Ask> asks = findAsks2(rootQuestion, source, target, beUtils);
 		return asks;
 	}
 
-	public static List<Ask> createAsksByQuestionCode2(EntityManager entityManager, final String questionCode,
-			final String sourceCode,
+	public static List<Ask> createAsksByQuestionCode2(final String questionCode, final String sourceCode,
 			final String targetCode, BaseEntityUtils beUtils) {
-		Question rootQuestion = findQuestionByCode(entityManager, questionCode, beUtils);
+
+		Question rootQuestion = DatabaseUtils.findQuestion(beUtils.getRealm(), questionCode);
 		BaseEntity source = null;
 		BaseEntity target = null;
+
 		if ("PER_SOURCE".equals(sourceCode) && "PER_TARGET".equals(targetCode)) {
 			source = new BaseEntity(sourceCode, "SourceCode");
 			target = new BaseEntity(targetCode, "TargetCode");
@@ -248,15 +245,15 @@ public class QuestionUtils implements Serializable {
 			source = beUtils.getBaseEntityByCode(sourceCode);
 			target = beUtils.getBaseEntityByCode(targetCode);
 		}
-		return createAsksByQuestion2(entityManager, rootQuestion, source, target, beUtils);
+
+		return createAsksByQuestion2(rootQuestion, source, target, beUtils);
 	}
 
-	public static QDataAskMessage getDirectAsks(EntityManager entityManager, String sourceCode, String targetCode,
-			String questionCode,
+	public static QDataAskMessage getDirectAsks(String sourceCode, String targetCode, String questionCode,
 			BaseEntityUtils beUtils) {
 		List<Ask> asks = null;
 
-		asks = createAsksByQuestionCode2(entityManager, questionCode, sourceCode, targetCode, beUtils);
+		asks = createAsksByQuestionCode2(questionCode, sourceCode, targetCode, beUtils);
 		log.debug("Number of asks=" + asks.size());
 		log.debug("Number of asks=" + asks);
 		final QDataAskMessage askMsgs = new QDataAskMessage(asks.toArray(new Ask[0]));
@@ -264,13 +261,12 @@ public class QuestionUtils implements Serializable {
 		return askMsgs;
 	}
 
-	public static QDataAskMessage getAsks(EntityManager entityManager, String sourceCode, String targetCode,
+	public static QDataAskMessage getAsks(String sourceCode, String targetCode,
 			String questionCode,
 			BaseEntityUtils beUtils) {
 
-		List<Ask> asks = null;
-
-		// asks = createAsksByQuestionCode2(entityManager, questionCode, sourceCode,
+		// List<Ask> asks = null;
+		// asks = createAsksByQuestionCode2(questionCode, sourceCode,
 		// targetCode, beUtils);
 		// log.info("Number of asks=" + asks.size());
 		// log.info("Number of asks=" + asks);
@@ -347,11 +343,11 @@ public class QuestionUtils implements Serializable {
 		return activeCodes;
 	}
 
-	public static QwandaMessage getQuestions(EntityManager entityManager, String sourceCode, String targetCode,
+	public static QwandaMessage getQuestions(String sourceCode, String targetCode,
 			String questionCode,
 			BaseEntityUtils beUtils)
 			throws ClientProtocolException, IOException {
-		return getQuestions(entityManager, sourceCode, targetCode, questionCode, beUtils, null, true);
+		return getQuestions(sourceCode, targetCode, questionCode, beUtils, null, true);
 	}
 
 	/**
@@ -367,7 +363,7 @@ public class QuestionUtils implements Serializable {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public static QwandaMessage getQuestions(EntityManager entityManager, String sourceCode, String targetCode,
+	public static QwandaMessage getQuestions(String sourceCode, String targetCode,
 			String questionCode,
 			BaseEntityUtils beUtils,
 			String stakeholderCode, Boolean pushSelection) throws ClientProtocolException, IOException {
@@ -378,7 +374,7 @@ public class QuestionUtils implements Serializable {
 		Instant start = Instant.now();
 
 		// get the ask data
-		QDataAskMessage questions = getAsks(entityManager, sourceCode, targetCode, questionCode, beUtils);
+		QDataAskMessage questions = getAsks(sourceCode, targetCode, questionCode, beUtils);
 
 		Instant middle = Instant.now();
 		log.info("getAsks duration = " + Duration.between(start, middle).toMillis() + " ms");
@@ -407,35 +403,35 @@ public class QuestionUtils implements Serializable {
 		return qwandaMessage;
 	}
 
-	public static QwandaMessage askQuestions(EntityManager entityManager, final String sourceCode,
+	public static QwandaMessage askQuestions(final String sourceCode,
 			final String targetCode,
 			final String questionGroupCode, BaseEntityUtils beUtils) {
-		return askQuestions(entityManager, sourceCode, targetCode, questionGroupCode, beUtils, null,
+		return askQuestions(sourceCode, targetCode, questionGroupCode, beUtils, null,
 				true);
 	}
 
-	public static QwandaMessage askQuestions(EntityManager entityManager, final String sourceCode,
+	public static QwandaMessage askQuestions(final String sourceCode,
 			final String targetCode,
 			final String questionGroupCode, BaseEntityUtils beUtils, String stakeholderCode) {
-		return askQuestions(entityManager, sourceCode, targetCode, questionGroupCode, beUtils,
+		return askQuestions(sourceCode, targetCode, questionGroupCode, beUtils,
 				stakeholderCode, true);
 	}
 
-	public static QwandaMessage askQuestions(EntityManager entityManager, final String sourceCode,
+	public static QwandaMessage askQuestions(final String sourceCode,
 			final String targetCode,
 			final String questionGroupCode, Boolean pushSelection, BaseEntityUtils beUtils) {
-		return askQuestions(entityManager, sourceCode, targetCode, questionGroupCode, beUtils, null,
+		return askQuestions(sourceCode, targetCode, questionGroupCode, beUtils, null,
 				pushSelection);
 	}
 
-	public static QwandaMessage askQuestions(EntityManager entityManager, final String sourceCode,
+	public static QwandaMessage askQuestions(final String sourceCode,
 			final String targetCode,
 			final String questionGroupCode, BaseEntityUtils beUtils, Boolean pushSelection) {
-		return askQuestions(entityManager, sourceCode, targetCode, questionGroupCode, beUtils, null,
+		return askQuestions(sourceCode, targetCode, questionGroupCode, beUtils, null,
 				pushSelection);
 	}
 
-	public static QwandaMessage askQuestions(EntityManager entityManager, final String sourceCode,
+	public static QwandaMessage askQuestions(final String sourceCode,
 			final String targetCode,
 			final String questionGroupCode, final BaseEntityUtils beUtils, final String stakeholderCode,
 			final Boolean pushSelection) {
@@ -443,7 +439,7 @@ public class QuestionUtils implements Serializable {
 		try {
 
 			// if sending the questions worked, we ask user
-			return getQuestions(entityManager, sourceCode, targetCode, questionGroupCode, beUtils,
+			return getQuestions(sourceCode, targetCode, questionGroupCode, beUtils,
 					stakeholderCode, pushSelection);
 
 		} catch (Exception e) {
@@ -684,7 +680,7 @@ public class QuestionUtils implements Serializable {
 		log.warn("No Question in cache for " + code + ", trying to grab from database...");
 
 		// fetch from DB
-		question = DatabaseUtils.fetchQuestion(realm, code);
+		question = DatabaseUtils.findQuestion(realm, code);
 
 		if (question == null) {
 			log.error("No Question found in database for " + code + " either!!!!");
@@ -724,6 +720,12 @@ public class QuestionUtils implements Serializable {
 		return result;
 	}
 
+	/**
+	* Perform a merge of ask data.
+	*
+	* @param ask
+	* @return
+	 */
 	private static Ask performMerge(Ask ask) {
 		if (ask.getName().contains("{{")) {
 			// now merge in data
@@ -742,71 +744,4 @@ public class QuestionUtils implements Serializable {
 
 	}
 
-	public static Question findQuestionByCode(EntityManager entityManager, @NotNull final String code,
-			@NotNull final BaseEntityUtils beUtils)
-			throws NoResultException {
-		List<Question> result = null;
-		try {
-			result = entityManager.createQuery("SELECT a FROM Question a where a.code=:code and a.realm=:realmStr")
-					.setParameter("realmStr", beUtils.getRealm()).setParameter("code", code.toUpperCase())
-					.getResultList();
-
-		} catch (Exception e) {
-			return null;
-		}
-		return result.get(0);
-	}
-
-	public DataType findDataTypeByCode(EntityManager entityManager,
-			@NotNull final String code, final BaseEntityUtils beUtils) throws NoResultException {
-
-		final DataType result = (DataType) entityManager
-				.createQuery("SELECT a FROM DataType a where a.code=:code  and a.realm=:realmStr")
-				.setParameter("realmStr", beUtils.getRealm()).setParameter("code", code.toUpperCase())
-				.getSingleResult();
-
-		return result;
-	}
-
-	public Validation findValidationByCode(EntityManager entityManager,
-			@NotNull final String code, @NotNull final BaseEntityUtils beUtils)
-			throws NoResultException {
-		Validation result = null;
-		try {
-			result = (Validation) entityManager
-					.createQuery("SELECT a FROM Validation a where a.code=:code and a.realm=:realmStr")
-					.setParameter("realmStr", beUtils.getRealm()).setParameter("code", code).getSingleResult();
-		} catch (Exception e) {
-			return null;
-		}
-
-		return result;
-	}
-
-	public static List<Ask> findAsksByQuestion(EntityManager entityManager, final Question question,
-			final BaseEntity source,
-			final BaseEntity target,
-			BaseEntityUtils beUtils) {
-		return findAsksByQuestionCode(entityManager, question.getCode(), source.getCode(), target.getCode(), beUtils);
-	}
-
-	public static List<Ask> findAsksByQuestionCode(EntityManager entityManager, final String questionCode,
-			String sourceCode,
-			final String targetCode, BaseEntityUtils beUtils) {
-		List<Ask> results = null;
-		final String userRealmStr = beUtils.getRealm();
-
-		try {
-			results = entityManager.createQuery(
-					"SELECT ask FROM Ask ask where ask.questionCode=:questionCode and ask.sourceCode=:sourceCode and ask.targetCode=:targetCode and ask.realm=:realmStr")
-					.setParameter("questionCode", questionCode).setParameter("sourceCode", sourceCode)
-
-					.setParameter("realmStr", beUtils.getRealm()).setParameter("targetCode", targetCode)
-					.getResultList();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return results;
-	}
 }

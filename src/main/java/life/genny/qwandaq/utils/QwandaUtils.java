@@ -156,7 +156,7 @@ public class QwandaUtils {
 
 			// fetch from database if not found in cache
 			log.warn("Could NOT read " + code + " from cache! Checking Database...");
-			question = DatabaseUtils.fetchQuestion(userToken.getRealm(), code);
+			question = DatabaseUtils.findQuestion(userToken.getRealm(), code);
 
 			if (question == null) {
 				log.error("Could not find question " + code + " in database!");

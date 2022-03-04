@@ -273,7 +273,7 @@ public class CapabilityUtils implements Serializable {
 		for (Attribute toBeRemovedCapability : existingCapability) {
 
 			QwandaUtils.removeAttributeFromMemory(toBeRemovedCapability.getCode());
-			DatabaseUtils.deleteAttribute(toBeRemovedCapability.getCode());
+			DatabaseUtils.deleteAttribute(realm, toBeRemovedCapability.getCode());
 
 			// update all the roles that use this attribute by reloading them into cache
 			QDataBaseEntityMessage msg = CacheUtils.getObject(realm, "ROLES_"+realm, QDataBaseEntityMessage.class);

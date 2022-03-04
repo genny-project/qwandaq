@@ -10,12 +10,16 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import com.mysql.cj.xdevapi.Schema.Validation;
+
 import org.jboss.logging.Logger;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import life.genny.qwandaq.Ask;
 import life.genny.qwandaq.Question;
 import life.genny.qwandaq.QuestionQuestion;
 import life.genny.qwandaq.attribute.Attribute;
+import life.genny.qwandaq.datatype.DataType;
 import life.genny.qwandaq.entity.BaseEntity;
 
 @RegisterForReflection
@@ -33,6 +37,69 @@ public class DatabaseUtils {
 	 */
 	public static void init(EntityManager em) {
 		entityManager = em;
+	}
+
+	/**
+	* Grab a Validation from the database using a code and a realm.
+	*
+	* @param code
+	* @param realm
+	* @return
+	 */
+	@Transactional
+	public static Validation findValidationByCode(String realm, String code) {
+
+		if (entityManager == null) {
+			log.error("EntityManager must be initialised first!!!");
+			return null;
+		}
+
+		try {
+
+			return entityManager
+				.createQuery("SELECT a FROM Validation a where a.code=:code and a.realm=:realmStr",
+						Validation.class)
+				.setParameter("realmStr", realm)
+				.setParameter("code", code)
+				.getSingleResult();
+
+		} catch (NoResultException e) {
+			log.errorv("No Validation found in DB for {} in realm {}", code, realm);
+			log.error(e.getStackTrace());
+		}
+		return null;
+	}
+
+
+	/**
+	* Grab a {@link DataType} from the database using a code and a realm.
+	*
+	* @param code
+	* @param realm
+	* @return
+	 */
+	@Transactional
+	public static DataType findDataTypeByCode(String realm, String code) {
+
+		if (entityManager == null) {
+			log.error("EntityManager must be initialised first!!!");
+			return null;
+		}
+
+		try {
+
+			return entityManager
+				.createQuery("SELECT a FROM DataType a where a.code=:code and a.realm=:realmStr",
+						DataType.class)
+				.setParameter("realmStr", realm)
+				.setParameter("code", code)
+				.getSingleResult();
+
+		} catch (NoResultException e) {
+			log.errorv("No DataType found in DB for {} in realm {}", code, realm);
+			log.error(e.getStackTrace());
+		}
+		return null;
 	}
 
 	/**
@@ -86,7 +153,7 @@ public class DatabaseUtils {
 					.getResultList();
 
 		} catch (NoResultException e) {
-			log.error("No BaseEntity found in DB for realm " + realm);
+			log.errorv("No BaseEntitys found in DB for realm {}", realm);
 		}
 		return null;
 	}
@@ -115,7 +182,7 @@ public class DatabaseUtils {
 					.getSingleResult();
 
 		} catch (NoResultException e) {
-			log.error("No BaseEntity found in DB for " + code);
+			log.errorv("No BaseEntity found in DB for {} in realm {}", code, realm);
 		}
 		return null;
 	}
@@ -174,7 +241,7 @@ public class DatabaseUtils {
 	 * @param code Code of the attribute to delete.
 	 */
 	@Transactional
-	public static void deleteAttribute(String code) {
+	public static void deleteAttribute(String realm, String code) {
 
 		log.info("Deleting Attribute " + code);
 
@@ -188,7 +255,7 @@ public class DatabaseUtils {
 			q.setParameter("code", code);
 			q.executeUpdate();
 
-			log.info("Successfully deleted attribute " + code);
+			log.infov("Successfully deleted attribute {} in realm {}", code, realm);
 
 		} catch (Exception e) {
 			log.error(e);
@@ -211,13 +278,13 @@ public class DatabaseUtils {
 					.getResultList();
 
 		} catch (NoResultException e) {
-			log.error("No Question found in DB for realm " + realm);
+			log.errorv("No Question found in DB for realm {}", realm);
 		}
 		return null;
 	}
 
 	@Transactional
-	public static Question fetchQuestion(String realm, String code) {
+	public static Question findQuestion(String realm, String code) {
 
 		if (entityManager == null) {
 			log.error("EntityManager must be initialised first!!!");
@@ -233,7 +300,7 @@ public class DatabaseUtils {
 					.getSingleResult();
 
 		} catch (NoResultException e) {
-			log.error("No Question found in DB for " + code);
+			log.errorv("No Question found in DB for {} in realm {}", code, realm);
 		}
 		return null;
 	}
@@ -254,11 +321,19 @@ public class DatabaseUtils {
 					.getResultList();
 
 		} catch (NoResultException e) {
-			log.error("No QuestionQuestion found in DB for realm " + realm);
+			log.errorv("No QuestionQuestion found in DB for realm {}", realm);
 		}
 		return null;
 	}
 
+	/**
+	* Find a QuestionQuestion using a realm, a sourceCode and a targetCode.
+	*
+	* @param realm
+	* @param sourceCode
+	* @param targetCode
+	* @return
+	 */
 	@Transactional
 	public static QuestionQuestion fetchQuestionQuestion(String realm, String sourceCode, String targetCode) {
 
@@ -278,11 +353,18 @@ public class DatabaseUtils {
 					.getSingleResult();
 
 		} catch (NoResultException e) {
-			log.error("No QuestionQuestion found in DB for " + sourceCode + ":" + targetCode);
+			log.errorv("No QuestionQuestion found in DB for {}:{}", sourceCode, targetCode);
 		}
 		return null;
 	}
 
+	/**
+	* Find a list of QuestionQuestions using a realm and a sourceCode
+	*
+	* @param realm
+	* @param sourceCode
+	* @return
+	 */
 	@Transactional
 	public static List<QuestionQuestion> fetchQuestionQuestionsBySource(String realm, String sourceCode) {
 
@@ -294,14 +376,48 @@ public class DatabaseUtils {
 		try {
 
 			return entityManager
-					.createQuery("SELECT * FROM QuestionQuestion WHERE realm=:realmStr AND sourceCode = :sourceCode"
-							, QuestionQuestion.class)
+					.createQuery("SELECT * FROM QuestionQuestion WHERE realm=:realmStr AND sourceCode = :sourceCode",
+							QuestionQuestion.class)
 					.setParameter("realmStr", realm)
 					.setParameter("sourceCode", sourceCode)
 					.getResultList();
 
 		} catch (NoResultException e) {
-			log.error("No QuestionQuestion found in DB for " + sourceCode);
+			log.errorv("No QuestionQuestion found in DB for {}", sourceCode);
+		}
+		return null;
+	}
+
+	/**
+	* Find a list of Asks using question code, sourceCode and targetCode.
+	*
+	* @param realm
+	* @param questionCode
+	* @param sourceCode
+	* @param targetCode
+	* @return
+	 */
+	@Transactional
+	public static List<Ask> findAsksByQuestionCode(String realm, String questionCode, String sourceCode, String targetCode) {
+
+		if (entityManager == null) {
+			log.error("EntityManager must be initialised first!!!");
+			return null;
+		}
+
+		try {
+			return entityManager
+				.createQuery("SELECT ask FROM Ask ask where ask.questionCode=:questionCode"
+						+ " and ask.sourceCode=:sourceCode and ask.targetCode=:targetCode and ask.realm=:realmStr",
+						Ask.class)
+					.setParameter("questionCode", questionCode)
+					.setParameter("sourceCode", sourceCode)
+					.setParameter("realmStr", realm)
+					.setParameter("targetCode", targetCode)
+					.getResultList();
+
+		} catch (NoResultException e) {
+			log.errorv("No Asks found in DB for {}:{}:{} in realm {}", questionCode, sourceCode, targetCode, realm);
 		}
 		return null;
 	}
