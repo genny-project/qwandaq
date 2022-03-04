@@ -65,6 +65,33 @@ public class DatabaseUtils {
 	}
 
 	/**
+	* Fetch a list of {@link BaseEntity} types from the database using a realm.
+	* 
+	* @param realm
+	* @return
+	 */
+	@Transactional
+	public static List<BaseEntity> fetchBaseEntitys(String realm) {
+
+		if (entityManager == null) {
+			log.error("EntityManager must be initialised first!!!");
+			return null;
+		}
+
+		try {
+
+			return entityManager
+					.createQuery("SELECT * FROM BaseEntity where realm=:realmStr", BaseEntity.class)
+					.setParameter("realmStr", realm)
+					.getResultList();
+
+		} catch (NoResultException e) {
+			log.error("No BaseEntity found in DB for realm " + realm);
+		}
+		return null;
+	}
+
+	/**
 	 * Fetch A {@link BaseEntity} from the database using the entity code.
 	 *
 	 * @param realm The realm that the {@link BaseEntity} is saved under
@@ -169,6 +196,27 @@ public class DatabaseUtils {
 	}
 
 	@Transactional
+	public static List<Question> fetchQuestions(String realm) {
+
+		if (entityManager == null) {
+			log.error("EntityManager must be initialised first!!!");
+			return null;
+		}
+
+		try {
+
+			return entityManager
+					.createQuery("SELECT * FROM Question WHERE realm=:realmStr", Question.class)
+					.setParameter("realmStr", realm)
+					.getResultList();
+
+		} catch (NoResultException e) {
+			log.error("No Question found in DB for realm " + realm);
+		}
+		return null;
+	}
+
+	@Transactional
 	public static Question fetchQuestion(String realm, String code) {
 
 		if (entityManager == null) {
@@ -186,6 +234,27 @@ public class DatabaseUtils {
 
 		} catch (NoResultException e) {
 			log.error("No Question found in DB for " + code);
+		}
+		return null;
+	}
+
+	@Transactional
+	public static List<QuestionQuestion> fetchQuestionQuestions(String realm) {
+
+		if (entityManager == null) {
+			log.error("EntityManager must be initialised first!!!");
+			return null;
+		}
+
+		try {
+
+			return entityManager
+					.createQuery("SELECT * FROM QuestionQuestion WHERE realm=:realmStr", QuestionQuestion.class)
+					.setParameter("realmStr", realm)
+					.getResultList();
+
+		} catch (NoResultException e) {
+			log.error("No QuestionQuestion found in DB for realm " + realm);
 		}
 		return null;
 	}
@@ -215,7 +284,7 @@ public class DatabaseUtils {
 	}
 
 	@Transactional
-	public static List<QuestionQuestion> fetchQuestionQuestionList(String realm, String sourceCode) {
+	public static List<QuestionQuestion> fetchQuestionQuestionsBySource(String realm, String sourceCode) {
 
 		if (entityManager == null) {
 			log.error("EntityManager must be initialised first!!!");

@@ -3,6 +3,7 @@ package life.genny.qwandaq.utils;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import java.io.Serializable;
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -168,7 +169,8 @@ public class BaseEntityUtils implements Serializable {
 		// build uri, serialize payload and fetch data from fyodor
 		String uri = GennySettings.fyodorServiceUrl() + "/api/search/fetch";
 		String json = jsonb.toJson(searchBE);
-		String body = HttpUtils.post(uri, json, this.token);
+		HttpResponse<String> response = HttpUtils.post(uri, json, this.token);
+		String body = response.body();
 
 		if (body != null) {
 			try {
@@ -182,6 +184,35 @@ public class BaseEntityUtils implements Serializable {
 
 		return null;
 	}
+
+	/**
+	* Call the Fyodor API to fetch a count of {@link BaseEntity} 
+	* objects using a {@link SearchEntity} object.
+	*
+	* @param searchBE	A {@link SearchEntity} object used to determine the results
+	* @return			A count
+	 */
+	public Long getBaseEntityCount(SearchEntity searchBE) {
+
+		// build uri, serialize payload and fetch data from fyodor
+		String uri = GennySettings.fyodorServiceUrl() + "/api/search/fetch";
+		String json = jsonb.toJson(searchBE);
+		HttpResponse<String> response = HttpUtils.post(uri, json, this.token);
+		String body = response.body();
+
+		if (body != null) {
+			try {
+				// deserialise and grab entities
+				QSearchBeResult results = jsonb.fromJson(body, QSearchBeResult.class);
+				return results.getTotal();
+			} catch (Exception e) {
+				log.error(e);
+			}
+		}
+
+		return null;
+	}
+
 
 	/**
 	* Update a {@link BaseEntity} in the database and the cache.

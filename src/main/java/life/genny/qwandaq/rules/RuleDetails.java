@@ -1,4 +1,4 @@
-package life.genny.qwanda.rules;
+package life.genny.qwandaq.rules;
 
 import java.io.Serializable;
 

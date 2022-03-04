@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Type;
+import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -278,10 +279,12 @@ public class QuestionUtils implements Serializable {
 		// askMsgs.setToken(beUtils.getToken());
 		// return askMsgs;
 
-		String json = HttpUtils.get(GennySettings.qwandaServiceUrl +
+		HttpResponse<String> response = HttpUtils.get(GennySettings.qwandaServiceUrl +
 				"/qwanda/baseentitys/"
 				+ sourceCode + "/asks2/" + questionCode + "/" + targetCode,
 				beUtils.getGennyToken().getToken());
+
+		String json = response.body();
 
 		if (json != null) {
 			if (!json.contains("<title>Error")) {

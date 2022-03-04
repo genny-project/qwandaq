@@ -1,5 +1,7 @@
 package life.genny.qwandaq.data;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -17,7 +19,9 @@ public class BridgeSwitch {
 
 	static Jsonb jsonb = JsonbBuilder.create();
 
-	public static ConcurrentMap<String, String> bridges = new ConcurrentHashMap<>();
+	public static ConcurrentMap<String, String> mappings = new ConcurrentHashMap<>();
+
+	public static Set<String> bridges = new HashSet<>();
 
 	/**
 	* Update the BridgeSwitch using an incoming payload. 
@@ -56,6 +60,6 @@ public class BridgeSwitch {
 		}
 
 		// update bridge switch
-		BridgeSwitch.bridges.put(jti, bridgeId);
+		BridgeSwitch.mappings.put(jti, bridgeId);
 	}
 }
