@@ -23,6 +23,9 @@ public class MoneyConverter implements AttributeConverter<Money, String> {
 
 	@Override
 	public String convertToDatabaseColumn(final Money money) {
+		if (money == null) {
+			return null;
+		}
 		return "{\"amount\":" + money.getNumber() + ",\"currency\":\"" + money.getCurrency().getCurrencyCode() + "\"}";
 	}
 

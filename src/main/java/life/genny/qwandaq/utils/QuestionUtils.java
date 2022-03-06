@@ -189,7 +189,7 @@ public class QuestionUtils implements Serializable {
 			for (QuestionQuestion qq : qqList) {
 				String qCode = qq.getPk().getTargetCode();
 				log.info(qq.getPk().getSourceCode() + " -> Child Question -> " + qCode);
-				Question childQuestion = DatabaseUtils.findQuestion(beUtils.getRealm(), qCode);
+				Question childQuestion = DatabaseUtils.findQuestionByCode(beUtils.getRealm(), qCode);
 				// Grab whatever icon the QuestionQuestion has set
 				childQuestion.setIcon(qq.getIcon());
 				if (childQuestion != null) {
@@ -234,7 +234,7 @@ public class QuestionUtils implements Serializable {
 	public static List<Ask> createAsksByQuestionCode2(final String questionCode, final String sourceCode,
 			final String targetCode, BaseEntityUtils beUtils) {
 
-		Question rootQuestion = DatabaseUtils.findQuestion(beUtils.getRealm(), questionCode);
+		Question rootQuestion = DatabaseUtils.findQuestionByCode(beUtils.getRealm(), questionCode);
 		BaseEntity source = null;
 		BaseEntity target = null;
 
@@ -261,9 +261,8 @@ public class QuestionUtils implements Serializable {
 		return askMsgs;
 	}
 
-	public static QDataAskMessage getAsks(String sourceCode, String targetCode,
-			String questionCode,
-			BaseEntityUtils beUtils) {
+	public static QDataAskMessage getAsks(String sourceCode, String targetCode, 
+			String questionCode, BaseEntityUtils beUtils) {
 
 		// List<Ask> asks = null;
 		// asks = createAsksByQuestionCode2(questionCode, sourceCode,
@@ -680,7 +679,7 @@ public class QuestionUtils implements Serializable {
 		log.warn("No Question in cache for " + code + ", trying to grab from database...");
 
 		// fetch from DB
-		question = DatabaseUtils.findQuestion(realm, code);
+		question = DatabaseUtils.findQuestionByCode(realm, code);
 
 		if (question == null) {
 			log.error("No Question found in database for " + code + " either!!!!");

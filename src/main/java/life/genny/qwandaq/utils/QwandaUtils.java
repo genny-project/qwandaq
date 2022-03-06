@@ -19,11 +19,13 @@ import org.jboss.logging.Logger;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Ask;
 import life.genny.qwandaq.Question;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.exception.BadDataException;
+import life.genny.qwandaq.message.QDataAskMessage;
 import life.genny.qwandaq.message.QDataBaseEntityMessage;
 import life.genny.qwandaq.message.QEventMessage;
 import life.genny.qwandaq.message.QScheduleMessage;
@@ -91,14 +93,13 @@ public class QwandaUtils {
 	public static void loadAllAttributes() {
 
 		String realm = gennyToken.getRealm();
+		List<Attribute> attributeList = null;
 
 		log.info("About to load all attributes for realm " + realm);
 
-		List<Attribute> attributeList = null;
-
 		try {
 			log.info("Fetching Attributes from database...");
-			attributeList = DatabaseUtils.fetchAttributes(realm);
+			attributeList = DatabaseUtils.findAttributes(realm, null, null);
 
 			log.info("Loaded all attributes for realm " + realm);
 			if (attributeList == null) {
@@ -156,7 +157,7 @@ public class QwandaUtils {
 
 			// fetch from database if not found in cache
 			log.warn("Could NOT read " + code + " from cache! Checking Database...");
-			question = DatabaseUtils.findQuestion(userToken.getRealm(), code);
+			question = DatabaseUtils.findQuestionByCode(userToken.getRealm(), code);
 
 			if (question == null) {
 				log.error("Could not find question " + code + " in database!");
@@ -217,6 +218,24 @@ public class QwandaUtils {
 
 		String uri = GennySettings.shleemyServiceUrl() + "/api/schedule/code/" + code;
 		HttpUtils.delete(uri, userToken.getToken());
+	}
+
+	/**
+	* Update the status of the disabled field for an Ask on the web.
+	*
+	* @param ask
+	* @param disabled
+	* @param userToken
+	 */
+	public static void updateAskDisabled(Ask ask, Boolean disabled, GennyToken userToken) {
+
+		ask.setDisabled(disabled);
+
+		QDataAskMessage askMsg = new QDataAskMessage(ask);
+		askMsg.setToken(userToken.getToken());
+		askMsg.setReplace(true);
+		String json = jsonb.toJson(askMsg);
+		KafkaUtils.writeMsg("webcmds", json);
 	}
 
 	/**

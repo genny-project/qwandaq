@@ -6,6 +6,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
@@ -128,5 +130,22 @@ public class HttpUtils {
 		}
 
 		return null;
+	}
+
+
+
+	/**
+	* Build an error message json string from a msg string.
+	*
+	* @param msg
+	* @return
+	 */
+	public static String errorBody(String msg) {
+
+		JsonObject json = Json.createObjectBuilder()
+			.add("error", msg)
+			.build();
+
+		return jsonb.toJson(json);
 	}
 }
