@@ -1,10 +1,38 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>life.genny</groupId>
   <artifactId>qwandaq</artifactId>
   <version>10.0.0</version>
+
+  <name>Qwanda Native</name>
+  <description>A Natively Compiled package for Genny classes and utilities</description>
+  <url>https://github.com/genny-project/qwandaq</url>
+
+  <licenses>
+	  <license>
+		  <name>Apache License, Version 2.0</name>
+		  <distribution>repo</distribution>
+		  <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+	  </license>
+  </licenses>
+
+  <developers>
+	  <developer>
+		  <name>Jasper Robison</name>
+		  <email>jasper.robison@gada.io</email>
+		  <organization>GADA Technology</organization>
+		  <organizationUrl>https://gada.io</organizationUrl>
+	  </developer>
+  </developers>
+
+  <scm>
+	  <connection>scm:git:git://github.com/genny-project/{project.artifactId}.git</connection>
+	  <developerConnection>scm:git:ssh://github.com:genny-project/{project.artifactId}.git</developerConnection>
+	  <url>http://github.com/genny-project/{project.artifactId}/tree/{project.version}</url>
+  </scm>
+
   <properties>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <maven.compiler.parameters>true</maven.compiler.parameters>
@@ -24,16 +52,16 @@
     <testcontainers.version>1.16.0</testcontainers.version>
   </properties>
 
-	<distributionManagement>
-		<repository>
-			<id>life.genny</id>
-            <url>https://nexus.outcome-hub.com/repository/life.genny/</url>
-		</repository>
-		<snapshotRepository>
-			<id>nexus-snapshots</id>
-            <url>https://nexus.outcome-hub.com/repository/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
+  <distributionManagement>
+	  <repository>
+		  <id>life.genny</id>
+		  <url>https://nexus.outcome-hub.com/repository/life.genny/</url>
+	  </repository>
+	  <snapshotRepository>
+		  <id>nexus-snapshots</id>
+		  <url>https://nexus.outcome-hub.com/repository/snapshots/</url>
+	  </snapshotRepository>
+  </distributionManagement>
 
   <dependencyManagement>
     <dependencies>
@@ -46,6 +74,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -63,10 +92,10 @@
 		<groupId>io.quarkus</groupId>
 		<artifactId>quarkus-hibernate-orm-rest-data-panache</artifactId>
 	</dependency>
-    <dependency>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-jdbc-mysql</artifactId>
-    </dependency>
+	<dependency>
+		<groupId>io.quarkus</groupId>
+		<artifactId>quarkus-jdbc-mysql</artifactId>
+	</dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-jsonb</artifactId>
@@ -137,11 +166,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-oidc</artifactId>
     </dependency>
-    <!-- <dependency> -->
-    <!--   <groupId>com.github.luben</groupId> -->
-    <!--   <artifactId>zstd-jni</artifactId> -->
-    <!--   <version>1.3.8-6</version> -->
-    <!-- </dependency> -->
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-shared-utils</artifactId>
@@ -194,8 +218,10 @@
 		<artifactId>quarkus-keycloak-authorization</artifactId>
 	</dependency>
   </dependencies>
+
   <build>
 	  <plugins>
+
 	    <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-source-plugin</artifactId>
@@ -225,6 +251,7 @@
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${compiler-plugin.version}</version>
@@ -232,6 +259,7 @@
           <parameters>${maven.compiler.parameters}</parameters>
         </configuration>
       </plugin>
+
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire-plugin.version}</version>
@@ -242,37 +270,42 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
-		<plugin>
+
+	  <plugin>
 		  <groupId>com.mysema.maven</groupId>
 		  <artifactId>apt-maven-plugin</artifactId>
 		  <version>1.1.3</version>
 		  <executions>
-			<execution>
-			  <goals>
-				<goal>process</goal>
-			  </goals>
-			  <configuration>
-				<outputDirectory>target/generated-sources/java</outputDirectory>
-				<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
-			  </configuration>
-			</execution>
+			  <execution>
+				  <goals>
+					  <goal>process</goal>
+				  </goals>
+				  <configuration>
+					  <outputDirectory>target/generated-sources/java</outputDirectory>
+					  <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+				  </configuration>
+			  </execution>
 		  </executions>
-		</plugin>
-		<plugin>
-			<groupId>org.jboss.jandex</groupId>
-			<artifactId>jandex-maven-plugin</artifactId>
-			<version>1.2.1</version>
-			<executions>
-				<execution>
-					<id>make-index</id>
-					<goals>
-						<goal>jandex</goal>
-					</goals>
-				</execution>
-			</executions>
-		</plugin>
+	  </plugin>
+
+	  <plugin>
+		  <groupId>org.jboss.jandex</groupId>
+		  <artifactId>jandex-maven-plugin</artifactId>
+		  <version>1.2.1</version>
+		  <executions>
+			  <execution>
+				  <id>make-index</id>
+				  <goals>
+					  <goal>jandex</goal>
+				  </goals>
+			  </execution>
+		  </executions>
+	  </plugin>
+
 	</plugins>
+
   </build>
+
   <profiles>
     <profile>
       <id>native</id>
