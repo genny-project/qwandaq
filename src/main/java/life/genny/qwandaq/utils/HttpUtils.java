@@ -132,18 +132,32 @@ public class HttpUtils {
 		return null;
 	}
 
-
-
 	/**
 	* Build an error message json string from a msg string.
 	*
 	* @param msg
 	* @return
 	 */
-	public static String errorBody(String msg) {
+	public static String error(String msg) {
 
 		JsonObject json = Json.createObjectBuilder()
+			.add("status", "failed")
 			.add("error", msg)
+			.build();
+
+		return jsonb.toJson(json);
+	}
+
+	/**
+	* Build an ok status json string;
+	*
+	* @param msg
+	* @return
+	 */
+	public static String ok() {
+
+		JsonObject json = Json.createObjectBuilder()
+			.add("status", "ok")
 			.build();
 
 		return jsonb.toJson(json);
