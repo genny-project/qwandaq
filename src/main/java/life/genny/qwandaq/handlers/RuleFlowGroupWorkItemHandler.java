@@ -14,6 +14,14 @@ public class RuleFlowGroupWorkItemHandler {
 		log.error("RuleFlowGroup handler is incomplete!!!!");
 	}
 
+	
+	/** 
+	 * @param beUtils
+	 * @param items
+	 * @param ruleFlowGroup
+	 * @param callingWorkflow
+	 * @return Map<String, Object>
+	 */
 	public Map<String, Object> executeRules(BaseEntityUtils beUtils, Map<String, Object> items,
 			String ruleFlowGroup, String callingWorkflow) {
 		log.error("RuleFlowGroup executeRules function is incomplete!!!!");

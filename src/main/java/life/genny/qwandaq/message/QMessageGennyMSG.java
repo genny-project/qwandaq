@@ -108,6 +108,10 @@ public class QMessageGennyMSG extends QMessage {
 		this.recipientArr = recipientArr;
 	}
 	
+	
+	/** 
+	 * @param messageType
+	 */
 	public void addMessageType(QBaseMSGMessageType messageType) {
 		
 		List<QBaseMSGMessageType> list = this.getMessageTypeArr() != null ? new CopyOnWriteArrayList<>(Arrays.asList(this.getMessageTypeArr())) : new CopyOnWriteArrayList<>();
@@ -115,16 +119,28 @@ public class QMessageGennyMSG extends QMessage {
 		this.setMessageTypeArr(list.toArray(new QBaseMSGMessageType[0]));
 	}
 
+	
+	/** 
+	 * @param recipient
+	 */
 	public void setRecipient(String recipient) {
 		this.recipientArr = new String[0];
 		addRecipient(recipient);
 	}
 
+	
+	/** 
+	 * @param recipient
+	 */
 	public void setRecipient(BaseEntity recipient) {
 		this.recipientArr = new String[0];
 		addRecipient(recipient);
 	}
 
+	
+	/** 
+	 * @param recipient
+	 */
 	public void addRecipient(BaseEntity recipient) {
 		if (recipient == null) {
 			log.warn("RECIPIENT BE passed is NULL");
@@ -133,6 +149,10 @@ public class QMessageGennyMSG extends QMessage {
 		}
 	}
 
+	
+	/** 
+	 * @param recipient
+	 */
 	public void addRecipient(String recipient) {
 		
 		if (recipient == null) {
@@ -144,6 +164,11 @@ public class QMessageGennyMSG extends QMessage {
 		}
 	}
 
+	
+	/** 
+	 * @param key
+	 * @param value
+	 */
 	public void addContext(String key, Object value) {
 		if (value == null) {
 			log.warn(key + " passed is NULL");
@@ -257,6 +282,10 @@ public class QMessageGennyMSG extends QMessage {
 
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

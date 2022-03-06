@@ -44,11 +44,20 @@ public class QwandaUtils {
 
 	static GennyToken gennyToken;
 
+	
+	/** 
+	 * @param token
+	 */
 	public static void init(GennyToken token) {
 		gennyToken = token;
 		loadAllAttributes();
 	}
 
+	
+	/** 
+	 * @param token
+	 * @param attributeList
+	 */
 	public static void init(GennyToken token, List<Attribute> attributeList) {
 		gennyToken = token;
 

@@ -96,10 +96,18 @@ public class DataType implements Serializable {
 
 	private String inputmask;
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getComponent() {
 		return component;
 	}
 
+	
+	/** 
+	 * @param component
+	 */
 	public void setComponent(String component) {
 		this.component = component;
 	}
@@ -159,7 +167,11 @@ public class DataType implements Serializable {
 		this(className, aValidationList, name, "");
 	}
 
-    public void setDttCodeFromClassName(String str){
+    
+	/** 
+	 * @param str
+	 */
+	public void setDttCodeFromClassName(String str){
 		String[] strs = str.split("\\.");
 		String type;
 
@@ -257,6 +269,10 @@ public class DataType implements Serializable {
 		this.inputmask = inputmask;
 	}
 
+	
+	/** 
+	 * @param clazz
+	 */
 	@JsonIgnore
 	@Transient
 	@XmlTransient
@@ -265,6 +281,10 @@ public class DataType implements Serializable {
 		setClassName(simpleClassName);
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -275,6 +295,11 @@ public class DataType implements Serializable {
 		return "DataType(" + className + " component: "+this.component+", inputmask:"+this.inputmask+")";
 	}
 
+	
+	/** 
+	 * @param className
+	 * @return DataType
+	 */
 	static public DataType getInstance(final String className) {
 		final List<Validation> validationList = new CopyOnWriteArrayList<Validation>();
 		ValidationList vlist = new ValidationList(validationList);
@@ -282,6 +307,11 @@ public class DataType implements Serializable {
 		return dataTypeInstance;
 	}
 
+	
+	/** 
+	 * @param dtype
+	 * @return boolean
+	 */
 	// Is DataType summable?
 
 	static public boolean summable(DataType dtype) {
@@ -300,6 +330,11 @@ public class DataType implements Serializable {
 		}
 	}
 
+	
+	/** 
+	 * @param dtype
+	 * @return Object
+	 */
 	static public Object Zero(DataType dtype) {
 		switch (dtype.getClassName()) {
 		case "java.lang.Integer":
@@ -320,6 +355,13 @@ public class DataType implements Serializable {
 		}
 	}
 
+	
+	/** 
+	 * @param dtype
+	 * @param v1
+	 * @param v2
+	 * @return Object
+	 */
 	static public Object add(DataType dtype, Object v1, Object v2) {
 		switch (dtype.getClassName()) {
 		case "java.lang.Integer":

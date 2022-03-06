@@ -155,6 +155,10 @@ public class Attribute extends CodedEntity implements Serializable {
 	}
 
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return getCode()+ ",dataType=" + dataType;
@@ -168,6 +172,10 @@ public class Attribute extends CodedEntity implements Serializable {
 		return defaultPrivacyFlag;
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isDefaultPrivacyFlag() {
 		return getDefaultPrivacyFlag();
 	}
@@ -256,7 +264,11 @@ public class Attribute extends CodedEntity implements Serializable {
         this.icon = icon;
     }
 
-    public String getIcon() {
+    
+	/** 
+	 * @return String
+	 */
+	public String getIcon() {
         return this.icon;
     }
 

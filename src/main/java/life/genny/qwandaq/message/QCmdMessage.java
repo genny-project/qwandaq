@@ -34,18 +34,34 @@ public class QCmdMessage extends QMessage {
 		this.cache = null;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getCmd_type() {
 		return cmd_type;
 	}
 
+	
+	/** 
+	 * @param cmd_type
+	 */
 	public void setCmd_type(String cmd_type) {
 		this.cmd_type = cmd_type;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getCode() {
 		return code;
 	}
 
+	
+	/** 
+	 * @param code
+	 */
 	public void setCode(String code) {
 		this.code = code;
 	}

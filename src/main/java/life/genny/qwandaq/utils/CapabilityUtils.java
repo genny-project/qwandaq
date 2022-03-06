@@ -51,12 +51,22 @@ public class CapabilityUtils implements Serializable {
 		this.capabilityManifest = capabilityManifest;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return "CapabilityUtils [" + (capabilityManifest != null ? "capabilityManifest=" + capabilityManifest : "") + "]";
 	}
 
 
+	
+	/** 
+	 * @param role
+	 * @param parentRole
+	 * @return BaseEntity
+	 */
 	public BaseEntity inheritRole(BaseEntity role, final BaseEntity parentRole) {
 
 		BaseEntity ret = role;
@@ -69,6 +79,12 @@ public class CapabilityUtils implements Serializable {
 		return ret;
 	}
 
+	
+	/** 
+	 * @param capabilityCode
+	 * @param name
+	 * @return Attribute
+	 */
 	public Attribute addCapability(final String capabilityCode, final String name) {
 
 		String fullCapabilityCode = "PRM_" + capabilityCode.toUpperCase();
@@ -88,6 +104,13 @@ public class CapabilityUtils implements Serializable {
 		return attribute;
 	}
 
+	
+	/** 
+	 * @param role
+	 * @param capabilityCode
+	 * @param mode
+	 * @return BaseEntity
+	 */
 	public BaseEntity addCapabilityToRole(BaseEntity role, final String capabilityCode, final CapabilityMode mode) {
 
 		// check if the userToken is allowed to do this!
@@ -289,6 +312,11 @@ public class CapabilityUtils implements Serializable {
 		}
 	}
 
+	
+	/** 
+	 * @param condition
+	 * @return Boolean
+	 */
 	public Boolean conditionMet(String condition) {
 
 		if (condition == null) {

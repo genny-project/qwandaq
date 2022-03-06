@@ -100,6 +100,10 @@ public class EntityEntityId implements java.io.Serializable {
 //		this.getAttribute().getCode() = linkAttribute.getCode();
 	}
 
+
+/** 
+ * @return int
+ */
 //	@Override
 //	public int hashCode() {
 //		final int prime = 31;
@@ -212,7 +216,12 @@ public class EntityEntityId implements java.io.Serializable {
         hcb.append(targetCode);
         return hcb.toHashCode();
     }      
-       @Override
+       
+	   /** 
+		* @param obj
+		* @return boolean
+		*/
+	   @Override
         public boolean equals(Object obj) {
             if (this == obj) {
                 return true;

@@ -6,6 +6,10 @@ public class MessageData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return " MessageData [code=" + code + "   " + id + "]";
@@ -30,34 +34,66 @@ public class MessageData implements Serializable {
 	}
 	
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getCode() {
 		return code;
 	}
 
+	
+	/** 
+	 * @param code
+	 */
 	public void setCode(String code) {
 		this.code = code;
 	}
 
+	
+	/** 
+	 * @return Long
+	 */
 	public Long getId() {
 		return id;
 	}
 
+	
+	/** 
+	 * @param id
+	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getValue() {
 		return value;
 	}
 
+	
+	/** 
+	 * @param value
+	 */
 	public void setValue(String value) {
 		this.value = value;
 	}
 	
+	
+	/** 
+	 * @return String
+	 */
 	public String getContent() {
 		return content;
 	}
 
+	
+	/** 
+	 * @param content
+	 */
 	public void setContent(String content) {
 		this.content = content;
 	}

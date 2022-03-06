@@ -75,6 +75,10 @@ uniqueConstraints = @UniqueConstraint(columnNames = {"code", "realm"}))
 
 public class Validation extends CodedEntity implements Serializable {
 	
+	
+	/** 
+	 * @return String
+	 */
 	/* (non-Javadoc)
    * @see java.lang.Object#toString()
    */
@@ -133,10 +137,18 @@ public class Validation extends CodedEntity implements Serializable {
 	}
 	
 	
+	
+	/** 
+	 * @return String
+	 */
 	public String getErrormsg() {
 		return errormsg;
 	}
 
+	
+	/** 
+	 * @param errormsg
+	 */
 	public void setErrormsg(String errormsg) {
 		this.errormsg = errormsg;
 	}
@@ -264,10 +276,18 @@ public class Validation extends CodedEntity implements Serializable {
 		return multiAllowed;
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isMultiAllowed() {
 		return getMultiAllowed();
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isRecursiveGroup() {
 		return getRecursiveGroup();
 	}

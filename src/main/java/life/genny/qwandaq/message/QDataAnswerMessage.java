@@ -34,14 +34,26 @@ public class QDataAnswerMessage extends QDataMessage {
 		setItems(items);
 	}
 
+	
+	/** 
+	 * @return Answer[]
+	 */
 	public Answer[] getItems() {
 		return items;
 	}
 
+	
+	/** 
+	 * @param items
+	 */
 	public void setItems(Answer[] items) {
 		this.items = items;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

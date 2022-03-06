@@ -25,6 +25,11 @@ public class ValidationListConverter implements AttributeConverter<List<Validati
 
 	private static final Logger log = Logger.getLogger(ValidationListConverter.class);
 
+	
+	/** 
+	 * @param list
+	 * @return String
+	 */
 	@Override
 	public String convertToDatabaseColumn(final List<Validation> list) {
 		String ret = "";
@@ -53,6 +58,11 @@ public class ValidationListConverter implements AttributeConverter<List<Validati
 
 	}
 
+	
+	/** 
+	 * @param joined
+	 * @return List<Validation>
+	 */
 	@SuppressWarnings("deprecation")
 	@Override
 	public List<Validation> convertToEntityAttribute(String joined) {
@@ -92,6 +102,11 @@ public class ValidationListConverter implements AttributeConverter<List<Validati
 		return validations;
 	}
 
+	
+	/** 
+	 * @param list
+	 * @return String
+	 */
 	public String convertToString(final List<String> list) {
 
 		// log.info(list);
@@ -105,6 +120,11 @@ public class ValidationListConverter implements AttributeConverter<List<Validati
 		return list.toString();
 	}
 
+	
+	/** 
+	 * @param joined
+	 * @return List<String>
+	 */
 	public List<String> convertFromString(final String joined) {
 
 		List<String> list = new CopyOnWriteArrayList<String>();

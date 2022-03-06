@@ -22,31 +22,58 @@ public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
     static final MonetaryContext MAX_CONTEXT =
             MonetaryContextBuilder.of(Money.class).setPrecision(0).setMaxScale(-1).set(RoundingMode.HALF_EVEN).build();
 
+    
+    /** 
+     * @param number
+     * @param currency
+     * @param monetaryContext
+     * @return Money
+     */
     @Override
     protected Money create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext) {
         return Money.of(number, currency, MonetaryContext.from(monetaryContext, Money.class));
     }
 
+    
+    /** 
+     * @return NumberValue
+     */
     @Override
     public NumberValue getMaxNumber() {
         return null;
     }
 
+    
+    /** 
+     * @return NumberValue
+     */
     @Override
     public NumberValue getMinNumber() {
         return null;
     }
 
+    
+    /** 
+     * @return Class<Money>
+     */
     @Override
     public Class<Money> getAmountType() {
         return Money.class;
     }
 
+    
+    /** 
+     * @return MonetaryContext
+     */
     @Override
     protected MonetaryContext loadDefaultMonetaryContext() {
         return DEFAULT_CONTEXT;
     }
 
+    
+    /** 
+     * @return MonetaryContext
+     */
     @Override
     protected MonetaryContext loadMaxMonetaryContext() {
         return MAX_CONTEXT;

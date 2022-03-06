@@ -14,10 +14,18 @@ public class QDataAttributeMessage extends QDataMessage{
 		setItems(items);
 	}
 
+	
+	/** 
+	 * @return Attribute[]
+	 */
 	public Attribute[] getItems() {
 		return items;
 	}
 
+	
+	/** 
+	 * @param items
+	 */
 	public void setItems(Attribute[] items) {
 		this.items = items;
 	}

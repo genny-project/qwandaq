@@ -259,6 +259,10 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 		autocreateUpdate();
 	}
 
+	
+	/** 
+	 * @return Date
+	 */
 	@Transient
 	@JsonIgnore
 	@JsonbTransient
@@ -267,6 +271,10 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 		return out;
 	}
 
+	
+	/** 
+	 * @return Date
+	 */
 	@Transient
 	@JsonIgnore
 	@JsonbTransient
@@ -278,6 +286,10 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 			return null;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -288,6 +300,10 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 		return "[id=" + id + ", created=" + created + ", updated=" + updated + ", name=" + name + "]";
 	}
 
+	
+	/** 
+	 * @return boolean
+	 */
 	public boolean hasName() {
 		return name != null && !"".equals(name.trim());
 	}

@@ -54,6 +54,12 @@ public class MergeUtils {
     public static final Pattern FORMAT_PATTERN_VARIABLE = Pattern.compile(Pattern.quote(FORMAT_VARIABLE_REGEX_START) + "(.*)" + Pattern.quote(FORMAT_VARIABLE_REGEX_END));  
     
     
+	
+	/** 
+	 * @param mergeStr
+	 * @param templateEntityMap
+	 * @return String
+	 */
 	public static String merge(String mergeStr, Map<String, Object> templateEntityMap) { 
 		
 		if (mergeStr != null) {
@@ -94,6 +100,12 @@ public class MergeUtils {
 		return mergeStr;
 	}
 	
+	
+	/** 
+	 * @param mergeText
+	 * @param entitymap
+	 * @return Object
+	 */
 	public static Object wordMerge(String mergeText, Map<String, Object> entitymap) {
 		
 		if(mergeText != null && !mergeText.isEmpty()) {
@@ -251,6 +263,11 @@ public class MergeUtils {
 		return true;
 	}
 
+	
+	/** 
+	 * @param mergeStr
+	 * @return Boolean
+	 */
 	public static Boolean requiresMerging(String mergeStr) {
 
 		if (mergeStr == null) {
@@ -282,6 +299,12 @@ public class MergeUtils {
 		return attributeVal;
 	}
 	
+	
+	/** 
+	 * @param be
+	 * @param attributeCode
+	 * @return Object
+	 */
 	public static Object getBaseEntityAttrObjectValue(BaseEntity be, String attributeCode) {
 
 		Object attributeVal = null;
@@ -295,6 +318,12 @@ public class MergeUtils {
 
 	}
 	
+	
+	/** 
+	 * @param dateToBeFormatted
+	 * @param format
+	 * @return String
+	 */
 	public static String getFormattedDateTimeString(LocalDateTime dateToBeFormatted, String format) {
 		if(dateToBeFormatted != null && format != null) {
 			DateTimeFormatter dateformat = DateTimeFormatter.ofPattern(format);
@@ -303,6 +332,12 @@ public class MergeUtils {
 		return null;
 	}
 
+	
+	/** 
+	 * @param dateToBeFormatted
+	 * @param format
+	 * @return String
+	 */
 	public static String getFormattedZonedDateTimeString(ZonedDateTime dateToBeFormatted, String format) {
 		if(dateToBeFormatted != null && format != null) {
 			DateTimeFormatter dateformat = DateTimeFormatter.ofPattern(format);
@@ -311,6 +346,12 @@ public class MergeUtils {
 		return null;
 	}
 
+	
+	/** 
+	 * @param dateToBeFormatted
+	 * @param format
+	 * @return String
+	 */
 	public static String getFormattedDateString(LocalDate dateToBeFormatted, String format) {
 		if(dateToBeFormatted != null && format != null) {
 			DateTimeFormatter dateformat = DateTimeFormatter.ofPattern(format);

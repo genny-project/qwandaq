@@ -247,6 +247,11 @@ public class Context extends CoreEntity implements Serializable {
 		this.dttCode = dttCode;
 	}
 
+	
+	/** 
+	 * @param o
+	 * @return int
+	 */
 	@Override
 	 public int compareTo(Object o) {
 		 Context myClass = (Context) o;
@@ -255,6 +260,10 @@ public class Context extends CoreEntity implements Serializable {
 	       .toComparison();
 	   }
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return "Context [entity=" + entity + ", weight=" + weight + ", contextCode=" + contextCode + ", dataType="

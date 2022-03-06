@@ -65,26 +65,46 @@ public class GennySettings {
 			: "http://alyson7.genny.life";
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public static String qwandaServiceUrl() {
 		return System.getenv("GENNY_API_URL") != null ? System.getenv("GENNY_API_URL") 
 			: (projectUrl() + ":8280");
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public static String fyodorServiceUrl() {
 		return System.getenv("FYODOR_SERVICE_API") != null ? System.getenv("FYODOR_SERVICE_API") 
 			: (projectUrl() + ":4242");
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public static String shleemyServiceUrl() {
 		return System.getenv("SHLEEMY_SERVICE_API") != null ? System.getenv("SHLEEMY_SERVICE_API")
 			: (projectUrl() + ":4242");
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public static String infinispanHost() {
 		return System.getenv("INFINISPAN_HOST") != null ? System.getenv("INFINISPAN_HOST")
 			: (projectUrl() + ":11222");
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public static String keycloakUrl() {
 		return System.getenv("KEYCLOAK_URL") != null ? System.getenv("KEYCLOAK_URL")
 			: "http://keycloak.genny.life";

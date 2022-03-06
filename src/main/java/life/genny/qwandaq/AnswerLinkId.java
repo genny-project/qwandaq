@@ -108,6 +108,10 @@ public class AnswerLinkId implements java.io.Serializable {
     return true;
   }
 
+  
+  /** 
+   * @return int
+   */
   @Override
   public int hashCode() {
     int result;

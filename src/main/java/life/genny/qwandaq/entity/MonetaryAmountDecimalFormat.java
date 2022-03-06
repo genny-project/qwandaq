@@ -50,37 +50,73 @@ public class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
     }
 
 
+    
+    /** 
+     * @return DecimalFormat
+     */
     DecimalFormat getDecimalFormat() {
         return decimalFormat;
     }
 
+    
+    /** 
+     * @return MonetaryAmountProducer
+     */
     MonetaryAmountProducer getProducer() {
         return producer;
     }
 
+    
+    /** 
+     * @return CurrencyUnit
+     */
     CurrencyUnit getCurrencyUnit() {
         return currencyUnit;
     }
 
 
+    
+    /** 
+     * @return String
+     */
     public String toLocalizedPattern() {
         return decimalFormat.toLocalizedPattern();
     }
 
+    
+    /** 
+     * @return String
+     */
     public String toPattern() {
         return decimalFormat.toPattern();
     }
 
+    
+    /** 
+     * @return AmountFormatContext
+     */
     @Override
     public AmountFormatContext getContext() {
         return CONTEXT;
     }
 
+    
+    /** 
+     * @param appendable
+     * @param amount
+     * @throws IOException
+     */
     @Override
     public void print(Appendable appendable, MonetaryAmount amount) throws IOException {
         requireNonNull(appendable).append(queryFrom(amount));
     }
 
+    
+    /** 
+     * @param text
+     * @return MonetaryAmount
+     * @throws MonetaryParseException
+     */
     @Override
     public MonetaryAmount parse(CharSequence text) throws MonetaryParseException {
         requireNonNull(text);
@@ -92,6 +128,11 @@ public class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
         }
     }
 
+    
+    /** 
+     * @param amount
+     * @return String
+     */
     @Override
     public String queryFrom(MonetaryAmount amount) {
         return Optional
@@ -100,11 +141,20 @@ public class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
                         BigDecimal.class))).orElse("null");
     }
 
+    
+    /** 
+     * @return int
+     */
     @Override
     public int hashCode() {
         return Objects.hash(decimalFormat, currencyUnit, producer);
     }
 
+    
+    /** 
+     * @param obj
+     * @return boolean
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -118,6 +168,10 @@ public class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
         return false;
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String toString() {
         return MonetaryAmountDecimalFormat.class.getName() + '{' +

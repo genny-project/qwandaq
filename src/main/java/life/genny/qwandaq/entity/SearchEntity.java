@@ -160,6 +160,11 @@ public class SearchEntity extends BaseEntity {
 		}
 	}
 
+	
+	/** 
+	 * @param operator
+	 * @return Filter
+	 */
 	static public SearchEntity.Filter convertOperatorToFilter(final String operator) {
 			SearchEntity.Filter ret = null;
 				switch (operator) {
@@ -178,6 +183,11 @@ public class SearchEntity extends BaseEntity {
 		
 	}
 	
+	
+	/** 
+	 * @param operator
+	 * @return StringFilter
+	 */
 	static public SearchEntity.StringFilter convertOperatorToStringFilter(final String operator) {
 		SearchEntity.StringFilter ret = null;
 			switch (operator) {
@@ -239,6 +249,11 @@ public class SearchEntity extends BaseEntity {
 		}
 	}
 
+	
+	/** 
+	 * @param value
+	 * @return String
+	 */
 	public static String convertToSaveable(String value) {
 		String name = value.replaceAll("\\>", "_GT_");
 		name = name.replaceAll("\\<", "_LT_");
@@ -250,6 +265,11 @@ public class SearchEntity extends BaseEntity {
 		return name;
 	}
 
+	
+	/** 
+	 * @param value
+	 * @return String
+	 */
 	public static String convertFromSaveable(String value) {
 		if (value != null) {
 			String name = value;
@@ -286,6 +306,12 @@ public class SearchEntity extends BaseEntity {
 		this.setBaseEntityAttributes(be.getBaseEntityAttributes());
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param columnName
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to add the attributes to the SearchEntity that is required
 	 * in the result BaseEntities
@@ -302,6 +328,12 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+		
+		/** 
+		 * @param attributeCode
+		 * @param columnName
+		 * @return SearchEntity
+		 */
 		/*
 	 * This method allows to add the action attributes to the SearchEntity that is
 	 * required in the result BaseEntities
@@ -310,6 +342,13 @@ public class SearchEntity extends BaseEntity {
 		return this.addAction(attributeCode, columnName, false);
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param columnName
+	 * @param confirmationFlag
+	 * @return SearchEntity
+	 */
 	public SearchEntity addAction(final String attributeCode, final String columnName, Boolean confirmationFlag) {
 		AttributeText attributeColumn = new AttributeText("ACT_" + attributeCode, columnName);
 		try {
@@ -323,6 +362,12 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param columnName
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to add the action attributes to the SearchEntity that is
 	 * required in the result BaseEntities
@@ -338,6 +383,12 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param columnName
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to add the search action attributes to the SearchEntity
 	 * not each result BaseEntities
@@ -354,6 +405,12 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param columnName
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to add the default search action attributes to the
 	 * SearchEntity not each result BaseEntities
@@ -369,6 +426,12 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param columnName
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to add the row action attribute to the
 	 * each result BaseEntities
@@ -384,6 +447,12 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param searchCode
+	 * @param columnName
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to add the linked searchcodes to the SearchEntity as
 	 * required
@@ -400,6 +469,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param searchCode
+	 * @param association
+	 * @param columnName
+	 * @return SearchEntity
+	 */
 	public SearchEntity addLinkedSearch(final String searchCode, final String association, final String columnName) {
 		AttributeText attributeColumn = new AttributeText(searchCode+"."+association, columnName);
 		try {
@@ -412,6 +488,12 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param columnName
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to add the combined searches to the SearchEntity.
 	 * This will combine the results with the two searches
@@ -429,6 +511,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param associatedLinkedBaseEntityCodeAttribute
+	 * @param columnName
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to add the associated attributes to the SearchEntity that
 	 * is required in the result BaseEntities
@@ -447,6 +536,14 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param nestedAttributeCode
+	 * @param associatedLinkedBaseEntityCodeAttribute
+	 * @param columnName
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows nested associated columns
 	 */
@@ -455,6 +552,15 @@ public class SearchEntity extends BaseEntity {
 		return addAssociatedColumn(attributeCode + "__" + nestedAttributeCode, associatedLinkedBaseEntityCodeAttribute, columnName);
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param nestedAttributeCode
+	 * @param doubleNestedAttributeCode
+	 * @param associatedLinkedBaseEntityCodeAttribute
+	 * @param columnName
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows double nested associated columns
 	 */
@@ -463,6 +569,13 @@ public class SearchEntity extends BaseEntity {
 		return addAssociatedColumn(attributeCode + "__" + nestedAttributeCode + "__" + doubleNestedAttributeCode, associatedLinkedBaseEntityCodeAttribute, columnName);
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param sortHelpText
+	 * @param sortType
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to add sorting to the attributes of the search results It
 	 * can either sort in ascending or descending order
@@ -480,6 +593,12 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param aName
+	 * @return SearchEntity
+	 */
 	public SearchEntity addSortAttribute(final String attributeCode, final String aName) {
 		AttributeText attributeSort = new AttributeText("ATTRSRT_" + attributeCode, aName);
 		try {
@@ -509,6 +628,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param groupBy
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to add grouping by a specific attribute. all BEs who's
 	 * value corresponding to this attribute will be grouped together.
@@ -527,6 +651,12 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param alias
+	 * @return SearchEntity
+	 */
 	public SearchEntity addAlias(final String attributeCode, final String alias) {
 		AttributeText attribute = new AttributeText("ALS_" + attributeCode, alias);
 		try {
@@ -540,6 +670,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the filter for the integer value in the search
 	 * 
@@ -563,6 +700,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the filter for the Long value in the search
 	 * 
@@ -586,6 +730,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the filter for the Double value in the search
 	 * 
@@ -609,6 +760,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the filter for the LocalDateTime value in the
 	 * search
@@ -633,6 +791,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the filter for the LocalDate value in the
 	 * search
@@ -657,6 +822,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the filter for the LocalDate value in the
 	 * search
@@ -682,6 +854,12 @@ public class SearchEntity extends BaseEntity {
 	}
 
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the filter for the Boolean value in the search
 	 * 
@@ -703,6 +881,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the filter for the String value in the search
 	 * 
@@ -726,6 +911,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the filter for the LocalDate value in the
 	 * search
@@ -750,6 +942,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set an OR filter for an attribute
 	 * 
@@ -779,6 +978,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
     
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set an OR filter for an attribute
 	 * 
@@ -808,6 +1014,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set an OR filter for an attribute
 	 * 
@@ -837,6 +1050,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set an OR filter for an attribute
 	 * 
@@ -866,6 +1086,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set an OR filter for an attribute
 	 * 
@@ -895,6 +1122,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set an OR filter for an attribute
 	 * 
@@ -924,6 +1158,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
     
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set an AND filter for an attribute
 	 * 
@@ -953,6 +1194,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
     
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set an AND filter for an attribute
 	 * 
@@ -982,6 +1230,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set an AND filter for an attribute
 	 * 
@@ -1011,6 +1266,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set an AND filter for an attribute
 	 * 
@@ -1040,6 +1302,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set an AND filter for an attribute
 	 * 
@@ -1069,6 +1338,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param filterType
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set an AND filter for an attribute
 	 * 
@@ -1098,6 +1374,12 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param condition
+	 * @return SearchEntity
+	 */
 	public SearchEntity addConditional(String attributeCode, String condition) {
 
 		Optional<EntityAttribute> existing = findEntityAttribute("CND_"+attributeCode);
@@ -1115,6 +1397,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @return SearchEntity
+	 */
 	public SearchEntity addWhitelist(String attributeCode) {
 		AttributeText attribute = new AttributeText("WTL_" + attributeCode, attributeCode);
 
@@ -1127,6 +1414,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @return SearchEntity
+	 */
 	public SearchEntity addBlacklist(String attributeCode) {
 		AttributeText attribute = new AttributeText("BKL_" + attributeCode, attributeCode);
 
@@ -1138,6 +1430,11 @@ public class SearchEntity extends BaseEntity {
 		
 		return this;
 	}
+	
+	/** 
+	 * @param value
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the LinkWeight to the resulted BaseEntities to its
 	 * parent
@@ -1155,6 +1452,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param filterType
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the filter based on the linkweight value of
 	 * BaseEntities to its parent
@@ -1172,6 +1474,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param title
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the title of the results data to be sent
 	 * 
@@ -1188,6 +1495,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+		
+		/** 
+		 * @param parentCode
+		 * @return SearchEntity
+		 */
 		/*
 	 * This method allows to set the parentCode of the SearchEntity
 	 * 
@@ -1204,6 +1516,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param pageStart
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the start/begining number of the range(page) of the
 	 * results data to be sent
@@ -1221,6 +1538,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param selectSize
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set size of the selection allowed for a searchEntity
 	 * 
@@ -1237,6 +1559,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param pageSize
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the total number of the results (BaseEntites) to be
 	 * sent
@@ -1254,6 +1581,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param stakeholderCode
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the stakeholder/user code to the search. It will
 	 * search for the BaseEntites that the given user is stakeholder of.
@@ -1271,6 +1603,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param sourceStakeholderCode
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the stakeholder/user code to the parent/source
 	 * Basentity involved in the search. It will search for the BaseEntites under
@@ -1289,6 +1626,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param linkCode
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the stakeholder/user code to the parent/source
 	 * Basentity involved in the search. It will search for the BaseEntites under
@@ -1307,6 +1649,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param linkValue
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the link value the result of the search.
 	 * 
@@ -1324,6 +1671,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param sourceCode
+	 * @return SearchEntity
+	 */
 	public SearchEntity setSourceCode(final String sourceCode) {
 		AttributeText attribute = new AttributeText("SCH_SOURCE_CODE", "SourceCode");
 		try {
@@ -1334,6 +1686,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param targetCode
+	 * @return SearchEntity
+	 */
 	public SearchEntity setTargetCode(final String targetCode) {
 		AttributeText attribute = new AttributeText("SCH_TARGET_CODE", "TargetCode");
 		try {
@@ -1345,6 +1702,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param displayMode
+	 * @return SearchEntity
+	 */
 	public SearchEntity setDisplayMode(final String displayMode) {
 		AttributeText attribute = new AttributeText("SCH_DISPLAY_MODE", "DisplayMode");
 		try {
@@ -1356,6 +1718,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param questionCode
+	 * @return SearchEntity
+	 */
 	public SearchEntity setSearchQuestionCode(final String questionCode) {
 		AttributeText attribute = new AttributeText("SCH_QUESTION_CODE", "Question Code");
 		try {
@@ -1401,6 +1768,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param wildcard
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the wildcard of the results data to be sent
 	 * 
@@ -1418,6 +1790,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param depth
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the wildcard depth level for associated wildcards
 	 * 
@@ -1435,6 +1812,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param status
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the status of the result BEs
 	 * 
@@ -1452,6 +1834,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 	
+	
+	/** 
+	 * @param cachable
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the cachable of the result BEs for initial page
 	 * 
@@ -1469,6 +1856,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param pageType
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the type of range data that the search relates to.
 	 * This is important for pagination that needs to page across data spans such as
@@ -1481,6 +1873,11 @@ public class SearchEntity extends BaseEntity {
 		return setPageType(EPageType.valueOf(pageType));
 	}
 
+	
+	/** 
+	 * @param pageType
+	 * @return SearchEntity
+	 */
 	public SearchEntity setPageType(final EPageType pageType) {
 		AttributeText attributePageStart = new AttributeText("SCH_PAGE_TYPE", "PageType");
 		try {
@@ -1527,6 +1924,10 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -1537,72 +1938,143 @@ public class SearchEntity extends BaseEntity {
 		return "SearchEntity[ code = " + this.getCode() + "]";
 	}
 
+	
+	/** 
+	 * @param defaultPageSize
+	 * @return Integer
+	 */
 	public Integer getPageStart(Integer defaultPageSize) {
 		Integer pageStart = getValue("SCH_PAGE_START", defaultPageSize);
 		return pageStart;
 	}
 
+	
+	/** 
+	 * @param defaultPageSize
+	 * @return Integer
+	 */
 	public Integer getPageSize(Integer defaultPageSize) {
 		Integer pageSize = getValue("SCH_PAGE_SIZE", defaultPageSize);
 		return pageSize;
 	}
 
+	
+	/** 
+	 * @return Double
+	 */
 	public Double getColIndex() {
 		return colIndex;
 	}
 
+	
+	/** 
+	 * @param colIndex
+	 */
 	public void setColIndex(Double colIndex) {
 		this.colIndex = colIndex;
 	}
 
+	
+	/** 
+	 * @return Double
+	 */
 	public Double getSortIndex() {
 		return sortIndex;
 	}
 
+	
+	/** 
+	 * @param sortIndex
+	 */
 	public void setSortIndex(Double sortIndex) {
 		this.sortIndex = sortIndex;
 	}
 
+	
+	/** 
+	 * @return Double
+	 */
 	public Double getFLCIndex() {
 		return flcIndex;
 	}
 
+	
+	/** 
+	 * @param flcIndex
+	 */
 	public void setFLCIndex(Double flcIndex) {
 		this.flcIndex = flcIndex;
 	}
 
+	
+	/** 
+	 * @return Double
+	 */
 	public Double getActionIndex() {
 		return actionIndex;
 	}
 
+	
+	/** 
+	 * @param actionIndex
+	 */
 	public void setActionIndex(Double actionIndex) {
 		this.actionIndex = actionIndex;
 	}
 
+	
+	/** 
+	 * @return Double
+	 */
 	public Double getSearchActionIndex() {
 		return searchActionIndex;
 	}
 
+	
+	/** 
+	 * @param searchActionIndex
+	 */
 	public void setSearchActionIndex(Double searchActionIndex) {
 		this.searchActionIndex = searchActionIndex;
 	}
 
+	
+	/** 
+	 * @return Double
+	 */
 	public Double getGroupIndex() {
 		return groupIndex;
 	}
 
+	
+	/** 
+	 * @param groupIndex
+	 */
 	public void setGroupIndex(Double groupIndex) {
 		this.groupIndex = groupIndex;
 	}
 
+	
+	/** 
+	 * @return Double
+	 */
 	public Double getSearchIndex() {
 		return searchIndex;
 	}
 
+	
+	/** 
+	 * @param searchIndex
+	 */
 	public void setSearchIndex(Double searchIndex) {
 		this.searchIndex = searchIndex;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to remove the attributes from the SearchEntity
 	 */
@@ -1611,6 +2083,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param totalResults
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the total number of the results (BaseEntites) from
 	 * the search
@@ -1628,6 +2105,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	
+	/** 
+	 * @param pageIndex
+	 * @return SearchEntity
+	 */
 	/*
 	 * This method allows to set the page index of the search
 	 * 
@@ -1670,6 +2152,12 @@ public class SearchEntity extends BaseEntity {
 		setActionIndex(index.doubleValue());
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 * @param prefix
+	 * @return Integer
+	 */
 	/*
 	 * This method helps calculate the index of an OR filter
 	 * 
@@ -1689,6 +2177,10 @@ public class SearchEntity extends BaseEntity {
 		return count;
 	}
 
+	
+	/** 
+	 * @return Double
+	 */
 	public Double getMaximumFilterWeight() {
 
 		Double maxWeight = 0.0;
@@ -1703,10 +2195,18 @@ public class SearchEntity extends BaseEntity {
 		return maxWeight;
 	}
 
+	
+	/** 
+	 * @param filterIndex
+	 */
 	public void setFilterIndex(Double filterIndex) {
 			this.filterIndex = filterIndex;
 	}
 
+	
+	/** 
+	 * @return Double
+	 */
 	public Double getFilterIndex() {
 			return this.filterIndex;
 	}

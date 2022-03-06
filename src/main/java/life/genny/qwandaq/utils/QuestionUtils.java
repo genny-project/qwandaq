@@ -141,12 +141,32 @@ public class QuestionUtils implements Serializable {
 		}
 	}
 
+	
+	/** 
+	 * @param rootQuestion
+	 * @param source
+	 * @param target
+	 * @param beUtils
+	 * @return List<Ask>
+	 */
 	public static List<Ask> findAsks2(final Question rootQuestion, final BaseEntity source,
 			final BaseEntity target,
 			BaseEntityUtils beUtils) {
 		return findAsks2(rootQuestion, source, target, false, false, false, false, beUtils);
 	}
 
+	
+	/** 
+	 * @param rootQuestion
+	 * @param source
+	 * @param target
+	 * @param childQuestionIsMandatory
+	 * @param childQuestionIsReadonly
+	 * @param childQuestionIsFormTrigger
+	 * @param childQuestionIsCreateOnTrigger
+	 * @param beUtils
+	 * @return List<Ask>
+	 */
 	public static List<Ask> findAsks2(final Question rootQuestion, final BaseEntity source,
 			final BaseEntity target,
 			Boolean childQuestionIsMandatory, Boolean childQuestionIsReadonly, Boolean childQuestionIsFormTrigger,
@@ -225,12 +245,28 @@ public class QuestionUtils implements Serializable {
 		return asks;
 	}
 
+	
+	/** 
+	 * @param rootQuestion
+	 * @param source
+	 * @param target
+	 * @param beUtils
+	 * @return List<Ask>
+	 */
 	public static List<Ask> createAsksByQuestion2(final Question rootQuestion, final BaseEntity source,
 			final BaseEntity target, BaseEntityUtils beUtils) {
 		List<Ask> asks = findAsks2(rootQuestion, source, target, beUtils);
 		return asks;
 	}
 
+	
+	/** 
+	 * @param questionCode
+	 * @param sourceCode
+	 * @param targetCode
+	 * @param beUtils
+	 * @return List<Ask>
+	 */
 	public static List<Ask> createAsksByQuestionCode2(final String questionCode, final String sourceCode,
 			final String targetCode, BaseEntityUtils beUtils) {
 
@@ -249,6 +285,14 @@ public class QuestionUtils implements Serializable {
 		return createAsksByQuestion2(rootQuestion, source, target, beUtils);
 	}
 
+	
+	/** 
+	 * @param sourceCode
+	 * @param targetCode
+	 * @param questionCode
+	 * @param beUtils
+	 * @return QDataAskMessage
+	 */
 	public static QDataAskMessage getDirectAsks(String sourceCode, String targetCode, String questionCode,
 			BaseEntityUtils beUtils) {
 		List<Ask> asks = null;
@@ -261,6 +305,14 @@ public class QuestionUtils implements Serializable {
 		return askMsgs;
 	}
 
+	
+	/** 
+	 * @param sourceCode
+	 * @param targetCode
+	 * @param questionCode
+	 * @param beUtils
+	 * @return QDataAskMessage
+	 */
 	public static QDataAskMessage getAsks(String sourceCode, String targetCode, 
 			String questionCode, BaseEntityUtils beUtils) {
 
@@ -342,6 +394,16 @@ public class QuestionUtils implements Serializable {
 		return activeCodes;
 	}
 
+	
+	/** 
+	 * @param sourceCode
+	 * @param targetCode
+	 * @param questionCode
+	 * @param beUtils
+	 * @return QwandaMessage
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
 	public static QwandaMessage getQuestions(String sourceCode, String targetCode,
 			String questionCode,
 			BaseEntityUtils beUtils)
@@ -402,6 +464,14 @@ public class QuestionUtils implements Serializable {
 		return qwandaMessage;
 	}
 
+	
+	/** 
+	 * @param sourceCode
+	 * @param targetCode
+	 * @param questionGroupCode
+	 * @param beUtils
+	 * @return QwandaMessage
+	 */
 	public static QwandaMessage askQuestions(final String sourceCode,
 			final String targetCode,
 			final String questionGroupCode, BaseEntityUtils beUtils) {
@@ -409,6 +479,15 @@ public class QuestionUtils implements Serializable {
 				true);
 	}
 
+	
+	/** 
+	 * @param sourceCode
+	 * @param targetCode
+	 * @param questionGroupCode
+	 * @param beUtils
+	 * @param stakeholderCode
+	 * @return QwandaMessage
+	 */
 	public static QwandaMessage askQuestions(final String sourceCode,
 			final String targetCode,
 			final String questionGroupCode, BaseEntityUtils beUtils, String stakeholderCode) {
@@ -416,6 +495,15 @@ public class QuestionUtils implements Serializable {
 				stakeholderCode, true);
 	}
 
+	
+	/** 
+	 * @param sourceCode
+	 * @param targetCode
+	 * @param questionGroupCode
+	 * @param pushSelection
+	 * @param beUtils
+	 * @return QwandaMessage
+	 */
 	public static QwandaMessage askQuestions(final String sourceCode,
 			final String targetCode,
 			final String questionGroupCode, Boolean pushSelection, BaseEntityUtils beUtils) {
@@ -423,6 +511,15 @@ public class QuestionUtils implements Serializable {
 				pushSelection);
 	}
 
+	
+	/** 
+	 * @param sourceCode
+	 * @param targetCode
+	 * @param questionGroupCode
+	 * @param beUtils
+	 * @param pushSelection
+	 * @return QwandaMessage
+	 */
 	public static QwandaMessage askQuestions(final String sourceCode,
 			final String targetCode,
 			final String questionGroupCode, BaseEntityUtils beUtils, Boolean pushSelection) {
@@ -430,6 +527,16 @@ public class QuestionUtils implements Serializable {
 				pushSelection);
 	}
 
+	
+	/** 
+	 * @param sourceCode
+	 * @param targetCode
+	 * @param questionGroupCode
+	 * @param beUtils
+	 * @param stakeholderCode
+	 * @param pushSelection
+	 * @return QwandaMessage
+	 */
 	public static QwandaMessage askQuestions(final String sourceCode,
 			final String targetCode,
 			final String questionGroupCode, final BaseEntityUtils beUtils, final String stakeholderCode,
@@ -448,6 +555,13 @@ public class QuestionUtils implements Serializable {
 		}
 	}
 
+	
+	/** 
+	 * @param questions
+	 * @param questionAttributeCode
+	 * @param customTemporaryQuestion
+	 * @return QwandaMessage
+	 */
 	public static QwandaMessage setCustomQuestion(QwandaMessage questions, String questionAttributeCode,
 			String customTemporaryQuestion) {
 

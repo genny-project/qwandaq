@@ -550,6 +550,10 @@ public class Answer implements Serializable {
 			setCreated(LocalDateTime.now(ZoneId.of("Z")));
 	}
 
+	
+	/** 
+	 * @return Date
+	 */
 	@Transient
 	@JsonIgnore
 	public Date getCreatedDate() {
@@ -557,6 +561,10 @@ public class Answer implements Serializable {
 		return out;
 	}
 
+	
+	/** 
+	 * @return Date
+	 */
 	@Transient
 	@JsonIgnore
 	public Date getUpdatedDate() {
@@ -798,11 +806,19 @@ public class Answer implements Serializable {
 	}
 
 	
+	
+	/** 
+	 * @return String
+	 */
 	public String getUniqueCode()
 	{
 		return getSourceCode() + ":" + getTargetCode() + ":" + getAttributeCode();
 	}
 	
+	
+	/** 
+	 * @return String
+	 */
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -136,6 +136,10 @@ public abstract class CodedEntity extends CoreEntity {
 		}
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -146,6 +150,10 @@ public abstract class CodedEntity extends CoreEntity {
 		return code+":"+super.toString();
 	}
 
+	
+	/** 
+	 * @return int
+	 */
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -158,6 +166,11 @@ public abstract class CodedEntity extends CoreEntity {
 		return hcb.toHashCode();
 	}
 
+	
+	/** 
+	 * @param obj
+	 * @return boolean
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -172,6 +185,11 @@ public abstract class CodedEntity extends CoreEntity {
 		return eb.isEquals();
 	}
 
+	
+	/** 
+	 * @param o
+	 * @return int
+	 */
 	@Override
 	public int compareTo(Object o) {
 		CodedEntity myClass = (CodedEntity) o;
@@ -212,6 +230,10 @@ public abstract class CodedEntity extends CoreEntity {
 		this.status = status;
 	}
 
+	
+	/** 
+	 * @return boolean
+	 */
 	public boolean hasCode() {
 		return code != null && !"".equals(code.trim());
 	}

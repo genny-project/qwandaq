@@ -72,6 +72,10 @@ public class RuleDetails implements Serializable {
 		this.note = note;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		String cw = callingWorkflow==null?"":callingWorkflow;

@@ -11,6 +11,11 @@ import javax.persistence.Converter;
 @Converter
 public class StringListConverter implements AttributeConverter<List<String>, String> {
 
+  
+  /** 
+   * @param list
+   * @return String
+   */
   @Override
   public String convertToDatabaseColumn(final List<String> list) {
     String ret = "";
@@ -23,6 +28,11 @@ public class StringListConverter implements AttributeConverter<List<String>, Str
 
   }
 
+  
+  /** 
+   * @param joined
+   * @return List<String>
+   */
   @Override
   public List<String> convertToEntityAttribute(final String joined) {
     List<String> strings = new CopyOnWriteArrayList<String>();

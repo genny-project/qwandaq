@@ -423,6 +423,11 @@ public class Ask extends CoreEntity implements Serializable {
 		this.targetCode = targetCode;
 	}
 
+	
+	/** 
+	 * @param answer
+	 * @throws BadDataException
+	 */
 	public void add(final Answer answer) throws BadDataException {
 		if ((answer.getSourceCode().equals(sourceCode)) && (answer.getTargetCode().equals(targetCode))
 				&& (answer.getAttributeCode().equals(attributeCode))) {
@@ -433,6 +438,11 @@ public class Ask extends CoreEntity implements Serializable {
 
 	}
 
+	
+	/** 
+	 * @param o
+	 * @return int
+	 */
 	@Override
 	public int compareTo(Object o) {
 		Ask myClass = (Ask) o;
@@ -513,6 +523,10 @@ public class Ask extends CoreEntity implements Serializable {
 		this.createOnTrigger = createOnTrigger;
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	@XmlTransient
 	@Transient
 	public Boolean hasTriggerQuestion() {
@@ -531,6 +545,11 @@ public class Ask extends CoreEntity implements Serializable {
 		return false;
 	}
 	
+	
+	/** 
+	 * @param ask
+	 * @return Ask
+	 */
 	public static Ask clone(Ask ask) {
 		Ask newAsk = new Ask();
 		newAsk.sourceCode = ask.getSourceCode();

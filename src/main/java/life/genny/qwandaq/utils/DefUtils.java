@@ -35,6 +35,10 @@ public class DefUtils {
 
 	static BaseEntityUtils beUtils;
 
+	
+	/** 
+	 * @param baseEntityUtils
+	 */
 	public static void init(BaseEntityUtils baseEntityUtils) {
 		beUtils = baseEntityUtils;
 		initializeDefs();
@@ -89,10 +93,20 @@ public class DefUtils {
 		}
 	}
 
+	
+	/** 
+	 * @param userToken
+	 * @return Map<String, BaseEntity>
+	 */
 	public static Map<String, BaseEntity> getDefMap(final GennyToken userToken) {
 		return getDefMap(userToken.getRealm());
 	}
 		
+	
+	/** 
+	 * @param realm
+	 * @return Map<String, BaseEntity>
+	 */
 	public static Map<String, BaseEntity> getDefMap(final String realm) {
 		if ((defs == null) || (defs.isEmpty())) {
 			initializeDefs();

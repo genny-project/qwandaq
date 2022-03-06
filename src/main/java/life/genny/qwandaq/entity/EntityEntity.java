@@ -245,11 +245,19 @@ public class EntityEntity implements java.io.Serializable, Comparable<Object> {
        }
   }
 
+  
+  /** 
+   * @return EntityEntityId
+   */
   @JsonIgnore
   public EntityEntityId getPk() {
     return pk;
   }
 
+  
+  /** 
+   * @param pk
+   */
   public void setPk(final EntityEntityId pk) {
     this.pk = pk;
   }
@@ -434,12 +442,20 @@ public void setLink(Link link) {
       setCreated(LocalDateTime.now(ZoneId.of("Z")));
   }
 
+  
+  /** 
+   * @return Date
+   */
   @Transient
   public Date getCreatedDate() {
     final Date out = Date.from(created.atZone(ZoneId.systemDefault()).toInstant());
     return out;
   }
 
+  
+  /** 
+   * @return Date
+   */
   @Transient
   public Date getUpdatedDate() {
 	  if (updated!=null) {
@@ -452,7 +468,12 @@ public void setLink(Link link) {
 
 
 
-	 public int compareTo(Object o) {
+	 
+   /** 
+    * @param o
+    * @return int
+    */
+   public int compareTo(Object o) {
 		 EntityEntity myClass = (EntityEntity) o;
 	     return new CompareToBuilder()
 //	       .appendSuper(super.compareTo(o)
@@ -466,13 +487,22 @@ public void setLink(Link link) {
 
 
 
+
+/** 
+ * @return int
+ */
 @Override
 	public int hashCode() {
 		return Objects.hash(link, realm, valueBoolean, valueDate, valueDateTime, valueDouble, valueInteger,
 				valueLong, valueMoney, valueString, valueTime, weight);
 	}
 
-	@Override
+	
+  /** 
+   * @param obj
+   * @return boolean
+   */
+  @Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -493,6 +523,10 @@ public void setLink(Link link) {
 				&& Objects.equals(weight, other.weight);
 	}
 
+
+/** 
+ * @return T
+ */
 @SuppressWarnings("unchecked")
 @JsonIgnore
   @Transient
@@ -529,6 +563,10 @@ public Boolean getValueBoolean() {
 	return valueBoolean;
 }
 
+
+/** 
+ * @return Boolean
+ */
 public Boolean isValueBoolean() {
 	return getValueBoolean();
 }
@@ -554,6 +592,10 @@ public void setValueDate(LocalDate valueDate) {
 	this.valueDate = valueDate;
 }
 
+
+/** 
+ * @param value
+ */
 @JsonIgnore
 @Transient
 @XmlTransient
@@ -677,6 +719,10 @@ public <T> void setValue(final Object value) {
 	this.link.setLinkValue(getObjectAsString(getValue()));
 }
 
+
+/** 
+ * @return String
+ */
 @JsonIgnore
 @Transient
 @XmlTransient
@@ -719,6 +765,11 @@ public String getAsString() {
 }
 
 
+
+/** 
+ * @param value
+ * @return String
+ */
 @JsonIgnore
 @Transient
 @XmlTransient
@@ -780,6 +831,10 @@ public void setRealm(String realm) {
 	this.realm = realm;
 }
 
+
+/** 
+ * @return String
+ */
 @Override
 public String toString() {
 	return this.realm+":"+this.link;

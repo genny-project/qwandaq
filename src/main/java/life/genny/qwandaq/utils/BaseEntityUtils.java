@@ -333,6 +333,12 @@ public class BaseEntityUtils implements Serializable {
 		return cleanCode;
 	}
 
+	
+	/** 
+	 * @param baseEntityCode
+	 * @param attributeCode
+	 * @return Object
+	 */
 	public Object getBaseEntityValue(final String baseEntityCode, final String attributeCode) {
 		BaseEntity be = getBaseEntityByCode(baseEntityCode);
 		Optional<EntityAttribute> ea = be.findEntityAttribute(attributeCode);
@@ -343,6 +349,12 @@ public class BaseEntityUtils implements Serializable {
 		}
 	}
 
+	
+	/** 
+	 * @param be
+	 * @param attributeCode
+	 * @return String
+	 */
 	public static String getBaseEntityAttrValueAsString(BaseEntity be, String attributeCode) {
 
 		String attributeVal = null;
@@ -358,6 +370,12 @@ public class BaseEntityUtils implements Serializable {
 		return attributeVal;
 	}
 
+	
+	/** 
+	 * @param baseEntityCode
+	 * @param attributeCode
+	 * @return String
+	 */
 	public String getBaseEntityValueAsString(final String baseEntityCode, final String attributeCode) {
 
 		String attrValue = null;
@@ -371,6 +389,12 @@ public class BaseEntityUtils implements Serializable {
 		return attrValue;
 	}
 
+	
+	/** 
+	 * @param baseEntityCode
+	 * @param attributeCode
+	 * @return LocalDateTime
+	 */
 	public LocalDateTime getBaseEntityValueAsLocalDateTime(final String baseEntityCode, final String attributeCode) {
 		BaseEntity be = getBaseEntityByCode(baseEntityCode);
 		Optional<EntityAttribute> ea = be.findEntityAttribute(attributeCode);
@@ -381,6 +405,12 @@ public class BaseEntityUtils implements Serializable {
 		}
 	}
 
+	
+	/** 
+	 * @param baseEntityCode
+	 * @param attributeCode
+	 * @return LocalDate
+	 */
 	public LocalDate getBaseEntityValueAsLocalDate(final String baseEntityCode, final String attributeCode) {
 		BaseEntity be = getBaseEntityByCode(baseEntityCode);
 		Optional<EntityAttribute> ea = be.findEntityAttribute(attributeCode);
@@ -391,6 +421,12 @@ public class BaseEntityUtils implements Serializable {
 		}
 	}
 
+	
+	/** 
+	 * @param baseEntityCode
+	 * @param attributeCode
+	 * @return LocalTime
+	 */
 	public LocalTime getBaseEntityValueAsLocalTime(final String baseEntityCode, final String attributeCode) {
 
 		BaseEntity be = getBaseEntityByCode(baseEntityCode);
@@ -402,6 +438,11 @@ public class BaseEntityUtils implements Serializable {
 		}
 	}
 
+	
+	/** 
+	 * @param strArr
+	 * @return List<BaseEntity>
+	 */
 	public List<BaseEntity> convertCodesToBaseEntityArray(String strArr) {
 
 		String[] arr = strArr.replace("\"", "").replace("[", "").replace("]", "").replace(" ", "").split(",");

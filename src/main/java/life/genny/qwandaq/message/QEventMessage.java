@@ -14,19 +14,39 @@ public class QEventMessage extends QMessage implements Serializable {
 	public MessageData data;
 
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return "QEventMessage [event_type=" + event_type + ", data=" + data + "]";
 	}
+	
+	/** 
+	 * @return String
+	 */
 	public String getEvent_type() {
 		return event_type;
 	}
+	
+	/** 
+	 * @param event_type
+	 */
 	public void setEvent_type(String event_type) {
 		this.event_type = event_type;
 	}
+	
+	/** 
+	 * @return MessageData
+	 */
 	public MessageData getData() {
 		return data;
 	}
+	
+	/** 
+	 * @param data
+	 */
 	public void setData(MessageData data) {
 		this.data = data;
 	}

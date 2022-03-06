@@ -309,12 +309,20 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		}
 	}
 
+	
+	/** 
+	 * @return EntityAttributeId
+	 */
 	@JsonIgnore
 	@JsonbTransient
 	public EntityAttributeId getPk() {
 		return pk;
 	}
 
+	
+	/** 
+	 * @param pk
+	 */
 	public void setPk(final EntityAttributeId pk) {
 		this.pk = pk;
 	}
@@ -332,34 +340,62 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		this.realm = baseEntity.getRealm();
 	}
 
+	
+	/** 
+	 * @return Attribute
+	 */
 	@Transient
 	// @JsonIgnore
 	public Attribute getAttribute() {
 		return getPk().getAttribute();
 	}
 
+	
+	/** 
+	 * @param attribute
+	 */
 	public void setAttribute(final Attribute attribute) {
 		getPk().setAttribute(attribute);
 		this.attributeCode = attribute.getCode();
 		this.attributeName = attribute.getName();
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isConfirmationFlag() {
 		return getConfirmationFlag();
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isInferred() {
 		return getInferred();
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isPrivacyFlag() {
 		return getPrivacyFlag();
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isReadonly() {
 		return getReadonly();
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isValueBoolean() {
 		return getValueBoolean();
 	}
@@ -470,10 +506,18 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		this.valueLong = valueLong;
 	}
 
+	
+	/** 
+	 * @return LocalDate
+	 */
 	public LocalDate getValueDate() {
 		return valueDate;
 	}
 
+	
+	/** 
+	 * @param valueDate
+	 */
 	public void setValueDate(LocalDate valueDate) {
 		this.valueDate = valueDate;
 	}
@@ -523,10 +567,18 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		this.valueString = valueString;
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean getValueBoolean() {
 		return valueBoolean;
 	}
 
+	
+	/** 
+	 * @param valueBoolean
+	 */
 	public void setValueBoolean(Boolean valueBoolean) {
 		this.valueBoolean = valueBoolean;
 	}
@@ -636,6 +688,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 			setCreated(LocalDateTime.now(ZoneId.of("Z")));
 	}
 
+	
+	/** 
+	 * @return Date
+	 */
 	@Transient
 	@JsonIgnore
 	@JsonbTransient
@@ -644,6 +700,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		return out;
 	}
 
+	
+	/** 
+	 * @return Date
+	 */
 	@Transient
 	@JsonIgnore
 	@JsonbTransient
@@ -653,6 +713,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		return out;
 	}
 
+	
+	/** 
+	 * @return T
+	 */
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -710,6 +774,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	      
 	}
 
+	
+	/** 
+	 * @param value
+	 */
 	@JsonIgnore
 	@Transient
 	@XmlTransient
@@ -717,6 +785,11 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		setValue(value,false);
 	}
 	
+	
+	/** 
+	 * @param value
+	 * @param lock
+	 */
 	@SuppressWarnings("unchecked")
 	@JsonIgnore
 	@Transient
@@ -873,6 +946,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		}
 	}
 
+	
+	/** 
+	 * @param value
+	 */
 	@JsonIgnore
 	@Transient
 	@XmlTransient
@@ -880,6 +957,11 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		setLoopValue(value,false);
 	}
 	
+	
+	/** 
+	 * @param value
+	 * @param lock
+	 */
 	@SuppressWarnings("unchecked")
 	@JsonIgnore
 	@Transient
@@ -924,6 +1006,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		}
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@JsonIgnore
 	@Transient
 	@XmlTransient
@@ -980,6 +1066,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@JsonIgnore
 	@Transient
 	@XmlTransient
@@ -1029,6 +1119,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		
 	}
 	
+	
+	/** 
+	 * @return T
+	 */
 	@SuppressWarnings("unchecked")
 	@JsonIgnore
 	@Transient
@@ -1060,6 +1154,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		return null;
 		
 	}
+	
+	/** 
+	 * @return int
+	 */
 	@Override
 	public int hashCode() {
 
@@ -1069,6 +1167,11 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		return hcb.toHashCode();
 	}
 
+	
+	/** 
+	 * @param obj
+	 * @return boolean
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -1084,6 +1187,11 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		return eb.isEquals();
 	}
 
+	
+	/** 
+	 * @param o
+	 * @return int
+	 */
 	public int compareTo(Object o) {
 		EntityAttribute myClass = (EntityAttribute) o;
 		final String dataType = getPk().getAttribute().getDataType().getClassName();
@@ -1122,6 +1230,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -1234,6 +1346,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 				+ getObjectAsString() + ", weight=" + weight + ", inferred=" + inferred + "] be="+this.getBaseEntityCode();
 	}
 
+	
+	/** 
+	 * @return T
+	 */
 	@SuppressWarnings("unchecked")
 	@JsonIgnore
 	@Transient
@@ -1283,6 +1399,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@JsonIgnore
 	@Transient
 	@XmlTransient
@@ -1384,10 +1504,18 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		this.realm = realm;
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean getConfirmationFlag() {
 		return confirmationFlag;
 	}
 
+	
+	/** 
+	 * @param confirmationFlag
+	 */
 	public void setConfirmationFlag(Boolean confirmationFlag) {
 		this.confirmationFlag = confirmationFlag;
 	}

@@ -19,6 +19,10 @@ public class CacheUtils {
 
 	public static GennyCache cache = null;
 
+	
+	/** 
+	 * @param gennyCache
+	 */
 	public static void init(GennyCache gennyCache) {
 		cache = gennyCache;
 	}

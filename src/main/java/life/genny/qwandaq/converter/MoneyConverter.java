@@ -21,6 +21,11 @@ public class MoneyConverter implements AttributeConverter<Money, String> {
 
 	private static final Logger log = Logger.getLogger(MoneyConverter.class);
 
+	
+	/** 
+	 * @param money
+	 * @return String
+	 */
 	@Override
 	public String convertToDatabaseColumn(final Money money) {
 		if (money == null) {
@@ -29,6 +34,11 @@ public class MoneyConverter implements AttributeConverter<Money, String> {
 		return "{\"amount\":" + money.getNumber() + ",\"currency\":\"" + money.getCurrency().getCurrencyCode() + "\"}";
 	}
 
+	
+	/** 
+	 * @param moneyStr
+	 * @return Money
+	 */
 	@Override
 	public Money convertToEntityAttribute(String moneyStr) {
 

@@ -123,10 +123,18 @@ public class Question extends CodedEntity implements Serializable {
 
 	private String icon;
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getHelper() {
 		return helper;
 	}
 
+	
+	/** 
+	 * @param helper
+	 */
 	public void setHelper(String helper) {
 		this.helper = helper;
 	}
@@ -245,6 +253,10 @@ public class Question extends CodedEntity implements Serializable {
 
 	}
 
+	
+	/** 
+	 * @param childQuestions
+	 */
 	@Transient
 	public void initialiseChildQuestions(List<Question> childQuestions) {
 
@@ -521,6 +533,10 @@ public class Question extends CodedEntity implements Serializable {
 		return foundEntity;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -531,6 +547,10 @@ public class Question extends CodedEntity implements Serializable {
 		return this.getCode() + ":" + getChildQuestionCodes();
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@Transient
 	@JsonIgnore
 	private String getChildQuestionCodes() {

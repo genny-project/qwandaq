@@ -75,6 +75,10 @@ public class QuestionQuestionId implements java.io.Serializable {
 		this.sourceCode = sourceCode;
 	}
 
+	
+	/** 
+	 * @return int
+	 */
 	@Override
     public int hashCode() {
 //        int result;
@@ -83,7 +87,12 @@ public class QuestionQuestionId implements java.io.Serializable {
         hcb.append(targetCode);
         return hcb.toHashCode();
     }      
-        @Override
+        
+		/** 
+		 * @param obj
+		 * @return boolean
+		 */
+		@Override
         public boolean equals(Object obj) {
             if (this == obj) {
                 return true;

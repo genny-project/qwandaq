@@ -225,6 +225,10 @@ public class AnswerLink implements java.io.Serializable {
 
 	}
 
+	
+	/** 
+	 * @param answer
+	 */
 	@JsonIgnore
 	public void setAnswer(final Answer answer) {
 		this.setCreated(answer.getCreated());
@@ -384,26 +388,46 @@ public class AnswerLink implements java.io.Serializable {
 
 	}
 
+	
+	/** 
+	 * @return AnswerLinkId
+	 */
 	// @JsonIgnore
 	public AnswerLinkId getPk() {
 		return pk;
 	}
 
+	
+	/** 
+	 * @param pk
+	 */
 	public void setPk(final AnswerLinkId pk) {
 		this.pk = pk;
 	}
 
+	
+	/** 
+	 * @return BaseEntity
+	 */
 	@Transient
 	@JsonIgnore
 	public BaseEntity getSource() {
 		return getPk().getSource();
 	}
 
+	
+	/** 
+	 * @param source
+	 */
 	public void setSource(final BaseEntity source) {
 		getPk().setSource(source);
 		setSourceCode(source.getCode());
 	}
 
+	
+	/** 
+	 * @return BaseEntity
+	 */
 	// @Transient
 	// @JsonIgnore
 	// public Ask getAsk() {
@@ -423,17 +447,29 @@ public class AnswerLink implements java.io.Serializable {
 		return getPk().getTarget();
 	}
 
+	
+	/** 
+	 * @param target
+	 */
 	public void setTarget(final BaseEntity target) {
 		getPk().setTarget(target);
 		setTargetCode(target.getCode());
 	}
 
+	
+	/** 
+	 * @return Attribute
+	 */
 	@Transient
 	@JsonIgnore
 	public Attribute getAttribute() {
 		return getPk().getAttribute();
 	}
 
+	
+	/** 
+	 * @param attribute
+	 */
 	public void setAttribute(final Attribute attribute) {
 		getPk().setAttribute(attribute);
 		;
@@ -503,18 +539,34 @@ public class AnswerLink implements java.io.Serializable {
 		return version;
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isExpired() {
 		return getExpired();
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isInferred() {
 		return getInferred();
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isRefused() {
 		return getRefused();
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isValueBoolean() {
 		return getValueBoolean();
 	}
@@ -582,10 +634,18 @@ public class AnswerLink implements java.io.Serializable {
 		this.valueLong = valueLong;
 	}
 
+	
+	/** 
+	 * @return LocalDate
+	 */
 	public LocalDate getValueDate() {
 		return valueDate;
 	}
 
+	
+	/** 
+	 * @param valueDate
+	 */
 	public void setValueDate(LocalDate valueDate) {
 		this.valueDate = valueDate;
 	}
@@ -713,12 +773,20 @@ public class AnswerLink implements java.io.Serializable {
 			setCreated(LocalDateTime.now(ZoneId.of("Z")));
 	}
 
+	
+	/** 
+	 * @return Date
+	 */
 	@Transient
 	public Date getCreatedDate() {
 		final Date out = Date.from(created.atZone(ZoneId.systemDefault()).toInstant());
 		return out;
 	}
 
+	
+	/** 
+	 * @return Date
+	 */
 	@Transient
 	public Date getUpdatedDate() {
 		Date out = null;
@@ -728,30 +796,59 @@ public class AnswerLink implements java.io.Serializable {
 		return out;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getTargetCode() {
 		return targetCode;
 	}
 
+	
+	/** 
+	 * @param targetCode
+	 */
 	public void setTargetCode(final String targetCode) {
 		this.targetCode = targetCode;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getSourceCode() {
 		return sourceCode;
 	}
 
+	
+	/** 
+	 * @param sourceCode
+	 */
 	public void setSourceCode(final String sourceCode) {
 		this.sourceCode = sourceCode;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getAttributeCode() {
 		return attributeCode;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 */
 	public void setAttributeCode(final String attributeCode) {
 		this.attributeCode = attributeCode;
 	}
 
+	
+	/** 
+	 * @param o
+	 * @return boolean
+	 */
 	@Override
 	public boolean equals(final Object o) {
 		if (this == o)
@@ -767,11 +864,19 @@ public class AnswerLink implements java.io.Serializable {
 		return true;
 	}
 
+	
+	/** 
+	 * @return int
+	 */
 	@Override
 	public int hashCode() {
 		return (getPk() != null ? getPk().hashCode() : 0);
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -783,6 +888,10 @@ public class AnswerLink implements java.io.Serializable {
 				+ weight + ", value=" + getValue() + ", v=" + version + "]";
 	}
 
+	
+	/** 
+	 * @return T
+	 */
 	@SuppressWarnings("unchecked")
 	@JsonIgnore
 	@Transient
@@ -823,6 +932,10 @@ public class AnswerLink implements java.io.Serializable {
 
 	}
 
+	
+	/** 
+	 * @param value
+	 */
 	@SuppressWarnings("unchecked")
 	@JsonIgnore
 	@Transient

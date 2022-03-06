@@ -65,6 +65,10 @@ public class QBulkMessage implements Serializable {
 		this.asks = qAsks.toArray(this.asks);
 	}
 
+	
+	/** 
+	 * @param qMessageArray
+	 */
 	public void add(QDataBaseEntityMessage[] qMessageArray) {
 		int newSize = ((messages == null) ? 0 : ((messages.length))) + qMessageArray.length;
 		QDataBaseEntityMessage[] extended = new QDataBaseEntityMessage[newSize];
@@ -75,6 +79,10 @@ public class QBulkMessage implements Serializable {
 		setMessages(extended);
 	}
 
+	
+	/** 
+	 * @param qAskArray
+	 */
 	public void add(QDataAskMessage[] qAskArray) {
 		int newSize = ((asks == null) ? 0 : ((asks.length))) + qAskArray.length;
 		QDataAskMessage[] extended = new QDataAskMessage[newSize];
@@ -85,6 +93,10 @@ public class QBulkMessage implements Serializable {
 		setAsks(extended);
 	}
 
+	
+	/** 
+	 * @param qMessageList
+	 */
 	public void add(List<QDataBaseEntityMessage> qMessageList) {
 		int newSize = ((messages == null) ? 0 : ((messages.length))) + qMessageList.size();
 		QDataBaseEntityMessage[] extended = new QDataBaseEntityMessage[newSize];
@@ -98,6 +110,10 @@ public class QBulkMessage implements Serializable {
 
 	}
 
+	
+	/** 
+	 * @param qAskList
+	 */
 	public void addAsks(List<QDataAskMessage> qAskList) {
 		int newSize = ((asks == null) ? 0 : ((asks.length))) + qAskList.size();
 
@@ -112,6 +128,10 @@ public class QBulkMessage implements Serializable {
 
 	}
 
+	
+	/** 
+	 * @param qMessage
+	 */
 	public void add(QDataBaseEntityMessage qMessage) {
 	//	if (qMessage.getItems().length > 0) {
 			Set<QDataBaseEntityMessage> set = new HashSet<QDataBaseEntityMessage>(Arrays.asList(this.messages));
@@ -129,6 +149,10 @@ public class QBulkMessage implements Serializable {
 //	    setMessages(extended);
 	}
 
+	
+	/** 
+	 * @param qMessage
+	 */
 	public void add(QDataAskMessage qMessage) {
 		if (qMessage.getItems().length > 0) {
 			Set<QDataAskMessage> set = new HashSet<QDataAskMessage>(Arrays.asList(this.asks));
@@ -145,6 +169,10 @@ public class QBulkMessage implements Serializable {
 //	    setAsks(extended);
 	}
 
+	
+	/** 
+	 * @param qBulkMessage
+	 */
 	public void add(QBulkMessage qBulkMessage) {
 		if ((qBulkMessage.getAsks() != null)) {
 			this.add(qBulkMessage.getAsks());
@@ -225,6 +253,10 @@ public class QBulkMessage implements Serializable {
 		this.recipientCodeArray = recipientCodeArray;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		int messageCount = (messages == null) ? 0 : messages.length;

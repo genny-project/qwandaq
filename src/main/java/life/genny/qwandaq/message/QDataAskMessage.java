@@ -35,10 +35,18 @@ public class QDataAskMessage extends QDataMessage implements Serializable {
 		setItems(asks);
 	}
 
+	
+	/** 
+	 * @return Ask[]
+	 */
 	public Ask[] getItems() {
 		return this.items;
 	}
 
+	
+	/** 
+	 * @param asks
+	 */
 	public void setItems(Ask[] asks) {
 		// if ((items == null)||(items.length == 0)) {
 		// this.items = new Ask[0];

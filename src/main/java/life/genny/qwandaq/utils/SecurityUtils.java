@@ -36,6 +36,16 @@ public class SecurityUtils {
 		return false;
 	}
 
+	
+	/** 
+	 * @param id
+	 * @param issuer
+	 * @param subject
+	 * @param ttlMillis
+	 * @param apiSecret
+	 * @param claims
+	 * @return String
+	 */
 	public static String createJwt(String id, String issuer, String subject, long ttlMillis, String apiSecret,
 			Map<String, Object> claims) {
 

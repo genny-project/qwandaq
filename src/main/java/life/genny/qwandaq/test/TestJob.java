@@ -37,39 +37,76 @@ public class TestJob {
 		jobLoader.putJob(entity, this);
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getUuid() {
 		return uuid;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getCode() {
 		return code;
 	}
 
+	
+	/** 
+	 * @return Instant
+	 */
 	public Instant getStart() {
 		return start;
 	}
 
+	
+	/** 
+	 * @return Instant
+	 */
 	public Instant getEnd() {
 		return end;
 	}
 
+	
+	/** 
+	 * @param end
+	 */
 	public void setEnd(Instant end) {
 		this.end = end;
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isComplete() {
 		return end != null;
 	}
 
+	
+	/** 
+	 * @return Long
+	 */
 	public Long getDuration() {
 		return Duration.between(start, end).toMillis();
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return toString(false);
 	}
 
+	
+	/** 
+	 * @param qSearchMessageJson
+	 * @return String
+	 */
 	public String toString(boolean qSearchMessageJson) {
 		return "TestJob ["
 				+ "code=" + code
@@ -80,10 +117,18 @@ public class TestJob {
 				+ "]";
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getSearchJSON() {
 		return searchEntityJson;
 	}
 	
+	
+	/** 
+	 * @return String
+	 */
 	public String getQSearchMessageJSON() {
 		return qSearchMessageJson;
 	}

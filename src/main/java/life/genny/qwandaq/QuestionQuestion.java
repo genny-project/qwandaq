@@ -213,10 +213,18 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
 	}
 
+	
+	/** 
+	 * @return QuestionQuestionId
+	 */
 	public QuestionQuestionId getPk() {
 		return pk;
 	}
 
+	
+	/** 
+	 * @param pk
+	 */
 	public void setPk(final QuestionQuestionId pk) {
 		this.pk = pk;
 	}
@@ -368,12 +376,20 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 			setCreated(LocalDateTime.now(ZoneId.of("Z")));
 	}
 
+	
+	/** 
+	 * @return Date
+	 */
 	@Transient
 	public Date getCreatedDate() {
 		final Date out = Date.from(created.atZone(ZoneId.systemDefault()).toInstant());
 		return out;
 	}
 
+	
+	/** 
+	 * @return Date
+	 */
 	@Transient
 	public Date getUpdatedDate() {
 		if (updated != null) {
@@ -384,6 +400,10 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 		}
 	}
 
+	
+	/** 
+	 * @return int
+	 */
 	@Override
 	public int hashCode() {
 
@@ -394,6 +414,11 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 		return hcb.toHashCode();
 	}
 
+	
+	/** 
+	 * @param obj
+	 * @return boolean
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -411,6 +436,11 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 	}
 
 
+	 
+	 /** 
+	  * @param o
+	  * @return int
+	  */
 	 public int compareTo(Object o) {
 		 QuestionQuestion myClass = (QuestionQuestion) o;
 	     return new CompareToBuilder()
@@ -463,32 +493,60 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 		this.createOnTrigger = createOnTrigger;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return "SRC:"+getPk().getSourceCode()+" - "+getPk().getTargetCode()+" "+(this.getMandatory()?"MANDATORY":"OPTIONAL")+" "+(this.getReadonly()?"RO":"RW")+" "+(this.getFormTrigger()?"FT":"NFT")+" "+(this.getCreateOnTrigger()?"COT":"NCOT");
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getSourceCode(){
 		return pk.getSourceCode();
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getTarketCode() {
 		return pk.getTargetCode();
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getDependency() {
 		return dependency;
 	}
 
+	
+	/** 
+	 * @param dependency
+	 */
 	public void setDependency(String dependency) {
 		this.dependency = dependency;
 	}
 
-    public void setIcon(String icon) {
+    
+	/** 
+	 * @param icon
+	 */
+	public void setIcon(String icon) {
         this.icon = icon;
     }
 
-    public String getIcon() {
+    
+	/** 
+	 * @return String
+	 */
+	public String getIcon() {
         return this.icon;
     }
 

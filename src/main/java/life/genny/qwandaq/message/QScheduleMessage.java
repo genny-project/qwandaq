@@ -76,34 +76,70 @@ public class QScheduleMessage extends PanacheEntity {
 		this.sourceCode = sourceCode;
 	}
 
+	
+	/** 
+	 * @param code
+	 */
 	public void setCode(String code) {
 		this.code = code;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getCode() {
 		return code;
 	}
 
+	
+	/** 
+	 * @param token
+	 */
 	public void setToken(String token) {
 		this.token = token;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getToken() {
 		return token;
 	}
 	
+	
+	/** 
+	 * @param id
+	 * @return QScheduleMessage
+	 */
 	public static QScheduleMessage findById(Long id) {
 		return find("id", id).firstResult();
 	}
 
+	
+	/** 
+	 * @param code
+	 * @return QScheduleMessage
+	 */
 	public static QScheduleMessage findByCode(String code) {
 		return find("code", code).firstResult();
 	}
 
+	
+	/** 
+	 * @param id
+	 * @return long
+	 */
 	public static long deleteById(final Long id) {
 		return delete("id", id);
 	}
 
+	
+	/** 
+	 * @param code
+	 * @return long
+	 */
 	public static long deleteByCode(final String code) {
 		return delete("code", code);
 	}

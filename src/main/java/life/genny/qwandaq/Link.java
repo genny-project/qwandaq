@@ -294,6 +294,10 @@ public void setRule(String rule) {
 
 
 
+
+/** 
+ * @return int
+ */
 @Override
 public int hashCode() {
 	return Objects.hash(attributeCode, childColor, linkValue, parentColor, sourceCode, targetCode, weight);
@@ -301,6 +305,11 @@ public int hashCode() {
 
 
 
+
+/** 
+ * @param obj
+ * @return boolean
+ */
 @Override
 public boolean equals(Object obj) {
 	if (this == obj) {
@@ -321,6 +330,10 @@ public boolean equals(Object obj) {
 
 
 
+
+/** 
+ * @return String
+ */
 /* (non-Javadoc)
  * @see java.lang.Object#toString()
  */

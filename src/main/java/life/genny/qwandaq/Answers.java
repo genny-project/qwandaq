@@ -16,6 +16,10 @@ public class Answers implements Serializable {
 		this.answers = answers;
 	}
 	
+	
+	/** 
+	 * @param answer
+	 */
 	public void add(Answer answer)
 	{
 		this.answers.add(answer);
@@ -35,6 +39,10 @@ public class Answers implements Serializable {
 		this.answers = answers;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return "Answers [answers=" + answers + "]";

@@ -69,10 +69,18 @@ public class QSearchBeResult implements Serializable {
 		this.total = total;
 	}
 
+	
+	/** 
+	 * @param entities
+	 */
 	public void setEntities(BaseEntity[] entities) {
 		this.entities = entities;
 	}
 
+	
+	/** 
+	 * @return BaseEntity[]
+	 */
 	public BaseEntity[] getEntities() {
 		return entities;
 	}

@@ -52,6 +52,10 @@ public class WeightedItem implements Serializable, Comparable<Object> {
 		this.weight = weight;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -60,6 +64,11 @@ public class WeightedItem implements Serializable, Comparable<Object> {
 		return "WeightedItem [weight=" + weight + ", item=" + item.getCode() + "]";
 	}
 
+	
+	/** 
+	 * @param o
+	 * @return int
+	 */
 	@Override
 	public int compareTo(Object o) {
 		WeightedItem myItem = (WeightedItem) o;

@@ -13,16 +13,29 @@ public class Allowed implements Serializable {
 		this.mode = mode;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return "Allowed [" + (code != null ? "code=" + code + ", " : "") + (mode != null ? "mode=" + mode : "") + "]";
 	}
 
+	
+	/** 
+	 * @return int
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(code, mode);
 	}
 
+	
+	/** 
+	 * @param obj
+	 * @return boolean
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

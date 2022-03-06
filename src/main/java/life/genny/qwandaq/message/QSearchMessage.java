@@ -22,23 +22,43 @@ public class QSearchMessage extends QMessage implements Serializable {
 		this.searchEntity = searchEntity;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return "QSearchMessage [searchEntity=" + searchEntity.getCode() + "]";
 	}
 
+	
+	/** 
+	 * @param searchEntity
+	 */
 	public void setSearchEntity(SearchEntity searchEntity) {
 		this.searchEntity = searchEntity;
 	}
 
+	
+	/** 
+	 * @return SearchEntity
+	 */
 	public SearchEntity getSearchEntity() {
 		return this.searchEntity;
 	}
 	
+	
+	/** 
+	 * @param destination
+	 */
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getDestination() {
 		return this.destination;
 	}

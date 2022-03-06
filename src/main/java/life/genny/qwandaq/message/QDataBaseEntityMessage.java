@@ -26,6 +26,11 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 	private Long returnCount;
 	private BaseEntity sum;
 
+	
+	/** 
+	 * @param o
+	 * @return int
+	 */
 	@Override
 	public int compareTo(QDataBaseEntityMessage o) {
 		
@@ -177,6 +182,10 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 		setTotal(total);
 	}
 
+	
+	/** 
+	 * @param item
+	 */
 	public void add(BaseEntity item) {
 		
 		List<BaseEntity> bes = this.getItems() != null ? new CopyOnWriteArrayList<>(this.getItems()) : new CopyOnWriteArrayList<>();
@@ -184,21 +193,37 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 		this.setItems(bes.toArray(new BaseEntity[0]));
 	}
 
+	
+	/** 
+	 * @param items
+	 */
 	public void add(List<BaseEntity> items) {
 		List<BaseEntity> bes = new CopyOnWriteArrayList<>(this.getItems());
 		bes.addAll(items);
 		this.setItems(bes.toArray(new BaseEntity[0]));
 	}
 
+	
+	/** 
+	 * @return List<BaseEntity>
+	 */
 	public List<BaseEntity> getItems() {
 		return items;
 	}
 
+	
+	/** 
+	 * @param items
+	 */
 	public void setItems(final BaseEntity[] items) {
 		this.items = Arrays.asList(items);
 		setReturnCount(new Long(items.length));
 	}
 
+	
+	/** 
+	 * @param items
+	 */
 	public void setItems(final List<BaseEntity> items) {
 		this.items = items;
 		setReturnCount(new Long(items.size()));
@@ -274,6 +299,10 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 		 this.weightedItems = Arrays.asList(weightedItems);
 	 }
 
+	 
+	 /** 
+	  * @param weightedItems
+	  */
 	 public void setWeightedItems(List<WeightedItem> weightedItems) {
 		this.weightedItems = weightedItems;
 	}
@@ -302,10 +331,18 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 		 this.parentCode = parentCode;
 	 }
 
+	 
+	 /** 
+	  * @return boolean
+	  */
 	 public boolean isDelete() {
 		 return super.getDelete();
 	 }
 
+	 
+	 /** 
+	  * @return boolean
+	  */
 	 public boolean isReplace() {
 		return super.getReplace();
 	}
@@ -324,6 +361,10 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 		 this.linkValue = linkValue;
 	 }
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return "QDataBaseEntityMessage [" + (parentCode != null ? "parentCode=" + parentCode + ", " : "")

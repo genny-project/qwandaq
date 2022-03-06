@@ -55,6 +55,11 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
     protected abstract MonetaryContext loadMaxMonetaryContext();
 
 
+    
+    /** 
+     * @param currency
+     * @return MonetaryAmountFactory<T>
+     */
     /*
      * (non-Javadoc)
      * @see javax.money.MonetaryAmountFactory#withCurrency(javax.money.CurrencyUnit)
@@ -66,6 +71,11 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
         return this;
     }
 
+    
+    /** 
+     * @param number
+     * @return MonetaryAmountFactory<T>
+     */
     /*
      * (non-Javadoc)
      * @see javax.money.MonetaryAmountFactory#with(java.lang.Number)
@@ -76,6 +86,11 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
         return this;
     }
 
+    
+    /** 
+     * @param currencyCode
+     * @return MonetaryAmountFactory<T>
+     */
     /*
      * (non-Javadoc)
      * @see javax.money.MonetaryAmountFactory#withCurrency(java.lang.String)
@@ -101,6 +116,11 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
         return this;
     }
 
+    
+    /** 
+     * @param number
+     * @return MonetaryAmountFactory<T>
+     */
     /*
      * (non-Javadoc)
      * @see javax.money.MonetaryAmountFactory#with(long)
@@ -111,6 +131,11 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
         return this;
     }
 
+    
+    /** 
+     * @param monetaryContext
+     * @return MonetaryAmountFactory<T>
+     */
     /*
      * (non-Javadoc)
      * @see javax.money.MonetaryAmountFactory#with(javax.money.MonetaryContext)

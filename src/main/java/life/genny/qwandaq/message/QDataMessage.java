@@ -5,11 +5,19 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 @RegisterForReflection
 public abstract class QDataMessage extends QMessage implements QDataMessageIntf {
 
+  
+  /** 
+   * @return String
+   */
   @Override
   public String getData_type() {
     return data_type;
   }
 
+  
+  /** 
+   * @param data_type
+   */
   public void setData_type(final String data_type) {
     this.data_type = data_type;
   }
@@ -34,15 +42,27 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
 
   }
 
+  
+  /** 
+   * @return Boolean
+   */
   @Override
   public Boolean getDelete() {
     return delete;
   }
 
+  
+  /** 
+   * @param delete
+   */
   public void setDelete(final Boolean delete) {
     this.delete = delete;
   }
 
+  
+  /** 
+   * @return String
+   */
   @Override
   public String toString() {
     return "QDataMessage [data_type=" + data_type + ", delete=" + delete + "]";
@@ -83,6 +103,10 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
     return shouldDeleteLinkedBaseEntities;
   }
 
+  
+  /** 
+   * @return boolean
+   */
   public boolean isShouldDeleteLinkedBaseEntities() {
     return (boolean) getShouldDeleteLinkedBaseEntities();
   }

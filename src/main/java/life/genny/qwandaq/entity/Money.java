@@ -153,6 +153,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return this.number.stripTrailingZeros();
     }
 
+    
+    /** 
+     * @param o
+     * @return int
+     */
     /*
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
@@ -166,6 +171,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return compare;
     }
 
+    
+    /** 
+     * @return Money
+     */
     // Arithmetic Operations
 
     /*
@@ -181,6 +190,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return negate();
     }
 
+    
+    /** 
+     * @param divisor
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -194,6 +208,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return divide(BigDecimal.valueOf(divisor));
     }
 
+    
+    /** 
+     * @param divisor
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -210,6 +229,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return divide(new BigDecimal(String.valueOf(divisor)));
     }
 
+    
+    /** 
+     * @param divisor
+     * @return Money[]
+     */
     /*
      * (non-Javadoc)
      *
@@ -221,6 +245,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return divideAndRemainder(BigDecimal.valueOf(divisor));
     }
 
+    
+    /** 
+     * @param divisor
+     * @return Money[]
+     */
     /*
      * (non-Javadoc)
      *
@@ -236,6 +265,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return divideAndRemainder(new BigDecimal(String.valueOf(divisor)));
     }
 
+    
+    /** 
+     * @param multiplicand
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -249,6 +283,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return multiply(BigDecimal.valueOf(multiplicand));
     }
 
+    
+    /** 
+     * @param multiplicand
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -263,6 +302,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return multiply(new BigDecimal(String.valueOf(multiplicand)));
     }
 
+    
+    /** 
+     * @param divisor
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -273,6 +317,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return remainder(BigDecimal.valueOf(divisor));
     }
 
+    
+    /** 
+     * @param divisor
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -286,6 +335,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return remainder(new BigDecimal(String.valueOf(divisor)));
     }
 
+    
+    /** 
+     * @return boolean
+     */
     /*
      * (non-Javadoc)
      *
@@ -296,6 +349,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return signum() == 0;
     }
 
+    
+    /** 
+     * @return boolean
+     */
     /*
      * (non-Javadoc)
      *
@@ -306,6 +363,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return signum() == 1;
     }
 
+    
+    /** 
+     * @return boolean
+     */
     /*
      * (non-Javadoc)
      *
@@ -316,6 +377,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return signum() >= 0;
     }
 
+    
+    /** 
+     * @return boolean
+     */
     /*
      * (non-Javadoc)
      *
@@ -326,6 +391,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return signum() == -1;
     }
 
+    
+    /** 
+     * @return boolean
+     */
     /*
      * (non-Javadoc)
      *
@@ -337,6 +406,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
     }
 
 
+    
+    /** 
+     * @param query
+     * @return R
+     */
     /*
      * (non-Javadoc)
      *
@@ -354,6 +428,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         }
     }
 
+    
+    /** 
+     * @param operator
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -371,6 +450,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         }
     }
 
+    
+    /** 
+     * @param amount
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -386,6 +470,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return new Money(this.number.add(amount.getNumber().numberValue(BigDecimal.class), mc), getCurrency(), monetaryContext);
     }
 
+    
+    /** 
+     * @param divisor
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -408,6 +497,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return new Money(this.number.divide(divisorBD, mc), getCurrency(), monetaryContext);
     }
 
+    
+    /** 
+     * @param divisor
+     * @return Money[]
+     */
     @Override
     public Money[] divideAndRemainder(Number divisor) {
         if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
@@ -423,6 +517,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return new Money[]{new Money(dec[0], getCurrency(), monetaryContext), new Money(dec[1], getCurrency(), monetaryContext)};
     }
 
+    
+    /** 
+     * @param divisor
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -435,6 +534,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return divideToIntegralValue(MoneyUtils.getBigDecimal(divisor));
     }
 
+    
+    /** 
+     * @param divisor
+     * @return Money
+     */
     @Override
     public Money divideToIntegralValue(double divisor) {
         if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
@@ -443,6 +547,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return divideToIntegralValue(MoneyUtils.getBigDecimal(divisor));
     }
 
+    
+    /** 
+     * @param divisor
+     * @return Money
+     */
     @Override
     public Money divideToIntegralValue(Number divisor) {
         if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
@@ -454,6 +563,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return new Money(dec, getCurrency(), monetaryContext);
     }
 
+    
+    /** 
+     * @param multiplicand
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -471,6 +585,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return new Money(dec, getCurrency(), monetaryContext);
     }
 
+    
+    /** 
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -481,6 +599,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return new Money(this.number.negate(), getCurrency());
     }
 
+    
+    /** 
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -491,6 +613,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return this;
     }
 
+    
+    /** 
+     * @param subtrahend
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -507,6 +634,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
                 monetaryContext);
     }
 
+    
+    /** 
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -520,6 +651,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return new Money(this.number.stripTrailingZeros(), getCurrency(), monetaryContext);
     }
 
+    
+    /** 
+     * @param divisor
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -535,6 +671,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return new Money(this.number.remainder(bd, mc), getCurrency(), monetaryContext);
     }
 
+    
+    /** 
+     * @param power
+     * @return Money
+     */
     /*
      * (non-Javadoc)
      *
@@ -546,6 +687,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
                 monetaryContext);
     }
 
+    
+    /** 
+     * @return int
+     */
     /*
      * (non-Javadoc)
      *
@@ -556,6 +701,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return this.number.signum();
     }
 
+    
+    /** 
+     * @param amount
+     * @return boolean
+     */
     /*
      * (non-Javadoc)
      *
@@ -568,6 +718,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
                 .compareTo(amount.getNumber().numberValue(BigDecimal.class).stripTrailingZeros()) < 0;
     }
 
+    
+    /** 
+     * @param amount
+     * @return boolean
+     */
     /*
      * (non-Javadoc)
      *
@@ -582,6 +737,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
                 .compareTo(amount.getNumber().numberValue(BigDecimal.class).stripTrailingZeros()) <= 0;
     }
 
+    
+    /** 
+     * @param amount
+     * @return boolean
+     */
     /*
      * (non-Javadoc)
      *
@@ -594,6 +754,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
                 .compareTo(amount.getNumber().numberValue(BigDecimal.class).stripTrailingZeros()) > 0;
     }
 
+    
+    /** 
+     * @param amount
+     * @return boolean
+     */
     /*
      * (non-Javadoc)
      *
@@ -608,6 +773,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
                 .compareTo(amount.getNumber().numberValue(BigDecimal.class).stripTrailingZeros()) >= 0;
     }
 
+    
+    /** 
+     * @param amount
+     * @return boolean
+     */
     /*
      * (non-Javadoc)
      *
@@ -620,6 +790,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
                 .compareTo(amount.getNumber().numberValue(BigDecimal.class).stripTrailingZeros()) == 0;
     }
 
+    
+    /** 
+     * @return MonetaryAmountFactory<Money>
+     */
     /*
      * (non-Javadoc)
      *
@@ -630,6 +804,11 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return new MoneyAmountFactory().setAmount(this);
     }
 
+    
+    /** 
+     * @param obj
+     * @return boolean
+     */
     /*
      * (non-Javadoc)
      *
@@ -648,6 +827,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return false;
     }
 
+    
+    /** 
+     * @return String
+     */
     /*
      * (non-Javadoc)
      *
@@ -663,6 +846,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         }
     }
 
+    
+    /** 
+     * @return int
+     */
     /*
      * (non-Javadoc)
      *
@@ -867,6 +1054,10 @@ public class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serial
         return from(formatter.parse(text));
     }
 
+    
+    /** 
+     * @return MonetaryAmountFormat
+     */
     private static MonetaryAmountFormat defaultFormat() {
         String useDefault = MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.useJDKdefaultFormat", "false");
         try{

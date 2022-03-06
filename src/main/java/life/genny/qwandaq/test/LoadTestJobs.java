@@ -19,6 +19,10 @@ public class LoadTestJobs {
 
 	public final Jsonb jsonb = JsonbBuilder.create();
 
+	
+	/** 
+	 * @return Map<String, TestJob>
+	 */
 	public Map<String, TestJob> getJobs() {
 		return jobs;
 	}

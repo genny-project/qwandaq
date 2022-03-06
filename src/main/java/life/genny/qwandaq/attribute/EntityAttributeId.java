@@ -34,22 +34,42 @@ public class EntityAttributeId implements java.io.Serializable {
 //	@JsonIgnore
 	public Attribute attribute;
 
+	
+	/** 
+	 * @return BaseEntity
+	 */
 	public BaseEntity getBaseEntity() {
 		return baseEntity;
 	}
 
+	
+	/** 
+	 * @param baseEntity
+	 */
 	public void setBaseEntity(final BaseEntity baseEntity) {
 		this.baseEntity = baseEntity;
 	}
 
+	
+	/** 
+	 * @return Attribute
+	 */
 	public Attribute getAttribute() {
 		return attribute;
 	}
 
+	
+	/** 
+	 * @param attribute
+	 */
 	public void setAttribute(final Attribute attribute) {
 		this.attribute = attribute;
 	}
 
+	
+	/** 
+	 * @return int
+	 */
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -62,6 +82,11 @@ public class EntityAttributeId implements java.io.Serializable {
 		return result;
 	}
 
+	
+	/** 
+	 * @param obj
+	 * @return boolean
+	 */
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */

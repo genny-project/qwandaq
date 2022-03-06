@@ -24,6 +24,10 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		IGNORE // the front end can ignore and handling of this message (useful for testing)
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return "QMessage [msg_type=" + msg_type + "]," + option.toString();
@@ -57,10 +61,18 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 	
 	private List<String> recipientCodeArray = new ArrayList<>();
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getMsg_type() {
 		return msg_type;
 	}
 
+	
+	/** 
+	 * @param msg_type
+	 */
 	public void setMsg_type(String msg_type) {
 		this.msg_type = msg_type;
 	}
@@ -100,6 +112,10 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		this.option = option.toString();
 	}
 
+	
+	/** 
+	 * @param option
+	 */
 	public void setOption(String option) {
 		this.option = option;
 	}
@@ -132,54 +148,106 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		this.targetCodes = targetCodes;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getSourceAddress() {
 		return sourceAddress;
 	}
 
+	
+	/** 
+	 * @param sourceAddress
+	 */
 	public void setSourceAddress(String sourceAddress) {
 		this.sourceAddress = sourceAddress;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getSourceCode() {
 		return sourceCode;
 	}
 
+	
+	/** 
+	 * @param sourceCode
+	 */
 	public void setSourceCode(String sourceCode) {
 		this.sourceCode = sourceCode;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getTargetCode() {
 		return targetCode;
 	}
 
+	
+	/** 
+	 * @param targetCode
+	 */
 	public void setTargetCode(String targetCode) {
 		this.targetCode = targetCode;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getQuestionCode() {
 		return questionCode;
 	}
 
+	
+	/** 
+	 * @param questionCode
+	 */
 	public void setQuestionCode(String questionCode) {
 		this.questionCode = questionCode;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getMessage() {
 		return message;
 	}
 
+	
+	/** 
+	 * @param message
+	 */
 	public void setMessage(String message) {
 		this.message = message;
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean getRedirect() {
 		return redirect;
 	}
 
+	
+	/** 
+	 * @return Boolean
+	 */
 	public Boolean isRedirect() {
 		return getRedirect();
 	}
 
+	
+	/** 
+	 * @param redirect
+	 */
 	public void setRedirect(Boolean redirect) {
 		this.redirect = redirect;
 	}
@@ -198,22 +266,42 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		this.recipientCodeArray = Arrays.asList(recipientCodeArray);
 	}
 
+	
+	/** 
+	 * @param recipientCodeArray
+	 */
 	public void setRecipientCodeArray(List<String> recipientCodeArray) {
 		this.recipientCodeArray = recipientCodeArray;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getAttributeCode() {
 		return attributeCode;
 	}
 
+	
+	/** 
+	 * @param attributeCode
+	 */
 	public void setAttributeCode(String attributeCode) {
 		this.attributeCode = attributeCode;
 	}
 
+	
+	/** 
+	 * @return String
+	 */
 	public String getBridgeId() {
 		return bridgeId;
 	}
 	
+	
+	/** 
+	 * @param bridgeId
+	 */
 	public void setBridgeId(String bridgeId) {
 		this.bridgeId = bridgeId;
 	}

@@ -223,20 +223,42 @@ public class SearchUtils {
 	}
 
 
+	
+	/** 
+	 * @param beUtils
+	 * @param searchBE
+	 */
 	public static void sendFilterQuestions(BaseEntityUtils beUtils, SearchEntity searchBE) {
 		log.error("Function not complete!");
 	}
 
+	
+	/** 
+	 * @param beUtils
+	 * @param baseBE
+	 * @param calEACode
+	 * @return Answer
+	 */
 	public static Answer getAssociatedColumnValue(BaseEntityUtils beUtils, BaseEntity baseBE, String calEACode) {
 		log.error("Function not complete!");
 		return null;
 	}
 
+	
+	/** 
+	 * @param searchCode
+	 * @return SearchEntity
+	 */
 	public static SearchEntity getSessionSearch(String searchCode) {
 		log.error("Function not complete!");
 		return null;
 	}
 
+	
+	/** 
+	 * @param beUtils
+	 * @param dropdownValue
+	 */
 	public static void performQuickSearch(BaseEntityUtils beUtils, String dropdownValue) {
 
 		Instant start = Instant.now();
