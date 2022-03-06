@@ -25,10 +25,10 @@ public class HttpUtils {
 	/**
 	* Create and send a PUT request.
 	*
-	* @param uri
-	* @param body
-	* @param token
-	* @return
+	* @param uri The target URI of the request.
+	* @param body The json string to use as the body.
+	* @param token The token to use in authorization.
+	* @return HttpResponse<String> The returned response object.
 	 */
 	public static HttpResponse<String> put(String uri, String body, String token) {
 
@@ -54,10 +54,10 @@ public class HttpUtils {
 	/**
 	* Create and send a POST request.
 	*
-	* @param uri
-	* @param body
-	* @param token
-	* @return
+	* @param uri The target URI of the request.
+	* @param body The json string to use as the body.
+	* @param token The token to use in authorization.
+	* @return HttpResponse<String> The returned response object.
 	 */
 	public static HttpResponse<String> post(String uri, String body, String token) {
 
@@ -83,9 +83,9 @@ public class HttpUtils {
 	/**
 	* Create and send a GET request.
 	*
-	* @param uri
-	* @param token
-	* @return
+	* @param uri The target URI of the request.
+	* @param token The token to use in authorization.
+	* @return HttpResponse<String> The returned response object.
 	 */
 	public static HttpResponse<String> get(String uri, String token) {
 
@@ -109,9 +109,9 @@ public class HttpUtils {
 	/**
 	* Create and send a DELETE request.
 	*
-	* @param uri
-	* @param token
-	* @return
+	* @param uri The target URI of the request.
+	* @param token The token to use in authorization.
+	* @return HttpResponse<String> The returned response object.
 	 */
 	public static HttpResponse<String> delete(String uri, String token) {
 
@@ -135,8 +135,8 @@ public class HttpUtils {
 	/**
 	* Build an error message json string from a msg string.
 	*
-	* @param msg
-	* @return
+	* @param msg The error message used to construct the json.
+	* @return String A stringified json object containing an error msg and status.
 	 */
 	public static String error(String msg) {
 
@@ -151,8 +151,7 @@ public class HttpUtils {
 	/**
 	* Build an ok status json string;
 	*
-	* @param msg
-	* @return
+	* @return String A stringified json object containing an ok status.
 	 */
 	public static String ok() {
 
