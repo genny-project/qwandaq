@@ -55,11 +55,10 @@ public class QScheduleMessage extends PanacheEntity {
 	public String code;
 
 
-	public QScheduleMessage()
-	{}
+	public QScheduleMessage() {}
 	
-	public QScheduleMessage(final String code,final String jsonMessage, final String sourceCode, final String channel, final String cron, final String realm)
-	{
+	public QScheduleMessage(final String code,final String jsonMessage, final String sourceCode, final String channel, final String cron, final String realm) {
+
 		this.code = code;
 		this.cron = cron;
 		this.jsonMessage = jsonMessage;
@@ -67,8 +66,8 @@ public class QScheduleMessage extends PanacheEntity {
 		this.sourceCode = sourceCode;
 	}
 	
-	public QScheduleMessage(final String code,final String jsonMessage, final String sourceCode, final String channel, final LocalDateTime triggertime, final String realm)
-	{
+	public QScheduleMessage(final String code,final String jsonMessage, final String sourceCode, final String channel, final LocalDateTime triggertime, final String realm) {
+
 		this.code = code;
 		this.triggertime = triggertime;
 		this.jsonMessage = jsonMessage;
@@ -78,7 +77,7 @@ public class QScheduleMessage extends PanacheEntity {
 
 	
 	/** 
-	 * @param code
+	 * @param code the code to set
 	 */
 	public void setCode(String code) {
 		this.code = code;
@@ -94,7 +93,7 @@ public class QScheduleMessage extends PanacheEntity {
 
 	
 	/** 
-	 * @param token
+	 * @param token the token to set
 	 */
 	public void setToken(String token) {
 		this.token = token;
@@ -109,8 +108,8 @@ public class QScheduleMessage extends PanacheEntity {
 	}
 	
 	
-	/** 
-	 * @param id
+	/**
+	 * @param id the id to delete by
 	 * @return QScheduleMessage
 	 */
 	public static QScheduleMessage findById(Long id) {
@@ -119,7 +118,7 @@ public class QScheduleMessage extends PanacheEntity {
 
 	
 	/** 
-	 * @param code
+	 * @param code the code to delete by
 	 * @return QScheduleMessage
 	 */
 	public static QScheduleMessage findByCode(String code) {
@@ -128,7 +127,7 @@ public class QScheduleMessage extends PanacheEntity {
 
 	
 	/** 
-	 * @param id
+	 * @param id the id to delete by
 	 * @return long
 	 */
 	public static long deleteById(final Long id) {
@@ -137,7 +136,7 @@ public class QScheduleMessage extends PanacheEntity {
 
 	
 	/** 
-	 * @param code
+	 * @param code the code to delete by
 	 * @return long
 	 */
 	public static long deleteByCode(final String code) {

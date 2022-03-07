@@ -53,11 +53,9 @@ public class MergeUtils {
     public static final String FORMAT_VARIABLE_REGEX_END = "))";
     public static final Pattern FORMAT_PATTERN_VARIABLE = Pattern.compile(Pattern.quote(FORMAT_VARIABLE_REGEX_START) + "(.*)" + Pattern.quote(FORMAT_VARIABLE_REGEX_END));  
     
-    
-	
 	/** 
-	 * @param mergeStr
-	 * @param templateEntityMap
+	 * @param mergeStr the mergeStr to merge
+	 * @param templateEntityMap the templateEntityMap to merge with
 	 * @return String
 	 */
 	public static String merge(String mergeStr, Map<String, Object> templateEntityMap) { 
@@ -102,8 +100,8 @@ public class MergeUtils {
 	
 	
 	/** 
-	 * @param mergeText
-	 * @param entitymap
+	 * @param mergeText the mergeText to merge
+	 * @param entitymap the entitymap to merge with
 	 * @return Object
 	 */
 	public static Object wordMerge(String mergeText, Map<String, Object> entitymap) {
@@ -226,9 +224,9 @@ public class MergeUtils {
 	/**
 	* Check to see if all contexts are present.
 	*
-	* @param mergeStr
-	* @param templateEntityMap
-	* @return
+	* @param mergeStr the mergeStr to check contexts for
+	* @param templateEntityMap the mergeStr to check contexts with
+	* @return Boolean
 	 */
 	public static Boolean contextsArePresent(String mergeStr, Map<String, Object> templateEntityMap) { 
 		
@@ -265,7 +263,7 @@ public class MergeUtils {
 
 	
 	/** 
-	 * @param mergeStr
+	 * @param mergeStr the mergeStr to check
 	 * @return Boolean
 	 */
 	public static Boolean requiresMerging(String mergeStr) {
@@ -282,10 +280,11 @@ public class MergeUtils {
 	}
 
 	/**
+	 * Get a value as a String
 	 * 
-	 * @param BaseEntity object
-	 * @param attributeCode
-	 * @return The attribute value for the BaseEntity attribute code passed
+	 * @param be BaseEntity object to et value from
+	 * @param attributeCode Attribute code to search for
+	 * @return String The attribute value for the BaseEntity attribute code passed
 	 */
 	public static String getBaseEntityAttrValueAsString(BaseEntity be, String attributeCode) {
 		
@@ -299,11 +298,10 @@ public class MergeUtils {
 		return attributeVal;
 	}
 	
-	
 	/** 
-	 * @param be
-	 * @param attributeCode
-	 * @return Object
+	 * @param be BaseEntity object to et value from
+	 * @param attributeCode Attribute code to search for
+	 * @return Object The attribute value for the BaseEntity attribute code passed
 	 */
 	public static Object getBaseEntityAttrObjectValue(BaseEntity be, String attributeCode) {
 
@@ -320,8 +318,8 @@ public class MergeUtils {
 	
 	
 	/** 
-	 * @param dateToBeFormatted
-	 * @param format
+	 * @param dateToBeFormatted the date to format
+	 * @param format the format to use
 	 * @return String
 	 */
 	public static String getFormattedDateTimeString(LocalDateTime dateToBeFormatted, String format) {
@@ -334,8 +332,8 @@ public class MergeUtils {
 
 	
 	/** 
-	 * @param dateToBeFormatted
-	 * @param format
+	 * @param dateToBeFormatted he date to be formatted
+	 * @param format the format to use
 	 * @return String
 	 */
 	public static String getFormattedZonedDateTimeString(ZonedDateTime dateToBeFormatted, String format) {
@@ -348,8 +346,8 @@ public class MergeUtils {
 
 	
 	/** 
-	 * @param dateToBeFormatted
-	 * @param format
+	 * @param dateToBeFormatted he date to be formatted
+	 * @param format the format to use
 	 * @return String
 	 */
 	public static String getFormattedDateString(LocalDate dateToBeFormatted, String format) {
@@ -366,10 +364,10 @@ public class MergeUtils {
 	 *
 	 * Author - Jasper Robison (27/07/21)
 	 *
-	 * @param	stringToBeFormatted		The string we want to format
-	 * @param	format					how it should be formatted (can be dot seperated string for multiple)
+	 * @param stringToBeFormatted		The string we want to format
+	 * @param format					how it should be formatted (can be dot seperated string for multiple)
 	 *
-	 * @return	The formatted string.
+	 * @return String The formatted string.
 	 */
 	public static String getFormattedString(String stringToBeFormatted, String format) {
 

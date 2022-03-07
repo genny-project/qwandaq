@@ -50,7 +50,6 @@ public class CapabilityUtils implements Serializable {
 	public void setCapabilityManifest(List<Attribute> capabilityManifest) {
 		this.capabilityManifest = capabilityManifest;
 	}
-
 	
 	/** 
 	 * @return String
@@ -60,11 +59,9 @@ public class CapabilityUtils implements Serializable {
 		return "CapabilityUtils [" + (capabilityManifest != null ? "capabilityManifest=" + capabilityManifest : "") + "]";
 	}
 
-
-	
 	/** 
-	 * @param role
-	 * @param parentRole
+	 * @param role the role to add to
+	 * @param parentRole the parentRole to inherit
 	 * @return BaseEntity
 	 */
 	public BaseEntity inheritRole(BaseEntity role, final BaseEntity parentRole) {
@@ -79,10 +76,9 @@ public class CapabilityUtils implements Serializable {
 		return ret;
 	}
 
-	
 	/** 
-	 * @param capabilityCode
-	 * @param name
+	 * @param capabilityCode the capabilityCode to add to
+	 * @param name the name to add
 	 * @return Attribute
 	 */
 	public Attribute addCapability(final String capabilityCode, final String name) {
@@ -104,11 +100,10 @@ public class CapabilityUtils implements Serializable {
 		return attribute;
 	}
 
-	
 	/** 
-	 * @param role
-	 * @param capabilityCode
-	 * @param mode
+	 * @param role the role to add to
+	 * @param capabilityCode the capabilityCode to add
+	 * @param mode the mode to add
 	 * @return BaseEntity
 	 */
 	public BaseEntity addCapabilityToRole(BaseEntity role, final String capabilityCode, final CapabilityMode mode) {
@@ -196,9 +191,9 @@ public class CapabilityUtils implements Serializable {
 	/**
 	* Checks if the user has a capability
 	*
-	* @param capabilityCode		The code of the capability.
-	* @param mode				The mode of the capability.
-	* @return					Boolean. True if the user has the capability, False otherwise.
+	* @param code The code of the capability.
+	* @param mode The mode of the capability.
+	* @return Boolean True if the user has the capability, False otherwise.
 	 */
 	public boolean hasCapability(String code, CapabilityMode mode) {
 
@@ -237,9 +232,9 @@ public class CapabilityUtils implements Serializable {
 	*
 	* NOTE: This should be temporary until ROL_ attributes are properly in place
 	*
-	* @param capabilityCode		The code of the capability.
-	* @param mode				The mode of the capability.
-	* @return					Boolean. True if the user has the capability, False otherwise.
+	* @param code The code of the capability.
+	* @param mode The mode of the capability.
+	* @return Boolean True if the user has the capability, False otherwise.
 	 */
 	public boolean hasCapabilityThroughPriIs(String code, CapabilityMode mode) {
 
@@ -312,9 +307,8 @@ public class CapabilityUtils implements Serializable {
 		}
 	}
 
-	
 	/** 
-	 * @param condition
+	 * @param condition the condition to check
 	 * @return Boolean
 	 */
 	public Boolean conditionMet(String condition) {
@@ -346,7 +340,7 @@ public class CapabilityUtils implements Serializable {
 	 *
 	 * @param userToken		A {@link GennyToken}.
 	 * @param user			The user {@link BaseEntity} to process.
-	 * @return				A list of {@link Allowed} objects.
+	 * @return				List A list of {@link Allowed} objects.
 	 */
 	public static List<Allowed> generateAlloweds(GennyToken userToken, BaseEntity user) {
 

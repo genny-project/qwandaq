@@ -42,8 +42,10 @@ public class GennyCache {
 	/**
 	* Return a remote cache for the given realm.
 	*
-	* @param realm
-	* @return
+	* @param realm 
+	* 		the associated realm of the desired cache
+	* @return RemoteCache&lt;String, String&gt; 
+	* 		the remote cache associatd with the realm
 	 */
 	public RemoteCache<String, String> getRemoteCache(final String realm) {
 

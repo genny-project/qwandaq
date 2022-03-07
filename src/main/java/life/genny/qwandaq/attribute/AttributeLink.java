@@ -63,18 +63,14 @@ import com.querydsl.core.annotations.QueryExclude;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("link")
 public class AttributeLink extends Attribute implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	private static final String DEFAULT_LNKCODE_PREFIX = "LNK_";
 		
 	/**
-	  * Constructor.
-	  * 
-	  * @param none
-	  */
+	 * Constructor.
+	 */
 	@SuppressWarnings("unused")
 	public AttributeLink()
 	{
@@ -83,12 +79,11 @@ public class AttributeLink extends Attribute implements Serializable {
 	}
 	
 	/**
-	  * Constructor.
-	  * 
-	  * @param aCode The unique code for this Question
-	  * @param aName The human readable summary name
-	  * @param attribute The associated attribute
-	  */
+	 * Constructor.
+	 * 
+	 * @param aCode The unique code for this Question
+	 * @param aName The human readable summary name
+	 */
 	public AttributeLink(String aCode, String aName)
 	{
 		super(aCode, aName, new DataType(BaseEntity.class));
@@ -99,11 +94,8 @@ public class AttributeLink extends Attribute implements Serializable {
 	 * 
 	 * @return the default Code prefix for this class.
 	 */
-	
 	static public String getDefaultCodePrefix() { // TODO: this won't work
 		return DEFAULT_LNKCODE_PREFIX;
 	}
-
-
 	
 }

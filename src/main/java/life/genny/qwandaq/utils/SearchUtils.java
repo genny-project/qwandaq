@@ -10,7 +10,6 @@ import javax.json.JsonObject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
-import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -28,9 +27,7 @@ import life.genny.qwandaq.exception.BadDataException;
 import life.genny.qwandaq.handlers.RuleFlowGroupWorkItemHandler;
 import life.genny.qwandaq.message.QBulkMessage;
 import life.genny.qwandaq.message.QDataBaseEntityMessage;
-import life.genny.qwandaq.message.QSearchBeResult;
 import life.genny.qwandaq.message.QSearchMessage;
-import life.genny.qwandaq.models.GennySettings;
 
 public class SearchUtils {
 
@@ -40,9 +37,9 @@ public class SearchUtils {
 	/**
 	* Evaluate any conditional filters for a {@link SearchEntity}
 	*
-	* @param beUtils
-	* @param searchBE
-	* @return
+	* @param beUtils the utils to use
+	* @param searchBE the SearchEntity to evaluate filters of
+	* @return SearchEntity
 	 */
 	public static SearchEntity evaluateConditionalFilters(BaseEntityUtils beUtils, SearchEntity searchBE) {
 
@@ -89,8 +86,8 @@ public class SearchUtils {
 	* Perform a table like search in Genny using a {@link SearchEntity} code. 
 	* The respective {@link SearchEntity} will be fetched from the cache befor processing.
 	*
-	* @param beUtils
-	* @param code
+	* @param beUtils the utils to use
+	* @param code the code of the SearchEntity to grab from cache and search
 	 */
 	public static void searchTable(BaseEntityUtils beUtils, String code) {
 
@@ -121,8 +118,8 @@ public class SearchUtils {
 	/**
 	* Perform a table like search in Genny using a {@link SearchEntity}.
 	*
-	* @param beUtils
-	* @param code
+	* @param beUtils the utils to use
+	* @param searchEntity the SearchEntity to search
 	 */
 	public static void searchTable(BaseEntityUtils beUtils, SearchEntity searchEntity) {
 
@@ -178,9 +175,9 @@ public class SearchUtils {
 	* A method to fetch any additional {@link EntityAttribute} filters for a given {@link SearchEntity} 
 	* from the SearchFilters rulegroup.
 	*
-	* @param beUtils
-	* @param searchBE
-	* @return
+	* @param beUtils the utils to use
+	* @param searchBE the SearchEntity to get additional filters for
+	* @return List
 	 */
 	public static List<EntityAttribute> getUserFilters(BaseEntityUtils beUtils, SearchEntity searchBE) {
 
@@ -221,43 +218,38 @@ public class SearchUtils {
 		}
 		return filters;
 	}
-
-
 	
 	/** 
-	 * @param beUtils
-	 * @param searchBE
+	 * @param beUtils the utils to use
+	 * @param searchBE the SearchEntity to send filter questions for
 	 */
 	public static void sendFilterQuestions(BaseEntityUtils beUtils, SearchEntity searchBE) {
 		log.error("Function not complete!");
 	}
-
 	
 	/** 
-	 * @param beUtils
-	 * @param baseBE
-	 * @param calEACode
+	 * @param beUtils the utils to use
+	 * @param baseBE the baseBE to get associated column for
+	 * @param calEACode the calEACode to get
 	 * @return Answer
 	 */
 	public static Answer getAssociatedColumnValue(BaseEntityUtils beUtils, BaseEntity baseBE, String calEACode) {
 		log.error("Function not complete!");
 		return null;
 	}
-
 	
 	/** 
-	 * @param searchCode
-	 * @return SearchEntity
+	 * @param searchCode the searchCode to get
+	 * @return SearchEntity get session search of
 	 */
 	public static SearchEntity getSessionSearch(String searchCode) {
 		log.error("Function not complete!");
 		return null;
 	}
 
-	
 	/** 
-	 * @param beUtils
-	 * @param dropdownValue
+	 * @param beUtils the utils to use
+	 * @param dropdownValue the dropdownValue to perform for
 	 */
 	public static void performQuickSearch(BaseEntityUtils beUtils, String dropdownValue) {
 
@@ -472,7 +464,9 @@ public class SearchUtils {
 	/**
 	 * Evaluate whether a set of conditions are met for a specific BaseEntity.
 	 *
-	 * <p>Used in bucket manipulation.
+	 * @param conditions the conditions to check
+	 * @param target the target entity to check against
+	 * @return Boolean
 	 */
 	public static Boolean jsonConditionsMet(JsonArray conditions, BaseEntity target) {
 
@@ -497,7 +491,9 @@ public class SearchUtils {
 	/**
 	 * Evaluate whether the condition is met for a specific BaseEntity.
 	 *
-	 * <p>Used in bucket manipulation.
+	 * @param condition the condition to check
+	 * @param target the target entity to check against
+	 * @return Boolean
 	 */
 	public static Boolean jsonConditionMet(JsonObject condition, BaseEntity target) {
 

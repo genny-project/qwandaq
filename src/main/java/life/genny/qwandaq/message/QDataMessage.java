@@ -16,15 +16,12 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
 
   
   /** 
-   * @param data_type
+   * @param data_type the data type to set
    */
   public void setData_type(final String data_type) {
     this.data_type = data_type;
   }
 
-  /**
-   *
-   */
   private static final String MESSAGE_TYPE = "DATA_MSG";
   private String data_type;
   private Boolean delete = false;
@@ -33,15 +30,15 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
   private String aliasCode;
 
   public QDataMessage() {
+
     super();
   }
 
   public QDataMessage(final String data_type) {
+
     super(MESSAGE_TYPE);
     this.data_type = data_type;
-
   }
-
   
   /** 
    * @return Boolean
@@ -53,7 +50,7 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
 
   
   /** 
-   * @param delete
+   * @param delete the delete status to set
    */
   public void setDelete(final Boolean delete) {
     this.delete = delete;
@@ -69,7 +66,7 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
   }
 
   /**
-   * @return the aliasCode
+   * @return String
    */
   public String getAliasCode() {
     return aliasCode;
@@ -112,8 +109,7 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
   }
 
   /**
-   * @param shouldDeleteLinkedBaseEntities the shouldDeleteLinkedBaseEntities to
-   *                                       set
+   * @param shouldDeleteLinkedBaseEntities the shouldDeleteLinkedBaseEntities to set
    */
   public void setShouldDeleteLinkedBaseEntities(Object shouldDeleteLinkedBaseEntities) {
     this.shouldDeleteLinkedBaseEntities = (Boolean) shouldDeleteLinkedBaseEntities;

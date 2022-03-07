@@ -28,7 +28,7 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 
 	
 	/** 
-	 * @param o
+	 * @param o the entity message to compare to
 	 * @return int
 	 */
 	@Override
@@ -184,7 +184,7 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 
 	
 	/** 
-	 * @param item
+	 * @param item the entity to add
 	 */
 	public void add(BaseEntity item) {
 		
@@ -195,7 +195,7 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 
 	
 	/** 
-	 * @param items
+	 * @param items the list of entities to add
 	 */
 	public void add(List<BaseEntity> items) {
 		List<BaseEntity> bes = new CopyOnWriteArrayList<>(this.getItems());
@@ -205,7 +205,7 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 
 	
 	/** 
-	 * @return List<BaseEntity>
+	 * @return List&lt;BaseEntity&gt;
 	 */
 	public List<BaseEntity> getItems() {
 		return items;
@@ -213,7 +213,7 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 
 	
 	/** 
-	 * @param items
+	 * @param items the array of entities to set
 	 */
 	public void setItems(final BaseEntity[] items) {
 		this.items = Arrays.asList(items);
@@ -222,7 +222,7 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 
 	
 	/** 
-	 * @param items
+	 * @param items the list of entities to set
 	 */
 	public void setItems(final List<BaseEntity> items) {
 		this.items = items;
@@ -301,7 +301,7 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 
 	 
 	 /** 
-	  * @param weightedItems
+	  * @param weightedItems the list weighted items to set
 	  */
 	 public void setWeightedItems(List<WeightedItem> weightedItems) {
 		this.weightedItems = weightedItems;
@@ -323,14 +323,13 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 
 	 /**
 	  * 
-	  * @param delete
-	  * @param parentCode
+	  * @param delete the delete status
+	  * @param parentCode the parentCode to set for
 	  */
 	 public void setDelete(final Boolean delete, final String parentCode) {
 		 super.setDelete(delete);
 		 this.parentCode = parentCode;
 	 }
-
 	 
 	 /** 
 	  * @return boolean
@@ -355,13 +354,12 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 	 }
 
 	 /**
-	  * @param linkValue, the linkValue to set
+	  * @param linkValue the linkValue to set
 	  */
 	 public void setLinkValue(final String linkValue) {
 		 this.linkValue = linkValue;
 	 }
 
-	
 	/** 
 	 * @return String
 	 */

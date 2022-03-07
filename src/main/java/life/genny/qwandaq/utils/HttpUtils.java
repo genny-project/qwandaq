@@ -28,7 +28,7 @@ public class HttpUtils {
 	* @param uri The target URI of the request.
 	* @param body The json string to use as the body.
 	* @param token The token to use in authorization.
-	* @return HttpResponse<String> The returned response object.
+	* @return HttpResponse&lt;String&gt; The returned response object.
 	 */
 	public static HttpResponse<String> put(String uri, String body, String token) {
 
@@ -57,7 +57,7 @@ public class HttpUtils {
 	* @param uri The target URI of the request.
 	* @param body The json string to use as the body.
 	* @param token The token to use in authorization.
-	* @return HttpResponse<String> The returned response object.
+	* @return HttpResponse&lt;String&gt; The returned response object.
 	 */
 	public static HttpResponse<String> post(String uri, String body, String token) {
 
@@ -85,7 +85,7 @@ public class HttpUtils {
 	*
 	* @param uri The target URI of the request.
 	* @param token The token to use in authorization.
-	* @return HttpResponse<String> The returned response object.
+	* @return HttpResponse&lt;String&gt; The returned response object.
 	 */
 	public static HttpResponse<String> get(String uri, String token) {
 
@@ -111,7 +111,7 @@ public class HttpUtils {
 	*
 	* @param uri The target URI of the request.
 	* @param token The token to use in authorization.
-	* @return HttpResponse<String> The returned response object.
+	* @return HttpResponse&lt;String&gt; The returned response object.
 	 */
 	public static HttpResponse<String> delete(String uri, String token) {
 

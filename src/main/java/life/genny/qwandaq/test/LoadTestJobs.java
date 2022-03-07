@@ -13,24 +13,26 @@ import life.genny.qwandaq.entity.SearchEntity;
 
 @ApplicationScoped
 public class LoadTestJobs {
-	private static final Logger log = Logger.getLogger(LoadTestJobs.class);
 
-	static Map<String, TestJob> jobs = new ConcurrentHashMap<String, TestJob>();
+	private static final Logger log = Logger.getLogger(LoadTestJobs.class);
 
 	public final Jsonb jsonb = JsonbBuilder.create();
 
+	static Map<String, TestJob> jobs = new ConcurrentHashMap<String, TestJob>();
 	
 	/** 
-	 * @return Map<String, TestJob>
+	 * @return Map&lt;String, TestJob&gt;
 	 */
 	public Map<String, TestJob> getJobs() {
 		return jobs;
 	}
 	
 	/**
-	 * Retrieve a {@link TestJob} from the job cache.<lb>
+	 * Retrieve a {@link TestJob} from the job cache.
 	 * Expecting Base Entity code + "_" + {@link TestJob#uuid}
-	 * @return
+	 *
+	 * @param uniqueCode the uniqueCode to set
+	 * @return TestJob
 	 */
 	public TestJob getJob(String uniqueCode) {
 		return jobs.get(uniqueCode);
@@ -38,8 +40,9 @@ public class LoadTestJobs {
 
 	/**
 	 * Put a new {@link TestJob} in the jobs store with a {@link SearchEntity} code as the key
-	 * @param entity - {@link SearchEntity} pertaining to the {@link TestJob}
-	 * @param job - {@link TestJob} to add
+	 *
+	 * @param entity {@link SearchEntity} pertaining to the {@link TestJob}
+	 * @param job {@link TestJob} to add
 	 */
 	void putJob(SearchEntity entity, TestJob job) {
 		jobs.put(entity.getCode(), job);

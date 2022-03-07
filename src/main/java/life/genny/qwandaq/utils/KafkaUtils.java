@@ -21,7 +21,7 @@ public class KafkaUtils implements Serializable {
 	/**
 	* Initialise the kafka interface
 	*
-	* @param kInterface
+	* @param kInterface the kInterface to set
 	 */
 	public static void init(KafkaInterface kInterface) {
 		kafkaInterface = kInterface;
@@ -30,8 +30,8 @@ public class KafkaUtils implements Serializable {
 	/**
 	* Write an Object to a kafka channel as a payload
 	*
-	* @param channel
-	* @param payload
+	* @param channel the channel to send to
+	* @param payload the payload to send
 	 */
 	public static void writeMsg(String channel, Object payload) {
 
@@ -43,8 +43,8 @@ public class KafkaUtils implements Serializable {
 	/**
 	* Write a String to a kafka channel as a payload
 	*
-	* @param channel
-	* @param payload
+	* @param channel the channel to send to
+	* @param payload the payload to send
 	 */
 	public static void writeMsg(String channel, String payload) {
 

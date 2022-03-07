@@ -62,17 +62,12 @@ import com.querydsl.core.annotations.QueryExclude;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("double")
 public class AttributeDouble extends Attribute implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = 1L;
 	
 	/**
-	  * Constructor.
-	  * 
-	  * @param none
-	  */
+	 * Constructor.
+	 */
 	@SuppressWarnings("unused")
 	public AttributeDouble()
 	{
@@ -81,17 +76,15 @@ public class AttributeDouble extends Attribute implements Serializable {
 	}
 	
 	/**
-	  * Constructor.
-	  * 
-	  * @param aCode The unique code for this Attribute
-	  * @param aValue The double value
-	  */
+	 * Constructor.
+	 * 
+	 * @param aCode The unique code for this Attribute
+	 * @param aName The name for this Attribute
+	 */
 	public AttributeDouble(String aCode, String aName)
 	{
 		super(aCode, aName, new DataType(Double.class));
 		
 	}
-	
-	
 	
 }

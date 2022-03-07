@@ -83,9 +83,6 @@ uniqueConstraints = @UniqueConstraint(columnNames = {"code", "realm"}))
 @RegisterForReflection
 public class Attribute extends CodedEntity implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private static final String DEFAULT_CODE_PREFIX = "PRI_";
@@ -113,10 +110,8 @@ public class Attribute extends CodedEntity implements Serializable {
 
 	
 	/**
-	  * Constructor.
-	  * 
-	  * @param none
-	  */
+	 * Constructor.
+	 */
 	@SuppressWarnings("unused")
 	public Attribute()
 	{

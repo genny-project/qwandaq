@@ -13,7 +13,9 @@ public class StringListConverter implements AttributeConverter<List<String>, Str
 
   
   /** 
-   * @param list
+   * Convert a List of Strings to a stringified list for storing in the database
+   *
+   * @param list the List of Strings to convert
    * @return String
    */
   @Override
@@ -30,8 +32,10 @@ public class StringListConverter implements AttributeConverter<List<String>, Str
 
   
   /** 
-   * @param joined
-   * @return List<String>
+   * Convert a stringified list to a List of Strings for an EntityAttribute
+   *
+   * @param joined the string to convert
+   * @return List&lt;String&gt;
    */
   @Override
   public List<String> convertToEntityAttribute(final String joined) {

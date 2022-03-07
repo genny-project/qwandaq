@@ -133,8 +133,6 @@ public class Ask extends CoreEntity implements Serializable {
 
 	/**
 	 * Constructor.
-	 * 
-	 * @param none
 	 */
 	@SuppressWarnings("unused")
 	public Ask() {
@@ -160,12 +158,11 @@ public class Ask extends CoreEntity implements Serializable {
 	 * @param aAttributeCode The associated Attribute
 	 * @param aSourceCode    The person answering the question
 	 * @param aTargetCode    The BaseEntity that the question is about
+	 * @param name    The name of the Ask
 	 */
 	public Ask(final String aAttributeCode, final String aSourceCode, final String aTargetCode, final String name) {
 		super(name);
 
-		// this.source = aSource;
-		// this.target = aTarget;
 		this.sourceCode = aSourceCode;
 		this.targetCode = aTargetCode;
 		this.attributeCode = aAttributeCode;
@@ -179,8 +176,8 @@ public class Ask extends CoreEntity implements Serializable {
 	 * Constructor.
 	 * 
 	 * @param aQuestion The associated Question
-	 * @param aSource   The person answering the question
-	 * @param aTarget   The BaseEntity that the question is about
+	 * @param aSourceCode The person answering the question
+	 * @param aTargetCode The BaseEntity that the question is about
 	 */
 	public Ask(final Question aQuestion, final String aSourceCode, final String aTargetCode) {
 		this(aQuestion, aSourceCode, aTargetCode, false);
@@ -189,10 +186,10 @@ public class Ask extends CoreEntity implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param aQuestion  The associated Question
-	 * @param aSource    The person answering the question
-	 * @param aTarget    The BaseEntity that the question is about
-	 * @param aMandatory Is this ask mandatory?
+	 * @param aQuestion The associated Question
+	 * @param aSourceCode The person answering the question
+	 * @param aTargetCode The BaseEntity that the question is about
+	 * @param aMandatory the mandatory status
 	 */
 	public Ask(final Question aQuestion, final String aSourceCode, final String aTargetCode, final Boolean aMandatory) {
 		this(aQuestion, aSourceCode, aTargetCode, aMandatory, 0.0);
@@ -201,11 +198,11 @@ public class Ask extends CoreEntity implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param aQuestion  The associated Question
-	 * @param aSource    The person answering the question
-	 * @param aTarget    The BaseEntity that the question is about
-	 * @param aMandatory Is this ask mandatory?
-	 * @param aWeight
+	 * @param aQuestion The associated Question
+	 * @param aSourceCode The person answering the question
+	 * @param aTargetCode The BaseEntity that the question is about
+	 * @param aMandatory the mandatory status
+	 * @param weight the weight
 	 */
 	public Ask(final Question aQuestion, final String aSourceCode, final String aTargetCode, final Boolean aMandatory,
 			final Double weight) {
@@ -215,11 +212,13 @@ public class Ask extends CoreEntity implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param aQuestion  The associated Question
-	 * @param aSource    The person answering the question
-	 * @param aTarget    The BaseEntity that the question is about
-	 * @param aMandatory Is this ask mandatory?
-	 * @param aWeight
+	 * @param aQuestion The associated Question
+	 * @param aSourceCode The person answering the question
+	 * @param aTargetCode The BaseEntity that the question is about
+	 * @param aMandatory the mandatory status
+	 * @param weight the weight
+	 * @param disabled the disabled status
+	 * @param hidden the hidden status
 	 */
 	public Ask(final Question aQuestion, final String aSourceCode, final String aTargetCode, final Boolean aMandatory,
 			final Double weight, final Boolean disabled, final Boolean hidden) {
@@ -231,11 +230,13 @@ public class Ask extends CoreEntity implements Serializable {
 	 * Constructor.
 	 * 
 	 * @param aQuestion  The associated Question
-	 * @param aSource    The person answering the question
-	 * @param aTarget    The BaseEntity that the question is about
-	 * @param aMandatory Is this ask mandatory?
-	 * @param aWeight
-	 * @param readonly
+	 * @param aSourceCode The source answering the question
+	 * @param aTargetCode The BaseEntity that the question is about
+	 * @param aMandatory the mandatory status
+	 * @param weight the weight
+	 * @param disabled the disabled status
+	 * @param hidden the hidden status
+	 * @param readonly the readonly status
 	 */
 	public Ask(final Question aQuestion, final String aSourceCode, final String aTargetCode, final Boolean aMandatory,
 			final Double weight, final Boolean disabled, final Boolean hidden, final Boolean readonly) {
@@ -425,8 +426,10 @@ public class Ask extends CoreEntity implements Serializable {
 
 	
 	/** 
-	 * @param answer
-	 * @throws BadDataException
+	 * Add an Answer to an entity.
+	 *
+	 * @param answer the Answer to add to the entity
+	 * @throws BadDataException exception thrown if sourceCode, targetCode or attributeCode don't match
 	 */
 	public void add(final Answer answer) throws BadDataException {
 		if ((answer.getSourceCode().equals(sourceCode)) && (answer.getTargetCode().equals(targetCode))
@@ -440,7 +443,9 @@ public class Ask extends CoreEntity implements Serializable {
 
 	
 	/** 
-	 * @param o
+	 * Compare to an object
+	 *
+	 * @param o the object to compare to
 	 * @return int
 	 */
 	@Override
@@ -547,7 +552,9 @@ public class Ask extends CoreEntity implements Serializable {
 	
 	
 	/** 
-	 * @param ask
+	 * Clone an Ask
+	 *
+	 * @param ask the Ask to clone
 	 * @return Ask
 	 */
 	public static Ask clone(Ask ask) {

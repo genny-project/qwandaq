@@ -6,7 +6,6 @@ import org.jboss.logging.Logger;
  * A Kafka interface to write to kafka channels.
  *
  * This interface should be implemented seperately in any project that requires sending through kafka.
- *
  * */
 public interface KafkaInterface {
 
@@ -15,8 +14,8 @@ public interface KafkaInterface {
 	/**
 	* A Dummy write method.
 	*
-	* @param channel
-	* @param payload
+	* @param channel the channel to write to
+	* @param payload the payload to write
 	 */
 	public default void write(String channel, String payload) {
 		log.error("No KafkaInterface set up... not writing Message!!!");

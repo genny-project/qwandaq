@@ -59,10 +59,6 @@ import org.javamoney.moneta.Money;
  * <li>The List of default Validation items
  * <li>The default mask used for data entry
  * </ul>
- * <p>
- * 
- * <p>
- * 
  * 
  * @author Adam Crow
  * @author Byron Aguirre
@@ -106,7 +102,7 @@ public class DataType implements Serializable {
 
 	
 	/** 
-	 * @param component
+	 * @param component the component to set
 	 */
 	public void setComponent(String component) {
 		this.component = component;
@@ -117,7 +113,6 @@ public class DataType implements Serializable {
 
 	/**
 	 * A fieldlist that stores the validations for this object.
-	 * <p>
 	 * Note that this is stored into a single object
 	 */
 
@@ -127,8 +122,6 @@ public class DataType implements Serializable {
 
 	/**
 	 * Constructor.
-	 * 
-	 * @param none
 	 */
 	@SuppressWarnings("unused")
 	public DataType() {
@@ -169,7 +162,7 @@ public class DataType implements Serializable {
 
     
 	/** 
-	 * @param str
+	 * @param str the className string used to set the Dtt
 	 */
 	public void setDttCodeFromClassName(String str){
 		String[] strs = str.split("\\.");
@@ -271,13 +264,13 @@ public class DataType implements Serializable {
 
 	
 	/** 
-	 * @param clazz
+	 * @param c the class to set
 	 */
 	@JsonIgnore
 	@Transient
 	@XmlTransient
-	public void setClass(final Class clazz) {
-		final String simpleClassName = clazz.getCanonicalName();
+	public void setClass(final Class c) {
+		final String simpleClassName = c.getCanonicalName();
 		setClassName(simpleClassName);
 	}
 
@@ -297,7 +290,9 @@ public class DataType implements Serializable {
 
 	
 	/** 
-	 * @param className
+	 * Get an Instance of a class
+	 *
+	 * @param className the className of the instance to get
 	 * @return DataType
 	 */
 	static public DataType getInstance(final String className) {
@@ -309,11 +304,11 @@ public class DataType implements Serializable {
 
 	
 	/** 
-	 * @param dtype
+	 * Is Datatype summable
+	 *
+	 * @param dtype the DataType to check
 	 * @return boolean
 	 */
-	// Is DataType summable?
-
 	static public boolean summable(DataType dtype) {
 		switch (dtype.getClassName()) {
 		case "java.lang.Integer":
@@ -330,9 +325,10 @@ public class DataType implements Serializable {
 		}
 	}
 
-	
 	/** 
-	 * @param dtype
+	 * Return a zero item
+	 *
+	 * @param dtype the DataType of the return item
 	 * @return Object
 	 */
 	static public Object Zero(DataType dtype) {
@@ -354,29 +350,30 @@ public class DataType implements Serializable {
 			return null;
 		}
 	}
-
 	
 	/** 
-	 * @param dtype
-	 * @param v1
-	 * @param v2
+	 * Add two items together
+	 *
+	 * @param dtype the DataType of the items
+	 * @param x item one
+	 * @param y item two
 	 * @return Object
 	 */
-	static public Object add(DataType dtype, Object v1, Object v2) {
+	static public Object add(DataType dtype, Object x, Object y) {
 		switch (dtype.getClassName()) {
 		case "java.lang.Integer":
 		case "Integer":
-			return ((Integer)v1) + ((Integer)v2);
+			return ((Integer) x) + ((Integer) y);
 		case "java.lang.Long":
 		case "Long":
-			return ((Long)v1) + ((Long)v2);
+			return ((Long) x) + ((Long) y);
 		case "java.lang.Double":
 		case "Double":
-			return ((Double)v1) + ((Double)v2);
+			return ((Double) x) + ((Double) y);
 		case "org.javamoney.moneta.Money":
 		case "Money":
-			Money m1 = (Money)v1;
-			Money m2 = (Money)v2;
+			Money m1 = (Money) x;
+			Money m2 = (Money) y;
 			Money sum = m1.add(m2);
 			return sum;
 		default:

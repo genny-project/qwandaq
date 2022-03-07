@@ -93,8 +93,8 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 	 * 
 	 * @param source
 	 *            the source baseEntity
-	 * @param target
-	 *            the target entity that is linked to
+	 * @param targetCode
+	 *            the target code of the entity that is linked to
 	 * @param weight
 	 *            the associated weight
 	 * @param mandatory
@@ -117,67 +117,64 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 		setHidden(hidden);
 		setReadonly(readonly);
 		if (weight == null) {
-			weight = 0.0; // This permits ease of adding attributes and hides
-							// attribute from scoring.
+			// This permits ease of adding attributes and hides attribute from scoring.
+			weight = 0.0;
 		}
 		setWeight(weight);
 	}
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param source
 	 *            the source baseEntity
-	 * @param target
-	 *            the target entity that is linked to
+	 * @param targetCode
+	 *            the target code of the entity that is linked to
 	 * @param weight
-	 *            the associated weight
+	 *            the weighted importance of this attribute (relative to the other
+	 *            attributes)
 	 * @param mandatory
 	 *            Is the question mandatory
 	 * @param disabled
 	 *            Is the question read only
 	 * @param hidden
 	 *            Is the question hidden
-	 * @param Weight
-	 *            the weighted importance of this attribute (relative to the other
-	 *            attributes)
 	 */
 	public QuestionQuestion(final Question source, final String targetCode, Double weight, boolean mandatory, boolean disabled, boolean hidden) {
-		this(source,targetCode,weight,mandatory,disabled,hidden,false);;
+		this(source,targetCode,weight,mandatory,disabled,hidden,false);
 	}
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param source
 	 *            the source baseEntity
-	 * @param target
-	 *            the target entity that is linked to
+	 * @param targetCode
+	 *            the target code of the entity that is linked to
 	 * @param weight
-	 *            the associated weight
+	 *            the weighted importance of this attribute (relative to the other
+	 *            attributes)
 	 * @param mandatory
 	 *            Is the question mandatory
 	 * @param disabled
 	 *            Is the question read only
-	 * @param Weight
-	 *            the weighted importance of this attribute (relative to the other
-	 *            attributes)
 	 */
 	public QuestionQuestion(final Question source, final String targetCode, Double weight, boolean mandatory, boolean disabled) {
-		this(source,targetCode,weight,mandatory,disabled,false);;
+		this(source,targetCode,weight,mandatory,disabled,false);
 	}
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param source
 	 *            the source baseEntity
-	 * @param target
-	 *            the target entity that is linked to
-	 * @param linkAttribute
-	 *            the associated linkAttribute
-	 * @param linkValue
-	 *            the associated linkValue
-	 * @param Weight
+	 * @param targetCode
+	 *            the target code of the entity that is linked to
+	 * @param weight
 	 *            the weighted importance of this attribute (relative to the other
 	 *            attributes)
+	 * @param mandatory
+	 * 				The mandatory status of this QuestionQuestion
 	 */
 	public QuestionQuestion(final Question source, final String targetCode, Double weight, boolean mandatory) {
 		this(source,targetCode,weight,mandatory,false);
@@ -185,18 +182,14 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
 	/**
 	 * Constructor.
-	 * 
-	 * @param Question
-	 *            the entity that needs to contain attributes
-	 * @param Attribute
-	 *            the associated Attribute
-	 * @param linkAttribute
-	 *            the associated linkAttribute
-	 * @param Weight
+	 *
+	 * @param source
+	 * 			The Source Question.
+	 * @param target
+	 * 			The Target Question.
+	 * @param weight
 	 *            the weighted importance of this attribute (relative to the other
 	 *            attributes)
-	 * @param Value
-	 *            the value associated with this attribute
 	 */
 	public QuestionQuestion(final Question source, final Question target, Double weight) {
 		autocreateCreated();
@@ -223,7 +216,7 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
 	
 	/** 
-	 * @param pk
+	 * @param pk the pk to set
 	 */
 	public void setPk(final QuestionQuestionId pk) {
 		this.pk = pk;
@@ -416,7 +409,9 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
 	
 	/** 
-	 * @param obj
+	 * Check equality
+	 *
+	 * @param obj the object to compare to
 	 * @return boolean
 	 */
 	@Override
@@ -438,7 +433,9 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
 	 
 	 /** 
-	  * @param o
+	  * Compare to an object
+	  *
+	  * @param o the object to compare to
 	  * @return int
 	  */
 	 public int compareTo(Object o) {
@@ -528,7 +525,7 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
 	
 	/** 
-	 * @param dependency
+	 * @param dependency the dependency to set
 	 */
 	public void setDependency(String dependency) {
 		this.dependency = dependency;
@@ -536,7 +533,7 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
     
 	/** 
-	 * @param icon
+	 * @param icon the icon to set
 	 */
 	public void setIcon(String icon) {
         this.icon = icon;

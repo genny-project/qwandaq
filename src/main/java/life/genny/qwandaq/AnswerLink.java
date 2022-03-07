@@ -167,7 +167,7 @@ public class AnswerLink implements java.io.Serializable {
 	private String targetCode;
 	private String sourceCode;
 	private Long askId;
-	private String attributeCode; // original answer
+	private String attributeCode;
 
 	public AnswerLink() {
 	}
@@ -175,11 +175,9 @@ public class AnswerLink implements java.io.Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param source        the source baseEntity
-	 * @param target        the target entity that is linked to
-	 * @param linkAttribute the associated linkAttribute
-	 * @param Weight        the weighted importance of this attribute (relative to
-	 *                      the other attributes)
+	 * @param source    the source entity
+	 * @param target    the target entity
+	 * @param answer 	the answer
 	 */
 	public AnswerLink(final BaseEntity source, final BaseEntity target, final Answer answer) {
 
@@ -193,41 +191,29 @@ public class AnswerLink implements java.io.Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param BaseEntity    the entity that needs to contain attributes
-	 * @param Attribute     the associated Attribute
-	 * @param linkAttribute the associated linkAttribute
-	 * @param Weight        the weighted importance of this attribute (relative to
-	 *                      the other attributes)
-	 * @param Value         the value associated with this attribute
+	 * @param source    the source entity
+	 * @param target    the target entity
+	 * @param answer 	the answer
+	 * @param weight    the weighted importance
 	 */
 	public AnswerLink(final BaseEntity source, final BaseEntity target, final Answer answer, Double weight) {
 		autocreateCreated();
 		setSource(source);
 		setTarget(target);
 		pk.setAttribute(answer.getAttribute());
-		// setAsk(answer.getAsk());
-		// if (answer.getAsk() != null) {
-		// if (answer.getAsk().getQuestion() != null) {
-		// setAttribute(answer.getAsk().getQuestion().getAttribute());
-		// }
-		// } else {
-		// // create dummy
-		//
-		// }
 		setAttributeCode(answer.getAttributeCode());
 
+		// This permits ease of adding attributes and hides attribute from scoring.
 		if (weight == null) {
-			weight = 0.0; // This permits ease of adding attributes and hides
-							// attribute from scoring.
+			weight = 0.0;
 		}
 		setWeight(weight);
 		setAnswer(answer);
 
 	}
-
 	
 	/** 
-	 * @param answer
+	 * @param answer the answer to set
 	 */
 	@JsonIgnore
 	public void setAnswer(final Answer answer) {
@@ -387,24 +373,20 @@ public class AnswerLink implements java.io.Serializable {
 		}
 
 	}
-
 	
 	/** 
 	 * @return AnswerLinkId
 	 */
-	// @JsonIgnore
 	public AnswerLinkId getPk() {
 		return pk;
 	}
-
 	
 	/** 
-	 * @param pk
+	 * @param pk the pk to set
 	 */
 	public void setPk(final AnswerLinkId pk) {
 		this.pk = pk;
 	}
-
 	
 	/** 
 	 * @return BaseEntity
@@ -414,49 +396,29 @@ public class AnswerLink implements java.io.Serializable {
 	public BaseEntity getSource() {
 		return getPk().getSource();
 	}
-
 	
 	/** 
-	 * @param source
+	 * @param source the source to set
 	 */
 	public void setSource(final BaseEntity source) {
 		getPk().setSource(source);
 		setSourceCode(source.getCode());
 	}
 
-	
-	/** 
-	 * @return BaseEntity
-	 */
-	// @Transient
-	// @JsonIgnore
-	// public Ask getAsk() {
-	// return getPk().getAsk();
-	// }
-	//
-	// public void setAsk(final Ask ask) {
-	// getPk().setAsk(ask);
-	// if (ask != null) {
-	// setAskId(ask.getId());
-	// }
-	// }
-
 	@Transient
 	@JsonIgnore
 	public BaseEntity getTarget() {
 		return getPk().getTarget();
 	}
-
 	
 	/** 
-	 * @param target
+	 * @param target the target to set
 	 */
 	public void setTarget(final BaseEntity target) {
 		getPk().setTarget(target);
 		setTargetCode(target.getCode());
 	}
 
-	
 	/** 
 	 * @return Attribute
 	 */
@@ -466,19 +428,16 @@ public class AnswerLink implements java.io.Serializable {
 		return getPk().getAttribute();
 	}
 
-	
 	/** 
-	 * @param attribute
+	 * @param attribute the attribute to set
 	 */
 	public void setAttribute(final Attribute attribute) {
 		getPk().setAttribute(attribute);
-		;
 	}
 
 	/**
 	 * @return the askId
 	 */
-
 	public Long getAskId() {
 		return askId;
 	}
@@ -644,7 +603,7 @@ public class AnswerLink implements java.io.Serializable {
 
 	
 	/** 
-	 * @param valueDate
+	 * @param valueDate the valueDate to set
 	 */
 	public void setValueDate(LocalDate valueDate) {
 		this.valueDate = valueDate;
@@ -772,7 +731,6 @@ public class AnswerLink implements java.io.Serializable {
 		if (getCreated() == null)
 			setCreated(LocalDateTime.now(ZoneId.of("Z")));
 	}
-
 	
 	/** 
 	 * @return Date
@@ -783,7 +741,6 @@ public class AnswerLink implements java.io.Serializable {
 		return out;
 	}
 
-	
 	/** 
 	 * @return Date
 	 */
@@ -796,7 +753,6 @@ public class AnswerLink implements java.io.Serializable {
 		return out;
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -804,15 +760,13 @@ public class AnswerLink implements java.io.Serializable {
 		return targetCode;
 	}
 
-	
 	/** 
-	 * @param targetCode
+	 * @param targetCode the targetCode to set
 	 */
 	public void setTargetCode(final String targetCode) {
 		this.targetCode = targetCode;
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -820,33 +774,31 @@ public class AnswerLink implements java.io.Serializable {
 		return sourceCode;
 	}
 
-	
 	/** 
-	 * @param sourceCode
+	 * @param sourceCode the sourceCode to set
 	 */
 	public void setSourceCode(final String sourceCode) {
 		this.sourceCode = sourceCode;
 	}
 
-	
 	/** 
 	 * @return String
 	 */
 	public String getAttributeCode() {
 		return attributeCode;
 	}
-
 	
 	/** 
-	 * @param attributeCode
+	 * @param attributeCode the attributeCode to set
 	 */
 	public void setAttributeCode(final String attributeCode) {
 		this.attributeCode = attributeCode;
 	}
-
 	
 	/** 
-	 * @param o
+	 * Check equality
+	 *
+	 * @param o the object to compare to
 	 * @return boolean
 	 */
 	@Override
@@ -863,7 +815,6 @@ public class AnswerLink implements java.io.Serializable {
 
 		return true;
 	}
-
 	
 	/** 
 	 * @return int
@@ -872,7 +823,6 @@ public class AnswerLink implements java.io.Serializable {
 	public int hashCode() {
 		return (getPk() != null ? getPk().hashCode() : 0);
 	}
-
 	
 	/** 
 	 * @return String
@@ -888,9 +838,11 @@ public class AnswerLink implements java.io.Serializable {
 				+ weight + ", value=" + getValue() + ", v=" + version + "]";
 	}
 
-	
-	/** 
-	 * @return T
+	/**
+	* Get the value
+	*
+	* @param <T> the type to return
+	* @return T
 	 */
 	@SuppressWarnings("unchecked")
 	@JsonIgnore
@@ -932,9 +884,11 @@ public class AnswerLink implements java.io.Serializable {
 
 	}
 
-	
-	/** 
-	 * @param value
+	/**
+	* Set the value
+	*
+	* @param <T> the type to return
+	* @param value the object to set as the value
 	 */
 	@SuppressWarnings("unchecked")
 	@JsonIgnore

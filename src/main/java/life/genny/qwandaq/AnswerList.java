@@ -42,10 +42,6 @@ import com.querydsl.core.annotations.QueryExclude;
  * <ul>
  * <li>List of Answers
  * </ul>
- * <p>
- * 
- * <p>
- * 
  * 
  * @author Adam Crow
  * @author Byron Aguirre
@@ -60,16 +56,11 @@ import com.querydsl.core.annotations.QueryExclude;
 @QueryExclude
 public class AnswerList implements Serializable {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
 
   /**
    * A fieldlist that stores the answers for this object.
-   * <p>
    */
-
   // @JsonIgnore
   @XmlTransient
 
@@ -78,20 +69,19 @@ public class AnswerList implements Serializable {
   @JoinColumn(name = "answerlist_id", referencedColumnName = "id")
   private List<AnswerLink> answerList = new CopyOnWriteArrayList<AnswerLink>();
 
-
+  /**
+   * Constructor.
+   */
+  public AnswerList() {}
 
   /**
    * Constructor.
    * 
-   * @param none
+   * @param answers the List AnswerLink objects to set
    */
-  public AnswerList() {}
-
   public AnswerList(final List<AnswerLink> answers) {
     this.answerList = answers;
   }
-
-
 
   /**
    * @return the answerList
@@ -100,15 +90,11 @@ public class AnswerList implements Serializable {
     return answerList;
   }
 
-
-
   /**
-   * @param validationList the validationList to set
+   * @param answerList the answerList to set
    */
   public void setAnswerList(final List<AnswerLink> answerList) {
     this.answerList = answerList;
   }
-
-
 
 }

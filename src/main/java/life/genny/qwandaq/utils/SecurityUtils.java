@@ -23,8 +23,8 @@ public class SecurityUtils {
 	/**
 	* Function to validate the authority for a given {@link GennyToken}.
 	*
-	* @param gennyToken
-	* @return
+	* @param gennyToken the gennyToken to check
+	* @return Boolean
 	 */
 	public static Boolean isAuthorisedGennyToken(GennyToken gennyToken) {
 
@@ -35,15 +35,16 @@ public class SecurityUtils {
 
 		return false;
 	}
-
 	
 	/** 
-	 * @param id
-	 * @param issuer
-	 * @param subject
-	 * @param ttlMillis
-	 * @param apiSecret
-	 * @param claims
+	 * Create a JWT
+	 *
+	 * @param id the id to set
+	 * @param issuer the issuer to set
+	 * @param subject the subject to set
+	 * @param ttlMillis the ttlMillis to set
+	 * @param apiSecret the apiSecret to set
+	 * @param claims the claims to set
 	 * @return String
 	 */
 	public static String createJwt(String id, String issuer, String subject, long ttlMillis, String apiSecret,

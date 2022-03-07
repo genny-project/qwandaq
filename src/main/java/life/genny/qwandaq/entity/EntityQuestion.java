@@ -27,7 +27,7 @@ public class EntityQuestion implements java.io.Serializable, Comparable<Object> 
 
 	
 	/** 
-	 * @param o
+	 * @param o the object to compare to
 	 * @return int
 	 */
 	@Override
@@ -45,7 +45,7 @@ public class EntityQuestion implements java.io.Serializable, Comparable<Object> 
 
 	
 	/** 
-	 * @param link
+	 * @param link the link to set
 	 */
 	public void setLink(Link link) {
 		this.link = link;
@@ -61,7 +61,7 @@ public class EntityQuestion implements java.io.Serializable, Comparable<Object> 
 
 	
 	/** 
-	 * @param weight
+	 * @param weight the weight to set
 	 */
 	public void setWeight(Double weight) {
 		this.weight = weight;
@@ -77,7 +77,7 @@ public class EntityQuestion implements java.io.Serializable, Comparable<Object> 
 
 	
 	/** 
-	 * @param valueString
+	 * @param valueString the valueString to set
 	 */
 	public void setValueString(String valueString) {
 		this.valueString = valueString;

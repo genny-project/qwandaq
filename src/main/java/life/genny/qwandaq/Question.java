@@ -81,9 +81,6 @@ public class Question extends CodedEntity implements Serializable {
 
 	private static final Logger log = Logger.getLogger(Question.class);
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private static final String DEFAULT_CODE_PREFIX = "QUE_";
@@ -133,7 +130,7 @@ public class Question extends CodedEntity implements Serializable {
 
 	
 	/** 
-	 * @param helper
+	 * @param helper the helper to set
 	 */
 	public void setHelper(String helper) {
 		this.helper = helper;
@@ -142,78 +139,78 @@ public class Question extends CodedEntity implements Serializable {
 
 	/**
 	 * Constructor.
-	 * 
-	 * @param none
 	 */
 	@SuppressWarnings("unused")
-	public Question() {
-		// dummy for hibernate
+	public Question() { }
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param code     The unique code for this Question
+	 * @param name     The human readable summary name
+	 * @param attribute The associated attribute
+	 */
+	public Question(final String code, final String name, final Attribute attribute) {
+		this(code, name, attribute, false);
 	}
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param aCode     The unique code for this Question
-	 * @param aName     The human readable summary name
+	 * @param code     The unique code for this Question
+	 * @param name     The human readable summary name
 	 * @param attribute The associated attribute
+	 * @param placeholder The placeholder text
 	 */
-	public Question(final String aCode, final String aName, final Attribute aAttribute) {
-		this(aCode, aName, aAttribute, false);
-	}
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param aCode     The unique code for this Question
-	 * @param aName     The human readable summary name
-	 * @param attribute The associated attribute
-	 */
-	public Question(final String aCode, final String aName, final Attribute aAttribute,final String placeholder) {
-		this(aCode, aName, aAttribute, false, aName, placeholder);
+	public Question(final String code, final String name, final Attribute attribute, final String placeholder) {
+		this(code, name, attribute, false, name, placeholder);
 	}
 	
 	/**
 	 * Constructor.
 	 * 
-	 * @param aCode     The unique code for this Question
-	 * @param aName     The human readable summary name
+	 * @param code     The unique code for this Question
+	 * @param name     The human readable summary name
 	 * @param attribute The associated attribute
-	 * @param mandatory
+	 * @param mandatory the mandatory status of the Question
 	 */
-	public Question(final String aCode, final String aName, final Attribute aAttribute, final Boolean mandatory) {
-		this(aCode, aName, aAttribute, mandatory, aName);
+	public Question(final String code, final String name, final Attribute attribute, final Boolean mandatory) {
+		this(code, name, attribute, mandatory, name);
 	}
 	
 	/**
 	 * Constructor.
 	 * 
-	 * @param aCode     The unique code for this Question
-	 * @param aName     The human readable summary name
+	 * @param code     The unique code for this Question
+	 * @param name     The human readable summary name
 	 * @param attribute The associated attribute
-	 * @param mandatory
+	 * @param mandatory the mandatory status of the Question
+	 * @param html 		the html of the Question
 	 */
-	public Question(final String aCode, final String aName, final Attribute aAttribute, final Boolean mandatory,
+	public Question(final String code, final String name, final Attribute attribute, final Boolean mandatory,
 			final String html) {
-		this(aCode, aName, aAttribute, mandatory, html, null);
+		this(code, name, attribute, mandatory, html, null);
 	}
 
 	
 	/**
 	 * Constructor.
 	 * 
-	 * @param aCode     The unique code for this Question
-	 * @param aName     The human readable summary name
+	 * @param code     The unique code for this Question
+	 * @param name     The human readable summary name
 	 * @param attribute The associated attribute
-	 * @param mandatory
+	 * @param mandatory the mandatory status of the Question
+	 * @param html 		the html of the Question
+	 * @param placeholder The placeholder text
 	 */
-	public Question(final String aCode, final String aName, final Attribute aAttribute, final Boolean mandatory,
+	public Question(final String code, final String name, final Attribute attribute, final Boolean mandatory,
 			final String html, final String placeholder) {
-		super(aCode, aName);
-		if (aAttribute == null) {
+		super(code, name);
+		if (attribute == null) {
 			throw new InvalidParameterException("Attribute must not be null");
 		}
-		this.attribute = aAttribute;
-		this.attributeCode = aAttribute.getCode();
+		this.attribute = attribute;
+		this.attributeCode = attribute.getCode();
 		this.mandatory = mandatory;
 		this.html = html;
 		this.placeholder = placeholder;
@@ -222,12 +219,12 @@ public class Question extends CodedEntity implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param aCode          The unique code for this Question
-	 * @param aName          The human readable summary name
+	 * @param code          The unique code for this Question
+	 * @param name          The human readable summary name
 	 * @param childQuestions The associated child Questions in this question Group
 	 */
-	public Question(final String aCode, final String aName, final List<Question> childQuestions) {
-		super(aCode, aName);
+	public Question(final String code, final String name, final List<Question> childQuestions) {
+		super(code, name);
 		if (childQuestions == null) {
 			throw new InvalidParameterException("QuestionList must not be null");
 		}
@@ -240,22 +237,20 @@ public class Question extends CodedEntity implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param aCode The unique code for this empty Question Group
-	 * @param aName The human readable summary name
+	 * @param code The unique code for this empty Question Group
+	 * @param name The human readable summary name
 	 */
-	public Question(final String aCode, final String aName) {
-		super(aCode, aName);
+	public Question(final String code, final String name) {
+		super(code, name);
 		if (childQuestions == null) {
 			throw new InvalidParameterException("QuestionList must not be null");
 		}
 		this.attribute = null;
 		this.attributeCode = QUESTION_GROUP_ATTRIBUTE_CODE;
-
 	}
-
 	
 	/** 
-	 * @param childQuestions
+	 * @param childQuestions the List of child Questions to initialize with
 	 */
 	@Transient
 	public void initialiseChildQuestions(List<Question> childQuestions) {
@@ -277,9 +272,10 @@ public class Question extends CodedEntity implements Serializable {
 	 * to the question. It auto creates the QuestionQuestion object and sets itself
 	 * to be the source. For efficiency we assume the link does not already exist
 	 * 
-	 * @param target
-	 * @param weight
-	 * @throws BadDataException
+	 * @param target the target to add
+	 * @param weight the weight
+	 * @return QuestionQuestion
+	 * @throws BadDataException if target could not be added
 	 */
 	public QuestionQuestion addTarget(final Question target, final Double weight) throws BadDataException {
 		if (target == null)
@@ -432,8 +428,8 @@ public class Question extends CodedEntity implements Serializable {
 	 * the question. It auto creates the QuestionQuestion object. For efficiency we
 	 * assume the child question link does not exist
 	 *
-	 * @param ea
-	 * @throws BadDataException
+	 * @param qq the QuestionQuestion used to add a child Question
+	 * @throws BadDataException if something is missing
 	 */
 	public void addChildQuestion(final QuestionQuestion qq) throws BadDataException {
 		if (qq == null)
@@ -447,9 +443,8 @@ public class Question extends CodedEntity implements Serializable {
 	 * question group. It auto creates the QuestionQuestion object. For efficiency
 	 * we assume the question link does not already exist
 	 *
-	 * @param childQuestion
-	 * @param weight
-	 * @throws BadDataException
+	 * @param childQuestionCode the code of the child Question to add
+	 * @throws BadDataException if something is missing
 	 */
 	public void addChildQuestion(final String childQuestionCode) throws BadDataException {
 
@@ -461,9 +456,9 @@ public class Question extends CodedEntity implements Serializable {
 	 * question group with no mandatory. It auto creates the QuestionQuestion
 	 * object. For efficiency we assume the question link does not already exist
 	 *
-	 * @param childQuestion
-	 * @param weight
-	 * @throws BadDataException
+	 * @param childQuestionCode the code of the child Question to add
+	 * @param weight the weight
+	 * @throws BadDataException if something is missing
 	 */
 	public void addChildQuestion(final String childQuestionCode, final Double weight) throws BadDataException {
 		addChildQuestion(childQuestionCode, weight, false);
@@ -474,10 +469,11 @@ public class Question extends CodedEntity implements Serializable {
 	 * mandatory setting to the question group. It auto creates the QuestionQuestion
 	 * object. For efficiency we assume the question link does not already exist
 	 *
-	 * @param childQuestion
-	 * @param weight
-	 * @param mandatory     setting
-	 * @throws BadDataException
+	 * @param childQuestionCode the code of the child question to add
+	 * @param weight the weight
+	 * @param mandatory the mandatory status
+	 * @return QuestionQuestion
+	 * @throws BadDataException if something is missing
 	 */
 	public QuestionQuestion addChildQuestion(final String childQuestionCode, final Double weight,
 			final Boolean mandatory) throws BadDataException {
@@ -498,7 +494,7 @@ public class Question extends CodedEntity implements Serializable {
 	 * removeChildQuestion This removes a child Question from the question group.
 	 * For efficiency we assume the child question exists
 	 *
-	 * @param questionCode
+	 * @param childQuestionCode the code of the child Question used to remove the child Question
 	 */
 	public void removeChildQuestion(final String childQuestionCode) {
 		final Optional<QuestionQuestion> optQuestionQuestion = findQuestionLink(childQuestionCode);
@@ -509,8 +505,8 @@ public class Question extends CodedEntity implements Serializable {
 	 * findChildQuestion This returns an QuestionLink if it exists in the question
 	 * group.
 	 *
-	 * @param childQuestionCode
-	 * @returns Optional<QuestionQuestion>
+	 * @param childQuestionCode the code of the child Question used to find the Question Link
+	 * @return Optional&lt;QuestionQuestion&gt;
 	 */
 	public Optional<QuestionQuestion> findQuestionLink(final String childQuestionCode) {
 		final Optional<QuestionQuestion> foundEntity = Optional.of(getChildQuestions().parallelStream()
@@ -523,8 +519,8 @@ public class Question extends CodedEntity implements Serializable {
 	 * findQuestionQuestion This returns an question link if it exists in the
 	 * question group. Could be more efficient in retrival (ACC: test)
 	 *
-	 * @param questionLink
-	 * @returns QuestionQuestion
+	 * @param childQuestion the code of the child Question used to find the QuestionQuestion
+	 * @return QuestionQuestion
 	 */
 	public QuestionQuestion findQuestionQuestion(final Question childQuestion) {
 		final QuestionQuestion foundEntity = getChildQuestions().parallelStream()
@@ -536,11 +532,6 @@ public class Question extends CodedEntity implements Serializable {
 	
 	/** 
 	 * @return String
-	 */
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
@@ -603,7 +594,7 @@ public class Question extends CodedEntity implements Serializable {
 	}
 
 	/**
-	 * @param readonly the readonly to set
+	 * @param icon the icon to set
 	 */
 	public void setIcon(String icon) {
 		this.icon = icon;

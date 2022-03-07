@@ -5,15 +5,10 @@ import java.io.Serializable;
 
 public class QEventMessage extends QMessage implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static final String MESSAGE_TYPE = "EVT_MSG";
 	private String event_type;
 	public MessageData data;
-
-
 	
 	/** 
 	 * @return String
@@ -31,7 +26,7 @@ public class QEventMessage extends QMessage implements Serializable {
 	}
 	
 	/** 
-	 * @param event_type
+	 * @param event_type the event type to set
 	 */
 	public void setEvent_type(String event_type) {
 		this.event_type = event_type;
@@ -45,13 +40,11 @@ public class QEventMessage extends QMessage implements Serializable {
 	}
 	
 	/** 
-	 * @param data
+	 * @param data the message data to set
 	 */
 	public void setData(MessageData data) {
 		this.data = data;
 	}
-	
-
 	
 	public QEventMessage(String eventType, String code) {
 		super(MESSAGE_TYPE);

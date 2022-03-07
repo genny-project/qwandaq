@@ -61,14 +61,14 @@ public class AnswerLinkId implements java.io.Serializable {
 
 
   /**
-   * @return the linkAttribute
+   * @return the attribute
    */
   public Attribute getAttribute() {
     return attribute;
   }
 
   /**
-   * @param linkAttribute the linkAttribute to set
+   * @param attribute the attribute to set
    */
   public void setAttribute(final Attribute attribute) {
     this.attribute = attribute;

@@ -123,24 +123,12 @@ public class Context extends CoreEntity implements Serializable {
 
 	/**
 	 * Constructor.
-	 *
-	 * @param none
 	 */
 	@SuppressWarnings("unused")
 	public Context() {
 		// dummy for hibernate
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param aCode
-	 *            The unique code for this Question
-	 * @param aName
-	 *            The human readable summary name
-	 * @param attribute
-	 *            The associated attribute
-	 */
 	public Context(ContextType key, BaseEntity aEntity) {
 		this(key, aEntity, VisualControlType.VCL_DEFAULT);
 	}
@@ -187,12 +175,13 @@ public class Context extends CoreEntity implements Serializable {
 	public BaseEntity getEntity() {
 		return entity;
 	}
+
 	/**
-	 * @param the entity to set
+	 * @param be The BaseEntity to set
 	 */
-	public void setEntity(BaseEntity aEntity) {
-		this.entity = aEntity;
-		this.contextCode = aEntity.getCode();
+	public void setEntity(BaseEntity be) {
+		this.entity = be;
+		this.contextCode = be.getCode();
 	}
 
 	/**
@@ -249,7 +238,9 @@ public class Context extends CoreEntity implements Serializable {
 
 	
 	/** 
-	 * @param o
+	 * Compare to an object
+	 *
+	 * @param o the object to compare with
 	 * @return int
 	 */
 	@Override

@@ -41,13 +41,13 @@ public class KeycloakUtils {
 	/**
     * Fetch an access token for a user using a username and password.
 	* 
-	* @param keycloakUrl
-	* @param realm
-	* @param clientId
-	* @param secret
-	* @param username
-	* @param password
-	* @return
+	* @param keycloakUrl the keycloakUrl to use
+	* @param realm the realm to use
+	* @param clientId the clientId to use
+	* @param secret the secret to use
+	* @param username the username to use
+	* @param password the password to use
+	* @return GennyToken
 	 */
     public static GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret, String username, String password) {
 
@@ -71,12 +71,12 @@ public class KeycloakUtils {
 	/**
 	* Fetch an access token for a user using a refresh token.
 	* 
-	* @param keycloakUrl
-	* @param realm
-	* @param clientId
-	* @param secret
-	* @param refreshToken
-	* @return
+	* @param keycloakUrl the keycloakUrl to use
+	* @param realm the realm to use
+	* @param clientId the clientId to use
+	* @param secret the secret to use
+	* @param refreshToken the refreshToken to use
+	* @return GennyToken
 	 */
     public static GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret, String refreshToken) {
 
@@ -99,10 +99,10 @@ public class KeycloakUtils {
 	/**
 	* Fetch an Impersonated Token for a user.
 	*
-	* @param userBE
-	* @param gennyToken
-	* @param project
-	* @return
+	* @param userBE the userBE to get a token for
+	* @param gennyToken the gennyToken to use to fetch the token
+	* @param project the project to use to fetch the token
+	* @return String
 	 */
     public static String getImpersonatedToken(BaseEntity userBE, GennyToken gennyToken, BaseEntity project) {
 
@@ -161,10 +161,10 @@ public class KeycloakUtils {
 	/**
 	* Fetch an OIDC access token from keycloak.
 	*
-	* @param keycloakUrl
-	* @param realm
-	* @param params
-	* @return
+	* @param keycloakUrl the keycloakUrl to fetch from
+	* @param realm the realm to fetch in
+	* @param params the params to use
+	* @return String
 	 */
 	public static String fetchOIDCToken(String keycloakUrl, String realm, HashMap<String, String> params) {
 
@@ -179,13 +179,12 @@ public class KeycloakUtils {
         return token;
 	}
 
-
     /**
      * Perform Custom encoded POST request.
      *
-     * @param uri
-     * @param postDataParams
-     * @return
+     * @param uri the uri to request from
+     * @param postDataParams the postDataParams to use in rquest
+     * @return String
      */
     public static String executeEncodedPostRequest(String uri, HashMap<String, String> postDataParams) {
 
@@ -232,8 +231,8 @@ public class KeycloakUtils {
     /**
      * Build POST query data string.
      *
-     * @param params
-     * @return
+     * @param params the params to construct the query with
+     * @return String
      */
     public static String getPostDataString(HashMap<String, String> params) {
         StringBuilder result = new StringBuilder();
@@ -261,9 +260,9 @@ public class KeycloakUtils {
     /**
      * Initialise a Dummy User in keycloak.
      *
-     * @param token
-     * @param realm
-     * @return
+     * @param token the token to use to create tje user
+     * @param realm the realm to create the user in
+     * @return String
      */
     public static String createDummyUser(String token, String realm) {
 
@@ -332,11 +331,11 @@ public class KeycloakUtils {
     /**
      * Fetch a keycloak users Id using a username.
      *
-     * @param token
-     * @param realm
-     * @param username
-     * @return
-     * @throws IOException
+     * @param token the token to fetch with
+     * @param realm the realm to fetch in
+     * @param username the username to fetch for
+     * @return Strign
+     * @throws IOException if id could not be fetched
      */
     public static String getKeycloakUserId(final String token, final String realm, final String username) throws IOException {
 
@@ -350,10 +349,10 @@ public class KeycloakUtils {
     /**
      * Fetch a keycloak user using a username.
      *
-     * @param token
-     * @param realm
-     * @param username
-     * @return
+     * @param token the token to fetch with
+     * @param realm the realm to fetch in
+     * @param username the username to fetch for
+     * @return List
      */
     public static List<LinkedHashMap> fetchKeycloakUser(final String token, final String realm, final String username) {
 
@@ -403,11 +402,11 @@ public class KeycloakUtils {
 	/**
 	* Update a keycloak user field.
 	*
-	* @param userToken
-	* @param user
-	* @param field
-	* @param value
-	* @return
+	* @param userToken the userToken to update with
+	* @param user the user to update for
+	* @param field the field to update
+	* @param value the value to update to
+	* @return int statusCode
 	 */
 	public static int updateUserField(GennyToken userToken, BaseEntity user, String field, String value) {
 
@@ -426,10 +425,10 @@ public class KeycloakUtils {
 	/**
 	* Update a keycloak user email.
 	*
-	* @param userToken
-	* @param user
-	* @param email
-	* @return
+	* @param userToken the userToken to update with
+	* @param user the user to update for
+	* @param email the email to set
+	* @return int statusCode
 	 */
 	public static int updateUserEmail(GennyToken userToken, BaseEntity user, String email) {
 

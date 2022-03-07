@@ -62,17 +62,12 @@ import com.querydsl.core.annotations.QueryExclude;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("long")
 public class AttributeLong extends Attribute implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
-	
 	/**
-	  * Constructor.
-	  * 
-	  * @param none
-	  */
+	 * Constructor.
+	 */
 	@SuppressWarnings("unused")
 	public AttributeLong()
 	{
@@ -81,17 +76,14 @@ public class AttributeLong extends Attribute implements Serializable {
 	}
 	
 	/**
-	  * Constructor.
-	  * 
-	  * @param aCode The unique code for this Question
-	  * @param aName The human readable summary name
-	  */
+	 * Constructor.
+	 * 
+	 * @param aCode The unique code for this Question
+	 * @param aName The human readable summary name
+	 */
 	public AttributeLong(String aCode, String aName)
 	{
 		super(aCode, aName, new DataType(Long.class));
-		
 	}
-	
-	
 	
 }

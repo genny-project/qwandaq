@@ -10,21 +10,16 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 @RegisterForReflection
 public abstract class QMessage implements Serializable, QMessageIntf {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public enum MsgOption {
 		CACHE, // cache this message as a response to a trigger event
 		EXEC, // execute this
 		EXEC_CACHE, // execute this AND set up as a cached response
-		LOCAL, // This message (if triggered, does not need to be sent through to the back end
-				// as well
+		LOCAL, // This message (if triggered, does not need to be sent through to the back end as well
 		IGNORE // the front end can ignore and handling of this message (useful for testing)
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -39,7 +34,8 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 
 	private String option = MsgOption.EXEC.toString();
 
-	private String triggerCode; // This can be used to trigger any option
+	// This can be used to trigger any option
+	private String triggerCode;
 
 	private List<String> targetCodes;
 
@@ -61,7 +57,6 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 	
 	private List<String> recipientCodeArray = new ArrayList<>();
 
-	
 	/** 
 	 * @return String
 	 */
@@ -69,23 +64,21 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		return msg_type;
 	}
 
-	
 	/** 
-	 * @param msg_type
+	 * @param msg_type the type of message to set
 	 */
 	public void setMsg_type(String msg_type) {
 		this.msg_type = msg_type;
 	}
 
-	public QMessage() {
-	}
+	public QMessage() { }
 
 	public QMessage(String msg_type) {
 		this.msg_type = msg_type;
 	}
 
 	/**
-	 * @return the token
+	 * @return String
 	 */
 	public String getToken() {
 		return token;
@@ -99,7 +92,7 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 	}
 
 	/**
-	 * @return the option
+	 * @return String
 	 */
 	public String getOption() {
 		return option;
@@ -112,9 +105,8 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		this.option = option.toString();
 	}
 
-	
 	/** 
-	 * @param option
+	 * @param option the option string to set
 	 */
 	public void setOption(String option) {
 		this.option = option;
@@ -148,7 +140,6 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		this.targetCodes = targetCodes;
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -156,31 +147,27 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		return sourceAddress;
 	}
 
-	
 	/** 
-	 * @param sourceAddress
+	 * @param sourceAddress the source address to set
 	 */
 	public void setSourceAddress(String sourceAddress) {
 		this.sourceAddress = sourceAddress;
 	}
 
-	
 	/** 
 	 * @return String
 	 */
 	public String getSourceCode() {
 		return sourceCode;
 	}
-
 	
 	/** 
-	 * @param sourceCode
+	 * @param sourceCode the source code to set
 	 */
 	public void setSourceCode(String sourceCode) {
 		this.sourceCode = sourceCode;
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -190,7 +177,7 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 
 	
 	/** 
-	 * @param targetCode
+	 * @param targetCode the target code to et
 	 */
 	public void setTargetCode(String targetCode) {
 		this.targetCode = targetCode;
@@ -204,15 +191,13 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		return questionCode;
 	}
 
-	
 	/** 
-	 * @param questionCode
+	 * @param questionCode the question code to set
 	 */
 	public void setQuestionCode(String questionCode) {
 		this.questionCode = questionCode;
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -220,14 +205,12 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		return message;
 	}
 
-	
 	/** 
-	 * @param message
+	 * @param message the message to set
 	 */
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
 	
 	/** 
 	 * @return Boolean
@@ -235,7 +218,6 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 	public Boolean getRedirect() {
 		return redirect;
 	}
-
 	
 	/** 
 	 * @return Boolean
@@ -243,10 +225,9 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 	public Boolean isRedirect() {
 		return getRedirect();
 	}
-
 	
 	/** 
-	 * @param redirect
+	 * @param redirect the redirect status
 	 */
 	public void setRedirect(Boolean redirect) {
 		this.redirect = redirect;
@@ -260,21 +241,19 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 	}
 
 	/**
-	 * @param recipientCodeArray the recipientCodeArray to set
+	 * @param recipientCodeArray the array of recipient codes to set
 	 */
 	public void setRecipientCodeArray(String[] recipientCodeArray) {
 		this.recipientCodeArray = Arrays.asList(recipientCodeArray);
 	}
 
-	
 	/** 
-	 * @param recipientCodeArray
+	 * @param recipientCodeArray the list of recipient codes to set
 	 */
 	public void setRecipientCodeArray(List<String> recipientCodeArray) {
 		this.recipientCodeArray = recipientCodeArray;
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -282,15 +261,13 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		return attributeCode;
 	}
 
-	
 	/** 
-	 * @param attributeCode
+	 * @param attributeCode the attribute code to set
 	 */
 	public void setAttributeCode(String attributeCode) {
 		this.attributeCode = attributeCode;
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -298,9 +275,8 @@ public abstract class QMessage implements Serializable, QMessageIntf {
 		return bridgeId;
 	}
 	
-	
 	/** 
-	 * @param bridgeId
+	 * @param bridgeId the bridge ID to set
 	 */
 	public void setBridgeId(String bridgeId) {
 		this.bridgeId = bridgeId;

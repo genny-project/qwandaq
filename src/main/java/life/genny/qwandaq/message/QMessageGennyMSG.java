@@ -37,7 +37,7 @@ public class QMessageGennyMSG extends QMessage {
 	}
 
 	/**
-	 * @return the messageTypeArr
+	 * @return QBaseMSGMessageType the messageTypeArr
 	 */
 	public QBaseMSGMessageType[] getMessageTypeArr() {
 		return messageTypeArr;
@@ -51,7 +51,7 @@ public class QMessageGennyMSG extends QMessage {
 	}
 
 	/**
-	 * @return the recipientArr
+	 * @return String the recipientArr
 	 */
 	public String[] getRecipientArr() {
 		return recipientArr;
@@ -65,7 +65,7 @@ public class QMessageGennyMSG extends QMessage {
 	}
 
 	/**
-	 * @return the messageContextMap
+	 * @return Map the messageContextMap
 	 */
 	public Map<String, String> getMessageContextMap() {
 		return messageContextMap;
@@ -108,9 +108,8 @@ public class QMessageGennyMSG extends QMessage {
 		this.recipientArr = recipientArr;
 	}
 	
-	
 	/** 
-	 * @param messageType
+	 * @param messageType the type of message to set
 	 */
 	public void addMessageType(QBaseMSGMessageType messageType) {
 		
@@ -119,27 +118,24 @@ public class QMessageGennyMSG extends QMessage {
 		this.setMessageTypeArr(list.toArray(new QBaseMSGMessageType[0]));
 	}
 
-	
 	/** 
-	 * @param recipient
+	 * @param recipient the entity of the recipient to set
 	 */
 	public void setRecipient(String recipient) {
 		this.recipientArr = new String[0];
 		addRecipient(recipient);
 	}
 
-	
 	/** 
-	 * @param recipient
+	 * @param recipient the code or email of the recipient to set
 	 */
 	public void setRecipient(BaseEntity recipient) {
 		this.recipientArr = new String[0];
 		addRecipient(recipient);
 	}
 
-	
 	/** 
-	 * @param recipient
+	 * @param recipient the entity of the recipient to add
 	 */
 	public void addRecipient(BaseEntity recipient) {
 		if (recipient == null) {
@@ -149,9 +145,8 @@ public class QMessageGennyMSG extends QMessage {
 		}
 	}
 
-	
 	/** 
-	 * @param recipient
+	 * @param recipient the code or email of the recipient to add
 	 */
 	public void addRecipient(String recipient) {
 		
@@ -163,11 +158,10 @@ public class QMessageGennyMSG extends QMessage {
 			this.setRecipientArr(list.toArray(new String[0]));
 		}
 	}
-
 	
 	/** 
-	 * @param key
-	 * @param value
+	 * @param key the key of the context to add
+	 * @param value the value of the context to add
 	 */
 	public void addContext(String key, Object value) {
 		if (value == null) {

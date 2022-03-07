@@ -26,6 +26,7 @@ public class QCmdMessage extends QMessage {
 	private ContextList contextList;
 
 	public QCmdMessage(String cmd_type, String code) {
+
 		super(MESSAGE_TYPE);
 		this.code = code;
 		this.cmd_type = cmd_type;
@@ -33,7 +34,6 @@ public class QCmdMessage extends QMessage {
 		this.exec=true;
 		this.cache = null;
 	}
-
 	
 	/** 
 	 * @return String
@@ -44,7 +44,7 @@ public class QCmdMessage extends QMessage {
 
 	
 	/** 
-	 * @param cmd_type
+	 * @param cmd_type the cmd type to set
 	 */
 	public void setCmd_type(String cmd_type) {
 		this.cmd_type = cmd_type;
@@ -60,17 +60,14 @@ public class QCmdMessage extends QMessage {
 
 	
 	/** 
-	 * @param code
+	 * @param code the code to set
 	 */
 	public void setCode(String code) {
 		this.code = code;
 	}
-
-	
-	
 	
 	/**
-	 * @return the exec
+	 * @return Boolean
 	 */
 	public Boolean getExec() {
 		return exec;
@@ -84,7 +81,7 @@ public class QCmdMessage extends QMessage {
 	}
 
 	/**
-	 * @return the send
+	 * @return Boolean
 	 */
 	public Boolean getSend() {
 		return send;
@@ -98,7 +95,7 @@ public class QCmdMessage extends QMessage {
 	}
 
 	/**
-	 * @return the cache
+	 * @return String
 	 */
 	public String getCache() {
 		return cache;
@@ -112,7 +109,7 @@ public class QCmdMessage extends QMessage {
 	}
 
 	/**
-	 * @return the contextList
+	 * @return ContextList
 	 */
 	public ContextList getContextList() {
 		return contextList;

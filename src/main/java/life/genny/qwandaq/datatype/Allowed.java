@@ -33,7 +33,9 @@ public class Allowed implements Serializable {
 
 	
 	/** 
-	 * @param obj
+	 * Check equality
+	 *
+	 * @param obj the object to compare to
 	 * @return boolean
 	 */
 	@Override

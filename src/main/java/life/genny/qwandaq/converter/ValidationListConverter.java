@@ -25,9 +25,10 @@ public class ValidationListConverter implements AttributeConverter<List<Validati
 
 	private static final Logger log = Logger.getLogger(ValidationListConverter.class);
 
-	
 	/** 
-	 * @param list
+	 * Convert a List of Validations to a Database Column
+	 *
+	 * @param list the List of Validations to convert
 	 * @return String
 	 */
 	@Override
@@ -58,10 +59,11 @@ public class ValidationListConverter implements AttributeConverter<List<Validati
 
 	}
 
-	
 	/** 
-	 * @param joined
-	 * @return List<Validation>
+	 * Convert a validation string to a List of Validations
+	 *
+	 * @param joined the string of validations to convert
+	 * @return List&lt;Validation&gt;
 	 */
 	@SuppressWarnings("deprecation")
 	@Override
@@ -102,28 +104,22 @@ public class ValidationListConverter implements AttributeConverter<List<Validati
 		return validations;
 	}
 
-	
 	/** 
-	 * @param list
+	 * Convert a List of Strings to a stringified list
+	 *
+	 * @param list the List of Strings to convert
 	 * @return String
 	 */
 	public String convertToString(final List<String> list) {
 
-		// log.info(list);
-
-		// JsonArrayBuilder builder = Json.createArrayBuilder();
-		// for(String item : list) {
-		// 	builder.add(item);
-		// }
-		// JsonArray array = builder.build();
-		// String json = array.toString();
 		return list.toString();
 	}
-
 	
 	/** 
-	 * @param joined
-	 * @return List<String>
+	 * Convert a stringified list to a List of Strings
+	 *
+	 * @param joined the string to convert
+	 * @return List&lt;String&gt;
 	 */
 	public List<String> convertFromString(final String joined) {
 
