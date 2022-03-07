@@ -100,7 +100,7 @@ public class DatabaseUtils {
 
 		try {
 			Query query = entityManager
-					.createQuery("SELECT a FROM Attribute a WHERE a.realm=:realmStr AND a.name not like 'App\\_%'",
+					.createQuery("FROM Attribute WHERE realm=:realmStr AND name not like 'App\\_%'",
 							Attribute.class)
 					.setParameter("realmStr", realm);
 
@@ -108,7 +108,7 @@ public class DatabaseUtils {
 				query = query.setFirstResult((pageNumber-1) * pageSize)
 					.setMaxResults(pageSize);
 			} else {
-				log.info("Fetching all Attributes (unset pageNumber or pageSize");
+				log.info("Fetching all Attributes (unset pageNumber or pageSize)");
 			}
 				
 			return query.getResultList();
