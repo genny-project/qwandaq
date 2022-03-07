@@ -1,0 +1,16 @@
+com.cdi.crud.infra.model
+life.genny.qwandaq
+life.genny.qwandaq.attribute
+life.genny.qwandaq.converter
+life.genny.qwandaq.data
+life.genny.qwandaq.datatype
+life.genny.qwandaq.entity
+life.genny.qwandaq.exception
+life.genny.qwandaq.handlers
+life.genny.qwandaq.intf
+life.genny.qwandaq.message
+life.genny.qwandaq.models
+life.genny.qwandaq.rules
+life.genny.qwandaq.test
+life.genny.qwandaq.utils
+life.genny.qwandaq.validation
