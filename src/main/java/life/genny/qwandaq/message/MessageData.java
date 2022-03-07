@@ -6,7 +6,6 @@ public class MessageData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	/** 
 	 * @return String
 	 */
@@ -33,8 +32,6 @@ public class MessageData implements Serializable {
 		this.code = code;
 	}
 	
-
-	
 	/** 
 	 * @return String
 	 */
@@ -44,7 +41,7 @@ public class MessageData implements Serializable {
 
 	
 	/** 
-	 * @param code
+	 * @param code the code to set
 	 */
 	public void setCode(String code) {
 		this.code = code;
@@ -60,7 +57,7 @@ public class MessageData implements Serializable {
 
 	
 	/** 
-	 * @param id
+	 * @param id the id to set
 	 */
 	public void setId(Long id) {
 		this.id = id;
@@ -76,7 +73,7 @@ public class MessageData implements Serializable {
 
 	
 	/** 
-	 * @param value
+	 * @param value the valu to set
 	 */
 	public void setValue(String value) {
 		this.value = value;
@@ -92,7 +89,7 @@ public class MessageData implements Serializable {
 
 	
 	/** 
-	 * @param content
+	 * @param content the content to set
 	 */
 	public void setContent(String content) {
 		this.content = content;
@@ -148,7 +145,7 @@ public class MessageData implements Serializable {
 	}
 
 	/**
-	 * @param targetCode the targetCode to set
+	 * @param sourceCode the sourceCode to set
 	 */
 	public void getSourceCode(String sourceCode) {
 		this.sourceCode = sourceCode;

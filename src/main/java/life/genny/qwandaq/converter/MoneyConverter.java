@@ -21,9 +21,10 @@ public class MoneyConverter implements AttributeConverter<Money, String> {
 
 	private static final Logger log = Logger.getLogger(MoneyConverter.class);
 
-	
 	/** 
-	 * @param money
+	 * Convert a Money object to a String
+	 *
+	 * @param money the string to convert
 	 * @return String
 	 */
 	@Override
@@ -33,10 +34,11 @@ public class MoneyConverter implements AttributeConverter<Money, String> {
 		}
 		return "{\"amount\":" + money.getNumber() + ",\"currency\":\"" + money.getCurrency().getCurrencyCode() + "\"}";
 	}
-
 	
 	/** 
-	 * @param moneyStr
+	 * Convert a String representation of Money to a Money object
+	 *
+	 * @param moneyStr the String to convert
 	 * @return Money
 	 */
 	@Override

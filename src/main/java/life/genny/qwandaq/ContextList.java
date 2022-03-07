@@ -44,10 +44,6 @@ import com.querydsl.core.annotations.QueryExclude;
  * <ul>
  * <li>List of Context 
  * </ul>
- * <p>
- * 
- * <p>
- * 
  * 
  * @author      Adam Crow
  * @author      Byron Aguirre
@@ -62,37 +58,28 @@ import com.querydsl.core.annotations.QueryExclude;
 @QueryExclude
 public class ContextList implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	A fieldlist that stores the Contexts for this object.
-	<p>
-	*/
-
-
+	 *A fieldlist that stores the Contexts for this object.
+	 */
 //  @JsonInclude(Include.NON_NULL)
 	@XmlTransient
 	@OneToMany( cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "list_id", referencedColumnName = "id")
 	private List<Context> contexts;
-
- 
 	
 	/**
-	  * Constructor.
-	  * 
-	  * @param none
-	  */
+	 * Constructor.
+	 */
+	public ContextList() { }
 	
-	public ContextList()
-	{
-		
-	}
-	
+	/**
+	* Constructor.
+	*
+	* @param Contexts Contexts to set.
+	 */
 	public ContextList(List<Context> Contexts) 
 	{
 		this.contexts = Contexts;

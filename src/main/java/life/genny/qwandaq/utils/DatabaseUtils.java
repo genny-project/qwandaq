@@ -18,7 +18,6 @@ import life.genny.qwandaq.Question;
 import life.genny.qwandaq.QuestionQuestion;
 import life.genny.qwandaq.QuestionQuestionId;
 import life.genny.qwandaq.attribute.Attribute;
-import life.genny.qwandaq.datatype.DataType;
 import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.validation.Validation;
 
@@ -31,9 +30,9 @@ public class DatabaseUtils {
 	static EntityManager entityManager;
 
 	/**
-	 * Initialise the EntityManager interface
+	 * Initialise the EntityManager interface.
 	 *
-	 * @param entityManager
+	 * @param em The EntityManager.
 	 */
 	public static void init(EntityManager em) {
 		entityManager = em;
@@ -54,10 +53,10 @@ public class DatabaseUtils {
 	* Fetch Validations from the database using page size and num.
 	* If pageSize and pageNumber are both null, all results will be returned at once.
 	* 
-	* @param realm
-	* @param pageSize
-	* @param pageNumber
-	* @return
+	* @param realm the realm to find in
+	* @param pageSize the pageSize to fetch
+	* @param pageNumber the pageNumber to fetch
+	* @return List
 	 */
 	@Transactional
 	public static List<Validation> findValidations(String realm, Integer pageSize, Integer pageNumber) {
@@ -88,10 +87,10 @@ public class DatabaseUtils {
 	* Fetch Attributes from the database using page size and num.
 	* If pageSize and pageNumber are both null, all results will be returned at once.
 	*
-	* @param realm
-	* @param pageSize
-	* @param pageNumber
-	* @return
+	* @param realm the realm to find in
+	* @param pageSize the pageSize to fetch
+	* @param pageNumber the pageNumber to fetch
+	* @return List
 	 */
 	@Transactional
 	public static List<Attribute> findAttributes(String realm, Integer pageSize, Integer pageNumber) {
@@ -125,8 +124,10 @@ public class DatabaseUtils {
 	* Fetch a list of {@link BaseEntity} types from the database using a realm.
 	* If pageSize and pageNumber are both null, all results will be returned at once.
 	* 
-	* @param realm
-	* @return
+	* @param realm the realm to find in
+	* @param pageSize the pageSize to fetch
+	* @param pageNumber the pageNumber to fetch
+	* @return List
 	 */
 	@Transactional
 	public static List<BaseEntity> findBaseEntitys(String realm, Integer pageSize, Integer pageNumber) {
@@ -157,8 +158,10 @@ public class DatabaseUtils {
 	* Fetch a list of {@link Question} types from the database using a realm, page size and page number.
 	* If pageSize and pageNumber are both null, all results will be returned at once.
 	* 
-	* @param realm
-	* @return
+	* @param realm the realm to find in
+	* @param pageSize the pageSize to fetch
+	* @param pageNumber the pageNumber to fetch
+	* @return List
 	 */
 	@Transactional
 	public static List<Question> findQuestions(String realm, Integer pageSize, Integer pageNumber) {
@@ -189,10 +192,10 @@ public class DatabaseUtils {
 	* Fetch a list of {@link QuestionQuestion} types from the database using a realm, page size and page number.
 	* If pageSize and pageNumber are both null, all results will be returned at once.
 	* 
-	* @param realm
-	* @param pageSize
-	* @param pageNumber
-	* @return
+	* @param realm the realm to find in
+	* @param pageSize the pageSize to fetch
+	* @param pageNumber the pageNumber to fetch
+	* @return List
 	 */
 	@Transactional
 	public static List<QuestionQuestion> findQuestionQuestions(String realm, Integer pageSize, Integer pageNumber) {
@@ -223,9 +226,9 @@ public class DatabaseUtils {
 	/**
 	* Grab a Validation from the database using a code and a realm.
 	*
-	* @param code
-	* @param realm
-	* @return
+	* @param realm the realm to find in
+	* @param code the code to find by
+	* @return Validation
 	 */
 	@Transactional
 	public static Validation findValidationByCode(String realm, String code) {
@@ -251,9 +254,9 @@ public class DatabaseUtils {
 	/**
 	* Fetch an Attribute from the database using a realm and a code.
 	*
-	* @param realm
-	* @param code
-	* @return
+	* @param realm the realm to find in
+	* @param code the code to find by
+	* @return Attribute
 	 */
 	@Transactional
 	public static Attribute findAttributeByCode(String realm, String code) {
@@ -303,10 +306,9 @@ public class DatabaseUtils {
 	/**
 	 * Fetch A {@link Question} from the database using the question code.
 	 *
-	 * 
-	 * @param realm
-	 * @param code
-	 * @return
+	 * @param realm the realm to find in
+	 * @param code the code to find by
+	 * @return Question
 	 */
 	@Transactional
 	public static Question findQuestionByCode(String realm, String code) {
@@ -330,10 +332,10 @@ public class DatabaseUtils {
 	/**
 	* Find a QuestionQuestion using a realm, a sourceCode and a targetCode.
 	*
-	* @param realm
-	* @param sourceCode
-	* @param targetCode
-	* @return
+	* @param realm the realm to find in
+	* @param sourceCode the sourceCode to find by
+	* @param targetCode the targetCode to find by
+	* @return List list of QuestionQuestions
 	 */
 	@Transactional
 	public static QuestionQuestion findQuestionQuestionBySourceAndTarget(String realm, String sourceCode, String targetCode) {
@@ -359,9 +361,9 @@ public class DatabaseUtils {
 	/**
 	* Find a list of QuestionQuestions using a realm and a sourceCode
 	*
-	* @param realm
-	* @param sourceCode
-	* @return
+	* @param realm the realm to find in
+	* @param sourceCode the sourceCode to find by
+	* @return List list of QuestionQuestions
 	 */
 	@Transactional
 	public static List<QuestionQuestion> findQuestionQuestionsBySourceCode(String realm, String sourceCode) {
@@ -386,11 +388,11 @@ public class DatabaseUtils {
 	/**
 	* Find a list of Asks using question code, sourceCode and targetCode.
 	*
-	* @param realm
-	* @param questionCode
-	* @param sourceCode
-	* @param targetCode
-	* @return
+	* @param realm the realm to find in
+	* @param questionCode the questionCode to find
+	* @param sourceCode the sourceCode to find by
+	* @param targetCode the targetCode to find by
+	* @return List list of asks
 	 */
 	@Transactional
 	public static List<Ask> findAsksByQuestionCode(String realm, String questionCode, String sourceCode, String targetCode) {
@@ -568,6 +570,7 @@ public class DatabaseUtils {
 	/**
 	 * Delete a Validation from the database.
 	 *
+	 * @param realm realm to delete in
 	 * @param code Code of the Validation to delete.
 	 */
 	@Transactional
@@ -593,6 +596,7 @@ public class DatabaseUtils {
 	/**
 	 * Delete an atttribute from the database.
 	 *
+	 * @param realm realm to delete in
 	 * @param code Code of the attribute to delete.
 	 */
 	@Transactional
@@ -618,6 +622,7 @@ public class DatabaseUtils {
 	/**
 	 * Delete a BaseEntity from the database.
 	 *
+	 * @param realm realm to delete in
 	 * @param code Code of the BaseEntity to delete.
 	 */
 	@Transactional
@@ -644,6 +649,7 @@ public class DatabaseUtils {
 	/**
 	 * Delete a Question from the database.
 	 *
+	 * @param realm realm to delete in
 	 * @param code Code of the Question to delete.
 	 */
 	@Transactional
@@ -670,9 +676,9 @@ public class DatabaseUtils {
 	/**
 	 * Delete a QuestionQuestion from the database.
 	 * 
-	 * @param realm
-	 * @param sourceCode
-	 * @param targetCode
+	 * @param realm the realm to delete in
+	 * @param sourceCode the sourceCode to delete by
+	 * @param targetCode the targetCode to delete by
 	 */
 	@Transactional
 	public static void deleteQuestionQuestion(String realm, String sourceCode, String targetCode) {

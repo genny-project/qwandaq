@@ -67,7 +67,7 @@ public class QBulkMessage implements Serializable {
 
 	
 	/** 
-	 * @param qMessageArray
+	 * @param qMessageArray the array of entities to add
 	 */
 	public void add(QDataBaseEntityMessage[] qMessageArray) {
 		int newSize = ((messages == null) ? 0 : ((messages.length))) + qMessageArray.length;
@@ -81,7 +81,7 @@ public class QBulkMessage implements Serializable {
 
 	
 	/** 
-	 * @param qAskArray
+	 * @param qAskArray the array of asks to add
 	 */
 	public void add(QDataAskMessage[] qAskArray) {
 		int newSize = ((asks == null) ? 0 : ((asks.length))) + qAskArray.length;
@@ -95,7 +95,7 @@ public class QBulkMessage implements Serializable {
 
 	
 	/** 
-	 * @param qMessageList
+	 * @param qMessageList the list of entities to add
 	 */
 	public void add(List<QDataBaseEntityMessage> qMessageList) {
 		int newSize = ((messages == null) ? 0 : ((messages.length))) + qMessageList.size();
@@ -112,7 +112,7 @@ public class QBulkMessage implements Serializable {
 
 	
 	/** 
-	 * @param qAskList
+	 * @param qAskList the list of asks to add
 	 */
 	public void addAsks(List<QDataAskMessage> qAskList) {
 		int newSize = ((asks == null) ? 0 : ((asks.length))) + qAskList.size();
@@ -128,30 +128,19 @@ public class QBulkMessage implements Serializable {
 
 	}
 
-	
 	/** 
-	 * @param qMessage
+	 * @param qMessage the entity message to add
 	 */
 	public void add(QDataBaseEntityMessage qMessage) {
-	//	if (qMessage.getItems().length > 0) {
-			Set<QDataBaseEntityMessage> set = new HashSet<QDataBaseEntityMessage>(Arrays.asList(this.messages));
-			set.add(qMessage);
-			this.messages = new QDataBaseEntityMessage[set.size()];
-			set.toArray(this.messages);
-	//	}
-		int newSize = ((messages==null)?0:((messages.length)))+1;
 
-//	    QDataBaseEntityMessage[] extended = new QDataBaseEntityMessage[newSize];
-//
-//		 extended[newSize-1] = qMessage;
-//
-//	    System.arraycopy(messages, 0, extended, 0, messages.length);
-//	    setMessages(extended);
+		Set<QDataBaseEntityMessage> set = new HashSet<QDataBaseEntityMessage>(Arrays.asList(this.messages));
+		set.add(qMessage);
+		this.messages = new QDataBaseEntityMessage[set.size()];
+		set.toArray(this.messages);
 	}
-
 	
 	/** 
-	 * @param qMessage
+	 * @param qMessage the ask message to add
 	 */
 	public void add(QDataAskMessage qMessage) {
 		if (qMessage.getItems().length > 0) {
@@ -160,18 +149,10 @@ public class QBulkMessage implements Serializable {
 			this.asks = new QDataAskMessage[set.size()];
 			set.toArray(this.asks);
 		}
-//		int newSize = ((asks==null)?0:((asks.length)))+1;
-//	    QDataAskMessage[] extended = new QDataAskMessage[newSize];
-//
-//		 extended[newSize-1] = qMessage;
-//
-//	    System.arraycopy(asks, 0, extended, 0, asks.length);
-//	    setAsks(extended);
 	}
 
-	
 	/** 
-	 * @param qBulkMessage
+	 * @param qBulkMessage the bulk message to add
 	 */
 	public void add(QBulkMessage qBulkMessage) {
 		if ((qBulkMessage.getAsks() != null)) {

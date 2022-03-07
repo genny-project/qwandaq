@@ -39,7 +39,7 @@ public class QSearchBeResult implements Serializable {
 	}
 
 	/**
-	 * @param total
+	 * @param total the total to set
 	 */
 	public QSearchBeResult(Long total) {
 		this.total = total;
@@ -71,7 +71,7 @@ public class QSearchBeResult implements Serializable {
 
 	
 	/** 
-	 * @param entities
+	 * @param entities the entities to set
 	 */
 	public void setEntities(BaseEntity[] entities) {
 		this.entities = entities;

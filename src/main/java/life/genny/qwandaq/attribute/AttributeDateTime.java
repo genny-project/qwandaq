@@ -63,17 +63,12 @@ import com.querydsl.core.annotations.QueryExclude;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("datetime")
 public class AttributeDateTime extends Attribute implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = 1L;
 	
 	/**
-	  * Constructor.
-	  * 
-	  * @param none
-	  */
+	 * Constructor.
+	 */
 	@SuppressWarnings("unused")
 	public AttributeDateTime()
 	{
@@ -82,17 +77,14 @@ public class AttributeDateTime extends Attribute implements Serializable {
 	}
 	
 	/**
-	  * Constructor.
-	  * 
-	  * @param aCode The unique code for this Question
-	  * @param aName The human readable summary name
-	  */
+	 * Constructor.
+	 * 
+	 * @param aCode The unique code for this Question
+	 * @param aName The human readable summary name
+	 */
 	public AttributeDateTime(String aCode, String aName)
 	{
 		super(aCode, aName, new DataType(LocalDateTime.class));
-		
 	}
-	
-	
 	
 }

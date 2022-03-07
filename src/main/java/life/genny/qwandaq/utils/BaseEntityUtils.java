@@ -30,7 +30,6 @@ import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.entity.SearchEntity;
 import life.genny.qwandaq.exception.BadDataException;
-import life.genny.qwandaq.message.QDataAnswerMessage;
 import life.genny.qwandaq.message.QSearchBeResult;
 
 @RegisterForReflection
@@ -64,7 +63,7 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	* Get the Token
 	*
-	* @return	The Token
+	* @return String
 	 */
 	public String getToken() {
 		return token;
@@ -73,7 +72,7 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	* Set the Token
 	*
-	* @param token
+	* @param token the toke to set
 	 */
 	public void setToken(String token) {
 		this.token = token;
@@ -83,7 +82,7 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	* Get the current realm
 	*
-	* @return 	The realm
+	* @return String
 	 */
 	public String getRealm() {
 		return gennyToken.getRealm();
@@ -92,7 +91,7 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	 * Get the GennyToken
 	 *
-	 * @return 	The gennyToken
+	 * @return GennyToken
 	 */
 	public GennyToken getGennyToken() {
 		return gennyToken;
@@ -101,7 +100,7 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	 * Set the GennyToken
 	 *
-	 * @param gennyToken
+	 * @param gennyToken the genny token to set
 	 */
 	public void setGennyToken(GennyToken gennyToken) {
 		this.gennyToken = gennyToken;
@@ -110,7 +109,7 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	 * Get the ServiceToken
 	 *
-	 * @return 	The serviceToken
+	 * @return GennyToken
 	 */
 	public GennyToken getServiceToken() {
 		return serviceToken;
@@ -119,7 +118,7 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	 * Set the ServiceToken
 	 *
-	 * @param serviceToken
+	 * @param serviceToken the serviceToken to set
 	 */
 	public void setServiceToken(GennyToken serviceToken) {
 		this.serviceToken = serviceToken;
@@ -128,7 +127,7 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	 * Get a string representation of the instance
 	 *
-	 * @return Instance as string
+	 * @return String
 	 */
 	@Override
 	public String toString() {
@@ -139,6 +138,8 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	 * Update the {@link GennyToken} of this utils instance. Unlike the standard 
 	 * setter method, this will also update the token and the realm.
+	 *
+	 * @param gennyToken the genny token to update with
 	 */
 	public void updateGennyToken(GennyToken gennyToken) {
 		this.token = gennyToken.getToken();
@@ -149,8 +150,8 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	* Fetch A {@link BaseEntity} from cache the using a code.
 	*
-	* @param code	The code of the {@link BaseEntity} to fetch
-	* @return		The corresponding BaseEntity, or null if not found.
+	* @param code The code of the {@link BaseEntity} to fetch
+	* @return BaseEntity The corresponding BaseEntity, or null if not found.
 	 */
 	public BaseEntity getBaseEntityByCode(String code) {
 
@@ -161,8 +162,8 @@ public class BaseEntityUtils implements Serializable {
 	* Call the Fyodor API to fetch a list of {@link BaseEntity} 
 	* objects using a {@link SearchEntity} object.
 	*
-	* @param searchBE	A {@link SearchEntity} object used to determine the results
-	* @return			A list of {@link BaseEntity} objects
+	* @param searchBE A {@link SearchEntity} object used to determine the results
+	* @return List A list of {@link BaseEntity} objects
 	 */
 	public List<BaseEntity> getBaseEntitys(SearchEntity searchBE) {
 
@@ -189,8 +190,8 @@ public class BaseEntityUtils implements Serializable {
 	* Call the Fyodor API to fetch a count of {@link BaseEntity} 
 	* objects using a {@link SearchEntity} object.
 	*
-	* @param searchBE	A {@link SearchEntity} object used to determine the results
-	* @return			A count
+	* @param searchBE A {@link SearchEntity} object used to determine the results
+	* @return Long A count of items
 	 */
 	public Long getBaseEntityCount(SearchEntity searchBE) {
 
@@ -217,7 +218,7 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	* Update a {@link BaseEntity} in the database and the cache.
 	*
-	* @param baseEntity
+	* @param baseEntity the baseEntity to update
 	 */
 	public void updateBaseEntity(BaseEntity baseEntity) {
 
@@ -231,7 +232,7 @@ public class BaseEntityUtils implements Serializable {
 	 *
 	 * @param baseEntityCode The targeted BaseEntity Code
 	 * @param attributeCode  The attribute storing the data
-	 * @return The baseEntity with code stored in the attribute
+	 * @return BaseEntity The baseEntity with code stored in the attribute
 	 */
 	public BaseEntity getBaseEntityFromLNKAttr(String baseEntityCode, String attributeCode) {
 
@@ -244,7 +245,7 @@ public class BaseEntityUtils implements Serializable {
 	 *
 	 * @param baseEntity    The targeted BaseEntity
 	 * @param attributeCode The attribute storing the data
-	 * @return The baseEntity with code stored in the attribute
+	 * @return BaseEntity The baseEntity with code stored in the attribute
 	 */
 	public BaseEntity getBaseEntityFromLNKAttr(BaseEntity baseEntity, String attributeCode) {
 
@@ -275,7 +276,7 @@ public class BaseEntityUtils implements Serializable {
 	 *
 	 * @param baseEntity    The targeted BaseEntity
 	 * @param attributeCode The attribute storing the data
-	 * @return The baseEntity code stored in the attribute
+	 * @return BaseEntity The baseEntity code stored in the attribute
 	 */
 	public String getBaseEntityCodeFromLNKAttr(BaseEntity baseEntity, String attributeCode) {
 
@@ -307,7 +308,7 @@ public class BaseEntityUtils implements Serializable {
 	 *
 	 * @param baseEntity    The targeted BaseEntity
 	 * @param attributeCode The attribute storing the data
-	 * @return An ArrayList of codes stored in the attribute
+	 * @return List An ArrayList of codes stored in the attribute
 	 */
 	public List<String> getBaseEntityCodeArrayFromLNKAttr(BaseEntity baseEntity, String attributeCode) {
 
@@ -335,8 +336,8 @@ public class BaseEntityUtils implements Serializable {
 
 	
 	/** 
-	 * @param baseEntityCode
-	 * @param attributeCode
+	 * @param baseEntityCode the code of the entity to grab from
+	 * @param attributeCode the code of the attribute to check
 	 * @return Object
 	 */
 	public Object getBaseEntityValue(final String baseEntityCode, final String attributeCode) {
@@ -351,8 +352,8 @@ public class BaseEntityUtils implements Serializable {
 
 	
 	/** 
-	 * @param be
-	 * @param attributeCode
+	 * @param be the code of the entity to grab from
+	 * @param attributeCode the code of the attribute to check 
 	 * @return String
 	 */
 	public static String getBaseEntityAttrValueAsString(BaseEntity be, String attributeCode) {
@@ -372,8 +373,8 @@ public class BaseEntityUtils implements Serializable {
 
 	
 	/** 
-	 * @param baseEntityCode
-	 * @param attributeCode
+	 * @param baseEntityCode the code of the entity to grab from
+	 * @param attributeCode the code of the attribute to check
 	 * @return String
 	 */
 	public String getBaseEntityValueAsString(final String baseEntityCode, final String attributeCode) {
@@ -391,8 +392,8 @@ public class BaseEntityUtils implements Serializable {
 
 	
 	/** 
-	 * @param baseEntityCode
-	 * @param attributeCode
+	 * @param baseEntityCode the code of the entity to grab from
+	 * @param attributeCode the code of the attribute to check
 	 * @return LocalDateTime
 	 */
 	public LocalDateTime getBaseEntityValueAsLocalDateTime(final String baseEntityCode, final String attributeCode) {
@@ -407,8 +408,8 @@ public class BaseEntityUtils implements Serializable {
 
 	
 	/** 
-	 * @param baseEntityCode
-	 * @param attributeCode
+	 * @param baseEntityCode the code of the entity to grab from
+	 * @param attributeCode the code of the attribute to check
 	 * @return LocalDate
 	 */
 	public LocalDate getBaseEntityValueAsLocalDate(final String baseEntityCode, final String attributeCode) {
@@ -423,8 +424,8 @@ public class BaseEntityUtils implements Serializable {
 
 	
 	/** 
-	 * @param baseEntityCode
-	 * @param attributeCode
+	 * @param baseEntityCode the code of the entity to grab from
+	 * @param attributeCode the code of the attribute to check
 	 * @return LocalTime
 	 */
 	public LocalTime getBaseEntityValueAsLocalTime(final String baseEntityCode, final String attributeCode) {
@@ -440,8 +441,8 @@ public class BaseEntityUtils implements Serializable {
 
 	
 	/** 
-	 * @param strArr
-	 * @return List<BaseEntity>
+	 * @param strArr the stringified array to convert
+	 * @return List&lt;BaseEntity&gt;
 	 */
 	public List<BaseEntity> convertCodesToBaseEntityArray(String strArr) {
 
@@ -457,8 +458,8 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	* Save an {@link Answer} object.
 	*
-	* @param answer
-	* @return
+	* @param answer the answer to save
+	* @return BaseEntity
 	 */
 	public BaseEntity saveAnswer(Answer answer) {
 
@@ -474,7 +475,7 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	* Save {@link Answers}.
 	* 
-	* @param answers
+	* @param answers the answers to save
 	 */
 	public void saveAnswers(Answers answers) {
 
@@ -484,7 +485,8 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	* Save a List of {@link Answer} objects.
 	*
-	* @param answers
+	* @param answers the list of answers to save
+	* @return List
 	 */
 	public List<BaseEntity> saveAnswers(List<Answer> answers) {
 
@@ -536,9 +538,9 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	* Create a new {@link BaseEntity} using a DEF entity code.
 	*
-	* @param defCode
-	* @return
-	* @throws Exception
+	* @param defCode the defCode to use 
+	* @return BaseEntity
+	* @throws Exception if the entity could not be created
 	 */
 	public BaseEntity create(final String defCode) throws Exception {
 
@@ -551,9 +553,9 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	* Create a new {@link BaseEntity} using a DEF entity.
 	*
-	* @param defBE
-	* @return
-	* @throws Exception
+	* @param defBE the def entity to use
+	* @return BaseEntity
+	* @throws Exception if the entity could not be created
 	 */
 	public BaseEntity create(final BaseEntity defBE) throws Exception {
 		return create(defBE, null, null);
@@ -562,10 +564,10 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	* Create a new {@link BaseEntity} using a DEF entity and a name.
 	*
-	* @param defBE
-	* @param name
-	* @return
-	* @throws Exception
+	* @param defBE the def entity to use
+	* @param name the name of the entity
+	* @return BaseEntity
+	* @throws Exception if the entity could not be created
 	 */
 	public BaseEntity create(final BaseEntity defBE, String name) throws Exception {
 		return create(defBE, name, null);
@@ -574,11 +576,11 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	* Create a new {@link BaseEntity} using a name and code.
 	*
-	* @param defBE
-	* @param name
-	* @param code
-	* @return
-	* @throws Exception
+	* @param defBE the def entity to use
+	* @param name the name of the entity
+	* @param code the code of the entity
+	* @return BaseEntity
+	* @throws Exception if the entity could not be created
 	 */
 	public BaseEntity create(final BaseEntity defBE, String name, String code) throws Exception {
 
@@ -674,10 +676,10 @@ public class BaseEntityUtils implements Serializable {
 	/**
 	* Create a new user {@link BaseEntity} using a DEF entity.
 	*
-	* @param defBE
-	* @param email
-	* @return
-	* @throws Exception
+	* @param defBE the def entity to use
+	* @param email the email to use
+	* @return BaseEntity
+	* @throws Exception if the user could not be created
 	 */
 	public BaseEntity createUser(final BaseEntity defBE, final String email) throws Exception {
 

@@ -44,10 +44,6 @@ import com.querydsl.core.annotations.QueryExclude;
  * <ul>
  * <li>List of Attribute 
  * </ul>
- * <p>
- * 
- * <p>
- * 
  * 
  * @author      Adam Crow
  * @author      Byron Aguirre
@@ -55,43 +51,32 @@ import com.querydsl.core.annotations.QueryExclude;
  * @since       1.0
  */
 
-
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 @Embeddable
 @QueryExclude
 public class AttributeList implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	A fieldlist that stores the attributes for this object.
-	<p>
-	*/
-
+	 *A fieldlist that stores the attributes for this object.
+	 */
 	@JsonIgnore
 	@XmlTransient
 	@ManyToMany( cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name = "base_id", referencedColumnName = "id")
 	private List<Attribute> attributeList = new CopyOnWriteArrayList<Attribute>();
 
- 
-	
 	/**
-	  * Constructor.
-	  * 
-	  * @param none
-	  */
-	
+	* Constructor
+	*
+	* @param attributes the attributes to set
+	 */
 	public AttributeList(List<Attribute> attributes) 
 	{
 		this.attributeList = attributes;
 	}
-
-
 
 	/**
 	 * @return the attributeList
@@ -100,15 +85,11 @@ public class AttributeList implements Serializable {
 		return attributeList;
 	}
 
-
-
 	/**
 	 * @param attributeList the attributeList to set
 	 */
 	public void setAttributeList(List<Attribute> attributeList) {
 		this.attributeList = attributeList;
 	}
-
-
 
 }

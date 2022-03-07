@@ -16,8 +16,10 @@ public class WeightedItem implements Serializable, Comparable<Object> {
 	}
 	
 	/**
-	 * @param item
-	 * @param weight
+	 * Constructor
+	 *
+	 * @param item the item to set
+	 * @param weight the weight to set
 	 */
 	public WeightedItem(BaseEntity item, Double weight) {
 		this.item = item;
@@ -51,7 +53,6 @@ public class WeightedItem implements Serializable, Comparable<Object> {
 	public void setWeight(Double weight) {
 		this.weight = weight;
 	}
-
 	
 	/** 
 	 * @return String
@@ -64,9 +65,10 @@ public class WeightedItem implements Serializable, Comparable<Object> {
 		return "WeightedItem [weight=" + weight + ", item=" + item.getCode() + "]";
 	}
 
-	
 	/** 
-	 * @param o
+	 * Compare to an object
+	 *
+	 * @param o the object to compare to
 	 * @return int
 	 */
 	@Override
@@ -74,9 +76,6 @@ public class WeightedItem implements Serializable, Comparable<Object> {
 		WeightedItem myItem = (WeightedItem) o;
 
 		return new CompareToBuilder().append(this.getWeight(), myItem.getWeight()).toComparison();
-
 	}
-	
-	
 	
 }

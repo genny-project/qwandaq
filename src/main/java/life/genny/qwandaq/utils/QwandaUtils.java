@@ -44,9 +44,8 @@ public class QwandaUtils {
 
 	static GennyToken gennyToken;
 
-	
 	/** 
-	 * @param token
+	 * @param token the token to set
 	 */
 	public static void init(GennyToken token) {
 		gennyToken = token;
@@ -54,10 +53,9 @@ public class QwandaUtils {
 		loadAllAttributesIntoCache();
 	}
 
-	
 	/** 
-	 * @param token
-	 * @param attributeList
+	 * @param token the token to set
+	 * @param attributeList the attributeList to set
 	 */
 	public static void init(GennyToken token, List<Attribute> attributeList) {
 		gennyToken = token;
@@ -74,9 +72,8 @@ public class QwandaUtils {
 	 * Get an attribute from the in memory attribute map. If realm not found, it
 	 * will try to fetch attributes from the DB.
 	 *
-	 * @param attributeCode
-	 * @param gennyToken
-	 * @return
+	 * @param attributeCode the code of the attribute to get
+	 * @return Attribute
 	 */
 	public static Attribute getAttribute(final String attributeCode) {
 
@@ -124,8 +121,6 @@ public class QwandaUtils {
 
 	/**
 	 * Load all attributes into the in memory map.
-	 *
-	 * @return
 	 */
 	public static void loadAllAttributes() {
 
@@ -165,7 +160,7 @@ public class QwandaUtils {
 	/**
 	 * Remove an atttribute from the in memory set using the code.
 	 *
-	 * @param code Code of the attribute to remove.
+	 * @param code the code of the attribute to remove.
 	 */
 	public static void removeAttributeFromMemory(String code) {
 
@@ -176,9 +171,9 @@ public class QwandaUtils {
 	/**
 	* Get a Question using a code.
 	*
-	* @param code
-	* @param userToken
-	* @return
+	* @param code the code of the question to get
+	* @param userToken the userToken to use
+	* @return Question
 	 */
 	static public Question getQuestion(String code, GennyToken userToken) {
 
@@ -213,11 +208,11 @@ public class QwandaUtils {
 	/**
 	 * Send a {@link QEventMessage} to shleemy for scheduling.
 	 *
-	 * @param userToken
-	 * @param eventMsgCode
-	 * @param scheduleMsgCode
-	 * @param triggertime
-	 * @param targetCode
+	 * @param userToken the userToken to schedule for
+	 * @param eventMsgCode the eventMsgCode to set
+	 * @param scheduleMsgCode the scheduleMsgCode to set
+	 * @param triggertime the triggertime to set
+	 * @param targetCode the targetCode to set
 	 */
 	public static void scheduleEvent(GennyToken userToken, String eventMsgCode, String scheduleMsgCode,
 			LocalDateTime triggertime, String targetCode) {
@@ -248,8 +243,8 @@ public class QwandaUtils {
 	/**
 	 * Delete a currently scheduled message via shleemy.
 	 *
-	 * @param userToken
-	 * @param code
+	 * @param userToken the userToken to delete with
+	 * @param code the code of the schedule message to delete
 	 */
 	public static void deleteSchedule(GennyToken userToken, String code) {
 
@@ -260,9 +255,9 @@ public class QwandaUtils {
 	/**
 	* Update the status of the disabled field for an Ask on the web.
 	*
-	* @param ask
-	* @param disabled
-	* @param userToken
+	* @param ask the ask to update
+	* @param disabled the disabled status to set
+	* @param userToken the userToken to use
 	 */
 	public static void updateAskDisabled(Ask ask, Boolean disabled, GennyToken userToken) {
 
@@ -278,8 +273,8 @@ public class QwandaUtils {
 	/**
 	* Send an updated entity for each unique target in answers.
 	*
-	* @param userToken
-	* @param answers
+	* @param userToken the userToken to use
+	* @param answers the answers to send entities for
 	 */
     static public void sendToFrontEnd(GennyToken userToken, Answer... answers) {
 
@@ -329,10 +324,10 @@ public class QwandaUtils {
 	/**
 	* Send feedback for answer data. ERROR, WARN, SUSPICIOUS or HINT.
 	*
-	* @param userToken
-	* @param answer
-	* @param prefix
-	* @param message
+	* @param userToken the userToken to use
+	* @param answer the answer to send for
+	* @param prefix the prefix to send
+	* @param message the message to send
 	 */
     public static void sendFeedback(GennyToken userToken, Answer answer, String prefix, String message) {
 
@@ -365,8 +360,8 @@ public class QwandaUtils {
 	/**
 	* Is the number a valid ABN.
 	*
-	* @param abn
-	* @return
+	* @param abn the abn to check
+	* @return boolean
 	 */
     public static boolean isValidAbnFormat(final String abn) {
         if (NumberUtils.isDigits(abn) && abn.length() != 11) {

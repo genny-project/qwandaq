@@ -14,19 +14,19 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @RegisterForReflection
 public class PanacheLocalDateTimeAdapter implements JsonbAdapter<LocalDateTime, JsonValue> {
-	 private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-	 
-	 public PanacheLocalDateTimeAdapter() {}
 
-	
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+	public PanacheLocalDateTimeAdapter() {}
+
 	/** 
-	 * @param obj
+	 * @param obj the object to adapt to json
 	 * @return JsonValue
-	 * @throws Exception
+	 * @throws Exception if something goes wrong
 	 */
 	@Override
 	public JsonValue adaptToJson(LocalDateTime obj) throws Exception {
-		
+
 		String dateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(dateTimePattern);
 		String localDateTimeStr = obj.format(dateFormatter);
@@ -34,14 +34,15 @@ public class PanacheLocalDateTimeAdapter implements JsonbAdapter<LocalDateTime, 
 
 	}
 
-	
+
 	/** 
-	 * @param obj
+	 * @param obj the object to adapt from json
 	 * @return LocalDateTime
-	 * @throws Exception
+	 * @throws Exception if something goes wrong
 	 */
 	@Override
 	public LocalDateTime adaptFromJson(JsonValue obj) throws Exception {
+
 		String dateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(dateTimePattern);
 		String str = obj.toString();
@@ -49,20 +50,20 @@ public class PanacheLocalDateTimeAdapter implements JsonbAdapter<LocalDateTime, 
 		String value = str.substring(1);
 		LocalDateTime ret = dateFormatter.parse(value, LocalDateTime::from);
 
-	return ret;
+		return ret;
 	}
-	
-	
+
+
 	/** 
-	 * @param dateTimeStr
-	 * @param zoneOffset
+	 * @param dateTimeStr the datetime string to convert
+	 * @param zoneOffset the zone offset to use in conversion
 	 * @return LocalDateTime
 	 */
-	static public  LocalDateTime getLocalDateTimeFromString(final String dateTimeStr, ZoneOffset zoneOffset)
-	{
+	static public LocalDateTime getLocalDateTimeFromString(final String dateTimeStr, ZoneOffset zoneOffset) {
+
 		TemporalAccessor ta = DateTimeFormatter.ISO_INSTANT.parse(dateTimeStr);
-	    Instant i = Instant.from(ta);
-	    LocalDateTime dt  = LocalDateTime.ofInstant(i, zoneOffset);
-	    return dt;
+		Instant i = Instant.from(ta);
+		LocalDateTime dt  = LocalDateTime.ofInstant(i, zoneOffset);
+		return dt;
 	}
 }

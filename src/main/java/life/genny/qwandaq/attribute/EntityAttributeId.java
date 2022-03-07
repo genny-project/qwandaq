@@ -16,14 +16,10 @@ import life.genny.qwandaq.entity.BaseEntity;
 @Embeddable
 public class EntityAttributeId implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-
 	@ManyToOne ( )
-//	@JsonBackReference(value="entityAttribute")
+	//	@JsonBackReference(value="entityAttribute")
 	@JsonManagedReference(value="entityAttribute")
 	@JsonIgnoreProperties("baseEntityAttributes")
 	@JsonbTransient
@@ -31,10 +27,9 @@ public class EntityAttributeId implements java.io.Serializable {
 
 	@ManyToOne
 	@JsonBackReference(value="attribute")
-//	@JsonIgnore
+	//	@JsonIgnore
 	public Attribute attribute;
 
-	
 	/** 
 	 * @return BaseEntity
 	 */
@@ -42,15 +37,13 @@ public class EntityAttributeId implements java.io.Serializable {
 		return baseEntity;
 	}
 
-	
 	/** 
-	 * @param baseEntity
+	 * @param baseEntity the baseentity to set
 	 */
 	public void setBaseEntity(final BaseEntity baseEntity) {
 		this.baseEntity = baseEntity;
 	}
 
-	
 	/** 
 	 * @return Attribute
 	 */
@@ -58,15 +51,13 @@ public class EntityAttributeId implements java.io.Serializable {
 		return attribute;
 	}
 
-	
 	/** 
-	 * @param attribute
+	 * @param attribute the attribute to set
 	 */
 	public void setAttribute(final Attribute attribute) {
 		this.attribute = attribute;
 	}
 
-	
 	/** 
 	 * @return int
 	 */
@@ -82,9 +73,10 @@ public class EntityAttributeId implements java.io.Serializable {
 		return result;
 	}
 
-	
 	/** 
-	 * @param obj
+	 * Chek equality
+	 *
+	 * @param obj the object to compare to
 	 * @return boolean
 	 */
 	/* (non-Javadoc)
@@ -111,8 +103,5 @@ public class EntityAttributeId implements java.io.Serializable {
 			return false;
 		return true;
 	}
-
-
-
 
 }

@@ -82,38 +82,27 @@ import life.genny.qwandaq.exception.BadDataException;
  * @since 1.0
  */
 
-
-
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
-
 @Table(name = "answer", 
 indexes = {
-  //      @Index(columnList = "sourcecode", name =  "code_idx"), // Don't need to index sourcecode
         @Index(columnList = "targetcode", name =  "code_idx"),
         @Index(columnList = "attributecode", name =  "code_idx"),
         @Index(columnList = "realm", name = "code_idx")
-    }//,
-//uniqueConstraints = @UniqueConstraint(columnNames = {"sourcecode","targetcode","attributecode", "realm"})
+    }
 )
 @Entity
 @QueryExclude
 @Immutable
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
-//@Cacheable
-//@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-
 public class Answer implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Stores the hibernate generated Id value for this object
 	 */
 	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
 
@@ -124,20 +113,17 @@ public class Answer implements Serializable {
 	/**
 	 * Stores the Created UMT DateTime that this object was created
 	 */
-	// @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
 	@Column(name = "created")
 	private LocalDateTime created;
 
 	/**
 	 * Stores the Last Modified UMT DateTime that this object was last updated
 	 */
-	// @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
 	@Column(name = "updated")
 	private LocalDateTime updated;
 
 	/**
 	 * A field that stores the human readable value of the answer.
-	 * <p>
 	 */
 	@NotNull
 	@Type(type = "text")
@@ -147,7 +133,6 @@ public class Answer implements Serializable {
 	/**
 	 * A field that stores the human readable attributecode associated with this
 	 * answer.
-	 * <p>
 	 */
 	@NotNull
 	@Size(max = 250)
@@ -161,14 +146,6 @@ public class Answer implements Serializable {
 	@JoinColumn(name = "attribute_id", nullable = false)
 	private Attribute attribute;
 
-	// @JsonInclude(JsonInclude.Include.NON_EMPTY)
-	// @JsonIgnore
-	// @XmlTransient
-	// @Transient
-	// // @OneToOne(fetch = FetchType.LAZY)
-	// // @JoinColumn(name = "ask_id", nullable = true)
-	// private Ask ask;
-
 	/**
 	 * Store the askId (if present)
 	 */
@@ -177,7 +154,6 @@ public class Answer implements Serializable {
 	/**
 	 * A field that stores the human readable targetcode associated with this
 	 * answer.
-	 * <p>
 	 */
 	@NotNull
 	@Size(max = 64)
@@ -187,7 +163,6 @@ public class Answer implements Serializable {
 	/**
 	 * A field that stores the human readable sourcecode associated with this
 	 * answer.
-	 * <p>
 	 */
 	@NotNull
 	@Size(max = 64)
@@ -216,21 +191,17 @@ public class Answer implements Serializable {
 
 	private Boolean changeEvent = false;
 
-	@Transient
 	// Provide a clue to any new attribute type that may be needed if the attribute does not exist yet, e.g. java.util.Double
+	@Transient
 	private String dataType = null;
 	
 	private String realm;
 	
 	/**
 	 * Constructor.
-	 * 
-	 * @param none
 	 */
 	@SuppressWarnings("unused")
-	public Answer() {
-		// dummy for hibernate
-	}
+	public Answer() { }
 
 	/**
 	 * Constructor.
@@ -302,6 +273,10 @@ public class Answer implements Serializable {
 	 *            The attributeCode associated with this Answer
 	 * @param value
 	 *            The associated String value
+	 * @param changeEvent
+	 *            The changeEvent status
+	 * @param inferred
+	 *            The inferred status
 	 */
 	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final Double value, final Boolean changeEvent, final Boolean inferred) {
 		this(sourceCode,targetCode,attributeCode,value+"");
@@ -415,6 +390,10 @@ public class Answer implements Serializable {
 	 *            The attributeCode associated with this Answer
 	 * @param value
 	 *            The associated String value
+	 * @param changeEvent
+	 *            The changeEvent status
+	 * @param inferred
+	 *            The inferred status
 	 */
 	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final String value, final Boolean changeEvent, final Boolean inferred) {
 		this.sourceCode = sourceCode;
@@ -437,6 +416,8 @@ public class Answer implements Serializable {
 	 *            The attributeCode associated with this Answer
 	 * @param value
 	 *            The associated String value
+	 * @param changeEvent
+	 *            The changeEvent status
 	 */
 	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final String value, final Boolean changeEvent) {
 		this(sourceCode,targetCode,attributeCode, value, changeEvent,false);
@@ -469,7 +450,7 @@ public class Answer implements Serializable {
 	 *            The ask that created this answer
 	 * @param value
 	 *            The associated String value
-	 * @throws BadDataException
+	 * @throws BadDataException if Answer could not be constructed
 	 */
 	public Answer(final Ask aAsk, final String value) throws BadDataException {
 		this.askId = aAsk.getId();
@@ -492,7 +473,7 @@ public class Answer implements Serializable {
 	 *            did this ask expire?
 	 * @param refused
 	 *            did the user refuse this question?
-	 * @throws BadDataException
+	 * @throws BadDataException if Answer could not be constructed
 	 */
 	public Answer(final Ask aAsk, final Boolean expired, final Boolean refused) throws BadDataException {
 		// this.ask = aAsk;

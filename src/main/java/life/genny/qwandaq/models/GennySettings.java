@@ -52,14 +52,17 @@ public class GennySettings {
 			? System.getenv("TWILIO_SENDER_MOBILE")
 			: "TWILIO_SENDER_MOBILE";
 
-
-	/**
+	/*
 	 * NOTE: The variables above seem to be defaulting all the time.
 	 * likely due to an issue with the environment variables not being present at initialisation.
 	 * If it cannot be fixed, we may have to opt for doing it as seen below.
-	 **/
+	 */
 
 	// URL methods
+	
+	/** 
+	 * @return String
+	 */
 	public static String projectUrl() {
 		return System.getenv("PROJECT_URL") != null ? System.getenv("PROJECT_URL")
 			: "http://alyson7.genny.life";

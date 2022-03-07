@@ -98,25 +98,22 @@ public class GennyToken implements Serializable {
 		}
 	}
 
-	
 	/** 
 	 * @return String
 	 */
 	public String getToken() {
 		return token;
 	}
-
 	
 	/** 
-	 * @return Map<String, Object>
+	 * @return Map&lt;String, Object&gt;
 	 */
 	public Map<String, Object> getAdecodedTokenMap() {
 		return adecodedTokenMap;
 	}
-
 	
 	/** 
-	 * @param adecodedTokenMap
+	 * @param adecodedTokenMap the decoded token map to set
 	 */
 	public void setAdecodedTokenMap(Map<String, Object> adecodedTokenMap) {
 		this.adecodedTokenMap = adecodedTokenMap;
@@ -142,16 +139,14 @@ public class GennyToken implements Serializable {
 
 	}
 
-	
 	/** 
-	 * @param role
+	 * @param role the role to check against
 	 * @return boolean
 	 */
 	public boolean hasRole(final String role) {
 		return userRoles.contains(role);
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -170,13 +165,12 @@ public class GennyToken implements Serializable {
 
 	
 	/** 
-	 * @param key
+	 * @param key the key of the string item to get
 	 * @return String
 	 */
 	public String getString(final String key) {
 		return (String) adecodedTokenMap.get(key);
 	}
-
 	
 	/** 
 	 * @return String
@@ -185,14 +179,12 @@ public class GennyToken implements Serializable {
 		return code;
 	}
 
-	
 	/** 
 	 * @return String
 	 */
 	public String getSessionCode() {
 		return getString("session_state");
 	}
-
 	
 	/** 
 	 * @return String
@@ -200,7 +192,6 @@ public class GennyToken implements Serializable {
 	public String getUsername() {
 		return getString("preferred_username");
 	}
-
 	
 	/** 
 	 * @return String
@@ -227,14 +218,12 @@ public class GennyToken implements Serializable {
 		return "http://keycloak.genny.life";
 	}
 
-	
 	/** 
 	 * @return String
 	 */
 	public String getClientCode() {
 		return getString("aud");
 	}
-
 	
 	/** 
 	 * @return String
@@ -244,7 +233,7 @@ public class GennyToken implements Serializable {
 	}
 
 	/**
-	 * @return the userCode
+	 * @return String the userCode
 	 */
 	public String getUserCode() {
 		return userCode;
@@ -253,14 +242,13 @@ public class GennyToken implements Serializable {
 	/**
 	* Set the userCode
 	*
-	* @param userCode
-	* @return
+	* @param userCode the user code to set
+	* @return String
 	 */
 	public String setUserCode(String userCode) {
 		return this.userCode = userCode;
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -268,7 +256,6 @@ public class GennyToken implements Serializable {
 		return userUUID;
 	}
 
-	
 	/** 
 	 * @return LocalDateTime
 	 */
@@ -278,7 +265,6 @@ public class GennyToken implements Serializable {
 				TimeZone.getDefault().toZoneId());
 		return authTime;
 	}
-
 	
 	/** 
 	 * @return LocalDateTime
@@ -289,7 +275,6 @@ public class GennyToken implements Serializable {
 				TimeZone.getDefault().toZoneId());
 		return expTime;
 	}
-
 	
 	/** 
 	 * @return OffsetDateTime
@@ -304,7 +289,6 @@ public class GennyToken implements Serializable {
 
 		return utcZoned.toOffsetDateTime();
 	}
-
 	
 	/** 
 	 * @return Integer
@@ -318,7 +302,7 @@ public class GennyToken implements Serializable {
 	}
 
 	/**
-	* @return 	the JWT Issue datetime object
+	* @return LocalDateTime the JWT Issue datetime object
 	 */
 	public LocalDateTime getiatDateTime() {
 		Long iat_timestamp = ((Number) adecodedTokenMap.get("iat")).longValue();
@@ -328,13 +312,12 @@ public class GennyToken implements Serializable {
 	}
 
 	/**
-	* @return 	the unique token id
+	* @return String the unique token id
 	 */
 	public String getUniqueId() {
 		return (String) adecodedTokenMap.get("jti");
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -350,7 +333,6 @@ public class GennyToken implements Serializable {
 		return uuid;
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -361,9 +343,8 @@ public class GennyToken implements Serializable {
 
 	}
 
-	
 	/** 
-	 * @param rawUsername
+	 * @param rawUsername the raw username to normalize
 	 * @return String
 	 */
 	public String getNormalisedUsername(final String rawUsername) {
@@ -377,10 +358,9 @@ public class GennyToken implements Serializable {
 		return username;
 
 	}
-
 	
 	/** 
-	 * @param userCode
+	 * @param userCode the userCode to check
 	 * @return Boolean
 	 */
 	public Boolean checkUserCode(String userCode) {
@@ -408,10 +388,9 @@ public class GennyToken implements Serializable {
 		return getRealm() + "+" + getUserCode();
 	}
 
-	
 	/** 
-	 * @param json
-	 * @return Map<String, Object>
+	 * @param json the json string to get
+	 * @return Map&lt;String, Object&gt;
 	 */
 	// Send the decoded Json token in the map
 	public Map<String, Object> getJsonMap(final String json) {
@@ -419,10 +398,9 @@ public class GennyToken implements Serializable {
 		return getJsonMap(jsonObj);
 	}
 
-	
 	/** 
-	 * @param jsonObj
-	 * @return Map<String, Object>
+	 * @param jsonObj the json object to get
+	 * @return Map&lt;String, Object&gt;
 	 */
 	public static Map<String, Object> getJsonMap(final JsonObject jsonObj) {
 		final String json = jsonObj.toString();
@@ -446,9 +424,8 @@ public class GennyToken implements Serializable {
 		return map;
 	}
 
-	
 	/** 
-	 * @param bearerToken
+	 * @param bearerToken the bearer token to set
 	 * @return JsonObject
 	 */
 	public JsonObject getDecodedToken(final String bearerToken) {

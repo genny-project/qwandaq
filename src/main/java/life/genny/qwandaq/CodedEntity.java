@@ -93,8 +93,6 @@ public abstract class CodedEntity extends CoreEntity {
 	
 	/**
 	 * Constructor.
-	 * 
-	 * @param none
 	 */
 	protected CodedEntity() {
 		// dummy
@@ -105,14 +103,14 @@ public abstract class CodedEntity extends CoreEntity {
 	/**
 	 * Constructor.
 	 * 
-	 * @param Name
+	 * @param name
 	 *            the summary name of the coded entity
-	 * @param Code
+	 * @param code
 	 *            the unique code of the coded entity
 	 */
-	public CodedEntity(String aCode, String aName) {
-		super(aName);
-		setCode(aCode);
+	public CodedEntity(String code, String name) {
+		super(name);
+		setCode(code);
 		setIndex(0);
 	}
 
@@ -124,15 +122,13 @@ public abstract class CodedEntity extends CoreEntity {
 	}
 
 	/**
-	 * 
-	 * @param aName
-	 *            human readable text representing the unique code
+	 * @param code the unique code of the coded entity
 	 */
-	public void setCode(String aCode) {
-		if (aCode == null) {
+	public void setCode(String code) {
+		if (code == null) {
 			log.error("Null Code passed. Will result in error if saved");
 		} else {
-			this.code = aCode.toUpperCase();
+			this.code = code.toUpperCase();
 		}
 	}
 
@@ -168,7 +164,9 @@ public abstract class CodedEntity extends CoreEntity {
 
 	
 	/** 
-	 * @param obj
+	 * Check equality
+	 *
+	 * @param obj the object to compare to
 	 * @return boolean
 	 */
 	@Override
@@ -187,7 +185,9 @@ public abstract class CodedEntity extends CoreEntity {
 
 	
 	/** 
-	 * @param o
+	 * Compare to an object.
+	 *
+	 * @param o the object to compare to
 	 * @return int
 	 */
 	@Override

@@ -41,10 +41,6 @@ import com.querydsl.core.annotations.QueryExclude;
  * <ul>
  * <li>List of Validation
  * </ul>
- * <p>
- * 
- * <p>
- * 
  * 
  * @author Adam Crow
  * @author Byron Aguirre
@@ -59,16 +55,11 @@ import com.querydsl.core.annotations.QueryExclude;
 @Embeddable
 public class ValidationList implements Serializable {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
 
   /**
    * A fieldlist that stores the validations for this object.
-   * <p>
    */
-
   @JsonIgnore
   @XmlTransient
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -81,10 +72,9 @@ public class ValidationList implements Serializable {
 
   /**
    * Constructor.
-   * 
-   * @param none
+   *
+   * @param validations the list of validations to set
    */
-
   public ValidationList(final List<Validation> validations) {
     this.validationList = validations;
   }

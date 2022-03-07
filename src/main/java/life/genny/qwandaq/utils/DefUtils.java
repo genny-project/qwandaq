@@ -35,15 +35,17 @@ public class DefUtils {
 
 	static BaseEntityUtils beUtils;
 
-	
 	/** 
-	 * @param baseEntityUtils
+	 * @param baseEntityUtils the baseEntityUtils to set
 	 */
 	public static void init(BaseEntityUtils baseEntityUtils) {
 		beUtils = baseEntityUtils;
 		initializeDefs();
 	}
 
+	/**
+	 * Initialize the in memory DEF store
+	 */
 	public static void initializeDefs() {
 
 		String realm = beUtils.getGennyToken().getRealm();
@@ -95,8 +97,8 @@ public class DefUtils {
 
 	
 	/** 
-	 * @param userToken
-	 * @return Map<String, BaseEntity>
+	 * @param userToken the userToken to get defs with
+	 * @return Map
 	 */
 	public static Map<String, BaseEntity> getDefMap(final GennyToken userToken) {
 		return getDefMap(userToken.getRealm());
@@ -104,8 +106,8 @@ public class DefUtils {
 		
 	
 	/** 
-	 * @param realm
-	 * @return Map<String, BaseEntity>
+	 * @param realm the realm to get defs from
+	 * @return Map
 	 */
 	public static Map<String, BaseEntity> getDefMap(final String realm) {
 		if ((defs == null) || (defs.isEmpty())) {
@@ -119,7 +121,7 @@ public class DefUtils {
 	* Find the corresponding definition for a given {@link BaseEntity}.
 	*
 	* @param be		The {@link BaseEntity} to check
-	* @return		The corresponding definition {@link BaseEntity}
+	* @return		BaseEntity The corresponding definition {@link BaseEntity}
 	 */
 	public static BaseEntity getDEF(final BaseEntity be) {
 
@@ -275,9 +277,8 @@ public class DefUtils {
 	* A function to determine the whether or not an attribute is allowed to be
 	* saved to a {@link BaseEntity}.
 	*
-	* @param defBE
-	* @param answer
-	* @return
+	* @param answer the answer to check
+	* @return Boolean
 	 */
 	public static Boolean answerValidForDEF(Answer answer) {
 		BaseEntity target = beUtils.getBaseEntityByCode(answer.getTargetCode());
@@ -294,9 +295,9 @@ public class DefUtils {
 	* A function to determine the whether or not an attribute is allowed to be
 	* saved to a {@link BaseEntity}
 	*
-	* @param defBE
-	* @param answer
-	* @return
+	* @param defBE the defBE to check with
+	* @param answer the answer to check
+	* @return Boolean
 	 */
 	public static Boolean answerValidForDEF(BaseEntity defBE, Answer answer) {
 		String targetCode = answer.getTargetCode();
@@ -330,7 +331,7 @@ public class DefUtils {
 	*
 	* @param searchBE	The {@link SearchEntity} to process
 	* @param ctxMap		Map of merge contexts
-	* @return			The updated {@link SearchEntity}
+	* @return			SearchEntity The updated {@link SearchEntity}
 	 */
 	public static SearchEntity mergeFilterValueVariables(SearchEntity searchBE, Map<String, Object> ctxMap) {
 

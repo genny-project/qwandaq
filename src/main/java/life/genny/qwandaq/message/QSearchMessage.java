@@ -22,7 +22,6 @@ public class QSearchMessage extends QMessage implements Serializable {
 		this.searchEntity = searchEntity;
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -33,7 +32,7 @@ public class QSearchMessage extends QMessage implements Serializable {
 
 	
 	/** 
-	 * @param searchEntity
+	 * @param searchEntity the searchEntity to set
 	 */
 	public void setSearchEntity(SearchEntity searchEntity) {
 		this.searchEntity = searchEntity;
@@ -49,7 +48,7 @@ public class QSearchMessage extends QMessage implements Serializable {
 	
 	
 	/** 
-	 * @param destination
+	 * @param destination the destination to set
 	 */
 	public void setDestination(String destination) {
 		this.destination = destination;

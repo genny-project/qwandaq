@@ -20,8 +20,8 @@ public class TestJob {
 	/**
 	 * Creates a new TestJob and adds it to a {@link LoadTestJobs} ConcurrentHashMap
 	 * 
-	 * @param jobLoader - {@link LoadTestJobs} to use
-	 * @param code      - {@link SearchEntity#code}
+	 * @param jobLoader {@link LoadTestJobs} to use
+	 * @param searchMessage {@link QSearchMessage} to user
 	 */
 	public TestJob(LoadTestJobs jobLoader, QSearchMessage searchMessage) {
 		this.start = Instant.now();
@@ -36,7 +36,6 @@ public class TestJob {
 		this.qSearchMessageJson = jobLoader.jsonb.toJson(searchMessage);
 		jobLoader.putJob(entity, this);
 	}
-
 	
 	/** 
 	 * @return String
@@ -44,7 +43,6 @@ public class TestJob {
 	public String getUuid() {
 		return uuid;
 	}
-
 	
 	/** 
 	 * @return String
@@ -52,7 +50,6 @@ public class TestJob {
 	public String getCode() {
 		return code;
 	}
-
 	
 	/** 
 	 * @return Instant
@@ -61,22 +58,19 @@ public class TestJob {
 		return start;
 	}
 
-	
 	/** 
 	 * @return Instant
 	 */
 	public Instant getEnd() {
 		return end;
 	}
-
 	
 	/** 
-	 * @param end
+	 * @param end the end to set
 	 */
 	public void setEnd(Instant end) {
 		this.end = end;
 	}
-
 	
 	/** 
 	 * @return Boolean
@@ -84,7 +78,6 @@ public class TestJob {
 	public Boolean isComplete() {
 		return end != null;
 	}
-
 	
 	/** 
 	 * @return Long
@@ -93,7 +86,6 @@ public class TestJob {
 		return Duration.between(start, end).toMillis();
 	}
 
-	
 	/** 
 	 * @return String
 	 */
@@ -101,10 +93,9 @@ public class TestJob {
 	public String toString() {
 		return toString(false);
 	}
-
 	
 	/** 
-	 * @param qSearchMessageJson
+	 * @param qSearchMessageJson the json to stringify
 	 * @return String
 	 */
 	public String toString(boolean qSearchMessageJson) {
@@ -117,14 +108,12 @@ public class TestJob {
 				+ "]";
 	}
 
-	
 	/** 
 	 * @return String
 	 */
 	public String getSearchJSON() {
 		return searchEntityJson;
 	}
-	
 	
 	/** 
 	 * @return String

@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
 	
 	/** 
-	 * @param s
+	 * @param s the string to unmarshal
 	 * @return LocalDateTime
-	 * @throws Exception
+	 * @throws Exception if something goes wrong
 	 */
 	@Override
 	public LocalDateTime unmarshal(String s) throws Exception {
@@ -18,9 +18,9 @@ public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
 
 	
 	/** 
-	 * @param dateTime
+	 * @param dateTime the datetime to marshal
 	 * @return String
-	 * @throws Exception
+	 * @throws Exception if something goes wrong
 	 */
 	@Override
 	public String marshal(LocalDateTime dateTime) throws Exception {

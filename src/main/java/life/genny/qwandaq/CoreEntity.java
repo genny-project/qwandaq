@@ -104,7 +104,6 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 
 	/**
 	 * A field that stores the human readable summary name of the attribute.
-	 * <p>
 	 * Note that this field is in English.
 	 */
 	@NotNull
@@ -124,46 +123,36 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	@Column(name = "realm", updatable = true, nullable = false)
 	private String realm = DEFAULT_REALM;
 
-	
-	
-	
-	
 	/**
 	 * Constructor.
-	 * 
-	 * @param none
 	 */
-	protected CoreEntity() {
-		// dummy
-	}
+	protected CoreEntity() { }
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param Realm
+	 * @param realm
 	 *            the security realm of the core entity
-	 * @param Name
+	 * @param name
 	 *            the name of the core entity
 	 */
-	public CoreEntity(final String realm, final String aName) {
+	public CoreEntity(final String realm, final String name) {
 		super();
 		this.realm = realm;
-		this.name = aName;
+		this.name = name;
 		autocreateCreated();
 	}
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param Name
+	 * @param name
 	 *            the summary name of the core entity
-	 * @param Code
-	 *            the unique code of the core entity
 	 */
-	public CoreEntity(final String aName) {
+	public CoreEntity(final String name) {
 		super();
 		this.realm = DEFAULT_REALM;
-		this.name = aName;
+		this.name = name;
 		autocreateCreated();
 	}
 

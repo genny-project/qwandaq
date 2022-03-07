@@ -50,10 +50,6 @@ import life.genny.qwandaq.converter.StringListConverter;
  * <ul>
  * <li>Regex 
  * </ul>
- * <p>
- * 
- * <p>
- * 
  * 
  * @author      Adam Crow
  * @author      Byron Aguirre
@@ -74,22 +70,18 @@ uniqueConstraints = @UniqueConstraint(columnNames = {"code", "realm"}))
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 
 public class Validation extends CodedEntity implements Serializable {
-	
-	
+
 	/** 
 	 * @return String
 	 */
 	/* (non-Javadoc)
-   * @see java.lang.Object#toString()
-   */
-  @Override
-  public String toString() {
-    return "Validation [regex=" + regex + "]";
-  }
-
-  /**
-	 * 
+	 * @see java.lang.Object#toString()
 	 */
+	@Override
+	public String toString() {
+		return "Validation [regex=" + regex + "]";
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	private static final String DEFAULT_CODE_PREFIX = "VLD_";
@@ -97,10 +89,9 @@ public class Validation extends CodedEntity implements Serializable {
 	private static final String DEFAULT_REGEX = ".*";
 
 	/**
-	A field that stores the validation regex.
-	<p>
-	Note that this regex needs to be applied to the complete value (Not partial).
-	*/
+	 * A field that stores the validation regex.
+	 * Note that this regex needs to be applied to the complete value (Not partial).
+	 */
 	@NotNull
 	@Type(type = "text")
 	@Column(name = "regex", updatable = true, nullable = false)	
@@ -147,25 +138,20 @@ public class Validation extends CodedEntity implements Serializable {
 
 	
 	/** 
-	 * @param errormsg
+	 * @param errormsg the error msg to set
 	 */
 	public void setErrormsg(String errormsg) {
 		this.errormsg = errormsg;
 	}
 
 	/**
-	  * Constructor.
-	  * 
-	  * @param none
-	  */
+	 * Constructor.
+	 */
 	@SuppressWarnings("unused")
 	public Validation()
 	{
 		super();
-		// dummy for hibernate
 	}
-	
-
 	
 	public Validation(String aCode, String aName, String aRegex) throws PatternSyntaxException
 	{
@@ -300,7 +286,7 @@ public class Validation extends CodedEntity implements Serializable {
 	}
 
 	/**
-	 * @param regex
+	 * @param regex the regex to validate
 	 */
 	static public void validateRegex(String regex) {
 		java.util.regex.Pattern p = java.util.regex.Pattern.compile(regex);

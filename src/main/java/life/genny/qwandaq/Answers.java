@@ -16,9 +16,8 @@ public class Answers implements Serializable {
 		this.answers = answers;
 	}
 	
-	
 	/** 
-	 * @param answer
+	 * @param answer the answer to add
 	 */
 	public void add(Answer answer)
 	{
@@ -47,6 +46,5 @@ public class Answers implements Serializable {
 	public String toString() {
 		return "Answers [answers=" + answers + "]";
 	}
-	
 	
 }

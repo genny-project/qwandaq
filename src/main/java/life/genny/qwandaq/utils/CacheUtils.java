@@ -19,9 +19,8 @@ public class CacheUtils {
 
 	public static GennyCache cache = null;
 
-	
 	/** 
-	 * @param gennyCache
+	 * @param gennyCache the gennyCache to set
 	 */
 	public static void init(GennyCache gennyCache) {
 		cache = gennyCache;
@@ -30,9 +29,9 @@ public class CacheUtils {
 	/**
 	 * Read a stringified item from a realm cache.
 	 *
-	 * @param realm
-	 * @param key
-	 * @return
+	 * @param realm the realm to read from
+	 * @param key the key to read
+	 * @return Object
 	 */
 	public static Object readCache(String realm, String key) {
 
@@ -55,11 +54,11 @@ public class CacheUtils {
 	/**
 	 * Get an object from a realm cache using a {@link Class}.
 	 *
-	 * @param <T>
-	 * @param realm
-	 * @param key
-	 * @param c
-	 * @return
+	 * @param <T> the Type to cast as
+	 * @param realm the realm to get from
+	 * @param key the key to get
+	 * @param c the Class to get as
+	 * @return T
 	 */
 	public static <T> T getObject(String realm, String key, Class c) {
 
@@ -74,11 +73,11 @@ public class CacheUtils {
 	/**
 	 * Get an object from a realm cache using a {@link Type}.
 	 *
-	 * @param <T>
-	 * @param realm
-	 * @param key
-	 * @param type
-	 * @return
+	 * @param <T> the Type to cast as
+	 * @param realm the realm to get from
+	 * @param key the key to get
+	 * @param t the Type to get as
+	 * @return T
 	 */
 	public static <T> T getObject(String realm, String key, Type t) {
 
@@ -93,9 +92,9 @@ public class CacheUtils {
 	/**
 	 * Put an object into the cache.
 	 *
-	 * @param realm
-	 * @param key
-	 * @param obj
+	 * @param realm the realm to put object into
+	 * @param key the key to put object under
+	 * @param obj the obj to put
 	 */
 	public static void putObject(String realm, String key, Object obj) {
 

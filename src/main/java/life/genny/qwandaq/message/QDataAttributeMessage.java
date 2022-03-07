@@ -10,11 +10,11 @@ public class QDataAttributeMessage extends QDataMessage{
 	private static final String DATATYPE_ATTRIBUTE = Attribute.class.getSimpleName();
 
 	public QDataAttributeMessage(Attribute[] items) {
+
 		super(DATATYPE_ATTRIBUTE);
 		setItems(items);
 	}
 
-	
 	/** 
 	 * @return Attribute[]
 	 */
@@ -22,9 +22,8 @@ public class QDataAttributeMessage extends QDataMessage{
 		return items;
 	}
 
-	
 	/** 
-	 * @param items
+	 * @param items the array of attributes to set
 	 */
 	public void setItems(Attribute[] items) {
 		this.items = items;

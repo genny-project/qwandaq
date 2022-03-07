@@ -24,7 +24,8 @@ import org.jboss.logging.Logger;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
-/* SearchEntity class implements the search of base entities applying different filters/search to the
+/* 
+ * SearchEntity class implements the search of base entities applying different filters/search to the
  * baseEntity and its attributes
  */
 @RegisterForReflection
@@ -159,38 +160,34 @@ public class SearchEntity extends BaseEntity {
 			}
 		}
 	}
-
 	
 	/** 
-	 * @param operator
+	 * @param operator the operator to convert
 	 * @return Filter
 	 */
 	static public SearchEntity.Filter convertOperatorToFilter(final String operator) {
-			SearchEntity.Filter ret = null;
-				switch (operator) {
-				case ">": ret =  SearchEntity.Filter.GREATER_THAN; break;
-				case "<": ret =  SearchEntity.Filter.LESS_THAN; break;
-				case ">=": ret =  SearchEntity.Filter.GREATER_THAN_AND_EQUAL; break;
-				case "<=": ret =  SearchEntity.Filter.LESS_THAN_AND_EQUAL; break;
-				case "<>":
-				case "!=": ret =  SearchEntity.Filter.NOT_EQUALS;break;
-				default:
-					ret = SearchEntity.Filter.EQUALS;
-				}
-				return ret;
-				
-		
-		
+		SearchEntity.Filter ret = null;
+		switch (operator) {
+			case ">": ret =  SearchEntity.Filter.GREATER_THAN; break;
+			case "<": ret =  SearchEntity.Filter.LESS_THAN; break;
+			case ">=": ret =  SearchEntity.Filter.GREATER_THAN_AND_EQUAL; break;
+			case "<=": ret =  SearchEntity.Filter.LESS_THAN_AND_EQUAL; break;
+			case "<>":
+			case "!=": ret =  SearchEntity.Filter.NOT_EQUALS;break;
+			default:
+					   ret = SearchEntity.Filter.EQUALS;
+		}
+
+		return ret;
 	}
 	
-	
 	/** 
-	 * @param operator
+	 * @param operator the operator to convert
 	 * @return StringFilter
 	 */
 	static public SearchEntity.StringFilter convertOperatorToStringFilter(final String operator) {
 		SearchEntity.StringFilter ret = null;
-			switch (operator) {
+		switch (operator) {
 			case "REGEXP": ret =  SearchEntity.StringFilter.REGEXP; break;
 			case "NOT REGEXP": ret =  SearchEntity.StringFilter.NOT_REGEXP; break;
 			case "RLIKE": ret =  SearchEntity.StringFilter.RLIKE; break;
@@ -200,14 +197,11 @@ public class SearchEntity extends BaseEntity {
 			case "<>":
 			case "!=": ret =  SearchEntity.StringFilter.NOT_EQUAL;break;
 			default:
-				ret = SearchEntity.StringFilter.EQUAL;
-			}
-			return ret;
-			
-	
-	
-}
-	
+					   ret = SearchEntity.StringFilter.EQUAL;
+		}
+
+		return ret;
+	}
 	
 	public void convertBEToSaveable() {
 		for (EntityAttribute ea : this.getBaseEntityAttributes()) {
@@ -249,9 +243,8 @@ public class SearchEntity extends BaseEntity {
 		}
 	}
 
-	
 	/** 
-	 * @param value
+	 * @param value the value to convert
 	 * @return String
 	 */
 	public static String convertToSaveable(String value) {
@@ -264,10 +257,9 @@ public class SearchEntity extends BaseEntity {
 		name = name.replaceAll("\\!", "_NOT_");
 		return name;
 	}
-
 	
 	/** 
-	 * @param value
+	 * @param value the value to convert
 	 * @return String
 	 */
 	public static String convertFromSaveable(String value) {
@@ -306,15 +298,13 @@ public class SearchEntity extends BaseEntity {
 		this.setBaseEntityAttributes(be.getBaseEntityAttributes());
 	}
 
-	
 	/** 
-	 * @param attributeCode
-	 * @param columnName
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to add the attributes to the SearchEntity that is required
 	 * in the result BaseEntities
+	 *
+	 * @param attributeCode the code of the column
+	 * @param columnName the name of the column
+	 * @return SearchEntity
 	 */
 	public SearchEntity addColumn(final String attributeCode, final String columnName) {
 		AttributeText attributeColumn = new AttributeText("COL_" + attributeCode, columnName);
@@ -328,25 +318,25 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
-		
-		/** 
-		 * @param attributeCode
-		 * @param columnName
-		 * @return SearchEntity
-		 */
-		/*
+	/** 
 	 * This method allows to add the action attributes to the SearchEntity that is
 	 * required in the result BaseEntities
+	 *
+	 * @param attributeCode the code of the action
+	 * @param columnName the name of the action
+	 * @return SearchEntity
 	 */
 	public SearchEntity addAction(final String attributeCode, final String columnName) {
 		return this.addAction(attributeCode, columnName, false);
 	}
 
-	
 	/** 
-	 * @param attributeCode
-	 * @param columnName
-	 * @param confirmationFlag
+	 * This method allows to add the action attributes to the SearchEntity that is
+	 * required in the result BaseEntities
+	 *
+	 * @param attributeCode the code of the action
+	 * @param columnName the name of the action
+	 * @param confirmationFlag the confirmation flag
 	 * @return SearchEntity
 	 */
 	public SearchEntity addAction(final String attributeCode, final String columnName, Boolean confirmationFlag) {
@@ -361,16 +351,14 @@ public class SearchEntity extends BaseEntity {
 		}
 		return this;
 	}
-
 	
 	/** 
-	 * @param attributeCode
-	 * @param columnName
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to add the action attributes to the SearchEntity that is
 	 * required in the result BaseEntities
+	 *
+	 * @param attributeCode the code of the default action
+	 * @param columnName the name of the default action
+	 * @return SearchEntity
 	 */
 	public SearchEntity addDefaultAction(final String attributeCode, final String columnName) {
 		AttributeText attributeColumn = new AttributeText("ACT_" + attributeCode, columnName);
@@ -382,16 +370,14 @@ public class SearchEntity extends BaseEntity {
 		}
 		return this;
 	}
-
 	
 	/** 
-	 * @param attributeCode
-	 * @param columnName
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to add the search action attributes to the SearchEntity
 	 * not each result BaseEntities
+	 *
+	 * @param attributeCode the code of the search action
+	 * @param columnName the name of the search action
+	 * @return SearchEntity
 	 */
 	public SearchEntity addSearchAction(final String attributeCode, final String columnName) {
 		AttributeText attributeColumn = new AttributeText("SCH_ACT_" + attributeCode, columnName);
@@ -404,16 +390,14 @@ public class SearchEntity extends BaseEntity {
 		}
 		return this;
 	}
-
 	
 	/** 
-	 * @param attributeCode
-	 * @param columnName
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to add the default search action attributes to the
 	 * SearchEntity not each result BaseEntities
+	 *
+	 * @param attributeCode the code of the default search action
+	 * @param columnName the name of the default search action
+	 * @return SearchEntity
 	 */
 	public SearchEntity addDefaultSearchAction(final String attributeCode, final String columnName) {
 		AttributeText attributeColumn = new AttributeText("SCH_ACT_" + attributeCode, columnName);
@@ -428,13 +412,12 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param columnName
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to add the row action attribute to the
 	 * each result BaseEntities
+	 *
+	 * @param attributeCode the code of the row action
+	 * @param columnName the name of the column
+	 * @return SearchEntity
 	 */
 	public SearchEntity addRowAction(final String attributeCode, final String columnName) {
 		AttributeText attributeColumn = new AttributeText("ROW_ACT_" + attributeCode, columnName);
@@ -449,13 +432,11 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param searchCode
-	 * @param columnName
+	 * This method allows to add the linked searchcodes to the SearchEntity as required
+	 *
+	 * @param searchCode the code of the search to link
+	 * @param columnName the name of the column
 	 * @return SearchEntity
-	 */
-	/*
-	 * This method allows to add the linked searchcodes to the SearchEntity as
-	 * required
 	 */
 	public SearchEntity addLinkedSearch(final String searchCode, final String columnName) {
 		AttributeText attributeColumn = new AttributeText(searchCode, columnName);
@@ -471,9 +452,11 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param searchCode
-	 * @param association
-	 * @param columnName
+	 * Add a Linked Search with an association code
+	 *
+	 * @param searchCode the code of the search to link
+	 * @param association the association attribute code
+	 * @param columnName the name of the column
 	 * @return SearchEntity
 	 */
 	public SearchEntity addLinkedSearch(final String searchCode, final String association, final String columnName) {
@@ -490,17 +473,16 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param columnName
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to add the combined searches to the SearchEntity.
 	 * This will combine the results with the two searches
 	 * NOTE: has only been implemented for counts so far
+	 *
+	 * @param searchCode the code of the search to combine
+	 * @param columnName the name of the column
+	 * @return SearchEntity
 	 */
-	public SearchEntity addCombinedSearch(final String attributeCode, final String columnName) {
-		AttributeText attributeColumn = new AttributeText("CMB_"+attributeCode, columnName);
+	public SearchEntity addCombinedSearch(final String searchCode, final String columnName) {
+		AttributeText attributeColumn = new AttributeText("CMB_"+searchCode, columnName);
 		try {
 			EntityAttribute ea = addAttribute(attributeColumn, searchIndex);
 			ea.setIndex(combinedSearchIndex.intValue());
@@ -513,14 +495,13 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param associatedLinkedBaseEntityCodeAttribute
-	 * @param columnName
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to add the associated attributes to the SearchEntity that
 	 * is required in the result BaseEntities
+	 *
+	 * @param attributeCode the code of the associated attribute
+	 * @param associatedLinkedBaseEntityCodeAttribute the the code of the attribute to fetch as a column
+	 * @param columnName the name of the column
+	 * @return SearchEntity
 	 */
 	public SearchEntity addAssociatedColumn(final String attributeCode, final String associatedLinkedBaseEntityCodeAttribute,
 			final String columnName) {
@@ -538,14 +519,13 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param nestedAttributeCode
-	 * @param associatedLinkedBaseEntityCodeAttribute
-	 * @param columnName
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows nested associated columns
+	 *
+	 * @param attributeCode the code of the associated attribute
+	 * @param nestedAttributeCode the code of the nested associated attribute
+	 * @param associatedLinkedBaseEntityCodeAttribute the the code of the attribute to fetch as a column
+	 * @param columnName the name of the column
+	 * @return SearchEntity
 	 */
 	public SearchEntity addAssociatedColumn(final String attributeCode, String nestedAttributeCode,
 			final String associatedLinkedBaseEntityCodeAttribute, final String columnName) {
@@ -554,15 +534,14 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param nestedAttributeCode
-	 * @param doubleNestedAttributeCode
-	 * @param associatedLinkedBaseEntityCodeAttribute
-	 * @param columnName
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows double nested associated columns
+	 *
+	 * @param attributeCode the code of the associated attribute
+	 * @param nestedAttributeCode the code of the nested associated attribute
+	 * @param doubleNestedAttributeCode the code of the double nested associated attribute
+	 * @param associatedLinkedBaseEntityCodeAttribute the the code of the attribute to fetch as a column
+	 * @param columnName the name of the column
+	 * @return SearchEntity
 	 */
 	public SearchEntity addAssociatedColumn(final String attributeCode, String nestedAttributeCode, String doubleNestedAttributeCode,
 			final String associatedLinkedBaseEntityCodeAttribute, final String columnName) {
@@ -571,14 +550,13 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param sortHelpText
-	 * @param sortType
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to add sorting to the attributes of the search results It
 	 * can either sort in ascending or descending order
+	 *
+	 * @param attributeCode the code of the attribute to add a sort for
+	 * @param sortHelpText the help text for the sort
+	 * @param sortType the type of sort
+	 * @return SearchEntity
 	 */
 	public SearchEntity addSort(final String attributeCode, final String sortHelpText, final Sort sortType) {
 		AttributeText attributeSort = new AttributeText("SRT_" + attributeCode, sortHelpText);
@@ -593,14 +571,13 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
-	
 	/** 
-	 * @param attributeCode
-	 * @param aName
+	 * @param attributeCode the code of the attribute to add a sort attribute for
+	 * @param name the name of the sort attribute
 	 * @return SearchEntity
 	 */
-	public SearchEntity addSortAttribute(final String attributeCode, final String aName) {
-		AttributeText attributeSort = new AttributeText("ATTRSRT_" + attributeCode, aName);
+	public SearchEntity addSortAttribute(final String attributeCode, final String name) {
+		AttributeText attributeSort = new AttributeText("ATTRSRT_" + attributeCode, name);
 		try {
 			addAttribute(attributeSort, 1.0);
 		} catch (BadDataException e) {
@@ -630,13 +607,12 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param groupBy
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to add grouping by a specific attribute. all BEs who's
 	 * value corresponding to this attribute will be grouped together.
 	 * NOTE: not implemented yet
+	 *
+	 * @param groupBy the group by code to set
+	 * @return SearchEntity
 	 */
 	public SearchEntity addGroupBy(final String groupBy) {
 		AttributeText attribute = new AttributeText("GPB_" + groupBy, "GroupBy");
@@ -653,8 +629,8 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param alias
+	 * @param attributeCode the attribute code to set an alias for
+	 * @param alias the alias to set for the attribute
 	 * @return SearchEntity
 	 */
 	public SearchEntity addAlias(final String attributeCode, final String alias) {
@@ -671,21 +647,14 @@ public class SearchEntity extends BaseEntity {
 	}
 
 	
-	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
 	/*
 	 * This method allows to set the filter for the integer value in the search
 	 * 
-	 * @param attributeCode - the attributeCode which holds integer value where we
+	 * @param attributeCode the attributeCode which holds integer value where we
 	 * apply the filter
-	 * 
-	 * @param filterType - type of the filter
-	 * 
-	 * @param value - filter against (search for) this value
+	 * @param filterType type of the filter
+	 * @param value filter against (search for) this value
+	 * @return SearchEntity
 	 */
 	public SearchEntity addFilter(final String attributeCode, final Filter filterType, final Integer value) {
 		AttributeInteger attribute = new AttributeInteger(attributeCode, filterType.toString());
@@ -700,22 +669,14 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
-	
-	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
+	/**
 	 * This method allows to set the filter for the Long value in the search
 	 * 
 	 * @param attributeCode - the attributeCode which holds long value where we
 	 * apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
 	public SearchEntity addFilter(final String attributeCode, final Filter filterType, final Long value) {
 		AttributeLong attribute = new AttributeLong(attributeCode, filterType.toString());
@@ -729,23 +690,15 @@ public class SearchEntity extends BaseEntity {
 
 		return this;
 	}
-
 	
-	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
+	/**
 	 * This method allows to set the filter for the Double value in the search
 	 * 
 	 * @param attributeCode - the attributeCode which holds long value where we
 	 * apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
 	public SearchEntity addFilter(final String attributeCode, final Filter filterType, final Double value) {
 		AttributeDouble attribute = new AttributeDouble(attributeCode, filterType.toString());
@@ -762,21 +715,14 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the filter for the LocalDateTime value in the
 	 * search
 	 * 
 	 * @param attributeCode - the attributeCode which holds LocalDateTime value
 	 * where we apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
 	public SearchEntity addFilter(final String attributeCode, final Filter filterType, final LocalDateTime value) {
 		AttributeDateTime attribute = new AttributeDateTime(attributeCode, filterType.toString());
@@ -793,21 +739,14 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the filter for the LocalDate value in the
 	 * search
 	 * 
 	 * @param attributeCode - the attributeCode which holds LocalDate value
 	 * where we apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
 	public SearchEntity addFilter(final String attributeCode, final Filter filterType, final LocalDate value) {
 		AttributeDate attribute = new AttributeDate(attributeCode, filterType.toString());
@@ -824,21 +763,14 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the filter for the LocalDate value in the
 	 * search
 	 * 
 	 * @param attributeCode - the attributeCode which holds LocalDate value
 	 * where we apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
 	public SearchEntity addFilter(final String attributeCode, final Filter filterType, final LocalTime value) {
 		AttributeTime attribute = new AttributeTime(attributeCode, filterType.toString());
@@ -856,17 +788,12 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the filter for the Boolean value in the search
 	 * 
 	 * @param attributeCode - the attributeCode which holds Boolean value where we
 	 * apply the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
 	public SearchEntity addFilter(final String attributeCode, final Boolean value) {
 		AttributeBoolean attribute = new AttributeBoolean(attributeCode, "=");
@@ -882,13 +809,7 @@ public class SearchEntity extends BaseEntity {
 	}
 
 	
-	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
+	/**
 	 * This method allows to set the filter for the String value in the search
 	 * 
 	 * @param attributeCode - the attributeCode which holds String value where we
@@ -897,6 +818,7 @@ public class SearchEntity extends BaseEntity {
 	 * @param filterType - type of the string filter
 	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
 	public SearchEntity addFilter(final String attributeCode, final StringFilter filterType, final String value) {
 		AttributeText attribute = new AttributeText(attributeCode, filterType.toString());
@@ -911,23 +833,15 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
-	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the filter for the LocalDate value in the
 	 * search
 	 * 
 	 * @param attributeCode - the attributeCode which holds LocalDate value
 	 * where we apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
 	public SearchEntity addFilterAsString(final String attributeCode, final Filter filterType, final String value) {
 		AttributeText attribute = new AttributeText(attributeCode, filterType.toString());
@@ -942,14 +856,7 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
-	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set an OR filter for an attribute
 	 * 
 	 * @param attributeCode - the attributeCode which holds String value where we
@@ -958,6 +865,7 @@ public class SearchEntity extends BaseEntity {
 	 * @param filterType - type of the filter
 	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
     
 	public SearchEntity addOr(final String attributeCode, final Filter filterType, final Integer value) {
@@ -980,22 +888,14 @@ public class SearchEntity extends BaseEntity {
     
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set an OR filter for an attribute
 	 * 
 	 * @param attributeCode - the attributeCode which holds String value where we
 	 * apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
-    
 	public SearchEntity addOr(final String attributeCode, final Filter filterType, final Long value) {
 		AttributeLong attribute = new AttributeLong(attributeCode, filterType.toString());
 		Integer count = countOccurrences(attributeCode, "OR") + 1;
@@ -1016,22 +916,14 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set an OR filter for an attribute
 	 * 
 	 * @param attributeCode - the attributeCode which holds String value where we
 	 * apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
-    
 	public SearchEntity addOr(final String attributeCode, final Filter filterType, final Double value) {
 		AttributeDouble attribute = new AttributeDouble(attributeCode, filterType.toString());
 		Integer count = countOccurrences(attributeCode, "OR") + 1;
@@ -1052,22 +944,14 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set an OR filter for an attribute
 	 * 
 	 * @param attributeCode - the attributeCode which holds String value where we
 	 * apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
-    
 	public SearchEntity addOr(final String attributeCode, final Filter filterType, final LocalDateTime value) {
 		AttributeDateTime attribute = new AttributeDateTime(attributeCode, filterType.toString());
 		Integer count = countOccurrences(attributeCode, "OR") + 1;
@@ -1088,22 +972,14 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set an OR filter for an attribute
 	 * 
 	 * @param attributeCode - the attributeCode which holds String value where we
 	 * apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
-    
 	public SearchEntity addOr(final String attributeCode, final Filter filterType, final LocalDate value) {
 		AttributeDate attribute = new AttributeDate(attributeCode, filterType.toString());
 		Integer count = countOccurrences(attributeCode, "OR") + 1;
@@ -1124,22 +1000,14 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set an OR filter for an attribute
 	 * 
 	 * @param attributeCode - the attributeCode which holds String value where we
 	 * apply the filter
-	 * 
 	 * @param filterType - type of the string filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
-    
 	public SearchEntity addOr(final String attributeCode, final StringFilter filterType, final String value) {
 		AttributeText attribute = new AttributeText(attributeCode, filterType.toString());
 		Integer count = countOccurrences(attributeCode, "OR") + 1;
@@ -1160,22 +1028,14 @@ public class SearchEntity extends BaseEntity {
     
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set an AND filter for an attribute
 	 * 
 	 * @param attributeCode - the attributeCode which holds String value where we
 	 * apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
-    
 	public SearchEntity addAnd(final String attributeCode, final Filter filterType, final Integer value) {
 		AttributeInteger attribute = new AttributeInteger(attributeCode, filterType.toString());
 		Integer count = countOccurrences(attributeCode, "AND") + 1;
@@ -1196,22 +1056,14 @@ public class SearchEntity extends BaseEntity {
     
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set an AND filter for an attribute
 	 * 
 	 * @param attributeCode - the attributeCode which holds String value where we
 	 * apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
-    
 	public SearchEntity addAnd(final String attributeCode, final Filter filterType, final Long value) {
 		AttributeLong attribute = new AttributeLong(attributeCode, filterType.toString());
 		Integer count = countOccurrences(attributeCode, "AND") + 1;
@@ -1232,22 +1084,14 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set an AND filter for an attribute
 	 * 
 	 * @param attributeCode - the attributeCode which holds String value where we
 	 * apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
-    
 	public SearchEntity addAnd(final String attributeCode, final Filter filterType, final Double value) {
 		AttributeDouble attribute = new AttributeDouble(attributeCode, filterType.toString());
 		Integer count = countOccurrences(attributeCode, "AND") + 1;
@@ -1268,22 +1112,14 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set an AND filter for an attribute
 	 * 
 	 * @param attributeCode - the attributeCode which holds String value where we
 	 * apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
-    
 	public SearchEntity addAnd(final String attributeCode, final Filter filterType, final LocalDateTime value) {
 		AttributeDateTime attribute = new AttributeDateTime(attributeCode, filterType.toString());
 		Integer count = countOccurrences(attributeCode, "AND") + 1;
@@ -1304,22 +1140,14 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set an AND filter for an attribute
 	 * 
 	 * @param attributeCode - the attributeCode which holds String value where we
 	 * apply the filter
-	 * 
 	 * @param filterType - type of the filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
-    
 	public SearchEntity addAnd(final String attributeCode, final Filter filterType, final LocalDate value) {
 		AttributeDate attribute = new AttributeDate(attributeCode, filterType.toString());
 		Integer count = countOccurrences(attributeCode, "AND") + 1;
@@ -1340,22 +1168,14 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param filterType
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set an AND filter for an attribute
 	 * 
 	 * @param attributeCode - the attributeCode which holds String value where we
 	 * apply the filter
-	 * 
 	 * @param filterType - type of the string filter
-	 * 
 	 * @param value - filter against (search for) this value
+	 * @return SearchEntity
 	 */
-    
 	public SearchEntity addAnd(final String attributeCode, final StringFilter filterType, final String value) {
 		AttributeText attribute = new AttributeText(attributeCode, filterType.toString());
 		Integer count = countOccurrences(attributeCode, "AND") + 1;
@@ -1376,8 +1196,10 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param condition
+	 * Add a conditional attribute
+	 *
+	 * @param attributeCode the attribute to apply the condition to
+	 * @param condition the condition to apply
 	 * @return SearchEntity
 	 */
 	public SearchEntity addConditional(String attributeCode, String condition) {
@@ -1399,7 +1221,9 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
+	 * Add a whitelist attribute
+	 *
+	 * @param attributeCode the attribute code to add to the whitelist
 	 * @return SearchEntity
 	 */
 	public SearchEntity addWhitelist(String attributeCode) {
@@ -1416,7 +1240,9 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
+	 * Add a blacklist attribute
+	 *
+	 * @param attributeCode the attribute code to add to the blacklist
 	 * @return SearchEntity
 	 */
 	public SearchEntity addBlacklist(String attributeCode) {
@@ -1432,14 +1258,11 @@ public class SearchEntity extends BaseEntity {
 	}
 	
 	/** 
-	 * @param value
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the LinkWeight to the resulted BaseEntities to its
 	 * parent
 	 * 
 	 * @param value - value/linkWeight to be set
+	 * @return SearchEntity
 	 */
 	public SearchEntity setLinkWeight(final Double value) {
 		AttributeDouble attribute = new AttributeDouble("SCH_LINK_WEIGHT", "LinkWeight");
@@ -1454,14 +1277,11 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param filterType
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the filter based on the linkweight value of
 	 * BaseEntities to its parent
 	 * 
 	 * @param filterType - type of the filter set to the linkWeight
+	 * @return SearchEntity
 	 */
 	public SearchEntity addFilterToLinkWeight(final Filter filterType) {
 		AttributeText attribute = new AttributeText("SCH_LINK_FILTER", "LinkFilterByWeight");
@@ -1476,13 +1296,10 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param title
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the title of the results data to be sent
 	 * 
 	 * @param title - The page Title
+	 * @return SearchEntity
 	 */
 	public SearchEntity setTitle(final String title) {
 		AttributeText attributeTitle = new AttributeText("SCH_TITLE", "Title");
@@ -1496,14 +1313,11 @@ public class SearchEntity extends BaseEntity {
 	}
 
 		
-		/** 
-		 * @param parentCode
-		 * @return SearchEntity
-		 */
-		/*
+	/** 
 	 * This method allows to set the parentCode of the SearchEntity
 	 * 
-	 * @param title - parentCode
+	 * @param parentCode the parent entity code
+	 * @return SearchEntity
 	 */
 	public SearchEntity setParentCode(final String parentCode) {
 		AttributeText attributeTitle = new AttributeText("SCH_PARENT_CODE", "Parent Code");
@@ -1518,14 +1332,11 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param pageStart
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the start/begining number of the range(page) of the
 	 * results data to be sent
 	 * 
-	 * @param pageStart - start of the page number
+	 * @param pageStart the start of the page number
+	 * @return SearchEntity
 	 */
 	public SearchEntity setPageStart(final Integer pageStart) {
 		AttributeInteger attributePageStart = new AttributeInteger("SCH_PAGE_START", "PageStart");
@@ -1538,15 +1349,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
-	
 	/** 
-	 * @param selectSize
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set size of the selection allowed for a searchEntity
 	 * 
-	 * @param pageStart - size of selection
+	 * @param selectSize size of selection
+	 * @return SearchEntity
 	 */
 	public SearchEntity setSelectSize(final Integer selectSize) {
 		AttributeInteger attributeSelectSize = new AttributeInteger("SCH_SELECT_SIZE", "SelectSize");
@@ -1559,16 +1366,12 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
-	
 	/** 
-	 * @param pageSize
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the total number of the results (BaseEntites) to be
 	 * sent
 	 * 
-	 * @param pageSize - total number of data's to be sent
+	 * @param pageSize number of items to be sent in each page
+	 * @return SearchEntity
 	 */
 	public SearchEntity setPageSize(final Integer pageSize) {
 		AttributeInteger attributePageSize = new AttributeInteger("SCH_PAGE_SIZE", "PageSize");
@@ -1581,16 +1384,12 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
-	
 	/** 
-	 * @param stakeholderCode
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the stakeholder/user code to the search. It will
 	 * search for the BaseEntites that the given user is stakeholder of.
 	 * 
-	 * @param stakeholderCode - userCode
+	 * @param stakeholderCode the userCode of the stakeHolder
+	 * @return SearchEntity
 	 */
 	public SearchEntity setStakeholder(final String stakeholderCode) {
 		AttributeText attribute = new AttributeText("SCH_STAKEHOLDER_CODE", "Stakeholder");
@@ -1602,18 +1401,14 @@ public class SearchEntity extends BaseEntity {
 
 		return this;
 	}
-
 	
 	/** 
-	 * @param sourceStakeholderCode
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the stakeholder/user code to the parent/source
 	 * Basentity involved in the search. It will search for the BaseEntites under
 	 * the give source BE that the given user is stakeholder of.
 	 * 
-	 * @param sourceStakeholderCode - userCode
+	 * @param sourceStakeholderCode the userCode of the source stakeHolder
+	 * @return SearchEntity
 	 */
 	public SearchEntity setSourceStakeholder(final String sourceStakeholderCode) {
 		AttributeText attribute = new AttributeText("SCH_SOURCE_STAKEHOLDER_CODE", "SourceStakeholder");
@@ -1625,18 +1420,14 @@ public class SearchEntity extends BaseEntity {
 
 		return this;
 	}
-
 	
 	/** 
-	 * @param linkCode
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the stakeholder/user code to the parent/source
 	 * Basentity involved in the search. It will search for the BaseEntites under
 	 * the give source BE that the given user is stakeholder of.
 	 * 
-	 * @param sourceStakeholderCode - userCode
+	 * @param linkCode the linkCode
+	 * @return SearchEntity
 	 */
 	public SearchEntity setLinkCode(final String linkCode) {
 		AttributeText attribute = new AttributeText("SCH_LINK_CODE", "LinkCode");
@@ -1648,17 +1439,13 @@ public class SearchEntity extends BaseEntity {
 
 		return this;
 	}
-
 	
 	/** 
-	 * @param linkValue
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the link value the result of the search.
 	 * 
 	 * @param linkValue - linkValue of the sourceCode to the results (BaseEntities)
 	 * of the search
+	 * @return SearchEntity
 	 */
 	public SearchEntity setLinkValue(final String linkValue) {
 		AttributeText attribute = new AttributeText("SCH_LINK_VALUE", "LinkValue");
@@ -1671,9 +1458,8 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
-	
 	/** 
-	 * @param sourceCode
+	 * @param sourceCode the sourceCode to set
 	 * @return SearchEntity
 	 */
 	public SearchEntity setSourceCode(final String sourceCode) {
@@ -1685,10 +1471,9 @@ public class SearchEntity extends BaseEntity {
 		}
 		return this;
 	}
-
 	
 	/** 
-	 * @param targetCode
+	 * @param targetCode the targetCode to set
 	 * @return SearchEntity
 	 */
 	public SearchEntity setTargetCode(final String targetCode) {
@@ -1704,7 +1489,7 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param displayMode
+	 * @param displayMode the displayMode to set
 	 * @return SearchEntity
 	 */
 	public SearchEntity setDisplayMode(final String displayMode) {
@@ -1720,7 +1505,7 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param questionCode
+	 * @param questionCode the questionCode to set
 	 * @return SearchEntity
 	 */
 	public SearchEntity setSearchQuestionCode(final String questionCode) {
@@ -1737,8 +1522,9 @@ public class SearchEntity extends BaseEntity {
 	/**
 	* Set the validation attribute.
 	* The search will then look to this attribute to find its validation state.
-	* @param validationAttribute
-	* @return SearchEntity the updated search
+	*
+	* @param validationAttribute the validation attribute code to set
+	* @return SearchEntity
 	 */
 	public SearchEntity setValidationAttribute(final String validationAttribute) {
 		AttributeText attribute = new AttributeText("SCH_VALIDATION_ATTRIBUTE", "ValidationAttribute");
@@ -1754,8 +1540,10 @@ public class SearchEntity extends BaseEntity {
 	/**
 	* This method allows users to set the dropdown target.
 	* Used to pass information about the entity concerning a dropdown.
+	*
 	* @param dropdownTarget A code, or other information about the target
 	* entity of a dropdown.
+	* @return SearchEntity
 	 */
 	public SearchEntity setDropdownTarget(final String dropdownTarget) {
 		AttributeText attribute = new AttributeText("SCH_DROPDOWN_TARGET", "Dropdown Target");
@@ -1768,15 +1556,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
-	
 	/** 
-	 * @param wildcard
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the wildcard of the results data to be sent
 	 * 
-	 * @param wildcard - the widlcard
+	 * @param wildcard the widlcard
+	 * @return SearchEntity
 	 */
 	public SearchEntity setWildcard(String wildcard) {
 
@@ -1790,15 +1574,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
-	
 	/** 
-	 * @param depth
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the wildcard depth level for associated wildcards
 	 * 
-	 * @param depth - the widlcard depth level
+	 * @param depth the widlcard depth level
+	 * @return SearchEntity
 	 */
 	public SearchEntity setWildcardDepth(Integer depth) {
 
@@ -1811,16 +1591,12 @@ public class SearchEntity extends BaseEntity {
 
 		return this;
 	}
-
 	
 	/** 
-	 * @param status
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the status of the result BEs
 	 * 
-	 * @param wildcard - the widlcard
+	 * @param status the search status to set
+	 * @return SearchEntity
 	 */
 	public SearchEntity setSearchStatus(EEntityStatus status) {
 
@@ -1834,15 +1610,11 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 	
-	
 	/** 
-	 * @param cachable
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the cachable of the result BEs for initial page
 	 * 
-	 * @param cachable - true or false. true means cache the result for subsequent lookup
+	 * @param cachable true or false. true means cache the result for subsequent lookup
+	 * @return SearchEntity
 	 */
 	public SearchEntity setCachable(Boolean cachable) {
 
@@ -1856,26 +1628,24 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
-	
 	/** 
-	 * @param pageType
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the type of range data that the search relates to.
 	 * This is important for pagination that needs to page across data spans such as
 	 * Months, days, weeks, years, etc.
 	 * 
-	 * @param pageStart - start of the page number
+	 * @param pageType the pageType to set
+	 * @return SearchEntity
 	 */
-
 	public SearchEntity setPageType(final String pageType) {
 		return setPageType(EPageType.valueOf(pageType));
 	}
 
-	
 	/** 
-	 * @param pageType
+	 * This method allows to set the type of range data that the search relates to.
+	 * This is important for pagination that needs to page across data spans such as
+	 * Months, days, weeks, years, etc.
+	 *
+	 * @param pageType the pageType to set
 	 * @return SearchEntity
 	 */
 	public SearchEntity setPageType(final EPageType pageType) {
@@ -1940,17 +1710,21 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param defaultPageSize
+	 * Get the page start
+	 *
+	 * @param defaultPageStart the default page start if nothing is found
 	 * @return Integer
 	 */
-	public Integer getPageStart(Integer defaultPageSize) {
-		Integer pageStart = getValue("SCH_PAGE_START", defaultPageSize);
+	public Integer getPageStart(Integer defaultPageStart) {
+		Integer pageStart = getValue("SCH_PAGE_START", defaultPageStart);
 		return pageStart;
 	}
 
 	
 	/** 
-	 * @param defaultPageSize
+	 * Get the page size
+	 *
+	 * @param defaultPageSize the default page size if nothing is found
 	 * @return Integer
 	 */
 	public Integer getPageSize(Integer defaultPageSize) {
@@ -1968,7 +1742,7 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param colIndex
+	 * @param colIndex the column index to set
 	 */
 	public void setColIndex(Double colIndex) {
 		this.colIndex = colIndex;
@@ -1984,7 +1758,7 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param sortIndex
+	 * @param sortIndex the sort index to set
 	 */
 	public void setSortIndex(Double sortIndex) {
 		this.sortIndex = sortIndex;
@@ -2000,7 +1774,7 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param flcIndex
+	 * @param flcIndex the filter column index to set
 	 */
 	public void setFLCIndex(Double flcIndex) {
 		this.flcIndex = flcIndex;
@@ -2016,7 +1790,7 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param actionIndex
+	 * @param actionIndex the action index to set
 	 */
 	public void setActionIndex(Double actionIndex) {
 		this.actionIndex = actionIndex;
@@ -2032,7 +1806,7 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param searchActionIndex
+	 * @param searchActionIndex the search action index to set
 	 */
 	public void setSearchActionIndex(Double searchActionIndex) {
 		this.searchActionIndex = searchActionIndex;
@@ -2048,7 +1822,7 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param groupIndex
+	 * @param groupIndex the group index to set
 	 */
 	public void setGroupIndex(Double groupIndex) {
 		this.groupIndex = groupIndex;
@@ -2064,35 +1838,29 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param searchIndex
+	 * @param searchIndex the search index to set
 	 */
 	public void setSearchIndex(Double searchIndex) {
 		this.searchIndex = searchIndex;
 	}
-
 	
 	/** 
-	 * @param attributeCode
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to remove the attributes from the SearchEntity
+	 *
+	 * @param attributeCode the code of the column to remove
+	 * @return SearchEntity
 	 */
 	public SearchEntity removeColumn(final String attributeCode) {
 		removeAttribute("COL_" + attributeCode);
 		return this;
 	}
-
 	
 	/** 
-	 * @param totalResults
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the total number of the results (BaseEntites) from
 	 * the search
 	 * 
-	 * @param totalResults - total results from the search
+	 * @param totalResults the total results count to set
+	 * @return SearchEntity
 	 */
 	public SearchEntity setTotalResults(final Integer totalResults) {
 		AttributeInteger attributeTotalResults = new AttributeInteger("PRI_TOTAL_RESULTS", "Total Results");
@@ -2107,13 +1875,10 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param pageIndex
-	 * @return SearchEntity
-	 */
-	/*
 	 * This method allows to set the page index of the search
 	 * 
-	 * @param totalResults - page index of the search
+	 * @param pageIndex the page index to set
+	 * @return SearchEntity
 	 */
 	public SearchEntity setPageIndex(final Integer pageIndex) {
 		AttributeInteger attributePageIndex = new AttributeInteger("PRI_INDEX", "Page Index");
@@ -2154,15 +1919,11 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param attributeCode
-	 * @param prefix
-	 * @return Integer
-	 */
-	/*
 	 * This method helps calculate the index of an OR filter
 	 * 
 	 * @param attributeCode - the attributeCode for which to count
 	 * @param prefix - prefix to count occurences of
+	 * @return Integer
 	 */
 	public Integer countOccurrences(final String attributeCode, final String prefix) {
         Integer count = -1;
@@ -2197,7 +1958,7 @@ public class SearchEntity extends BaseEntity {
 
 	
 	/** 
-	 * @param filterIndex
+	 * @param filterIndex the filter index to set
 	 */
 	public void setFilterIndex(Double filterIndex) {
 			this.filterIndex = filterIndex;
