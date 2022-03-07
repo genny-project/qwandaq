@@ -49,7 +49,8 @@ public class QwandaUtils {
 	 */
 	public static void init(GennyToken token) {
 		gennyToken = token;
-		loadAllAttributes();
+		//loadAllAttributes();
+		loadAllAttributesIntoCache();
 	}
 
 	/** 
@@ -77,18 +78,45 @@ public class QwandaUtils {
 	public static Attribute getAttribute(final String attributeCode) {
 
 		String realm = gennyToken.getRealm();
+		Attribute cachedAttribute = CacheUtils.getObject(realm, attributeCode, Attribute.class);
 
-		if (attributes.get(gennyToken.getRealm()) == null) {
-			loadAllAttributes();
-		}
+		if(cachedAttribute == null) {
+			log.error("Could not find attribute " + attributeCode + " in cache: " + realm);
+			loadAllAttributesIntoCache();
+		} 
 
-		Attribute attribute = attributes.get(realm).get(attributeCode);
+		cachedAttribute = CacheUtils.getObject(realm, attributeCode, Attribute.class);
+		// else if (attributes.get(gennyToken.getRealm()) == null) {
+		// 	//loadAllAttributes();
+		// 	loadAllAttributesIntoCache();
+		// }
 
-		if (attribute == null) {
+		// Attribute attribute = attributes.get(realm).get(attributeCode);
+
+		if (cachedAttribute == null) {
 			log.error("Bad Attribute in Map for realm " + realm + " and code " + attributeCode);
 		}
 
-		return attribute;
+		return cachedAttribute;
+	}
+
+	public static void loadAllAttributesIntoCache() {
+		String realm = gennyToken.getRealm();
+		List<Attribute> attributeList = null;
+
+		log.info("About to load all attributes for realm " + realm);
+
+		try {
+			log.info("Fetching attributes from database and putting into cache");
+			attributeList = DatabaseUtils.findAttributes(realm, null, null);
+			for(Attribute attribute : attributeList) {
+				log.info("Loading attrib: " + attribute.getCode());
+				String key = attribute.getCode();
+				CacheUtils.putObject(realm, key, attribute);
+			}
+		} catch(Exception e) {
+			log.error("Error loading attributes for realm " + realm);
+		}
 	}
 
 	/**
