@@ -18,6 +18,13 @@ import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.message.QDataBaseEntityMessage;
 import life.genny.qwandaq.models.GennyToken;
 
+/*
+ * A non-static utility class for managing roles and capabilities.
+ * 
+ * @author Adam Crow
+ * @author Jasper Robison
+ * @author Bryn Mecheam
+ */
 public class CapabilityUtils implements Serializable {
 
 	static final Logger log = Logger.getLogger(CapabilityUtils.class);

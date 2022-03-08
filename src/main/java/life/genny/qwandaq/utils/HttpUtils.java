@@ -15,6 +15,11 @@ import org.jboss.logging.Logger;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
+/**
+ * A Static utility class for standard HTTP requests.
+ * 
+ * @author Jasper Robison
+ */
 @RegisterForReflection
 public class HttpUtils {
 

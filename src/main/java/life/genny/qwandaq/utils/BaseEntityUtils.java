@@ -32,6 +32,13 @@ import life.genny.qwandaq.entity.SearchEntity;
 import life.genny.qwandaq.exception.BadDataException;
 import life.genny.qwandaq.message.QSearchBeResult;
 
+/**
+ * A non-static utility class used for standard 
+ * operations involving BaseEntitys.
+ * 
+ * @author Adam Crow
+ * @author Jasper Robison
+ */
 @RegisterForReflection
 public class BaseEntityUtils implements Serializable {
 

@@ -22,6 +22,11 @@ import org.javamoney.moneta.Money;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.entity.BaseEntity;
 
+/**
+ * A utiltity used in the MailMerge feature of Genny.
+ * 
+ * @author Jasper Robison
+ */
 public class MergeUtils {
 	
 	private static final Logger log = Logger.getLogger(MergeUtils.class);

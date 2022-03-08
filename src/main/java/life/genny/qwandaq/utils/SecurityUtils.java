@@ -16,6 +16,11 @@ import io.jsonwebtoken.security.InvalidKeyException;
 
 import life.genny.qwandaq.models.GennyToken;
 
+/**
+ * A utility class dedicated to security related operations.
+ * 
+ * @author Jasper Robison
+ */
 public class SecurityUtils {
 
 	static final Logger log = Logger.getLogger(SecurityUtils.class);

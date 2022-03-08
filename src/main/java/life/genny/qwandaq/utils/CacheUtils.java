@@ -10,6 +10,12 @@ import org.jboss.logging.Logger;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.data.GennyCache;
 
+/*
+ * A static utility class used for standard read and write 
+ * operations to the cache.
+ * 
+ * @author Jasper Robison
+ */
 @RegisterForReflection
 public class CacheUtils {
 

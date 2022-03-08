@@ -32,6 +32,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * A static utility class used for standard requests and
+ * operations involving Keycloak.
+ * 
+ * @author Adam Crow
+ * @author Jasper Robison
+ */
 @RegisterForReflection
 public class KeycloakUtils {
 

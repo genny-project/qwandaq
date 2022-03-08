@@ -127,11 +127,10 @@ public class Ask extends CoreEntity implements Serializable {
 
 	/**
 	 * Constructor.
+	 * dummy for hibernate
 	 */
 	@SuppressWarnings("unused")
-	public Ask() {
-		// dummy for hibernate
-	}
+	public Ask() { }
 
 	/**
 	 * Constructor.
