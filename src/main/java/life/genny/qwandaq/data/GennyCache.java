@@ -18,6 +18,11 @@ import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.commons.api.CacheContainerAdmin;
 
+/**
+ * A remote cache management class for accessing realm caches.
+ * 
+ * @author Jasper Robison
+ */
 @RegisterForReflection
 @ApplicationScoped
 public class GennyCache {

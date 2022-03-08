@@ -47,22 +47,23 @@ import life.genny.qwandaq.converter.MoneyConverter;
 import life.genny.qwandaq.converter.StringListConverter;
 import life.genny.qwandaq.entity.BaseEntity;
 
+/**
+ * AnswerLink represents a link between BaseEntitys for Answer objects.
+ * 
+ * @author Adam Crow
+ * @author Byron Aguirre
+ */
 @Entity
 @Table(name = "answerlinks")
-// @Table(name = "answerlinks", indexes = {
-// @Index(name = "IDX_MYIDX1", columnList =
-// "targetCode,sourceCode,attributeCode") })
-
-@AssociationOverrides({ @AssociationOverride(name = "pk.source", joinColumns = @JoinColumn(name = "SOURCE_ID")),
-		@AssociationOverride(name = "pk.target", joinColumns = @JoinColumn(name = "TARGET_ID")) })
+@AssociationOverrides({ 
+	@AssociationOverride(name = "pk.source", joinColumns = @JoinColumn(name = "SOURCE_ID")),
+	@AssociationOverride(name = "pk.target", joinColumns = @JoinColumn(name = "TARGET_ID")) 
+})
 @RegisterForReflection
 public class AnswerLink implements java.io.Serializable {
 
 	private static final Logger log = Logger.getLogger(AnswerLink.class);
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId

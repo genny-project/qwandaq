@@ -94,7 +94,7 @@ public class QwandaUtils {
 		// Attribute attribute = attributes.get(realm).get(attributeCode);
 
 		if (cachedAttribute == null) {
-			log.error("Bad Attribute in Map for realm " + realm + " and code " + attributeCode);
+			log.error("Bad Attribute in Cache for realm " + realm + " and code " + attributeCode);
 		}
 
 		return cachedAttribute;
@@ -103,17 +103,38 @@ public class QwandaUtils {
 	public static void loadAllAttributesIntoCache() {
 		String realm = gennyToken.getRealm();
 		List<Attribute> attributeList = null;
+		
+		Long attributeCount = DatabaseUtils.countAttributes(realm);
+		final Integer CHUNK_LOAD_SIZE = 200;
+		
+		final int TOTAL_PAGES = (int)Math.ceil(attributeCount / CHUNK_LOAD_SIZE);
+
+		Long totalAttribsCached = 0L;
 
 		log.info("About to load all attributes for realm " + realm);
-
+		log.info("Found " + attributeCount + " attributes");
 		try {
-			log.info("Fetching attributes from database and putting into cache");
-			attributeList = DatabaseUtils.findAttributes(realm, null, null);
-			for(Attribute attribute : attributeList) {
-				log.info("Loading attrib: " + attribute.getCode());
-				String key = attribute.getCode();
-				CacheUtils.putObject(realm, key, attribute);
+			for(int currentPage = 0; currentPage < TOTAL_PAGES + 1; currentPage++) {
+
+				long attributesLoaded = currentPage * CHUNK_LOAD_SIZE;
+
+
+				// Correctly determine how many more attributes we need to load in
+				int nextLoad = CHUNK_LOAD_SIZE;
+				if(attributeCount - attributesLoaded < CHUNK_LOAD_SIZE) {
+					nextLoad = (int)(attributeCount - attributesLoaded);
+				}
+				log.info("Loading in page " + currentPage + " of " + TOTAL_PAGES + " containing " + nextLoad + " attributes");
+				attributeList = DatabaseUtils.findAttributes(realm, nextLoad, currentPage);
+				for(Attribute attribute : attributeList) {
+					// log.info("Loading attrib: " + attribute.getCode());
+					String key = attribute.getCode();
+					CacheUtils.putObject(realm, key, attribute);
+					totalAttribsCached++;
+				}
 			}
+
+			log.info("Cached " + totalAttribsCached + " attributes");
 		} catch(Exception e) {
 			log.error("Error loading attributes for realm " + realm);
 		}

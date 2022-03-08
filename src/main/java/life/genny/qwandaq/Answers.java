@@ -4,6 +4,12 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * Answers represents a collection of Answer objects.
+ * 
+ * @author Adam Crow
+ * @author Byron Aguirre
+ */
 public class Answers implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

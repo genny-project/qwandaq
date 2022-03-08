@@ -81,7 +81,6 @@ import life.genny.qwandaq.exception.BadDataException;
  * @version %I%, %G%
  * @since 1.0
  */
-
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 @Table(name = "answer", 
