@@ -10,6 +10,12 @@ import javax.persistence.ManyToOne;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.entity.BaseEntity;
 
+/**
+ * AnswerLinkId stores information regarding the source and target BaseEntitys for AnswerLink objects.
+ * 
+ * @author Adam Crow
+ * @author Byron Aguirre
+ */
 @Embeddable
 @RegisterForReflection
 public class AnswerLinkId implements java.io.Serializable {
@@ -25,10 +31,6 @@ public class AnswerLinkId implements java.io.Serializable {
   @JsonIgnore
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   private Attribute attribute;
-
-  // @JsonIgnore
-  // @ManyToOne(optional = true, fetch = FetchType.LAZY)
-  // private Ask ask;
 
   /**
    * @return the source
@@ -58,8 +60,6 @@ public class AnswerLinkId implements java.io.Serializable {
     this.target = target;
   }
 
-
-
   /**
    * @return the attribute
    */
@@ -73,22 +73,6 @@ public class AnswerLinkId implements java.io.Serializable {
   public void setAttribute(final Attribute attribute) {
     this.attribute = attribute;
   }
-
-
-
-  // /**
-  // * @return the ask
-  // */
-  // public Ask getAsk() {
-  // return ask;
-  // }
-  //
-  // /**
-  // * @param ask the ask to set
-  // */
-  // public void setAsk(final Ask ask) {
-  // this.ask = ask;
-  // }
 
   @Override
   public boolean equals(final Object o) {
@@ -107,7 +91,6 @@ public class AnswerLinkId implements java.io.Serializable {
       return false;
     return true;
   }
-
   
   /** 
    * @return int

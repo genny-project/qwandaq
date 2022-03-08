@@ -13,6 +13,12 @@ import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.models.GennyToken;
 
+/**
+ * A Bridge ID management class for data message route selection.
+ * 
+ * @author Byron Aguirre
+ * @author Jasper Robison
+ */
 public class BridgeSwitch {
 
 	static final Logger log = Logger.getLogger(BridgeSwitch.class);

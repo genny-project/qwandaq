@@ -48,7 +48,6 @@ import life.genny.qwandaq.Question;
 
 import com.querydsl.core.annotations.QueryExclude;
 
-
 /**
  * Ask represents the presentation of a Question to a source entity. A Question
  * object is refered to as a means of requesting information from a source about
@@ -75,22 +74,17 @@ import com.querydsl.core.annotations.QueryExclude;
  * @version %I%, %G%
  * @since 1.0
  */
-
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 @Table(name = "ask", indexes = { @Index(columnList = "id", name = "code_idx"),
 		@Index(columnList = "realm", name = "code_idx") }, uniqueConstraints = @UniqueConstraint(columnNames = { "id",
 				"realm" }))
-
 @Entity
 @QueryExclude
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 @Inheritance(strategy = InheritanceType.JOINED)
-
 public class Ask extends CoreEntity implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	@XmlTransient
