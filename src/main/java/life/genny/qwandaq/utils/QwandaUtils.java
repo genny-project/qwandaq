@@ -1,6 +1,7 @@
 package life.genny.qwandaq.utils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import java.util.stream.Stream;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jboss.logging.Logger;
 
@@ -32,6 +34,16 @@ import life.genny.qwandaq.message.QScheduleMessage;
 import life.genny.qwandaq.models.GennySettings;
 import life.genny.qwandaq.models.GennyToken;
 
+/**
+ * A Static utility class to assist in any Qwanda Engine Question 
+ * and Answer operations.
+ * <p>
+ * The class should be initialized with a GennyToken 
+ * to ensure successful operation
+ * <p>
+ * 
+ * @author Jasper Robison
+ */
 @RegisterForReflection
 public class QwandaUtils {
 
@@ -271,6 +283,48 @@ public class QwandaUtils {
 
 		String uri = GennySettings.shleemyServiceUrl() + "/api/schedule/code/" + code;
 		HttpUtils.delete(uri, userToken.getToken());
+
+	}
+
+	/**
+	 * Generate Question group for a baseEntity
+	 *
+	 * @param baseEntity the baseEntity to create for
+	 * @param beUtils the utility to use
+	 */
+	public static Ask generateQuestionGroupUsingBaseEntity(BaseEntity baseEntity, BaseEntityUtils beUtils) {
+
+		// init tokens
+		GennyToken userToken = beUtils.getGennyToken();
+		String token = userToken.getToken();
+
+		// grab def entity
+		BaseEntity defBE = DefUtils.getDEF(baseEntity);
+
+		// create GRP ask
+		Attribute questionAttribute = getAttribute("QQQ_QUESTION_GROUP");
+		Question question = new Question("QUE_EDIT_GRP", "Edit " + baseEntity.getCode(), questionAttribute);
+		Ask ask = new Ask(question, userToken.getUserCode(), baseEntity.getCode());
+
+		List<Ask> childAsks = new ArrayList<>();
+
+		// create a child ask for every valid atribute
+		baseEntity.getBaseEntityAttributes().stream()
+			.filter(ea -> defBE.containsEntityAttribute("ATT_" + ea.getAttributeCode()))
+			.forEach((ea) -> {
+
+				String questionCode = "QUE_" + StringUtils.removeStart(StringUtils.removeStart(ea.getAttributeCode(), "PRI_"), "LNK_");
+
+				Question childQues = new Question(questionCode, "Edit " + baseEntity.getCode(), ea.getAttribute());
+				Ask childAsk = new Ask(childQues, userToken.getUserCode(), baseEntity.getCode());
+
+				childAsks.add(childAsk);
+			});
+
+		// set child asks
+		ask.setChildAsks(childAsks.toArray(new Ask[childAsks.size()]));
+
+		return ask;
 	}
 
 	/**

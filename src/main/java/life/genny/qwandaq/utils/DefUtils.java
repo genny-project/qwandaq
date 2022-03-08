@@ -25,6 +25,13 @@ import life.genny.qwandaq.exception.BadDataException;
 import life.genny.qwandaq.exception.DebugException;
 import life.genny.qwandaq.models.ANSIColour;
 
+/*
+ * A static utility class for operations regarding 
+ * definition BaseEntitys.
+ * 
+ * @author Adam Crow
+ * @author Jasper Robison
+ */
 public class DefUtils {
 
 	static final Logger log = Logger.getLogger(DefUtils.class);

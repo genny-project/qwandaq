@@ -10,6 +10,12 @@ import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.intf.KafkaInterface;
 
+/*
+ * A static utility class used for standard 
+ * message routing throgh Kafka.
+ * 
+ * @author Jasper Robison
+ */
 @ApplicationScoped
 public class KafkaUtils implements Serializable {
 

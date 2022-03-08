@@ -46,6 +46,12 @@ import life.genny.qwandaq.message.QwandaMessage;
 import life.genny.qwandaq.models.GennySettings;
 import life.genny.qwandaq.validation.Validation;
 
+/**
+ * A static utility class used in generating Questions in Genny.
+ * 
+ * @author Adam Crow
+ * @author Jasper Robison
+ */
 @RegisterForReflection
 public class QuestionUtils implements Serializable {
 

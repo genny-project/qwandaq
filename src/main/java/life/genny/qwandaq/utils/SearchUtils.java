@@ -29,6 +29,12 @@ import life.genny.qwandaq.message.QBulkMessage;
 import life.genny.qwandaq.message.QDataBaseEntityMessage;
 import life.genny.qwandaq.message.QSearchMessage;
 
+/**
+ * A static utility class used for performing table 
+ * searches and search related operations.
+ * 
+ * @author Jasper Robison
+ */
 public class SearchUtils {
 
 	static final Logger log = Logger.getLogger(SearchUtils.class);

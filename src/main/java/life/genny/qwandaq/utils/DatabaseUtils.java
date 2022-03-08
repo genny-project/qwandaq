@@ -21,6 +21,13 @@ import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.validation.Validation;
 
+/*
+ * A static utility class used for standard read and write 
+ * operations to the database.
+ * 
+ * @author Jasper Robison
+ * @author Bryn Mecheam
+ */
 @RegisterForReflection
 @ApplicationScoped
 public class DatabaseUtils {
