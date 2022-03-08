@@ -2,6 +2,6 @@
 ./mvnw clean install -DskipTests=false -U
 
 # Update docs directory
-rm -rf docs
-mkdir docs
-cp -r target/apidocs/ docs/
+rm -rf docs/javadocs
+mkdir docs/javadocs
+cp -r target/apidocs/ docs/javadocs
