@@ -39,3 +39,6 @@ nb-configuration.xml
 .env
 /.apt_generated/
 /.apt_generated_tests/
+
+# documentation
+docs/javadocs
