@@ -83,12 +83,30 @@ public class DatabaseUtils {
 		return null;
 	}
 
+
+	public static Long countAttributes(String realm) {
+		checkEntityManager();
+
+		try {
+			Query query = entityManager
+				.createQuery("SELECT count(*) FROM Attribute WHERE realm=:realmStr AND name not like 'App\\_%'")
+				.setParameter("realmStr", realm);
+
+			return (Long)query.getResultList().get(0);
+		} catch(NoResultException e) {
+			log.error("No Attributes found from DB Search");
+			log.error(e.getStackTrace());
+		}
+
+		return 0L;
+	}
+
 	/**
 	* Fetch Attributes from the database using page size and num.
 	* If pageSize and pageNumber are both null, all results will be returned at once.
 	*
 	* @param realm the realm to find in
-	* @param pageSize the pageSize to fetch
+	* @param pageSize the pageSize to fetch (Starting from Page 1)
 	* @param pageNumber the pageNumber to fetch
 	* @return List
 	 */
@@ -104,7 +122,7 @@ public class DatabaseUtils {
 					.setParameter("realmStr", realm);
 
 			if (pageNumber != null && pageSize != null) {
-				query = query.setFirstResult((pageNumber-1) * pageSize)
+				query = query.setFirstResult((pageNumber) * pageSize)
 					.setMaxResults(pageSize);
 			} else {
 				log.info("Fetching all Attributes (unset pageNumber or pageSize)");
