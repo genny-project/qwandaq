@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# Merge latest
+git merge $1
+
+# Build docs
 ./mvnw clean install -DskipTests=false -U
 
 # Update docs directory
