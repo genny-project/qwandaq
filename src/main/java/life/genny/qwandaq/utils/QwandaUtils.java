@@ -292,7 +292,7 @@ public class QwandaUtils {
 	 * @param baseEntity the baseEntity to create for
 	 * @param beUtils the utility to use
 	 */
-	public static Ask generateQuestionGroupUsingBaseEntity(BaseEntity baseEntity, BaseEntityUtils beUtils) {
+	public static Ask generateAskGroupUsingBaseEntity(BaseEntity baseEntity, BaseEntityUtils beUtils) {
 
 		// init tokens
 		GennyToken userToken = beUtils.getGennyToken();
@@ -303,7 +303,7 @@ public class QwandaUtils {
 
 		// create GRP ask
 		Attribute questionAttribute = getAttribute("QQQ_QUESTION_GROUP");
-		Question question = new Question("QUE_EDIT_GRP", "Edit " + baseEntity.getCode(), questionAttribute);
+		Question question = new Question("QUE_EDIT_GRP", "Edit " + baseEntity.getCode() + " : " + baseEntity.getName(), questionAttribute);
 		Ask ask = new Ask(question, userToken.getUserCode(), baseEntity.getCode());
 
 		List<Ask> childAsks = new ArrayList<>();
@@ -315,7 +315,7 @@ public class QwandaUtils {
 
 				String questionCode = "QUE_" + StringUtils.removeStart(StringUtils.removeStart(ea.getAttributeCode(), "PRI_"), "LNK_");
 
-				Question childQues = new Question(questionCode, "Edit " + baseEntity.getCode(), ea.getAttribute());
+				Question childQues = new Question(questionCode, ea.getAttribute().getName(), ea.getAttribute());
 				Ask childAsk = new Ask(childQues, userToken.getUserCode(), baseEntity.getCode());
 
 				childAsks.add(childAsk);
