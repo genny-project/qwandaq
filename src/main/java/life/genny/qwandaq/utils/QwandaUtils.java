@@ -319,6 +319,10 @@ public class QwandaUtils {
 				Ask childAsk = new Ask(childQues, userToken.getUserCode(), baseEntity.getCode());
 
 				childAsks.add(childAsk);
+
+				if (defBE.containsEntityAttribute("SER_" + ea.getAttributeCode())) {
+					SearchUtils.performDropdownSearch(childAsk, userToken);
+				}
 			});
 
 		// set child asks
