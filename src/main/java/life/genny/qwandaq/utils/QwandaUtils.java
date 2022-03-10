@@ -307,6 +307,9 @@ public class QwandaUtils {
 		Ask ask = new Ask(question, userToken.getUserCode(), baseEntity.getCode());
 
 		List<Ask> childAsks = new ArrayList<>();
+		QDataBaseEntityMessage entityMessage = new QDataBaseEntityMessage();
+		entityMessage.setToken(token);
+		entityMessage.setReplace(true);
 
 		// create a child ask for every valid atribute
 		baseEntity.getBaseEntityAttributes().stream()
@@ -320,6 +323,18 @@ public class QwandaUtils {
 
 				childAsks.add(childAsk);
 
+				if (ea.getAttributeCode().startsWith("LNK_")) {
+					if (ea.getValueString() != null) {
+
+						String[] codes = BaseEntityUtils.cleanUpAttributeValue(ea.getValueString()).split(",");
+
+						for (String code : codes) {
+							BaseEntity link = beUtils.getBaseEntityByCode(code);
+							entityMessage.add(link);
+						}
+					}
+				}
+
 				if (defBE.containsEntityAttribute("SER_" + ea.getAttributeCode())) {
 					SearchUtils.performDropdownSearch(childAsk, userToken);
 				}
@@ -327,6 +342,8 @@ public class QwandaUtils {
 
 		// set child asks
 		ask.setChildAsks(childAsks.toArray(new Ask[childAsks.size()]));
+
+		KafkaUtils.writeMsg("webdata", entityMessage);
 
 		return ask;
 	}

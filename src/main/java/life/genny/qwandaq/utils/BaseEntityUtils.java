@@ -336,7 +336,7 @@ public class BaseEntityUtils implements Serializable {
 	 * @param value The value to clean
 	 * @return A clean string
 	 */
-	public String cleanUpAttributeValue(String value) {
+	public static String cleanUpAttributeValue(String value) {
 		String cleanCode = value.replace("\"", "").replace("[", "").replace("]", "").replace(" ", "");
 		return cleanCode;
 	}
