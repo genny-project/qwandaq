@@ -341,8 +341,9 @@ public class BaseEntityUtils implements Serializable {
 		return cleanCode;
 	}
 
-	
 	/** 
+	 * Get the value of an EntityAttribute as an Object.
+	 *
 	 * @param baseEntityCode The code of the entity to grab from
 	 * @param attributeCode The code of the attribute to check
 	 * @return The value as an Object
@@ -356,9 +357,10 @@ public class BaseEntityUtils implements Serializable {
 			return null;
 		}
 	}
-
 	
 	/** 
+	 * Get the value of an EntityAttribute as a String.
+	 *
 	 * @param be The code of the entity to grab from
 	 * @param attributeCode The code of the attribute to check 
 	 * @return The value as a String
@@ -378,8 +380,9 @@ public class BaseEntityUtils implements Serializable {
 		return attributeVal;
 	}
 
-	
 	/** 
+	 * Get the value of an EntityAttribute as a String.
+	 *
 	 * @param baseEntityCode The code of the entity to grab from
 	 * @param attributeCode The code of the attribute to check
 	 * @return The value as a String
@@ -397,8 +400,9 @@ public class BaseEntityUtils implements Serializable {
 		return attrValue;
 	}
 
-	
 	/** 
+	 * Get the value of an EntityAttribute as a LocalDateTime.
+	 *
 	 * @param baseEntityCode The code of the entity to grab from
 	 * @param attributeCode The code of the attribute to check
 	 * @return The value as a LocalDateTime
@@ -413,8 +417,9 @@ public class BaseEntityUtils implements Serializable {
 		}
 	}
 
-	
 	/** 
+	 * Get the value of an EntityAttribute as a LocalDate.
+	 *
 	 * @param baseEntityCode The code of the entity to grab from
 	 * @param attributeCode The code of the attribute to check
 	 * @return The value as a LocalDate
@@ -428,9 +433,10 @@ public class BaseEntityUtils implements Serializable {
 			return null;
 		}
 	}
-
 	
 	/** 
+	 * Get the value of an EntityAttribute as a LocalTime.
+	 *
 	 * @param baseEntityCode The code of the entity to grab from
 	 * @param attributeCode The code of the attribute to check
 	 * @return The value as a LocalTime
@@ -448,6 +454,8 @@ public class BaseEntityUtils implements Serializable {
 
 	
 	/** 
+	 * Convert a stringified list of BaseEntity codes into a list of BaseEntity objects.
+	 *
 	 * @param strArr The stringified array to convert
 	 * @return A list of BaseEntitys
 	 */
