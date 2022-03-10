@@ -18,6 +18,8 @@ import java.util.HashMap;
 import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Ask;
+import life.genny.qwandaq.Question;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.datatype.CapabilityMode;
@@ -25,9 +27,12 @@ import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.entity.SearchEntity;
 import life.genny.qwandaq.exception.BadDataException;
 import life.genny.qwandaq.handlers.RuleFlowGroupWorkItemHandler;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.message.MessageData;
 import life.genny.qwandaq.message.QBulkMessage;
 import life.genny.qwandaq.message.QDataBaseEntityMessage;
 import life.genny.qwandaq.message.QSearchMessage;
+import life.genny.qwandaq.message.QEventDropdownMessage;
 
 /**
  * A static utility class used for performing table 
@@ -534,6 +539,31 @@ public class SearchUtils {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Perform a dropdown search through dropkick.
+	 *
+	 * @param ask the ask to perform dropdown search for
+	 * @param userToken the userToken used to perform the search
+	 */
+	public static void performDropdownSearch(Ask ask, GennyToken userToken) {
+
+		// setup message data
+		MessageData messageData = new MessageData();
+		messageData.setCode(ask.getQuestion().getCode());
+		messageData.setSourceCode(ask.getSourceCode());
+		messageData.setTargetCode(ask.getTargetCode());
+		messageData.setValue("");
+
+		// setup dropdown message and assign data
+		QEventDropdownMessage msg = new QEventDropdownMessage();
+		msg.setData(messageData);
+		msg.setAttributeCode(ask.getQuestion().getAttribute().getCode());
+
+		// publish to events for dropkick
+		msg.setToken(userToken.getToken());
+		KafkaUtils.writeMsg("events", msg);
 	}
 
 }

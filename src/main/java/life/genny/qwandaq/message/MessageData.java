@@ -28,6 +28,8 @@ public class MessageData implements Serializable {
 	private String value;
 	private String content;
 
+	public MessageData() { }
+
 	public MessageData(String code) {
 		this.code = code;
 	}
@@ -147,7 +149,7 @@ public class MessageData implements Serializable {
 	/**
 	 * @param sourceCode the sourceCode to set
 	 */
-	public void getSourceCode(String sourceCode) {
+	public void setSourceCode(String sourceCode) {
 		this.sourceCode = sourceCode;
 	}
 

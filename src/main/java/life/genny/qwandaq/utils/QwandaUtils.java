@@ -292,7 +292,7 @@ public class QwandaUtils {
 	 * @param baseEntity the baseEntity to create for
 	 * @param beUtils the utility to use
 	 */
-	public static Ask generateQuestionGroupUsingBaseEntity(BaseEntity baseEntity, BaseEntityUtils beUtils) {
+	public static Ask generateAskGroupUsingBaseEntity(BaseEntity baseEntity, BaseEntityUtils beUtils) {
 
 		// init tokens
 		GennyToken userToken = beUtils.getGennyToken();
@@ -303,10 +303,13 @@ public class QwandaUtils {
 
 		// create GRP ask
 		Attribute questionAttribute = getAttribute("QQQ_QUESTION_GROUP");
-		Question question = new Question("QUE_EDIT_GRP", "Edit " + baseEntity.getCode(), questionAttribute);
+		Question question = new Question("QUE_EDIT_GRP", "Edit " + baseEntity.getCode() + " : " + baseEntity.getName(), questionAttribute);
 		Ask ask = new Ask(question, userToken.getUserCode(), baseEntity.getCode());
 
 		List<Ask> childAsks = new ArrayList<>();
+		QDataBaseEntityMessage entityMessage = new QDataBaseEntityMessage();
+		entityMessage.setToken(token);
+		entityMessage.setReplace(true);
 
 		// create a child ask for every valid atribute
 		baseEntity.getBaseEntityAttributes().stream()
@@ -315,14 +318,32 @@ public class QwandaUtils {
 
 				String questionCode = "QUE_" + StringUtils.removeStart(StringUtils.removeStart(ea.getAttributeCode(), "PRI_"), "LNK_");
 
-				Question childQues = new Question(questionCode, "Edit " + baseEntity.getCode(), ea.getAttribute());
+				Question childQues = new Question(questionCode, ea.getAttribute().getName(), ea.getAttribute());
 				Ask childAsk = new Ask(childQues, userToken.getUserCode(), baseEntity.getCode());
 
 				childAsks.add(childAsk);
+
+				if (ea.getAttributeCode().startsWith("LNK_")) {
+					if (ea.getValueString() != null) {
+
+						String[] codes = BaseEntityUtils.cleanUpAttributeValue(ea.getValueString()).split(",");
+
+						for (String code : codes) {
+							BaseEntity link = beUtils.getBaseEntityByCode(code);
+							entityMessage.add(link);
+						}
+					}
+				}
+
+				if (defBE.containsEntityAttribute("SER_" + ea.getAttributeCode())) {
+					SearchUtils.performDropdownSearch(childAsk, userToken);
+				}
 			});
 
 		// set child asks
 		ask.setChildAsks(childAsks.toArray(new Ask[childAsks.size()]));
+
+		KafkaUtils.writeMsg("webdata", entityMessage);
 
 		return ask;
 	}

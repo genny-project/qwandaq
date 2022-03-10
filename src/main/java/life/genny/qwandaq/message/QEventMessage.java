@@ -45,6 +45,10 @@ public class QEventMessage extends QMessage implements Serializable {
 	public void setData(MessageData data) {
 		this.data = data;
 	}
+
+	public QEventMessage(String eventType) {
+		super(MESSAGE_TYPE);
+	}
 	
 	public QEventMessage(String eventType, String code) {
 		super(MESSAGE_TYPE);
