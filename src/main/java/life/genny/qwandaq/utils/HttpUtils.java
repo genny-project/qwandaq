@@ -33,7 +33,7 @@ public class HttpUtils {
 	* @param uri The target URI of the request.
 	* @param body The json string to use as the body.
 	* @param token The token to use in authorization.
-	* @return HttpResponse&lt;String&gt; The returned response object.
+	* @return The returned response object.
 	 */
 	public static HttpResponse<String> put(String uri, String body, String token) {
 
@@ -62,7 +62,7 @@ public class HttpUtils {
 	* @param uri The target URI of the request.
 	* @param body The json string to use as the body.
 	* @param token The token to use in authorization.
-	* @return HttpResponse&lt;String&gt; The returned response object.
+	* @return The returned response object.
 	 */
 	public static HttpResponse<String> post(String uri, String body, String token) {
 
@@ -90,7 +90,7 @@ public class HttpUtils {
 	*
 	* @param uri The target URI of the request.
 	* @param token The token to use in authorization.
-	* @return HttpResponse&lt;String&gt; The returned response object.
+	* @return The returned response object.
 	 */
 	public static HttpResponse<String> get(String uri, String token) {
 
@@ -116,7 +116,7 @@ public class HttpUtils {
 	*
 	* @param uri The target URI of the request.
 	* @param token The token to use in authorization.
-	* @return HttpResponse&lt;String&gt; The returned response object.
+	* @return The returned response object.
 	 */
 	public static HttpResponse<String> delete(String uri, String token) {
 
@@ -141,7 +141,7 @@ public class HttpUtils {
 	* Build an error message json string from a msg string.
 	*
 	* @param msg The error message used to construct the json.
-	* @return String A stringified json object containing an error msg and status.
+	* @return A stringified json object containing an error msg and status.
 	 */
 	public static String error(String msg) {
 
@@ -156,7 +156,7 @@ public class HttpUtils {
 	/**
 	* Build an ok status json string;
 	*
-	* @return String A stringified json object containing an ok status.
+	* @return A stringified json object containing an ok status.
 	 */
 	public static String ok() {
 
