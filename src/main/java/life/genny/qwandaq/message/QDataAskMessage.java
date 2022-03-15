@@ -1,13 +1,15 @@
 package life.genny.qwandaq.message;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 import life.genny.qwandaq.Ask;
 
 public class QDataAskMessage extends QDataMessage implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Ask[] items;
+	private List<Ask> items;
 	private static final String DATATYPE_ASK = Ask.class.getSimpleName();
 
 	public QDataAskMessage() {
@@ -32,14 +34,14 @@ public class QDataAskMessage extends QDataMessage implements Serializable {
 	 * @return Ask[]
 	 */
 	public Ask[] getItems() {
-		return this.items;
+		return this.items.toArray(new Ask[0]);
 	}
 
 	/** 
 	 * @param asks the array of asks to set
 	 */
 	public void setItems(Ask[] asks) {
-		this.items = asks;
+		this.items = Arrays.asList(asks);
 	}
 
 }
