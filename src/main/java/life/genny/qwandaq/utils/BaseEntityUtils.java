@@ -330,8 +330,12 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	 * Classic Genny style string clean up. Hope this makes our code look a little
+	 * Classic Genny style string clean up. This will remove any double quotes, 
+	 * whitespaces and square brackets from the string.
+	 * <p>
+	 * Hope this makes our code look a little
 	 * nicer :)
+	 * <p>
 	 *
 	 * @param value The value to clean
 	 * @return A clean string
