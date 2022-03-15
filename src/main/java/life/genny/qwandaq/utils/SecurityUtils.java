@@ -13,7 +13,6 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.InvalidKeyException;
-
 import life.genny.qwandaq.models.GennyToken;
 
 /**
@@ -22,6 +21,8 @@ import life.genny.qwandaq.models.GennyToken;
  * @author Jasper Robison
  */
 public class SecurityUtils {
+
+	public static final String SERVICE_USERNAME = "service";
 
 	static final Logger log = Logger.getLogger(SecurityUtils.class);
 
@@ -40,7 +41,11 @@ public class SecurityUtils {
 
 		return false;
 	}
-	
+
+	public Boolean tokenIsServiceUser(GennyToken token) {
+		return SERVICE_USERNAME.equals(token.getUsername());
+	}
+
 	/** 
 	 * Create a JWT
 	 *
