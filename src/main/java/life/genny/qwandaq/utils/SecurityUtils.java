@@ -81,17 +81,17 @@ public class SecurityUtils {
 
 		try {
 			key = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-			builder.signWith(SignatureAlgorithm.HS256, key);
+			builder.signWith(key, SignatureAlgorithm.HS256);
 
 		} catch (Exception e) {
 			try {
 				key = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-				builder.signWith(SignatureAlgorithm.HS256, key);
+				builder.signWith(key, SignatureAlgorithm.HS256);
 
 			} catch (Exception e1) {
 				try {
 					Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-					builder.signWith(signatureAlgorithm, signingKey);
+					builder.signWith(signingKey, signatureAlgorithm);
 
 				} catch (InvalidKeyException e2) {
 					log.error(e2);
