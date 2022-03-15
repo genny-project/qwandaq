@@ -34,7 +34,7 @@ public class SecurityUtils {
 	 */
 	public static Boolean isAuthorisedGennyToken(GennyToken gennyToken) {
 
-		if (gennyToken.hasRole("admin") || gennyToken.hasRole("service") || gennyToken.hasRole("dev")) {
+		if (gennyToken.hasRole("admin","service","dev")) {
 			log.error(gennyToken.getUserCode() + " has no authority to schedule");
 			return true;
 		}

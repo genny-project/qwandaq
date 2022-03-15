@@ -140,11 +140,44 @@ public class GennyToken implements Serializable {
 	}
 
 	/** 
-	 * @param role the role to check against
-	 * @return boolean
+	 * <p>Checks the {@link GennyToken#userRoles} for any of the supplied roles</p>
+	 * @param roles the roles to check against
+	 * @return boolean whether or not the token has at least one of the roles
 	 */
-	public boolean hasRole(final String role) {
-		return userRoles.contains(role);
+	public boolean hasRole(final String... roles) {
+		return hasRole(false, roles);
+	}
+
+	/** 
+	 * <p>A method to for checking the token roles. Can check for a match on all of the roles or at least one of the roles</p>
+	 * @param roles the roles to check against
+	 * @param requiresAll whether or not the token is required to have all roles supplied
+	 * 	<lb>- Default: <b>false</b>
+	 * @return boolean whether or not the token has either all of the roles or at least one of the roles (depending on requiresAll)
+	 */
+	public boolean hasRole(final boolean requiresAll, final String... roles) {
+		/*
+			if we require all to be checked, check if any are missing. If there is one missing return false
+			if we don't require all to be checked, return true if found at least 1
+
+			on return, if we require all and we didn't return early, return true (missing 1 match)
+			on return, if we didn't require all and we didn't return early, return false (no match)
+		*/
+		for(String role : roles) {
+			boolean hasRole = userRoles.contains(role);
+
+			if(requiresAll) {
+				if(!hasRole) {
+					return false;
+				}
+			} else {
+				if(hasRole) {
+					return true;
+				}
+			}
+		}
+
+		return requiresAll;
 	}
 
 	/** 
