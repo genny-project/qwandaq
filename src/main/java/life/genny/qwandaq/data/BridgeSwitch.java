@@ -32,7 +32,7 @@ public class BridgeSwitch {
 
 		public BridgeInfo() {}
 
-		public ConcurrentMap<String, String> mappings = new ConcurrentHashMap<>();
+		private ConcurrentMap<String, String> mappings = new ConcurrentHashMap<>();
 	}
 
 	/**

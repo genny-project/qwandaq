@@ -23,7 +23,7 @@ public class CacheUtils {
 
 	static Jsonb jsonb = JsonbBuilder.create();
 
-	public static GennyCache cache = null;
+	private static GennyCache cache = null;
 
 	/** 
 	 * @param gennyCache the gennyCache to set
@@ -55,6 +55,17 @@ public class CacheUtils {
 	public static void writeCache(String realm, String key, String value) {
 
 		cache.getRemoteCache(realm).put(key, value);
+	}
+
+	/**
+	* Remove an entry from a realm cache.
+	*
+	* @param realm The realm cache to remove from.
+	* @param key The key of the entry to remove.
+	 */
+	public static void removeEntry(String realm, String key) {
+		
+		cache.getRemoteCache(realm).remove(key);
 	}
 
 	/**
