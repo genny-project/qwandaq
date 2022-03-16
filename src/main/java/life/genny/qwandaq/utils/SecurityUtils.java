@@ -13,7 +13,6 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.InvalidKeyException;
-
 import life.genny.qwandaq.models.GennyToken;
 
 /**
@@ -22,6 +21,8 @@ import life.genny.qwandaq.models.GennyToken;
  * @author Jasper Robison
  */
 public class SecurityUtils {
+
+	public static final String SERVICE_USERNAME = "service";
 
 	static final Logger log = Logger.getLogger(SecurityUtils.class);
 
@@ -33,14 +34,18 @@ public class SecurityUtils {
 	 */
 	public static Boolean isAuthorisedGennyToken(GennyToken gennyToken) {
 
-		if (gennyToken.hasRole("admin") || gennyToken.hasRole("service") || gennyToken.hasRole("dev")) {
-			log.error(gennyToken.getUserCode() + " has no authority!");
+		if (gennyToken.hasRole("admin","service","dev")) {
+			log.error(gennyToken.getUserCode() + " has no authority to schedule");
 			return true;
 		}
 
 		return false;
 	}
-	
+
+	public Boolean tokenIsServiceUser(GennyToken token) {
+		return SERVICE_USERNAME.equals(token.getUsername());
+	}
+
 	/** 
 	 * Create a JWT
 	 *
@@ -76,17 +81,17 @@ public class SecurityUtils {
 
 		try {
 			key = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-			builder.signWith(SignatureAlgorithm.HS256, key);
+			builder.signWith(key, SignatureAlgorithm.HS256);
 
 		} catch (Exception e) {
 			try {
 				key = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-				builder.signWith(SignatureAlgorithm.HS256, key);
+				builder.signWith(key, SignatureAlgorithm.HS256);
 
 			} catch (Exception e1) {
 				try {
 					Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-					builder.signWith(signatureAlgorithm, signingKey);
+					builder.signWith(signingKey, signatureAlgorithm);
 
 				} catch (InvalidKeyException e2) {
 					log.error(e2);
