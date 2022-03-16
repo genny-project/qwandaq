@@ -152,7 +152,7 @@ public class GennyToken implements Serializable {
 	 * <p>A method to for checking the token roles. Can check for a match on all of the roles or at least one of the roles</p>
 	 * @param roles the roles to check against
 	 * @param requiresAll whether or not the token is required to have all roles supplied
-	 * 	<lb>- Default: <b>false</b>
+	 * - Default: <b>false</b>
 	 * @return boolean whether or not the token has either all of the roles or at least one of the roles (depending on requiresAll)
 	 */
 	public boolean hasRole(final boolean requiresAll, final String... roles) {
