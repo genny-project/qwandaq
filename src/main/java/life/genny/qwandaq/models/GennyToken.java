@@ -345,9 +345,9 @@ public class GennyToken implements Serializable {
 	}
 
 	/**
-	* @return String the unique token id
+	* @return String the token jti field
 	 */
-	public String getUniqueId() {
+	public String getJTI() {
 		return (String) adecodedTokenMap.get("jti");
 	}
 

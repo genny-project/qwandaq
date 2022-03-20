@@ -59,7 +59,7 @@ public class BridgeSwitch {
 		}
 
 		// add entry for jti and update in cache
-		String jti = gennyToken.getUniqueId();
+		String jti = gennyToken.getJTI();
 		info.mappings.put(jti, bridgeId);
 
 		CacheUtils.putObject(realm, key, info);
@@ -82,10 +82,11 @@ public class BridgeSwitch {
 		
 		if (info == null) {
 			log.error("No BridgeInfo object found for user " + gennyToken.getUserCode());
+			return null;
 		}
 
 		// grab entry for jti
-		String jti = gennyToken.getUniqueId();
+		String jti = gennyToken.getJTI();
 		String bridgeId = info.mappings.get(jti);
 
 		return bridgeId;
