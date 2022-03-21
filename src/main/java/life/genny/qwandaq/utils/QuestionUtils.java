@@ -312,7 +312,6 @@ public class QuestionUtils implements Serializable {
 	}
 
 	/** 
-	 * @param realm the realm to use
 	 * @param sourceCode the sourceCode to use
 	 * @param targetCode the targetCode to use
 	 * @param questionCode the questionCode to use
