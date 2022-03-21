@@ -8,10 +8,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-
+import life.genny.qwandaq.annotation.ProtoMessage;
 import life.genny.qwandaq.entity.BaseEntity;
 
 @RegisterForReflection
+@ProtoMessage
 public class QSearchBeResult implements Serializable {
 	/**
 	 * 

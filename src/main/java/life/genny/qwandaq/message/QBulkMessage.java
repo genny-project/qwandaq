@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.Set;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import life.genny.qwandaq.annotation.ProtoMessage;
 
-
+@ProtoMessage
 @RegisterForReflection
 public class QBulkMessage implements Serializable {
 
