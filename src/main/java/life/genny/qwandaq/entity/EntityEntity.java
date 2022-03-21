@@ -35,6 +35,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.jboss.logging.Logger;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import life.genny.qwandaq.annotation.ProtoMessage;
 
 import org.hibernate.annotations.Type;
 import org.javamoney.moneta.Money;
@@ -45,6 +46,7 @@ import life.genny.qwandaq.Link;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.converter.MoneyConverter;
 
+@ProtoMessage
 @Entity
 @Table(name = "baseentity_baseentity")
 

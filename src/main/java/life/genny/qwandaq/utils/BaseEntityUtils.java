@@ -143,6 +143,15 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
+	 * Fetch the user base entity of the {@link GennyToken} used to initialise the BaseEntityUtils
+	 * @return the user {@link BaseEntity}
+	 */
+	public BaseEntity getUserBaseEntity() {
+		return this.getBaseEntityByCode(this.getGennyToken().getUserCode());
+	}
+	
+
+	/**
 	 * Update the {@link GennyToken} of this utils instance. Unlike the standard 
 	 * setter method, this will also update the token and the realm.
 	 *
@@ -330,8 +339,12 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	 * Classic Genny style string clean up. Hope this makes our code look a little
+	 * Classic Genny style string clean up. This will remove any double quotes, 
+	 * whitespaces and square brackets from the string.
+	 * <p>
+	 * Hope this makes our code look a little
 	 * nicer :)
+	 * <p>
 	 *
 	 * @param value The value to clean
 	 * @return A clean string
