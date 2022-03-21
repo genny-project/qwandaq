@@ -37,7 +37,8 @@ public class KogitoUtils implements Serializable {
 				+ "   agentCode"
 				+ "  }"
 				+ "}";
-		String graphQlUrl = System.getenv("GENNY_KOGITO_DATAINDEX_HTTP_URL");
+		String graphQlUrl = System.getenv("GENNY_KOGITO_DATAINDEX_HTTP_URL") + "/graphql";
+		log.info("graphQL url=" + graphQlUrl);
 		HttpResponse<String> response = HttpUtils.post(graphQlUrl, data, "application/GraphQL", token);
 		return response.body();
 	}
