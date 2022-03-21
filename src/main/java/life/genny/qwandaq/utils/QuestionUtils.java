@@ -312,6 +312,7 @@ public class QuestionUtils implements Serializable {
 	}
 
 	/** 
+	 * @param realm the realm to use
 	 * @param sourceCode the sourceCode to use
 	 * @param targetCode the targetCode to use
 	 * @param questionCode the questionCode to use
@@ -321,49 +322,51 @@ public class QuestionUtils implements Serializable {
 	public static QDataAskMessage getAsks(String sourceCode, String targetCode, 
 			String questionCode, BaseEntityUtils beUtils) {
 
-		HttpResponse<String> response = HttpUtils.get(GennySettings.qwandaServiceUrl +
-				"/qwanda/baseentitys/"
-				+ sourceCode + "/asks2/" + questionCode + "/" + targetCode,
-				beUtils.getGennyToken().getToken());
+		List<Ask> asks = DatabaseUtils.findAsksByQuestionCode(beUtils.getRealm(), questionCode, sourceCode, targetCode);
+		QDataAskMessage msg = new QDataAskMessage(asks.toArray(new Ask[0]));
+		// TODO: Ensure migration from api to Database worked fine
+		// HttpResponse<String> response = HttpUtils.get(GennySettings.qwandaServiceUrl +
+		// 		"/qwanda/baseentitys/"
+		// 		+ sourceCode + "/asks2/" + questionCode + "/" + targetCode,
+		// 		beUtils.getGennyToken().getToken());
 
-		String json = response.body();
+		// String json = response.body();
 
-		if (json != null) {
-			if (!json.contains("<title>Error")) {
-				QDataAskMessage msg = jsonb.fromJson(json, QDataAskMessage.class);
+		// if (json != null) {
+		// 	if (!json.contains("<title>Error")) {
+		// 		QDataAskMessage msg = jsonb.fromJson(json, QDataAskMessage.class);
 
-				if (true) {
-					// Identify all the attributeCodes and build up a working active Set
-					Set<String> activeAttributeCodes = new HashSet<String>();
-					for (Ask ask : msg.getItems()) {
-						activeAttributeCodes.addAll(getAttributeCodes(ask));
+		// TODO: Need to ask what the hell is going on here? if (true) ????
+		if (true) {
+			// Identify all the attributeCodes and build up a working active Set
+			Set<String> activeAttributeCodes = new HashSet<String>();
+			for (Ask ask : msg.getItems()) {
+				activeAttributeCodes.addAll(getAttributeCodes(ask));
 
-						// Go down through the child asks and get cached questions
-						setCachedQuestionsRecursively(ask, beUtils);
-					}
-					// Now fetch the set from cache and add it....
-					Type type = new TypeToken<Set<String>>() {
-					}.getType();
-
-					Set<String> activeAttributesSet = CacheUtils.getObject(beUtils.getRealm(),
-							"ACTIVE_ATTRIBUTES",
-							type);
-
-					if (activeAttributesSet == null) {
-						activeAttributesSet = new HashSet<String>();
-					}
-					activeAttributesSet.addAll(activeAttributeCodes);
-
-					CacheUtils.putObject(beUtils.getRealm(), "ACTIVE_ATTRIBUTES",
-							activeAttributesSet);
-
-					log.debug("Total Active AttributeCodes = " + activeAttributesSet.size());
-				}
-				return msg;
+				// Go down through the child asks and get cached questions
+				setCachedQuestionsRecursively(ask, beUtils);
 			}
-		}
+			// Now fetch the set from cache and add it....
+			Type type = new TypeToken<Set<String>>() {
+			}.getType();
 
-		return null;
+			Set<String> activeAttributesSet = CacheUtils.getObject(beUtils.getRealm(),
+					"ACTIVE_ATTRIBUTES",
+					type);
+
+			if (activeAttributesSet == null) {
+				activeAttributesSet = new HashSet<String>();
+			}
+			activeAttributesSet.addAll(activeAttributeCodes);
+
+			CacheUtils.putObject(beUtils.getRealm(), "ACTIVE_ATTRIBUTES",
+					activeAttributesSet);
+
+			log.debug("Total Active AttributeCodes = " + activeAttributesSet.size());
+		}
+		return msg;
+		// 	}
+		// }
 	}
 
 	/**

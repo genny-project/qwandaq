@@ -47,13 +47,16 @@ public class DatabaseUtils {
 
 	/**
 	 * Check if entityManager is present.
+	 * @return whether or not entityManager is present
 	 */
-	public static void checkEntityManager() {
+	public static boolean checkEntityManager() {
 
 		if (entityManager == null) {
 			log.error("EntityManager must be initialised first!!!");
-			return;
+			return false;
 		}
+
+		return true;
 	}
 
 	/**
