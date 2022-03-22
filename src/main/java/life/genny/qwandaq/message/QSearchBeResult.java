@@ -8,33 +8,34 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-
+import life.genny.qwandaq.annotation.ProtoMessage;
 import life.genny.qwandaq.entity.BaseEntity;
 
 @RegisterForReflection
+@ProtoMessage
 public class QSearchBeResult implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	String[] codes;
+	List<String> codes;
 	Long total;
 
 	// Added 19/08/2021
 	// Users may want to just return the Entities instead of 
 	// A list of codes
-	BaseEntity[] entities;
+	List<BaseEntity> entities;
 
 	public QSearchBeResult() {}
 	
 	public QSearchBeResult(List<String> codes, Long total) {
-		this.codes = codes.toArray(new String[0]);
+		this.codes = codes;
 		this.total = total;
 	}
 
 	public QSearchBeResult(BaseEntity[] entities, Long total) {
-		this.codes = Stream.of(entities).map(x -> x.getCode()).collect(Collectors.toList()).toArray(String[]::new);
-		this.entities = entities;
+		this.codes = Stream.of(entities).map(x -> x.getCode()).collect(Collectors.toList());
+		this.entities = Arrays.asList(entities);
 		this.total = total;
 	}
 
@@ -48,13 +49,13 @@ public class QSearchBeResult implements Serializable {
 	 * @return the codes
 	 */
 	public List<String> getCodes() {
-		return Arrays.asList(codes);
+		return codes;
 	}
 	/**
 	 * @param codes the codes to set
 	 */
 	public void setCodes(List<String> codes) {
-		this.codes = codes.toArray(new String[0]);
+		this.codes = codes;
 	}
 	/**
 	 * @return the total
@@ -74,7 +75,7 @@ public class QSearchBeResult implements Serializable {
 	 * @param entities the entities to set
 	 */
 	public void setEntities(BaseEntity[] entities) {
-		this.entities = entities;
+		this.entities = Arrays.asList(entities);
 	}
 
 	
@@ -82,7 +83,7 @@ public class QSearchBeResult implements Serializable {
 	 * @return BaseEntity[]
 	 */
 	public BaseEntity[] getEntities() {
-		return entities;
+		return entities.toArray(new BaseEntity[0]);
 	}
 	
 	

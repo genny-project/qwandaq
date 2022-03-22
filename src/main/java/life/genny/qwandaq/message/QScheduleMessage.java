@@ -13,6 +13,7 @@ import org.jboss.logging.Logger;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import life.genny.qwandaq.annotation.ProtoMessage;
 import life.genny.qwandaq.datatype.PanacheLocalDateTimeAdapter;
 
 import com.querydsl.core.annotations.QueryExclude;
@@ -22,6 +23,7 @@ import com.querydsl.core.annotations.QueryExclude;
 @Table(name = "schedulemessage")
 @RegisterForReflection
 @QueryExclude
+@ProtoMessage
 public class QScheduleMessage extends PanacheEntity {
 
 	 private static final Logger log = Logger.getLogger(QScheduleMessage.class);	

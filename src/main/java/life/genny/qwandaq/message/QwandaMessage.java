@@ -2,8 +2,10 @@ package life.genny.qwandaq.message;
 
 import java.io.Serializable;
 
- 
+import life.genny.qwandaq.annotation.ProtoMessage;
 
+ 
+@ProtoMessage
 public class QwandaMessage extends  QCmdMessage implements Serializable {
 		
 	/**

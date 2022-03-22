@@ -1,5 +1,8 @@
 package life.genny.qwandaq.message;
 
+import life.genny.qwandaq.annotation.ProtoMessage;
+
+@ProtoMessage
 public class QEventDropdownMessage extends QEventMessage {
 	
 	private Integer pageIndex = 0;

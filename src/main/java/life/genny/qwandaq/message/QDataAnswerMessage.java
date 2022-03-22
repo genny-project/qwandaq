@@ -4,11 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.annotation.ProtoMessage;
 
+@ProtoMessage
 public class QDataAnswerMessage extends QDataMessage {
 
 	private static final long serialVersionUID = 1L;
-	private Answer[] items;
+	private List<Answer> items;
 	private static final String DATATYPE_ANSWER = Answer.class.getSimpleName();
 
 
@@ -32,23 +34,23 @@ public class QDataAnswerMessage extends QDataMessage {
 	public QDataAnswerMessage(Answer item) {
 
 		super(DATATYPE_ANSWER);
-		items = new Answer[1];
-		items[0] = item;
-		setItems(items);
+		Answer[] itemsArr = new Answer[1];
+		itemsArr[0] = item;
+		setItems(itemsArr);
 	}
 	
 	/** 
 	 * @return Answer[]
 	 */
 	public Answer[] getItems() {
-		return items;
+		return items.toArray(new Answer[0]);
 	}
 
 	/** 
 	 * @param items the array of answers to set
 	 */
 	public void setItems(Answer[] items) {
-		this.items = items;
+		this.items = Arrays.asList(items);
 	}
 
 	/** 
@@ -59,7 +61,7 @@ public class QDataAnswerMessage extends QDataMessage {
 	 */
 	@Override
 	public String toString() {
-		return "QDataAnswerMessage [" + (items != null ? "items=" + Arrays.toString(items) : "") + "]";
+		return "QDataAnswerMessage [" + (items != null ? "items=" + Arrays.toString(items.toArray(new Answer[0])) : "") + "]";
 	}
 	
 }

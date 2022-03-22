@@ -17,6 +17,8 @@
 package life.genny.qwandaq;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.persistence.DiscriminatorColumn;
@@ -38,15 +40,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.apache.commons.lang3.builder.CompareToBuilder;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.querydsl.core.annotations.QueryExclude;
+
+import org.apache.commons.lang3.builder.CompareToBuilder;
 
 import life.genny.qwandaq.exception.BadDataException;
-import life.genny.qwandaq.Question;
-
-import com.querydsl.core.annotations.QueryExclude;
 
 /**
  * Ask represents the presentation of a Question to a source entity. A Question
@@ -113,7 +113,7 @@ public class Ask extends CoreEntity implements Serializable {
 	private Boolean createOnTrigger = false;
 
 	@Transient
-	private Ask[] childAsks;
+	private List<Ask> childAsks;
 
 	// @Embedded
 	// @Valid
@@ -453,14 +453,14 @@ public class Ask extends CoreEntity implements Serializable {
 	 */
 	@Transient
 	public Ask[] getChildAsks() {
-		return childAsks;
+		return childAsks.toArray(new Ask[0]);
 	}
 
 	/**
 	 * @param childAsks the childAsks to set
 	 */
 	public void setChildAsks(Ask[] childAsks) {
-		this.childAsks = childAsks;
+		this.childAsks = Arrays.asList(childAsks);
 	}
 
 	/**
@@ -534,7 +534,7 @@ public class Ask extends CoreEntity implements Serializable {
 		if (this.formTrigger) {
 			return true;
 		} else {
-			if ((this.childAsks!=null)&&(this.childAsks.length > 0)) {
+			if ((this.childAsks!=null)&&(this.childAsks.size() > 0)) {
 				for (Ask childAsk : this.childAsks) {
 					return childAsk.hasTriggerQuestion();
 				}
@@ -566,7 +566,7 @@ public class Ask extends CoreEntity implements Serializable {
 		newAsk.formTrigger = ask.getFormTrigger();
 		newAsk.createOnTrigger = ask.getCreateOnTrigger();
 		if(ask.getChildAsks() != null && ask.getChildAsks().length > 0){
-			newAsk.childAsks = ask.getChildAsks();
+			newAsk.childAsks = Arrays.asList(ask.getChildAsks());
 		}
 		if(ask.getContextList() != null ){
 			newAsk.contextList = ask.getContextList();

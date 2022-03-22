@@ -1,12 +1,17 @@
 package life.genny.qwandaq.message;
 
 
+import java.util.Arrays;
+import java.util.List;
+
+import life.genny.qwandaq.annotation.ProtoMessage;
 import life.genny.qwandaq.attribute.Attribute;
 
+@ProtoMessage
 public class QDataAttributeMessage extends QDataMessage{
 
 	private static final long serialVersionUID = 1L;
-	private Attribute[] items;
+	private List<Attribute> items;
 	private static final String DATATYPE_ATTRIBUTE = Attribute.class.getSimpleName();
 
 	public QDataAttributeMessage(Attribute[] items) {
@@ -19,14 +24,14 @@ public class QDataAttributeMessage extends QDataMessage{
 	 * @return Attribute[]
 	 */
 	public Attribute[] getItems() {
-		return items;
+		return items.toArray(new Attribute[0]);
 	}
 
 	/** 
 	 * @param items the array of attributes to set
 	 */
 	public void setItems(Attribute[] items) {
-		this.items = items;
+		this.items = Arrays.asList(items);
 	}
 
 }
