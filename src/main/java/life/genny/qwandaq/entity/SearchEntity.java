@@ -1035,7 +1035,7 @@ public class SearchEntity extends BaseEntity {
 	 * @return SearchEntity
 	 */
 	public SearchEntity addOr(final String attributeCode, final Boolean value) {
-		AttributeText attribute = new AttributeText(attributeCode, "=");
+		AttributeText attribute = new AttributeText(attributeCode, StringFilter.EQUAL.toString());
 		Integer count = countOccurrences(attributeCode, "OR") + 1;
 
 		for (int i = 0; i < count; i++) {
