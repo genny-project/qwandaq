@@ -74,6 +74,7 @@ public class HttpUtils {
 	*
 	* @param uri The target URI of the request.
 	* @param body The json string to use as the body.
+	* @param contentType The contentType to use in the header. Default: "application/json"
 	* @param token The token to use in authorization.
 	* @return The returned response object.
 	 */
