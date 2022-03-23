@@ -43,7 +43,6 @@ import life.genny.qwandaq.message.QBulkMessage;
 import life.genny.qwandaq.message.QDataAskMessage;
 import life.genny.qwandaq.message.QDataBaseEntityMessage;
 import life.genny.qwandaq.message.QwandaMessage;
-import life.genny.qwandaq.models.GennySettings;
 import life.genny.qwandaq.validation.Validation;
 
 /**
@@ -159,8 +158,8 @@ public class QuestionUtils implements Serializable {
 	 * @return List&lt;Ask&gt;
 	 */
 	public static List<Ask> findAsks2(final Question rootQuestion, final BaseEntity source,
-			final BaseEntity target,
-			BaseEntityUtils beUtils) {
+			final BaseEntity target, BaseEntityUtils beUtils) {
+
 		return findAsks2(rootQuestion, source, target, false, false, false, false, beUtils);
 	}
 
@@ -176,19 +175,21 @@ public class QuestionUtils implements Serializable {
 	 * @param beUtils the beUtils to use
 	 * @return List&lt;Ask&gt;
 	 */
-	public static List<Ask> findAsks2(final Question rootQuestion, final BaseEntity source,
-			final BaseEntity target,
+	public static List<Ask> findAsks2(final Question rootQuestion, final BaseEntity source, final BaseEntity target,
 			Boolean childQuestionIsMandatory, Boolean childQuestionIsReadonly, Boolean childQuestionIsFormTrigger,
 			Boolean childQuestionIsCreateOnTrigger, BaseEntityUtils beUtils) {
+
 		if (rootQuestion == null) {
 			log.error(
 					"rootQuestion for findAsks2 is null - source=" + source.getCode() + ": target " + target.getCode());
 			return new ArrayList<Ask>();
 		}
+
 		List<Ask> asks = new ArrayList<>();
 		Boolean mandatory = rootQuestion.getMandatory() || childQuestionIsMandatory;
 		Boolean readonly = rootQuestion.getReadonly() || childQuestionIsReadonly;
 		Ask ask = null;
+
 		// check if this already exists?
 		List<Ask> myAsks = DatabaseUtils.findAsksByQuestionCode(beUtils.getRealm(), rootQuestion.getCode(), source.getCode(), target.getCode());
 		if (!(myAsks == null || myAsks.isEmpty())) {
@@ -206,9 +207,8 @@ public class QuestionUtils implements Serializable {
 
 			// Now merge ask name if required
 			ask = performMerge(ask);
-
-			// ask = upsert(ask);
 		}
+
 		// create one
 		if (rootQuestion.getAttributeCode().startsWith(Question.QUESTION_GROUP_ATTRIBUTE_CODE)) {
 			// Recurse!
@@ -245,9 +245,6 @@ public class QuestionUtils implements Serializable {
 			ask.setChildAsks(asksArray);
 
 			ask.setRealm(beUtils.getRealm());
-			// ask.setChildAsks(childAsks);
-
-			// ask = upsert(ask); // save
 		}
 
 		asks.add(ask);
@@ -263,7 +260,9 @@ public class QuestionUtils implements Serializable {
 	 */
 	public static List<Ask> createAsksByQuestion2(final Question rootQuestion, final BaseEntity source,
 			final BaseEntity target, BaseEntityUtils beUtils) {
+
 		List<Ask> asks = findAsks2(rootQuestion, source, target, beUtils);
+
 		return asks;
 	}
 	
@@ -318,54 +317,35 @@ public class QuestionUtils implements Serializable {
 	 * @param beUtils the beUtils to use
 	 * @return QDataAskMessage
 	 */
-	public static QDataAskMessage getAsks(String sourceCode, String targetCode, 
-			String questionCode, BaseEntityUtils beUtils) {
+	public static QDataAskMessage getAsks(String sourceCode, String targetCode, String questionCode, BaseEntityUtils beUtils) {
 
+		// TODO: Ensure migration from api to Database worked fine
 		List<Ask> asks = DatabaseUtils.findAsksByQuestionCode(beUtils.getRealm(), questionCode, sourceCode, targetCode);
 		QDataAskMessage msg = new QDataAskMessage(asks.toArray(new Ask[0]));
-		// TODO: Ensure migration from api to Database worked fine
-		// HttpResponse<String> response = HttpUtils.get(GennySettings.qwandaServiceUrl +
-		// 		"/qwanda/baseentitys/"
-		// 		+ sourceCode + "/asks2/" + questionCode + "/" + targetCode,
-		// 		beUtils.getGennyToken().getToken());
 
-		// String json = response.body();
+		// Identify all the attributeCodes and build up a working active Set
+		Set<String> activeAttributeCodes = new HashSet<String>();
+		for (Ask ask : msg.getItems()) {
+			activeAttributeCodes.addAll(getAttributeCodes(ask));
 
-		// if (json != null) {
-		// 	if (!json.contains("<title>Error")) {
-		// 		QDataAskMessage msg = jsonb.fromJson(json, QDataAskMessage.class);
-
-		// TODO: Need to ask what the hell is going on here? if (true) ????
-		if (true) {
-			// Identify all the attributeCodes and build up a working active Set
-			Set<String> activeAttributeCodes = new HashSet<String>();
-			for (Ask ask : msg.getItems()) {
-				activeAttributeCodes.addAll(getAttributeCodes(ask));
-
-				// Go down through the child asks and get cached questions
-				setCachedQuestionsRecursively(ask, beUtils);
-			}
-			// Now fetch the set from cache and add it....
-			Type type = new TypeToken<Set<String>>() {
-			}.getType();
-
-			Set<String> activeAttributesSet = CacheUtils.getObject(beUtils.getRealm(),
-					"ACTIVE_ATTRIBUTES",
-					type);
-
-			if (activeAttributesSet == null) {
-				activeAttributesSet = new HashSet<String>();
-			}
-			activeAttributesSet.addAll(activeAttributeCodes);
-
-			CacheUtils.putObject(beUtils.getRealm(), "ACTIVE_ATTRIBUTES",
-					activeAttributesSet);
-
-			log.debug("Total Active AttributeCodes = " + activeAttributesSet.size());
+			// Go down through the child asks and get cached questions
+			setCachedQuestionsRecursively(ask, beUtils);
 		}
+		// Now fetch the set from cache and add it....
+		Type type = new TypeToken<Set<String>>(){}.getType();
+
+		Set<String> activeAttributesSet = CacheUtils.getObject(beUtils.getRealm(), "ACTIVE_ATTRIBUTES", type);
+
+		if (activeAttributesSet == null) {
+			activeAttributesSet = new HashSet<String>();
+		}
+		activeAttributesSet.addAll(activeAttributeCodes);
+
+		CacheUtils.putObject(beUtils.getRealm(), "ACTIVE_ATTRIBUTES", activeAttributesSet);
+
+		log.debug("Total Active AttributeCodes = " + activeAttributesSet.size());
+
 		return msg;
-		// 	}
-		// }
 	}
 
 	/**
@@ -401,9 +381,8 @@ public class QuestionUtils implements Serializable {
 	 * @throws IOException if something went wrong
 	 */
 	public static QwandaMessage getQuestions(String sourceCode, String targetCode,
-			String questionCode,
-			BaseEntityUtils beUtils)
-			throws ClientProtocolException, IOException {
+			String questionCode, BaseEntityUtils beUtils) throws ClientProtocolException, IOException {
+
 		return getQuestions(sourceCode, targetCode, questionCode, beUtils, null, true);
 	}
 
