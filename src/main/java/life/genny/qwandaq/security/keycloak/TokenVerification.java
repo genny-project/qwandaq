@@ -59,6 +59,7 @@ public class TokenVerification {
 
 		log.info("The public cert for realm " + realm + " will be retrieved...");
 		certStore.put(realm, client.fetchRealmCerts(realm));
+		log.info(certStore.get(realm).keys.get(0).toString());
 
 		return certStore.get(realm);
 	}

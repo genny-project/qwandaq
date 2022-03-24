@@ -25,19 +25,24 @@ public class KeycloakRealmKey {
     public String kty;
     /* Algorithm type such as HS256 */
     public String alg;
-    public String sig;
+    public String use;
 
 	@JsonbProperty("n")
     public String modulus;
+
+	public String n;
+
 	@JsonbProperty("e")
     public String exponent;
+
+	public String e;
 
 	public KeycloakRealmKey() { }
 
     @Override
     public String toString() {
-        return "KeycloakRealmKey [alg=" + alg + ", exponent=" + exponent + ", kid=" + kid + ", kty=" + kty
-                + ", modulus=" + modulus + ", sig=" + sig + "]";
+        return "KeycloakRealmKey [alg=" + alg + ", exponent=" + exponent +" OR " + e + ", kid=" + kid + ", kty=" + kty
+                + ", modulus=" + modulus + "OR" + n + ", use=" + use + "]";
     }
 
 	public void setKid(String kid) {
@@ -64,12 +69,12 @@ public class KeycloakRealmKey {
 		return alg;
 	}
 
-	public void setSig(String sig) {
-		this.sig = sig;
+	public void setUse(String use) {
+		this.use = use;
 	}
 
-	public String getSig() {
-		return sig;
+	public String getUse() {
+		return use;
 	}
 
 	public void setModulus(String modulus) {
@@ -89,11 +94,11 @@ public class KeycloakRealmKey {
 	}
 
 	public BigInteger getDecodedModulus() {
-        return new BigInteger(1, Base64Url.decode(this.modulus));
+        return new BigInteger(1, Base64Url.decode(this.n));
 	}
 
 	public BigInteger getDecodedExponent() {
-        return new BigInteger(1, Base64Url.decode(this.exponent));
+        return new BigInteger(1, Base64Url.decode(this.e));
 	}
 }
 
