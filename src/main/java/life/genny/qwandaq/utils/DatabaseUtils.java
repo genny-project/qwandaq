@@ -47,13 +47,16 @@ public class DatabaseUtils {
 
 	/**
 	 * Check if entityManager is present.
+	 * @return whether or not entityManager is present
 	 */
-	public static void checkEntityManager() {
+	public static boolean checkEntityManager() {
 
 		if (entityManager == null) {
 			log.error("EntityManager must be initialised first!!!");
-			return;
+			return false;
 		}
+
+		return true;
 	}
 
 	/**
@@ -92,6 +95,7 @@ public class DatabaseUtils {
 
 
 	public static Long countAttributes(String realm) {
+
 		checkEntityManager();
 
 		try {
@@ -273,6 +277,7 @@ public class DatabaseUtils {
 			log.errorv("No Validation found in DB for {} in realm {}", code, realm);
 			log.error(e.getStackTrace());
 		}
+
 		return null;
 	}
 
@@ -299,6 +304,7 @@ public class DatabaseUtils {
 		} catch (NoResultException e) {
 			log.errorv("No Attribute found in DB for {} in realm {}", code, realm);
 		}
+
 		return null;
 	}
 
@@ -325,6 +331,7 @@ public class DatabaseUtils {
 		} catch (NoResultException e) {
 			log.errorv("No BaseEntity found in DB for {} in realm {}", code, realm);
 		}
+
 		return null;
 	}
 
@@ -351,6 +358,7 @@ public class DatabaseUtils {
 		} catch (NoResultException e) {
 			log.errorv("No Question found in DB for {} in realm {}", code, realm);
 		}
+
 		return null;
 	}
 
@@ -380,6 +388,7 @@ public class DatabaseUtils {
 		} catch (NoResultException e) {
 			log.errorv("No QuestionQuestion found in DB for {}:{} in realm {}", sourceCode, targetCode, realm);
 		}
+
 		return null;
 	}
 
@@ -407,6 +416,7 @@ public class DatabaseUtils {
 		} catch (NoResultException e) {
 			log.errorv("No QuestionQuestion found in DB for {}", sourceCode);
 		}
+
 		return null;
 	}
 
@@ -437,6 +447,7 @@ public class DatabaseUtils {
 		} catch (NoResultException e) {
 			log.errorv("No Asks found in DB for {}:{}:{} in realm {}", questionCode, sourceCode, targetCode, realm);
 		}
+
 		return null;
 	}
 

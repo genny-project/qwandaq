@@ -1,5 +1,7 @@
 package life.genny.qwandaq.data;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -24,15 +26,18 @@ public class BridgeSwitch {
 
 	static Jsonb jsonb = JsonbBuilder.create();
 
-	public static ConcurrentMap<String, String> mappings = new ConcurrentHashMap<>();
-
 	public static String BRIDGE_INFO_PREFIX = "BIF";
 
+	public static Set<String> activeBridgeIds = new HashSet<String>();
+
+	/**
+	 * A child class used to store bridge mappings for individual users.
+	 */
 	public static class BridgeInfo {
 
 		public BridgeInfo() {}
 
-		private ConcurrentMap<String, String> mappings = new ConcurrentHashMap<>();
+		public ConcurrentMap<String, String> mappings = new ConcurrentHashMap<>();
 	}
 
 	/**
@@ -54,7 +59,7 @@ public class BridgeSwitch {
 		}
 
 		// add entry for jti and update in cache
-		String jti = gennyToken.getUniqueId();
+		String jti = gennyToken.getJTI();
 		info.mappings.put(jti, bridgeId);
 
 		CacheUtils.putObject(realm, key, info);
@@ -77,52 +82,14 @@ public class BridgeSwitch {
 		
 		if (info == null) {
 			log.error("No BridgeInfo object found for user " + gennyToken.getUserCode());
+			return null;
 		}
 
 		// grab entry for jti
-		String jti = gennyToken.getUniqueId();
+		String jti = gennyToken.getJTI();
 		String bridgeId = info.mappings.get(jti);
 
 		return bridgeId;
 	}
 
-	/**
-	* Update the BridgeSwitch using an incoming payload. 
-	* Function will initially look for a field relating to 
-	* the JTI found in the token, and if nothing is found, will try
-	* looking for a bridgeId field since it might be an internal message.
-	*
-	* @param data An incoming stringified payload.
-	 */
-	public static void updateBridgeSwitchWithIncomingData(String data) {
-
-		// deserialise msg into JsonObject
-		JsonObject payload = jsonb.fromJson(data, JsonObject.class);
-		String token = payload.getString("token");
-
-		// grab userToken from message
-		GennyToken userToken = new GennyToken(token);
-		String jti = userToken.getUniqueId();
-
-		if (jti == null) {
-			log.error("JTI is null for token");
-			return;
-		}
-
-		// look for field corresponding to the JTI
-		String bridgeId = payload.getString(jti);
-
-		// if null, this might be an internal msg object
-		if (bridgeId == null) {
-			bridgeId = payload.getString("bridgeId");
-		}
-
-		if (bridgeId == null) {
-			log.error("Could not resolve bridgeId");
-			return;
-		}
-
-		// update bridge switch
-		BridgeSwitch.mappings.put(jti, bridgeId);
-	}
 }
