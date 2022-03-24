@@ -79,7 +79,6 @@ public class HttpUtils {
 	 */
 	public static HttpResponse<String> post(String uri, String body, String contentType, String token) {
 
->>>>>>> Stashed changes
 		HttpClient client = HttpClient.newHttpClient();
 
 		HttpRequest request = HttpRequest.newBuilder()
