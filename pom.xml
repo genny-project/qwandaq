@@ -25,6 +25,18 @@
       <organization>GADA Technology</organization>
       <organizationUrl>https://gada.io</organizationUrl>
     </developer>
+    <developer>
+      <name>Adam Crow</name>
+      <email>adam.crow@gada.io</email>
+      <organization>GADA Technology</organization>
+      <organizationUrl>https://gada.io</organizationUrl>
+    </developer>
+    <developer>
+      <name>Bryn Meachem</name>
+      <email>bryn.meahem@gada.io</email>
+      <organization>GADA Technology</organization>
+      <organizationUrl>https://gada.io</organizationUrl>
+    </developer>
   </developers>
 
   <scm>
@@ -130,7 +142,11 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-infinispan-client</artifactId>
+      <artifactId>quarkus-smallrye-jwt-build</artifactId>
+    </dependency>
+    <dependency>
+	<groupId>io.quarkus</groupId>
+	<artifactId>quarkus-infinispan-client</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

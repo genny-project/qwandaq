@@ -2,6 +2,7 @@ package life.genny.qwandaq.utils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,7 +20,6 @@ import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.Answer;
 import life.genny.qwandaq.Ask;
-import life.genny.qwandaq.Question;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.datatype.CapabilityMode;
@@ -42,7 +42,7 @@ import life.genny.qwandaq.message.QEventDropdownMessage;
  */
 public class SearchUtils {
 
-	static final Logger log = Logger.getLogger(SearchUtils.class);
+	static Logger log = Logger.getLogger(SearchUtils.class);
 	static Jsonb jsonb = JsonbBuilder.create();
 
 	/**
@@ -135,28 +135,13 @@ public class SearchUtils {
 	public static void searchTable(BaseEntityUtils beUtils, SearchEntity searchEntity) {
 
 		String realm = beUtils.getRealm();
-		String sessionCode = beUtils.getGennyToken().getSessionCode();
 
 		if (searchEntity == null) {
 			System.out.println("SearchBE is null");
 		}
 
-		// get session search code for SBE
-		if (!searchEntity.getCode().contains(sessionCode.toUpperCase())) {
-			searchEntity.setCode(searchEntity.getCode() + "_" + sessionCode.toUpperCase());
-		}
-
-		log.info("sessionSearchCode  ::  " + searchEntity.getCode());
-
-		// update any nested search attribute codes
-		searchEntity.getBaseEntityAttributes().stream()
-			.filter(ea -> ea.getAttributeCode().startsWith("SBE_"))
-			.forEach(ea -> {
-				ea.setAttributeCode(ea.getAttributeCode() + "_" + sessionCode.toUpperCase());
-			});
-
-		// put session search in cache
-		CacheUtils.putObject(realm, searchEntity.getCode(), searchEntity);
+		// update code to session search code
+		searchEntity = getSessionSearch(beUtils, searchEntity);
 
 		// Add any necessary extra filters
 		List<EntityAttribute> filters = getUserFilters(beUtils, searchEntity);
@@ -169,7 +154,7 @@ public class SearchUtils {
 			}
 		}
 
-		CacheUtils.putObject(realm, "LAST-SEARCH:"+sessionCode, searchEntity);
+		CacheUtils.putObject(realm, "LAST-SEARCH:"+searchEntity.getCode(), searchEntity);
 
 		// ensure column and action indexes are accurate
 		searchEntity.updateColumnIndex();
@@ -245,17 +230,109 @@ public class SearchUtils {
 	 * @return Answer
 	 */
 	public static Answer getAssociatedColumnValue(BaseEntityUtils beUtils, BaseEntity baseBE, String calEACode) {
-		log.error("Function not complete!");
-		return null;
+
+		String[] calFields = calEACode.substring("COL__".length()).split("__");
+		if (calFields.length == 1) {
+			log.error("CALS length is bad for :" + calEACode);
+			return null;
+		}
+
+		String linkBeCode = calFields[calFields.length-1];
+		BaseEntity be = baseBE;
+		Optional<EntityAttribute> associateEa = null;
+		String finalAttributeCode = calEACode.substring("COL_".length());
+
+		// Fetch The Attribute of the last code
+		String primaryAttrCode = calFields[calFields.length-1];
+		Attribute primaryAttribute = QwandaUtils.getAttribute(primaryAttrCode);
+
+		Answer ans = new Answer(baseBE.getCode(), baseBE.getCode(), finalAttributeCode, "");
+		Attribute att = new Attribute(finalAttributeCode, primaryAttribute.getName(), primaryAttribute.getDataType());
+		ans.setAttribute(att);
+
+		for (int i = 0; i < calFields.length-1; i++) {
+			String attributeCode = calFields[i];
+			String calBe = be.getValueAsString(attributeCode);
+
+			if (calBe != null && !calBe.isBlank()) {
+				String calVal = BaseEntityUtils.cleanUpAttributeValue(calBe);
+				String[] codeArr = calVal.split(",");
+
+				for (String code : codeArr) {
+					if (code.isBlank()) {
+						log.error("code from Calfields is empty calVal["+calVal+"] skipping calFields=["+calFields+"] - be:"+baseBE.getCode());
+						continue;
+					}
+
+					BaseEntity associatedBe = beUtils.getBaseEntityByCode(code);
+					if (associatedBe == null) {
+						log.warn("associatedBe DOES NOT exist ->" + code);
+						return null;
+					}
+
+					if (i == (calFields.length-2)) {
+						associateEa = associatedBe.findEntityAttribute(linkBeCode);
+
+						if (associateEa != null && (associateEa.isPresent() || ("PRI_NAME".equals(linkBeCode)))) {
+							String linkedValue = null;
+							if ("PRI_NAME".equals(linkBeCode)) {
+								linkedValue = associatedBe.getName();
+							} else {
+								linkedValue = associatedBe.getValueAsString(linkBeCode);
+							}
+							if (!ans.getValue().isEmpty()) {
+								linkedValue = ans.getValue() + "," + linkedValue;
+							}
+							ans.setValue(linkedValue);
+						} else {
+							log.warn("No attribute present");
+						}
+					}
+					be = associatedBe;
+				}
+			} else {
+				log.warn("Could not find attribute value for " + attributeCode + " for entity " + be.getCode());
+				return null;
+			}
+		}
+
+		return ans;
 	}
 	
-	/** 
-	 * @param searchCode the searchCode to get
-	 * @return SearchEntity get session search of
+	/**
+	* Get a session search for a given SearchEntity
+	*
+	* @param beUtils the utility used in operation
+	* @param searchEntity the searchEntity
+	* @return SearchEntity
 	 */
-	public static SearchEntity getSessionSearch(String searchCode) {
-		log.error("Function not complete!");
-		return null;
+	public static SearchEntity getSessionSearch(BaseEntityUtils beUtils, SearchEntity searchEntity) {
+
+		GennyToken gennyToken = beUtils.getGennyToken();
+		String realm = gennyToken.getRealm();
+
+		// don't bother if the code is already a session search
+		if (searchEntity.getCode().contains(gennyToken.getJTI().toUpperCase())) {
+			return searchEntity;
+		}
+
+		// we need to set the searchEntity's code to session search code
+		String sessionSearchCode = searchEntity.getCode() + "_" + gennyToken.getJTI().toUpperCase();
+		log.info("sessionSearchCode  ::  " + searchEntity.getCode());
+
+		// update code and any nested codes
+		searchEntity.setCode(sessionSearchCode);
+
+		searchEntity.getBaseEntityAttributes().stream()
+			.filter(ea -> ea.getAttributeCode().startsWith("SBE_"))
+			.forEach(ea -> {
+				ea.setAttributeCode(ea.getAttributeCode() + "_" + gennyToken.getJTI().toUpperCase());
+			});
+
+		// put/update in the cache
+		CacheUtils.putObject(realm, searchEntity.getCode(), searchEntity);
+
+		return searchEntity;
 	}
 
 	/** 
@@ -267,9 +344,8 @@ public class SearchUtils {
 		Instant start = Instant.now();
 
 		String realm = beUtils.getServiceToken().getRealm();
-		String sToken = beUtils.getServiceToken().getToken();
 		String gToken = beUtils.getGennyToken().getToken();
-		String sessionCode = beUtils.getGennyToken().getUniqueId().toUpperCase();
+		String sessionCode = beUtils.getGennyToken().getJTI().toUpperCase();
 
 		// convert to entity list
 		log.info("dropdownValue = " + dropdownValue);

@@ -37,15 +37,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class GennyToken implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
+	static final Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
+	static Jsonb jsonb = JsonbBuilder.create();
 
-	String code;
-	String userCode;
-	String userUUID;
-	String token;
-	Map<String, Object> adecodedTokenMap = null;
-	String realm = null;
-	Set<String> userRoles = new HashSet<String>();
+	public String code;
+	public String userCode;
+	public String userUUID;
+	public String token;
+	public Map<String, Object> adecodedTokenMap = null;
+	public String realm = null;
+	public Set<String> userRoles = new HashSet<String>();
 
 	public GennyToken(final String token) {
 
@@ -71,9 +72,8 @@ public class GennyToken implements Serializable {
 				adecodedTokenMap.put("realm", realm);
 				this.token = token;
 				this.realm = realm;
-				String uuid = adecodedTokenMap.get("sub").toString();
+
 				String username = (String) adecodedTokenMap.get("preferred_username");
-				String normalisedUsername = getNormalisedUsername(username);
 				this.userUUID = "PER_" + this.getUuid().toUpperCase();
 
 				if ("service".equals(username)) {
@@ -187,7 +187,6 @@ public class GennyToken implements Serializable {
 	public String toString() {
 		return getRealm() + ": " + getCode() + ": " + getUserCode() + ": " + this.userRoles;
 	}
-
 	
 	/** 
 	 * @return String
@@ -195,7 +194,6 @@ public class GennyToken implements Serializable {
 	public String getRealm() {
 		return realm;
 	}
-
 	
 	/** 
 	 * @param key the key of the string item to get
@@ -345,9 +343,9 @@ public class GennyToken implements Serializable {
 	}
 
 	/**
-	* @return String the unique token id
+	* @return String the token jti field
 	 */
-	public String getUniqueId() {
+	public String getJTI() {
 		return (String) adecodedTokenMap.get("jti");
 	}
 
@@ -462,13 +460,12 @@ public class GennyToken implements Serializable {
 	 * @return JsonObject
 	 */
 	public JsonObject getDecodedToken(final String bearerToken) {
-		Jsonb jsonb = JsonbBuilder.create();
 
 		final String[] chunks = bearerToken.split("\\.");
 		Base64.Decoder decoder = Base64.getDecoder();
-//		String header = new String(decoder.decode(chunks[0]));
 		String payload = new String(decoder.decode(chunks[1]));
 		JsonObject json = jsonb.fromJson(payload, JsonObject.class);
+
 		return json;
 	}
 }

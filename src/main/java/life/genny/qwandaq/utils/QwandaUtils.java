@@ -291,6 +291,7 @@ public class QwandaUtils {
 	 *
 	 * @param baseEntity the baseEntity to create for
 	 * @param beUtils the utility to use
+	 * @return Ask
 	 */
 	public static Ask generateAskGroupUsingBaseEntity(BaseEntity baseEntity, BaseEntityUtils beUtils) {
 
