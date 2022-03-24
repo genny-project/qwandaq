@@ -66,7 +66,7 @@ public class HttpUtils {
 	 */
 	public static HttpResponse<String> post(String uri, String body, String token) {
 
-	return post(uri, body, "application/json",token);
+		return post(uri, body, "application/json",token);
 	}
 
 	/**
@@ -77,13 +77,13 @@ public class HttpUtils {
 	* @param token The token to use in authorization.
 	* @return The returned response object.
 	 */
-	public static HttpResponse<String> post(String uri, String body, String contentType,String token) {
+	public static HttpResponse<String> post(String uri, String body, String contentType, String token) {
 
 		HttpClient client = HttpClient.newHttpClient();
 
 		HttpRequest request = HttpRequest.newBuilder()
 			.uri(URI.create(uri))
-			.setHeader("Content-Type", contentType)
+			.setHeader("Content-Type", "application/json")
 			.setHeader("Authorization", "Bearer " + token)
 			.POST(HttpRequest.BodyPublishers.ofString(body))
 			.build();
@@ -97,6 +97,7 @@ public class HttpUtils {
 
 		return null;
 	}
+
 	/**
 	* Create and send a GET request.
 	*

@@ -45,6 +45,7 @@ import javax.money.Monetary;
 
 import javax.json.Json;
 import javax.json.JsonReader;
+import javax.json.bind.annotation.JsonbCreator;
 import javax.json.bind.annotation.JsonbProperty;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.json.JsonObject;
@@ -55,12 +56,11 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import life.genny.qwandaq.annotation.ProtoMessage;
 import life.genny.qwandaq.converter.MoneyConverter;
 import life.genny.qwandaq.entity.BaseEntity;
 
 @Entity
-@ProtoMessage
+
 @Table(name = "baseentity_attribute" ,
 indexes = {
 		@Index(columnList = "baseEntityCode", name = "ba_idx"),
