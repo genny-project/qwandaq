@@ -94,13 +94,14 @@ public class DatabaseUtils {
 	}
 
 
+	@Transactional
 	public static Long countAttributes(String realm) {
 
 		checkEntityManager();
 
 		try {
 			Query query = entityManager
-				.createQuery("SELECT count(*) FROM Attribute WHERE realm=:realmStr AND name not like 'App\\_%'")
+				.createQuery("SELECT count(1) FROM Attribute WHERE realm=:realmStr AND name not like 'App\\_%'")
 				.setParameter("realmStr", realm);
 
 			return (Long)query.getResultList().get(0);
