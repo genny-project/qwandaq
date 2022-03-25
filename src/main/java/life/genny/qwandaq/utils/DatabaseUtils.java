@@ -121,7 +121,7 @@ public class DatabaseUtils {
 	* @param pageNumber the pageNumber to fetch
 	* @return List
 	 */
-	@Transactional
+	//@Transactional
 	public static List<Attribute> findAttributes(String realm, Integer pageSize, Integer pageNumber) {
 
 		checkEntityManager();
