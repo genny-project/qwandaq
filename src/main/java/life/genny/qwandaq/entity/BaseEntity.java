@@ -59,7 +59,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import life.genny.qwandaq.Answer;
 import life.genny.qwandaq.AnswerLink;
 import life.genny.qwandaq.CodedEntity;
-import life.genny.qwandaq.annotation.ProtoMessage;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.exception.BadDataException;
@@ -83,7 +82,6 @@ import life.genny.qwandaq.exception.BadDataException;
  * @since 1.0
  */
 
-@ProtoMessage
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 

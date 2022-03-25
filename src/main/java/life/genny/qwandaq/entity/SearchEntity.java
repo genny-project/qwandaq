@@ -1025,33 +1025,8 @@ public class SearchEntity extends BaseEntity {
 
 		return this;
 	}
-
-	/**
-	 * This method allows to set an OR filter with Boolean value for an attribute
-	 *
-	 * @param attributeCode - the attributeCode which holds String value where we
-	 * apply the filter
-	 * @param value - filter against (search for) this value
-	 * @return SearchEntity
-	 */
-	public SearchEntity addOr(final String attributeCode, final Boolean value) {
-		AttributeText attribute = new AttributeText(attributeCode, StringFilter.EQUAL.toString());
-		Integer count = countOccurrences(attributeCode, "OR") + 1;
-
-		for (int i = 0; i < count; i++) {
-			attribute.setCode("OR_"+attribute.getCode());
-		}
-
-		try {
-			addAttribute(attribute, filterIndex, value);
-			filterIndex += 1.0;
-		} catch (BadDataException e) {
-			log.error("Bad OR Boolean Filter Initialisation");
-		}
-
-		return this;
-	}
-
+    
+	
 	/** 
 	 * This method allows to set an AND filter for an attribute
 	 * 

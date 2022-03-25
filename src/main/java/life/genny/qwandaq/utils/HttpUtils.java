@@ -28,23 +28,23 @@ public class HttpUtils {
 	static Jsonb jsonb = JsonbBuilder.create();
 
 	/**
-	* Create and send a PUT request.
-	*
-	* @param uri The target URI of the request.
-	* @param body The json string to use as the body.
-	* @param token The token to use in authorization.
-	* @return The returned response object.
+	 * Create and send a PUT request.
+	 *
+	 * @param uri   The target URI of the request.
+	 * @param body  The json string to use as the body.
+	 * @param token The token to use in authorization.
+	 * @return The returned response object.
 	 */
 	public static HttpResponse<String> put(String uri, String body, String token) {
 
 		HttpClient client = HttpClient.newHttpClient();
 
 		HttpRequest request = HttpRequest.newBuilder()
-			.uri(URI.create(uri))
-			.setHeader("Content-Type", "application/json")
-			.setHeader("Authorization", "Bearer " + token)
-			.PUT(HttpRequest.BodyPublishers.ofString(body))
-			.build();
+				.uri(URI.create(uri))
+				.setHeader("Content-Type", "application/json")
+				.setHeader("Authorization", "Bearer " + token)
+				.PUT(HttpRequest.BodyPublishers.ofString(body))
+				.build();
 
 		try {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -57,16 +57,16 @@ public class HttpUtils {
 	}
 
 	/**
-	* Create and send a POST request.
-	*
-	* @param uri The target URI of the request.
-	* @param body The json string to use as the body.
-	* @param token The token to use in authorization.
-	* @return The returned response object.
+	 * Create and send a POST request.
+	 *
+	 * @param uri   The target URI of the request.
+	 * @param body  The json string to use as the body.
+	 * @param token The token to use in authorization.
+	 * @return The returned response object.
 	 */
 	public static HttpResponse<String> post(String uri, String body, String token) {
 
-	return post(uri, body, "application/json",token);
+		return post(uri, body, "application/json", token);
 	}
 
 	/**
@@ -78,16 +78,16 @@ public class HttpUtils {
 	* @param token The token to use in authorization.
 	* @return The returned response object.
 	 */
-	public static HttpResponse<String> post(String uri, String body, String contentType,String token) {
+	public static HttpResponse<String> post(String uri, String body, String contentType, String token) {
 
 		HttpClient client = HttpClient.newHttpClient();
 
 		HttpRequest request = HttpRequest.newBuilder()
-			.uri(URI.create(uri))
-			.setHeader("Content-Type", contentType)
-			.setHeader("Authorization", "Bearer " + token)
-			.POST(HttpRequest.BodyPublishers.ofString(body))
-			.build();
+				.uri(URI.create(uri))
+				.setHeader("Content-Type", contentType)
+				.setHeader("Authorization", "Bearer " + token)
+				.POST(HttpRequest.BodyPublishers.ofString(body))
+				.build();
 
 		try {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -98,21 +98,22 @@ public class HttpUtils {
 
 		return null;
 	}
+
 	/**
-	* Create and send a GET request.
-	*
-	* @param uri The target URI of the request.
-	* @param token The token to use in authorization.
-	* @return The returned response object.
+	 * Create and send a GET request.
+	 *
+	 * @param uri   The target URI of the request.
+	 * @param token The token to use in authorization.
+	 * @return The returned response object.
 	 */
 	public static HttpResponse<String> get(String uri, String token) {
 
 		HttpClient client = HttpClient.newHttpClient();
 
-		HttpRequest request = HttpRequest.newBuilder() .uri(URI.create(uri))
-			.setHeader("Content-Type", "application/json")
-			.setHeader("Authorization", "Bearer " + token)
-			.GET().build();
+		HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri))
+				.setHeader("Content-Type", "application/json")
+				.setHeader("Authorization", "Bearer " + token)
+				.GET().build();
 
 		try {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -125,20 +126,20 @@ public class HttpUtils {
 	}
 
 	/**
-	* Create and send a DELETE request.
-	*
-	* @param uri The target URI of the request.
-	* @param token The token to use in authorization.
-	* @return The returned response object.
+	 * Create and send a DELETE request.
+	 *
+	 * @param uri   The target URI of the request.
+	 * @param token The token to use in authorization.
+	 * @return The returned response object.
 	 */
 	public static HttpResponse<String> delete(String uri, String token) {
 
 		HttpClient client = HttpClient.newHttpClient();
 
-		HttpRequest request = HttpRequest.newBuilder() .uri(URI.create(uri))
-			.setHeader("Content-Type", "application/json")
-			.setHeader("Authorization", "Bearer " + token)
-			.DELETE().build();
+		HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri))
+				.setHeader("Content-Type", "application/json")
+				.setHeader("Authorization", "Bearer " + token)
+				.DELETE().build();
 
 		try {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -151,63 +152,64 @@ public class HttpUtils {
 	}
 
 	/**
-	* Build an error message json string from a msg string.
-	*
-	* @param msg The error message used to construct the json.
-	* @return A stringified json object containing an error msg and status.
+	 * Build an error message json string from a msg string.
+	 *
+	 * @param msg The error message used to construct the json.
+	 * @return A stringified json object containing an error msg and status.
 	 */
 	public static String error(String msg) {
 
 		JsonObject json = Json.createObjectBuilder()
-			.add("status", "failed")
-			.add("error", msg)
-			.build();
+				.add("status", "failed")
+				.add("error", msg)
+				.build();
 
 		return jsonb.toJson(json);
 	}
 
 	/**
-	* Build an ok status json string;
-	*
-	* @return A stringified json object containing an ok status.
+	 * Build an ok status json string;
+	 *
+	 * @return A stringified json object containing an ok status.
 	 */
 	public static String ok() {
 
 		JsonObject json = Json.createObjectBuilder()
-			.add("status", "ok")
-			.build();
+				.add("status", "ok")
+				.build();
 
 		return jsonb.toJson(json);
 	}
 
-    /**
-     * Extract the token from a header and handle different scenarios such as:
-     *      - The authorization parameter does not have spaces
-     *      - The authorization parameter does not start with bearer
-     *      - The authorization parameter starts with bearer
-     *      - The authorization parameter only has bearer
-     *      - The authorization parameter only has token
-     *      - The authorization parameter starts with bearer and join by space with a token
-     *
-     *
-     * @param authorization Value of the authorization header normally with this 
-     * format: Bearer eydsMSklo30...
-     *
-     * @return token Token extracted or the same token if nothing found to extract
-     */
-    public static String extractTokenFromHeaders(String authorization){
+	/**
+	 * Extract the token from a header and handle different scenarios such as:
+	 * - The authorization parameter does not have spaces
+	 * - The authorization parameter does not start with bearer
+	 * - The authorization parameter starts with bearer
+	 * - The authorization parameter only has bearer
+	 * - The authorization parameter only has token
+	 * - The authorization parameter starts with bearer and join by space with a
+	 * token
+	 *
+	 *
+	 * @param authorization Value of the authorization header normally with this
+	 *                      format: Bearer eydsMSklo30...
+	 *
+	 * @return token Token extracted or the same token if nothing found to extract
+	 */
+	public static String extractTokenFromHeaders(String authorization) {
 
-        String[] splittedAuthValue = authorization.split(" ");
+		String[] splittedAuthValue = authorization.split(" ");
 
-        if (splittedAuthValue.length < 2) {
-            if (splittedAuthValue.length != 0 
-					&& !splittedAuthValue[0].equalsIgnoreCase("bearer") 
+		if (splittedAuthValue.length < 2) {
+			if (splittedAuthValue.length != 0
+					&& !splittedAuthValue[0].equalsIgnoreCase("bearer")
 					&& splittedAuthValue[0].length() > 5) {
 
 				return splittedAuthValue[0];
 			}
-        }
+		}
 
-        return splittedAuthValue[1];
-    }
+		return splittedAuthValue[1];
+	}
 }
