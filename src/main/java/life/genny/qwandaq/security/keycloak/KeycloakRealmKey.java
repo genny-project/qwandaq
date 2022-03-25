@@ -2,7 +2,7 @@ package life.genny.qwandaq.security.keycloak;
 
 import java.math.BigInteger;
 
-import javax.json.bind.annotation.JsonbProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.jose4j.base64url.Base64Url;
 
@@ -27,22 +27,19 @@ public class KeycloakRealmKey {
     public String alg;
     public String use;
 
-	@JsonbProperty("n")
+	@JsonProperty("n")
     public String modulus;
 
-	public String n;
-
-	@JsonbProperty("e")
+	@JsonProperty("e")
     public String exponent;
 
-	public String e;
 
 	public KeycloakRealmKey() { }
 
     @Override
     public String toString() {
-        return "KeycloakRealmKey [alg=" + alg + ", exponent=" + exponent +" OR " + e + ", kid=" + kid + ", kty=" + kty
-                + ", modulus=" + modulus + "OR" + n + ", use=" + use + "]";
+        return "KeycloakRealmKey [alg=" + alg + ", exponent=" + exponent + ", kid=" + kid + ", kty=" + kty
+                + ", modulus=" + modulus + ", use=" + use + "]";
     }
 
 	public void setKid(String kid) {
@@ -94,11 +91,11 @@ public class KeycloakRealmKey {
 	}
 
 	public BigInteger getDecodedModulus() {
-        return new BigInteger(1, Base64Url.decode(this.n));
+        return new BigInteger(1, Base64Url.decode(this.modulus));
 	}
 
 	public BigInteger getDecodedExponent() {
-        return new BigInteger(1, Base64Url.decode(this.e));
+        return new BigInteger(1, Base64Url.decode(this.exponent));
 	}
 }
 
