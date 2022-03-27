@@ -35,7 +35,7 @@ public class HttpUtils {
 	 * @param token The token to use in authorization.
 	 * @return The returned response object.
 	 */
-	public static HttpResponse<String> put(String uri, String body, String token) {
+	public static java.net.http.HttpResponse<String> put(String uri, String body, String token) {
 
 		HttpClient client = HttpClient.newHttpClient();
 
@@ -70,23 +70,26 @@ public class HttpUtils {
 	}
 
 	/**
-	* Create and send a POST  request.
-	*
-	* @param uri The target URI of the request.
-	* @param body The json string to use as the body.
-	* @param contentType The contentType to use in the header. Default: "application/json"
-	* @param token The token to use in authorization.
-	* @return The returned response object.
+	 * Create and send a POST request.
+	 *
+	 * @param uri         The target URI of the request.
+	 * @param body        The json string to use as the body.
+	 * @param contentType The contentType to use in the header. Default:
+	 *                    "application/json"
+	 * @param token       The token to use in authorization.
+	 * @return The returned response object.
 	 */
-	public static HttpResponse<String> post(String uri, String body, String contentType, String token) {
+	public static java.net.http.HttpResponse<String> post(String uri, String body, String contentType, String token) {
 
 		HttpClient client = HttpClient.newHttpClient();
 
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create(uri))
-				.setHeader("Content-Type", contentType)
-				.setHeader("Authorization", "Bearer " + token)
-				.POST(HttpRequest.BodyPublishers.ofString(body))
+				.setHeader("Content-Type", contentType);
+		if (token != null) {
+			request.setHeader("Authorization", "Bearer " + token);
+		}
+		request.POST(HttpRequest.BodyPublishers.ofString(body))
 				.build();
 
 		try {
