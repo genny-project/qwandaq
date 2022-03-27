@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.HttpRequest.Builder;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -83,13 +84,13 @@ public class HttpUtils {
 
 		HttpClient client = HttpClient.newHttpClient();
 
-		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(uri))
+		Builder requestBuilder = HttpRequest.newBuilder();
+		requestBuilder.uri(URI.create(uri))
 				.setHeader("Content-Type", contentType);
 		if (token != null) {
-			request.setHeader("Authorization", "Bearer " + token);
+			requestBuilder.setHeader("Authorization", "Bearer " + token);
 		}
-		request.POST(HttpRequest.BodyPublishers.ofString(body))
+		HttpRequest request = requestBuilder.POST(HttpRequest.BodyPublishers.ofString(body))
 				.build();
 
 		try {
