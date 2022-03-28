@@ -6,6 +6,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.intf.KafkaInterface;
@@ -22,6 +25,7 @@ public class KafkaUtils implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(KafkaUtils.class);
 	private static Jsonb jsonb = JsonbBuilder.create();
+	private static ObjectMapper objectMapper = new ObjectMapper();
 	private static KafkaInterface kafkaInterface;
 
 	/**
@@ -42,7 +46,12 @@ public class KafkaUtils implements Serializable {
 	public static void writeMsg(String channel, Object payload) {
 
 		// jsonify the payload and write
-		String json = jsonb.toJson(payload);
+		String json = "";
+		try {
+			json = objectMapper.writeValueAsString(payload);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 		writeMsg(channel, json);
 	}
 
