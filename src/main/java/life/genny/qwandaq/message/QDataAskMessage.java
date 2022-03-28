@@ -1,10 +1,8 @@
 package life.genny.qwandaq.message;
 
-import java.io.Serializable;
-
 import life.genny.qwandaq.Ask;
 
-public class QDataAskMessage extends QDataMessage implements Serializable {
+public class QDataAskMessage extends QDataMessage {
 
 	private static final long serialVersionUID = 1L;
 	private Ask[] items;
