@@ -55,6 +55,7 @@ import org.jboss.logging.Logger;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import life.genny.qwandaq.converter.MoneyConverter;
 import life.genny.qwandaq.entity.BaseEntity;
@@ -368,6 +369,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	 * @return the created
 	 */
 	@JsonbTransient
+	@JsonIgnore
 	public LocalDateTime getCreated() {
 		return created;
 	}
@@ -671,7 +673,6 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	@JsonIgnore
 	@Transient
 	@XmlTransient
-	@JsonbProperty(nillable=true)
 	public <T> T getValue() {
 		if ((getPk()==null)||(getPk().attribute==null)) {
 			return getLoopValue();

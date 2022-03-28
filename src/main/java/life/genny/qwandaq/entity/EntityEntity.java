@@ -75,6 +75,7 @@ public class EntityEntity implements java.io.Serializable, Comparable<Object> {
 	@EmbeddedId
 	@Column
 	@JsonbTransient
+	@JsonIgnore
 	private EntityEntityId pk = new EntityEntityId();
 
 	/**

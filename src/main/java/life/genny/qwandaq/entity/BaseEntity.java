@@ -1073,6 +1073,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return String[]
 	 */
 	@Transient
+	@JsonIgnore
 	@JsonbTransient
 	public String[] getPushCodes() {
 		return getPushCodes(new String[0]);
@@ -1085,6 +1086,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 */
 	@Transient
 	@JsonbTransient
+	@JsonIgnore
 	public String[] getPushCodes(String... initialCodes) {
 		// go through all the links
 		Set<String> codes = new HashSet<String>();
