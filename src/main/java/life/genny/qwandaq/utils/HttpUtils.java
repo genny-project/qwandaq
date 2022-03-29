@@ -97,8 +97,12 @@ public class HttpUtils {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			return response;
 		} catch (IOException | InterruptedException e) {
+			log.error("Error getting response back from " + uri);
 			log.error(e);
+			e.printStackTrace();
 		}
+		log.error("Null response from: " + uri);
+		log.error("Payload: " + body);
 
 		return null;
 	}
