@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import life.genny.qwandaq.Ask;
+import life.genny.qwandaq.annotation.ProtoMessage;
 
+@ProtoMessage
 public class QDataAskMessage extends QDataMessage {
 
 	private static final long serialVersionUID = 1L;

@@ -7,7 +7,9 @@ import javax.persistence.Embedded;
 import javax.validation.Valid;
 
 import life.genny.qwandaq.ContextList;
+import life.genny.qwandaq.annotation.ProtoMessage;
 
+@ProtoMessage
 public class QCmdMessage extends QMessage {
 
 	private static final String MESSAGE_TYPE = "CMD_MSG";

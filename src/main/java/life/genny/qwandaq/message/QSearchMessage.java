@@ -3,9 +3,11 @@ package life.genny.qwandaq.message;
 import java.io.Serializable;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import life.genny.qwandaq.annotation.ProtoMessage;
 import life.genny.qwandaq.entity.SearchEntity;
 
 @RegisterForReflection
+@ProtoMessage
 public class QSearchMessage extends QMessage implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

@@ -4,8 +4,10 @@ package life.genny.qwandaq.message;
 import java.util.Arrays;
 import java.util.List;
 
+import life.genny.qwandaq.annotation.ProtoMessage;
 import life.genny.qwandaq.attribute.Attribute;
 
+@ProtoMessage
 public class QDataAttributeMessage extends QDataMessage{
 
 	private static final long serialVersionUID = 1L;

@@ -7,9 +7,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.WeightedItem;
+import life.genny.qwandaq.annotation.ProtoMessage;
 import life.genny.qwandaq.entity.BaseEntity;
 
 @RegisterForReflection
+@ProtoMessage
 public class QDataBaseEntityMessage extends QDataMessage implements Comparable<QDataBaseEntityMessage> {
 
 	private static final long serialVersionUID = 1L;
