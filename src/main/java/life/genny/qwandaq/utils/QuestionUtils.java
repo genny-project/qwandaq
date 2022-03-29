@@ -122,7 +122,7 @@ public class QuestionUtils implements Serializable {
 	 * @param ask     the ask to set
 	 * @param beUtils the beUtils to use
 	 */
-	public void setCachedQuestionsRecursively(Ask ask, BaseEntityUtils beUtils) {
+	public static void setCachedQuestionsRecursively(Ask ask, BaseEntityUtils beUtils) {
 
 		// call recursively if ask represents a question group
 		if (ask.getAttributeCode().equals("QQQ_QUESTION_GROUP")) {
@@ -318,7 +318,7 @@ public class QuestionUtils implements Serializable {
 	 * @param beUtils      the beUtils to use
 	 * @return QDataAskMessage
 	 */
-	public QDataAskMessage getAsks(String sourceCode, String targetCode, String questionCode, BaseEntityUtils beUtils) {
+	public static QDataAskMessage getAsks(String sourceCode, String targetCode, String questionCode, BaseEntityUtils beUtils) {
 
 		// TODO: Ensure migration from api to Database worked fine
 		List<Ask> asks = DatabaseUtils.findAsksByQuestionCode(beUtils.getRealm(), questionCode, sourceCode, targetCode);
@@ -356,7 +356,7 @@ public class QuestionUtils implements Serializable {
 	 * @param ask The ask to traverse.
 	 * @return A set of Strings containing the attribute codes.
 	 */
-	private Set<String> getAttributeCodes(Ask ask) {
+	private static Set<String> getAttributeCodes(Ask ask) {
 
 		// grab attribute code of current ask
 		Set<String> activeCodes = new HashSet<String>();
