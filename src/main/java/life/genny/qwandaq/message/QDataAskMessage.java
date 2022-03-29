@@ -33,7 +33,12 @@ public class QDataAskMessage extends QDataMessage {
 	 * @return Ask[]
 	 */
 	public Ask[] getItems() {
-		return this.items.toArray(new Ask[0]);
+		if (items != null) {
+			return this.items.toArray(new Ask[0]);
+		} else {
+			return null;
+		}
+		
 	}
 
 	/** 

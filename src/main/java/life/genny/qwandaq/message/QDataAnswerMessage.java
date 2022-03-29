@@ -41,7 +41,12 @@ public class QDataAnswerMessage extends QDataMessage {
 	 * @return Answer[]
 	 */
 	public Answer[] getItems() {
-		return items.toArray(new Answer[0]);
+		if (items != null) {
+			return items.toArray(new Answer[0]);
+		} else {
+			return null;
+		}
+		
 	}
 
 	/** 

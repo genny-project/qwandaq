@@ -25,7 +25,7 @@ public class QBulkMessage implements Serializable {
 	private List<QDataBaseEntityMessage> messages;
 
 	private List<QDataAskMessage> asks;
-
+	
 	private List<String> recipientCodeArray;
 
 	public QBulkMessage() {
@@ -48,6 +48,7 @@ public class QBulkMessage implements Serializable {
 		messages[0] = qMessage;
 		setMessages(messages);
 		asks = new ArrayList<QDataAskMessage>();
+		recipientCodeArray = new ArrayList<>();
 	}
 
 	public QBulkMessage(QDataAskMessage qAsk) {
@@ -153,7 +154,12 @@ public class QBulkMessage implements Serializable {
 	 * @return the messages
 	 */
 	public QDataBaseEntityMessage[] getMessages() {
-		return messages.toArray(new QDataBaseEntityMessage[0]);
+		if (messages != null) {
+			return messages.toArray(new QDataBaseEntityMessage[0]);
+		} else {
+			return null;
+		}
+		
 	}
 
 	/**
@@ -167,7 +173,12 @@ public class QBulkMessage implements Serializable {
 	 * @return the asks
 	 */
 	public QDataAskMessage[] getAsks() {
-		return asks.toArray(new QDataAskMessage[0]);
+		if (asks != null) {
+			return asks.toArray(new QDataAskMessage[0]);
+		} else {
+			return null;
+		}
+		
 	}
 
 	/**
@@ -209,7 +220,12 @@ public class QBulkMessage implements Serializable {
 	 * @return the recipientCodeArray
 	 */
 	public String[] getRecipientCodeArray() {
-		return recipientCodeArray.toArray(new String[0]);
+		if (recipientCodeArray != null) {
+			return recipientCodeArray.toArray(new String[0]);
+		} else {
+			return null;
+		}
+		
 	}
 
 	/**
