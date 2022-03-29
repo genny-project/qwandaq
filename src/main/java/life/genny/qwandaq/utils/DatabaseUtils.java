@@ -122,7 +122,7 @@ public class DatabaseUtils {
 	* @param pageNumber the pageNumber to fetch
 	* @return List
 	 */
-	@Transactional
+	//@Transactional
 	public static List<Attribute> findAttributes(String realm, Integer pageSize, Integer pageNumber) {
 
 		checkEntityManager();
@@ -178,7 +178,7 @@ public class DatabaseUtils {
 			return query.getResultList();
 
 		} catch (NoResultException e) {
-			log.errorv("No BaseEntitys found in DB for realm {}", realm);
+			log.error("No BaseEntitys found in DB for realm " + realm);
 		}
 
 		return null;
@@ -212,7 +212,7 @@ public class DatabaseUtils {
 			return query.getResultList();
 
 		} catch (NoResultException e) {
-			log.errorv("No Question found in DB for realm {}", realm);
+			log.error("No Question found in DB for realm " + realm);
 		}
 
 		return null;
@@ -246,7 +246,7 @@ public class DatabaseUtils {
 			return query.getResultList();
 
 		} catch (NoResultException e) {
-			log.errorv("No QuestionQuestion found in DB for realm {}", realm);
+			log.error("No QuestionQuestion found in DB for realm " + realm);
 		}
 
 		return null;
@@ -275,7 +275,7 @@ public class DatabaseUtils {
 				.getSingleResult();
 
 		} catch (NoResultException e) {
-			log.errorv("No Validation found in DB for {} in realm {}", code, realm);
+			log.error("No Validation found in DB for " + code + " in realm " + realm);
 			log.error(e.getStackTrace());
 		}
 
@@ -303,7 +303,7 @@ public class DatabaseUtils {
 					.getSingleResult();
 
 		} catch (NoResultException e) {
-			log.errorv("No Attribute found in DB for {} in realm {}", code, realm);
+			log.error("No Attribute found in DB for " + code + " in realm " + realm);
 		}
 
 		return null;
@@ -330,7 +330,7 @@ public class DatabaseUtils {
 					.getSingleResult();
 
 		} catch (NoResultException e) {
-			log.errorv("No BaseEntity found in DB for {} in realm {}", code, realm);
+			log.error("No BaseEntity found in DB for " + code + " in realm " + realm);
 		}
 
 		return null;
@@ -357,7 +357,7 @@ public class DatabaseUtils {
 					.getSingleResult();
 
 		} catch (NoResultException e) {
-			log.errorv("No Question found in DB for {} in realm {}", code, realm);
+			log.error("No Question found in DB for " + code + " in realm " + realm);
 		}
 
 		return null;
@@ -387,7 +387,7 @@ public class DatabaseUtils {
 					.getSingleResult();
 
 		} catch (NoResultException e) {
-			log.errorv("No QuestionQuestion found in DB for {}:{} in realm {}", sourceCode, targetCode, realm);
+			log.error("No QuestionQuestion found in DB for " + sourceCode + ":" + targetCode + " in realm " + realm);
 		}
 
 		return null;
@@ -415,7 +415,7 @@ public class DatabaseUtils {
 					.getResultList();
 
 		} catch (NoResultException e) {
-			log.errorv("No QuestionQuestion found in DB for {}", sourceCode);
+			log.error("No QuestionQuestion found in DB for " + sourceCode);
 		}
 
 		return null;
@@ -446,7 +446,7 @@ public class DatabaseUtils {
 					.getResultList();
 
 		} catch (NoResultException e) {
-			log.errorv("No Asks found in DB for {}:{}:{} in realm {}", questionCode, sourceCode, targetCode, realm);
+			log.error("No Asks found in DB for " + questionCode + ":" + sourceCode + ":" + targetCode + " in realm " + realm);
 		}
 
 		return null;
@@ -579,7 +579,7 @@ public class DatabaseUtils {
 
 		QuestionQuestionId pk = questionQuestion.getPk();
 
-		log.infov("Saving QuestionQuestion {}:{}", pk.getSourceCode(), pk.getTargetCode());
+		log.info("Saving QuestionQuestion " + pk.getSourceCode() + ":" + pk.getTargetCode());
 
 		checkEntityManager();
 
@@ -597,7 +597,7 @@ public class DatabaseUtils {
 				entityManager.merge(questionQuestion);
 			}
 
-			log.infov("Successfully saved QuestionQuestion {}:{}", pk.getSourceCode(), pk.getTargetCode());
+			log.info("Successfully saved QuestionQuestion " + pk.getSourceCode() + ":" + pk.getTargetCode());
 
 		} catch (Exception e) {
 			log.error(e);
@@ -623,7 +623,7 @@ public class DatabaseUtils {
 					.setParameter("code", code);
 
 			q.executeUpdate();
-			log.infov("Successfully deleted Validation {} in realm {}", code, realm);
+			log.info("Successfully deleted Validation " + code + " in realm " + realm);
 
 		} catch (Exception e) {
 			log.error(e);
@@ -649,7 +649,7 @@ public class DatabaseUtils {
 					.setParameter("code", code);
 
 			q.executeUpdate();
-			log.infov("Successfully deleted Attribute {} in realm {}", code, realm);
+			log.info("Successfully deleted Attribute " + code + " in realm " + realm);
 
 		} catch (Exception e) {
 			log.error(e);
@@ -675,7 +675,7 @@ public class DatabaseUtils {
 					.setParameter("code", code);
 
 			q.executeUpdate();
-			log.infov("Successfully deleted BaseEntity {} in realm {}", code, realm);
+			log.info("Successfully deleted BaseEntity " + code + " in realm " + realm);
 
 		} catch (Exception e) {
 			log.error(e);
@@ -702,7 +702,7 @@ public class DatabaseUtils {
 					.setParameter("code", code);
 
 			q.executeUpdate();
-			log.infov("Successfully deleted Question {} in realm {}", code, realm);
+			log.info("Successfully deleted Question " + code + " in realm " + realm);
 
 		} catch (Exception e) {
 			log.error(e);
@@ -720,7 +720,7 @@ public class DatabaseUtils {
 	@Transactional
 	public static void deleteQuestionQuestion(String realm, String sourceCode, String targetCode) {
 
-		log.infov("Deleting QuestionQuestion {}:{} in realm {}", sourceCode, targetCode, realm);
+		log.info("Deleting QuestionQuestion " + sourceCode + ":" + targetCode + " in realm " + realm);
 
 		checkEntityManager();
 
@@ -731,7 +731,7 @@ public class DatabaseUtils {
 					.setParameter("targetCode", targetCode);
 
 			q.executeUpdate();
-			log.infov("Successfully deleted QuestionQuestion {}:{} in realm {}", sourceCode, targetCode, realm);
+			log.info("Successfully deleted QuestionQuestion " + sourceCode + ":" + targetCode + " in realm " + realm);
 
 		} catch (Exception e) {
 			log.error(e);
