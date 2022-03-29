@@ -1,11 +1,12 @@
 package life.genny.qwandaq.message;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import org.jboss.logging.Logger;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -20,8 +21,8 @@ public class QMessageGennyMSG extends QMessage {
 	private static final long serialVersionUID = 1L;
 	private static final String MESSAGE_TYPE = "MSG_MESSAGE";
 	private String templateCode;
-	private QBaseMSGMessageType[] messageTypeArr;
-	private String[] recipientArr;
+	private List<QBaseMSGMessageType> messageTypeArr;
+	private List<String> recipientArr;
 	private Map<String, String> messageContextMap;
 	
 	/**
@@ -42,28 +43,36 @@ public class QMessageGennyMSG extends QMessage {
 	 * @return QBaseMSGMessageType the messageTypeArr
 	 */
 	public QBaseMSGMessageType[] getMessageTypeArr() {
-		return messageTypeArr;
+		if (messageTypeArr != null) {
+			return messageTypeArr.toArray(new QBaseMSGMessageType[0]);
+		} else {
+			return null;
+		}
 	}
 
 	/**
 	 * @param messageTypeArr the messageTypeArr to set
 	 */
 	public void setMessageTypeArr(QBaseMSGMessageType[] messageTypeArr) {
-		this.messageTypeArr = messageTypeArr;
+		this.messageTypeArr = Arrays.asList(messageTypeArr);
 	}
 
 	/**
 	 * @return String the recipientArr
 	 */
 	public String[] getRecipientArr() {
-		return recipientArr;
+		if (recipientArr != null) {
+			return recipientArr.toArray(new String[0]);
+		} else {
+			return null;
+		}
 	}
 
 	/**
 	 * @param recipientArr the recipientArr to set
 	 */
 	public void setRecipientArr(String[] recipientArr) {
-		this.recipientArr = recipientArr;
+		this.recipientArr = Arrays.asList(recipientArr);
 	}
 
 	/**
@@ -82,32 +91,32 @@ public class QMessageGennyMSG extends QMessage {
 	
 	public QMessageGennyMSG() {
 		super("COM_MSG");
-		this.messageTypeArr = new QBaseMSGMessageType[0];
+		this.messageTypeArr = new ArrayList<>();
 		this.messageContextMap = new HashMap<String, String>();
-		this.recipientArr = new String[0];
+		this.recipientArr = new ArrayList<>();
 	}
 
 	public QMessageGennyMSG(String templateCode) {
 		super("COM_MSG");
 		this.templateCode = templateCode;
-		this.messageTypeArr = new QBaseMSGMessageType[0];
+		this.messageTypeArr = new ArrayList<>();
 		this.messageContextMap = new HashMap<String, String>();
-		this.recipientArr = new String[0];
+		this.recipientArr = new ArrayList<>();
 	}
 
 	public QMessageGennyMSG(QBaseMSGMessageType messageType) {
 		super("COM_MSG");
-		this.messageTypeArr = new QBaseMSGMessageType[]{ messageType };
+		setMessageTypeArr(new QBaseMSGMessageType[]{ messageType });
 		this.messageContextMap = new HashMap<String, String>();
-		this.recipientArr = new String[0];
+		this.recipientArr = new ArrayList<>();
 	}
 
 	public QMessageGennyMSG(String msg_type, QBaseMSGMessageType[] messageType, String templateCode, Map<String, String> contextMap, String[] recipientArr) {
 		super(msg_type);
 		this.templateCode = templateCode;
-		this.messageTypeArr = messageType;
+		setMessageTypeArr(messageType);
 		this.messageContextMap = contextMap;
-		this.recipientArr = recipientArr;
+		setRecipientArr(recipientArr);
 	}
 	
 	/** 
@@ -124,7 +133,7 @@ public class QMessageGennyMSG extends QMessage {
 	 * @param recipient the entity of the recipient to set
 	 */
 	public void setRecipient(String recipient) {
-		this.recipientArr = new String[0];
+		this.recipientArr = new ArrayList<>();
 		addRecipient(recipient);
 	}
 
@@ -132,7 +141,7 @@ public class QMessageGennyMSG extends QMessage {
 	 * @param recipient the code or email of the recipient to set
 	 */
 	public void setRecipient(BaseEntity recipient) {
-		this.recipientArr = new String[0];
+		this.recipientArr = new ArrayList<>();
 		addRecipient(recipient);
 	}
 
@@ -267,7 +276,7 @@ public class QMessageGennyMSG extends QMessage {
 			}
 
 			// Set Msg Type to DEFAULT if none set already
-			if (this.msg.messageTypeArr.length == 0) {
+			if (this.msg.messageTypeArr.size() == 0) {
 				this.msg.addMessageType(QBaseMSGMessageType.DEFAULT);
 			}
 			// Set token and send
@@ -288,7 +297,7 @@ public class QMessageGennyMSG extends QMessage {
 	@Override
 	public String toString() {
 		return "QMessageGennyMSG [templateCode=" + templateCode + ", messageTypeArr=" + messageTypeArr
-				+ ", recipientArr=" + Arrays.toString(recipientArr) + ", messageContextMap=" + messageContextMap + "]";
+				+ ", recipientArr=" + Arrays.toString(recipientArr.toArray(new String[0])) + ", messageContextMap=" + messageContextMap + "]";
 	}
 
 }

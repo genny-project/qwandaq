@@ -1,5 +1,8 @@
 package life.genny.qwandaq.message;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -12,7 +15,7 @@ public class QDataB2BMessage extends QDataMessage {
 	private static final long serialVersionUID = 1L;
 
 	  @JsonProperty
-	  private GennyItem[] items;
+	  private List<GennyItem> items;
 	  private static final String DATATYPE_ITEM = GennyItem.class.getSimpleName();
 
 	  // For json parameters
@@ -26,11 +29,15 @@ public class QDataB2BMessage extends QDataMessage {
 	  }
 
 	  public GennyItem[] getItems() {
-	    return items;
+		if (items != null) {
+			return items.toArray(new GennyItem[0]);
+		} else {
+			return null;
+		}
 	  }
 
 	  public void setItems(final GennyItem[] items) {
-	    this.items = items;
+	    this.items = Arrays.asList(items);
 	  }
 	
 }

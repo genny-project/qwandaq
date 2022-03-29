@@ -46,12 +46,7 @@ public class KafkaUtils implements Serializable {
 	public static void writeMsg(String channel, Object payload) {
 
 		// jsonify the payload and write
-		String json = "";
-		try {
-			json = objectMapper.writeValueAsString(payload);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
+		String json = jsonb.toJson(payload);
 		writeMsg(channel, json);
 	}
 
