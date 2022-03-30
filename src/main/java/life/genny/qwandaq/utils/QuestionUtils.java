@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -54,11 +56,18 @@ import life.genny.qwandaq.validation.Validation;
  * @author Jasper Robison
  */
 @RegisterForReflection
+@ApplicationScoped
 public class QuestionUtils implements Serializable {
 
 	static final Logger log = Logger.getLogger(QuestionUtils.class);
 
-	static Jsonb jsonb = JsonbBuilder.create();
+	Jsonb jsonb = JsonbBuilder.create();
+
+	@Inject
+	DatabaseUtils databaseUtils;
+
+	@Inject
+	QwandaUtils qwandaUtils;
 
 	/**
 	 * Check if a Question group exists in the database and cache.
@@ -122,7 +131,7 @@ public class QuestionUtils implements Serializable {
 	 * @param ask     the ask to set
 	 * @param beUtils the beUtils to use
 	 */
-	public static void setCachedQuestionsRecursively(Ask ask, BaseEntityUtils beUtils) {
+	public void setCachedQuestionsRecursively(Ask ask, BaseEntityUtils beUtils) {
 
 		// call recursively if ask represents a question group
 		if (ask.getAttributeCode().equals("QQQ_QUESTION_GROUP")) {
@@ -191,7 +200,7 @@ public class QuestionUtils implements Serializable {
 		Ask ask = null;
 
 		// check if this already exists?
-		List<Ask> myAsks = DatabaseUtils.findAsksByQuestionCode(beUtils.getRealm(), rootQuestion.getCode(),
+		List<Ask> myAsks = databaseUtils.findAsksByQuestionCode(beUtils.getRealm(), rootQuestion.getCode(),
 				source.getCode(), target.getCode());
 		if (!(myAsks == null || myAsks.isEmpty())) {
 			ask = myAsks.get(0);
@@ -219,7 +228,7 @@ public class QuestionUtils implements Serializable {
 			for (QuestionQuestion qq : qqList) {
 				String qCode = qq.getPk().getTargetCode();
 				log.info(qq.getPk().getSourceCode() + " -> Child Question -> " + qCode);
-				Question childQuestion = DatabaseUtils.findQuestionByCode(beUtils.getRealm(), qCode);
+				Question childQuestion = databaseUtils.findQuestionByCode(beUtils.getRealm(), qCode);
 				// Grab whatever icon the QuestionQuestion has set
 				childQuestion.setIcon(qq.getIcon());
 				if (childQuestion != null) {
@@ -277,7 +286,7 @@ public class QuestionUtils implements Serializable {
 	public List<Ask> createAsksByQuestionCode2(final String questionCode, final String sourceCode,
 			final String targetCode, BaseEntityUtils beUtils) {
 
-		Question rootQuestion = DatabaseUtils.findQuestionByCode(beUtils.getRealm(), questionCode);
+		Question rootQuestion = databaseUtils.findQuestionByCode(beUtils.getRealm(), questionCode);
 		BaseEntity source = null;
 		BaseEntity target = null;
 
@@ -318,11 +327,11 @@ public class QuestionUtils implements Serializable {
 	 * @param beUtils      the beUtils to use
 	 * @return QDataAskMessage
 	 */
-	public static QDataAskMessage getAsks(String sourceCode, String targetCode, String questionCode,
+	public QDataAskMessage getAsks(String sourceCode, String targetCode, String questionCode,
 			BaseEntityUtils beUtils) {
 
 		// TODO: Ensure migration from api to Database worked fine
-		List<Ask> asks = DatabaseUtils.findAsksByQuestionCode(beUtils.getRealm(), questionCode, sourceCode, targetCode);
+		List<Ask> asks = databaseUtils.findAsksByQuestionCode(beUtils.getRealm(), questionCode, sourceCode, targetCode);
 		QDataAskMessage msg = new QDataAskMessage(asks.toArray(new Ask[0]));
 
 		// Identify all the attributeCodes and build up a working active Set
@@ -357,7 +366,7 @@ public class QuestionUtils implements Serializable {
 	 * @param ask The ask to traverse.
 	 * @return A set of Strings containing the attribute codes.
 	 */
-	private static Set<String> getAttributeCodes(Ask ask) {
+	private Set<String> getAttributeCodes(Ask ask) {
 
 		// grab attribute code of current ask
 		Set<String> activeCodes = new HashSet<String>();
@@ -564,7 +573,7 @@ public class QuestionUtils implements Serializable {
 			if (attributeCode != null && attributeCode.startsWith("LNK_")) {
 
 				// we get the attribute validation to get the group code
-				Attribute attribute = QwandaUtils.getAttribute(attributeCode);
+				Attribute attribute = qwandaUtils.getAttribute(attributeCode);
 
 				if (attribute != null) {
 
@@ -652,7 +661,7 @@ public class QuestionUtils implements Serializable {
 
 		// create attribute code using isQuestionGroup and fetch attribute
 		String attributeCode = isQuestionGroup ? "QQQ_QUESTION_GROUP_INPUT" : "PRI_EVENT";
-		Attribute attribute = QwandaUtils.getAttribute(attributeCode);
+		Attribute attribute = qwandaUtils.getAttribute(attributeCode);
 
 		/*
 		 * creating suffix according to value of isQuestionGroup. If it is a
@@ -681,7 +690,7 @@ public class QuestionUtils implements Serializable {
 
 		// create attribute code using isQuestionGroup and fetch attribute
 		String attributeCode = isQuestionGroup ? "QQQ_QUESTION_GROUP_INPUT" : "PRI_EVENT";
-		Attribute attribute = QwandaUtils.getAttribute(attributeCode);
+		Attribute attribute = qwandaUtils.getAttribute(attributeCode);
 
 		// create temporary attribute if not fetched
 		if (attribute == null) {
@@ -749,7 +758,7 @@ public class QuestionUtils implements Serializable {
 		log.warn("No Question in cache for " + code + ", trying to grab from database...");
 
 		// fetch from DB
-		question = DatabaseUtils.findQuestionByCode(realm, code);
+		question = databaseUtils.findQuestionByCode(realm, code);
 
 		if (question == null) {
 			log.error("No Question found in database for " + code + " either!!!!");

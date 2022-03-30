@@ -33,15 +33,15 @@ import life.genny.qwandaq.validation.Validation;
 public class DatabaseUtils {
 
 	static final Logger log = Logger.getLogger(DatabaseUtils.class);
-	static Jsonb jsonb = JsonbBuilder.create();
-	static EntityManager entityManager;
+	Jsonb jsonb = JsonbBuilder.create();
+	EntityManager entityManager;
 
 	/**
 	 * Initialise the EntityManager interface.
 	 *
 	 * @param em The EntityManager.
 	 */
-	public static void init(EntityManager em) {
+	public void init(EntityManager em) {
 		entityManager = em;
 	}
 
@@ -50,7 +50,7 @@ public class DatabaseUtils {
 	 * 
 	 * @return whether or not entityManager is present
 	 */
-	public static boolean checkEntityManager() {
+	public boolean checkEntityManager() {
 
 		if (entityManager == null) {
 			log.error("EntityManager must be initialised first!!!");
@@ -70,8 +70,8 @@ public class DatabaseUtils {
 	 * @param pageNumber the pageNumber to fetch
 	 * @return List
 	 */
-	@Transactional
-	public static List<Validation> findValidations(String realm, Integer pageSize, Integer pageNumber) {
+
+	public List<Validation> findValidations(String realm, Integer pageSize, Integer pageNumber) {
 
 		checkEntityManager();
 
@@ -95,8 +95,7 @@ public class DatabaseUtils {
 		return null;
 	}
 
-	@Transactional
-	public static Long countAttributes(String realm) {
+	public Long countAttributes(String realm) {
 
 		checkEntityManager();
 
@@ -124,8 +123,8 @@ public class DatabaseUtils {
 	 * @param pageNumber the pageNumber to fetch
 	 * @return List
 	 */
-	// @Transactional
-	public static List<Attribute> findAttributes(String realm, Integer pageSize, Integer pageNumber) {
+
+	public List<Attribute> findAttributes(String realm, Integer pageSize, Integer pageNumber) {
 
 		checkEntityManager();
 
@@ -162,8 +161,8 @@ public class DatabaseUtils {
 	 * @param pageNumber the pageNumber to fetch
 	 * @return List
 	 */
-	@Transactional
-	public static List<BaseEntity> findBaseEntitys(String realm, Integer pageSize, Integer pageNumber) {
+
+	public List<BaseEntity> findBaseEntitys(String realm, Integer pageSize, Integer pageNumber) {
 
 		checkEntityManager();
 
@@ -198,8 +197,8 @@ public class DatabaseUtils {
 	 * @param pageNumber the pageNumber to fetch
 	 * @return List
 	 */
-	@Transactional
-	public static List<Question> findQuestions(String realm, Integer pageSize, Integer pageNumber) {
+
+	public List<Question> findQuestions(String realm, Integer pageSize, Integer pageNumber) {
 
 		checkEntityManager();
 
@@ -234,8 +233,8 @@ public class DatabaseUtils {
 	 * @param pageNumber the pageNumber to fetch
 	 * @return List
 	 */
-	@Transactional
-	public static List<QuestionQuestion> findQuestionQuestions(String realm, Integer pageSize, Integer pageNumber) {
+
+	public List<QuestionQuestion> findQuestionQuestions(String realm, Integer pageSize, Integer pageNumber) {
 
 		checkEntityManager();
 
@@ -266,8 +265,8 @@ public class DatabaseUtils {
 	 * @param code  the code to find by
 	 * @return Validation
 	 */
-	@Transactional
-	public static Validation findValidationByCode(String realm, String code) {
+
+	public Validation findValidationByCode(String realm, String code) {
 
 		checkEntityManager();
 
@@ -295,8 +294,8 @@ public class DatabaseUtils {
 	 * @param code  the code to find by
 	 * @return Attribute
 	 */
-	@Transactional
-	public static Attribute findAttributeByCode(String realm, String code) {
+
+	public Attribute findAttributeByCode(String realm, String code) {
 
 		checkEntityManager();
 
@@ -322,8 +321,8 @@ public class DatabaseUtils {
 	 * @param code  The code of the {@link BaseEntity} to fetch
 	 * @return The corresponding BaseEntity, or null if not found.
 	 */
-	@Transactional
-	public static BaseEntity findBaseEntityByCode(String realm, String code) {
+
+	public BaseEntity findBaseEntityByCode(String realm, String code) {
 
 		checkEntityManager();
 
@@ -349,8 +348,8 @@ public class DatabaseUtils {
 	 * @param code  the code to find by
 	 * @return Question
 	 */
-	@Transactional
-	public static Question findQuestionByCode(String realm, String code) {
+
+	public Question findQuestionByCode(String realm, String code) {
 
 		checkEntityManager();
 
@@ -377,8 +376,8 @@ public class DatabaseUtils {
 	 * @param targetCode the targetCode to find by
 	 * @return List list of QuestionQuestions
 	 */
-	@Transactional
-	public static QuestionQuestion findQuestionQuestionBySourceAndTarget(String realm, String sourceCode,
+
+	public QuestionQuestion findQuestionQuestionBySourceAndTarget(String realm, String sourceCode,
 			String targetCode) {
 
 		checkEntityManager();
@@ -408,8 +407,8 @@ public class DatabaseUtils {
 	 * @param sourceCode the sourceCode to find by
 	 * @return List list of QuestionQuestions
 	 */
-	@Transactional
-	public static List<QuestionQuestion> findQuestionQuestionsBySourceCode(String realm, String sourceCode) {
+
+	public List<QuestionQuestion> findQuestionQuestionsBySourceCode(String realm, String sourceCode) {
 
 		checkEntityManager();
 
@@ -438,8 +437,8 @@ public class DatabaseUtils {
 	 * @param targetCode   the targetCode to find by
 	 * @return List list of asks
 	 */
-	@Transactional
-	public static List<Ask> findAsksByQuestionCode(String realm, String questionCode, String sourceCode,
+
+	public List<Ask> findAsksByQuestionCode(String realm, String questionCode, String sourceCode,
 			String targetCode) {
 
 		checkEntityManager();
@@ -471,8 +470,8 @@ public class DatabaseUtils {
 	 * @param targetCode   the targetCode to find by
 	 * @return List list of asks
 	 */
-	@Transactional
-	public static List<Ask> findAsksByQuestionGroupCode(String realm, String questionCode) {
+
+	public List<Ask> findAsksByQuestionGroupCode(String realm, String questionCode) {
 
 		checkEntityManager();
 
@@ -497,7 +496,7 @@ public class DatabaseUtils {
 	 * @param validation A {@link Validation} object to save
 	 */
 	@Transactional
-	public static void saveValidation(Validation validation) {
+	public void saveValidation(Validation validation) {
 
 		log.info("Saving Validation " + validation.getCode());
 
@@ -526,7 +525,7 @@ public class DatabaseUtils {
 	 * @param attribute An {@link Attribute} object to save
 	 */
 	@Transactional
-	public static void saveAttribute(Attribute attribute) {
+	public void saveAttribute(Attribute attribute) {
 
 		log.info("Saving Attribute " + attribute.getCode());
 
@@ -555,7 +554,7 @@ public class DatabaseUtils {
 	 * @param entity A {@link BaseEntity} object to save
 	 */
 	@Transactional
-	public static void saveBaseEntity(BaseEntity entity) {
+	public void saveBaseEntity(BaseEntity entity) {
 
 		log.info("Saving BaseEntity " + entity.getCode());
 
@@ -584,7 +583,7 @@ public class DatabaseUtils {
 	 * @param question A {@link Question} object to save
 	 */
 	@Transactional
-	public static void saveQuestion(Question question) {
+	public void saveQuestion(Question question) {
 
 		log.info("Saving Question " + question.getCode());
 
@@ -613,7 +612,7 @@ public class DatabaseUtils {
 	 * @param questionQuestion A {@link QuestionQuestion} object to save
 	 */
 	@Transactional
-	public static void saveQuestionQuestion(QuestionQuestion questionQuestion) {
+	public void saveQuestionQuestion(QuestionQuestion questionQuestion) {
 
 		QuestionQuestionId pk = questionQuestion.getPk();
 
@@ -648,7 +647,7 @@ public class DatabaseUtils {
 	 * @param code  Code of the Validation to delete.
 	 */
 	@Transactional
-	public static void deleteValidation(String realm, String code) {
+	public void deleteValidation(String realm, String code) {
 
 		log.info("Deleting Validation " + code);
 
@@ -674,7 +673,7 @@ public class DatabaseUtils {
 	 * @param code  Code of the attribute to delete.
 	 */
 	@Transactional
-	public static void deleteAttribute(String realm, String code) {
+	public void deleteAttribute(String realm, String code) {
 
 		log.info("Deleting Attribute " + code);
 
@@ -700,7 +699,7 @@ public class DatabaseUtils {
 	 * @param code  Code of the BaseEntity to delete.
 	 */
 	@Transactional
-	public static void deleteBaseEntity(String realm, String code) {
+	public void deleteBaseEntity(String realm, String code) {
 
 		log.info("Deleting BaseEntity " + code);
 
@@ -726,7 +725,7 @@ public class DatabaseUtils {
 	 * @param code  Code of the Question to delete.
 	 */
 	@Transactional
-	public static void deleteQuestion(String realm, String code) {
+	public void deleteQuestion(String realm, String code) {
 
 		log.info("Deleting Question " + code);
 
@@ -753,7 +752,7 @@ public class DatabaseUtils {
 	 * @param targetCode the targetCode to delete by
 	 */
 	@Transactional
-	public static void deleteQuestionQuestion(String realm, String sourceCode, String targetCode) {
+	public void deleteQuestionQuestion(String realm, String sourceCode, String targetCode) {
 
 		log.info("Deleting QuestionQuestion " + sourceCode + ":" + targetCode + " in realm " + realm);
 

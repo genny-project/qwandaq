@@ -12,6 +12,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
@@ -35,41 +38,56 @@ import life.genny.qwandaq.models.GennySettings;
 import life.genny.qwandaq.models.GennyToken;
 
 /**
- * A Static utility class to assist in any Qwanda Engine Question 
+ * A Static utility class to assist in any Qwanda Engine Question
  * and Answer operations.
  * <p>
- * The class should be initialized with a GennyToken 
+ * The class should be initialized with a GennyToken
  * to ensure successful operation
  * <p>
  * 
  * @author Jasper Robison
  */
 @RegisterForReflection
+@ApplicationScoped
 public class QwandaUtils {
 
 	static final Logger log = Logger.getLogger(QwandaUtils.class);
-	private static final ExecutorService executorService = Executors.newFixedThreadPool(200);
+
+	@Inject
+	DatabaseUtils databaseUtils;
+
+	@Inject
+	DefUtils defUtils;
+
+	@Inject
+	SearchUtils searchUtils;
+
+	private final ExecutorService executorService = Executors.newFixedThreadPool(200);
 
 	static Map<String, Map<String, Attribute>> attributes = new ConcurrentHashMap<>();
 
 	static Jsonb jsonb = JsonbBuilder.create();
 
-	static GennyToken gennyToken;
+	GennyToken gennyToken;
 
-	/** 
+	public QwandaUtils() {
+	}
+
+	/**
 	 * @param token the token to set
 	 */
-	public static void init(GennyToken token) {
+
+	public void init(GennyToken token) {
 		gennyToken = token;
-		//loadAllAttributes();
+		// loadAllAttributes();
 		loadAllAttributesIntoCache();
 	}
 
-	/** 
-	 * @param token the token to set
+	/**
+	 * @param token         the token to set
 	 * @param attributeList the attributeList to set
 	 */
-	public static void init(GennyToken token, List<Attribute> attributeList) {
+	public void init(GennyToken token, List<Attribute> attributeList) {
 		gennyToken = token;
 
 		attributes.put(token.getRealm(), new ConcurrentHashMap<String, Attribute>());
@@ -87,20 +105,20 @@ public class QwandaUtils {
 	 * @param attributeCode the code of the attribute to get
 	 * @return Attribute
 	 */
-	public static Attribute getAttribute(final String attributeCode) {
+	public Attribute getAttribute(final String attributeCode) {
 
 		String realm = gennyToken.getRealm();
 		Attribute cachedAttribute = CacheUtils.getObject(realm, attributeCode, Attribute.class);
 
-		if(cachedAttribute == null) {
+		if (cachedAttribute == null) {
 			log.error("Could not find attribute " + attributeCode + " in cache: " + realm);
 			loadAllAttributesIntoCache();
-		} 
+		}
 
 		cachedAttribute = CacheUtils.getObject(realm, attributeCode, Attribute.class);
 		// else if (attributes.get(gennyToken.getRealm()) == null) {
-		// 	//loadAllAttributes();
-		// 	loadAllAttributesIntoCache();
+		// //loadAllAttributes();
+		// loadAllAttributesIntoCache();
 		// }
 
 		// Attribute attribute = attributes.get(realm).get(attributeCode);
@@ -112,33 +130,33 @@ public class QwandaUtils {
 		return cachedAttribute;
 	}
 
-	public static void loadAllAttributesIntoCache() {
+	public void loadAllAttributesIntoCache() {
 		String realm = gennyToken.getRealm();
 		List<Attribute> attributeList = null;
-		
-		Long attributeCount = DatabaseUtils.countAttributes(realm);
+
+		Long attributeCount = databaseUtils.countAttributes(realm);
 		final Integer CHUNK_LOAD_SIZE = 200;
-		
-		final int TOTAL_PAGES = (int)Math.ceil(attributeCount / CHUNK_LOAD_SIZE);
+
+		final int TOTAL_PAGES = (int) Math.ceil(attributeCount / CHUNK_LOAD_SIZE);
 
 		Long totalAttribsCached = 0L;
 
 		log.info("About to load all attributes for realm " + realm);
 		log.info("Found " + attributeCount + " attributes");
 		try {
-			for(int currentPage = 0; currentPage < TOTAL_PAGES + 1; currentPage++) {
+			for (int currentPage = 0; currentPage < TOTAL_PAGES + 1; currentPage++) {
 
 				long attributesLoaded = currentPage * CHUNK_LOAD_SIZE;
 
-
 				// Correctly determine how many more attributes we need to load in
 				int nextLoad = CHUNK_LOAD_SIZE;
-				if(attributeCount - attributesLoaded < CHUNK_LOAD_SIZE) {
-					nextLoad = (int)(attributeCount - attributesLoaded);
+				if (attributeCount - attributesLoaded < CHUNK_LOAD_SIZE) {
+					nextLoad = (int) (attributeCount - attributesLoaded);
 				}
-				log.info("Loading in page " + currentPage + " of " + TOTAL_PAGES + " containing " + nextLoad + " attributes");
-				attributeList = DatabaseUtils.findAttributes(realm, nextLoad, currentPage);
-				for(Attribute attribute : attributeList) {
+				log.info("Loading in page " + currentPage + " of " + TOTAL_PAGES + " containing " + nextLoad
+						+ " attributes");
+				attributeList = databaseUtils.findAttributes(realm, nextLoad, currentPage);
+				for (Attribute attribute : attributeList) {
 					// log.info("Loading attrib: " + attribute.getCode());
 					String key = attribute.getCode();
 					CacheUtils.putObject(realm, key, attribute);
@@ -147,7 +165,7 @@ public class QwandaUtils {
 			}
 
 			log.info("Cached " + totalAttribsCached + " attributes");
-		} catch(Exception e) {
+		} catch (Exception e) {
 			log.error("Error loading attributes for realm " + realm);
 		}
 	}
@@ -155,7 +173,7 @@ public class QwandaUtils {
 	/**
 	 * Load all attributes into the in memory map.
 	 */
-	public static void loadAllAttributes() {
+	public void loadAllAttributes() {
 
 		String realm = gennyToken.getRealm();
 		List<Attribute> attributeList = null;
@@ -164,7 +182,7 @@ public class QwandaUtils {
 
 		try {
 			log.info("Fetching Attributes from database...");
-			attributeList = DatabaseUtils.findAttributes(realm, null, null);
+			attributeList = databaseUtils.findAttributes(realm, null, null);
 
 			log.info("Loaded all attributes for realm " + realm);
 			if (attributeList == null) {
@@ -195,20 +213,20 @@ public class QwandaUtils {
 	 *
 	 * @param code the code of the attribute to remove.
 	 */
-	public static void removeAttributeFromMemory(String code) {
+	public void removeAttributeFromMemory(String code) {
 
 		String realm = gennyToken.getRealm();
 		attributes.get(realm).remove(code);
 	}
 
 	/**
-	* Get a Question using a code.
-	*
-	* @param code the code of the question to get
-	* @param userToken the userToken to use
-	* @return Question
+	 * Get a Question using a code.
+	 *
+	 * @param code      the code of the question to get
+	 * @param userToken the userToken to use
+	 * @return Question
 	 */
-	static public Question getQuestion(String code, GennyToken userToken) {
+	public Question getQuestion(String code, GennyToken userToken) {
 
 		if (code == null) {
 			log.error("Code must not be null!");
@@ -222,7 +240,7 @@ public class QwandaUtils {
 
 			// fetch from database if not found in cache
 			log.warn("Could NOT read " + code + " from cache! Checking Database...");
-			question = DatabaseUtils.findQuestionByCode(userToken.getRealm(), code);
+			question = databaseUtils.findQuestionByCode(userToken.getRealm(), code);
 
 			if (question == null) {
 				log.error("Could not find question " + code + " in database!");
@@ -237,17 +255,16 @@ public class QwandaUtils {
 		return question;
 	}
 
-
 	/**
 	 * Send a {@link QEventMessage} to shleemy for scheduling.
 	 *
-	 * @param userToken the userToken to schedule for
-	 * @param eventMsgCode the eventMsgCode to set
+	 * @param userToken       the userToken to schedule for
+	 * @param eventMsgCode    the eventMsgCode to set
 	 * @param scheduleMsgCode the scheduleMsgCode to set
-	 * @param triggertime the triggertime to set
-	 * @param targetCode the targetCode to set
+	 * @param triggertime     the triggertime to set
+	 * @param targetCode      the targetCode to set
 	 */
-	public static void scheduleEvent(GennyToken userToken, String eventMsgCode, String scheduleMsgCode,
+	public void scheduleEvent(GennyToken userToken, String eventMsgCode, String scheduleMsgCode,
 			LocalDateTime triggertime, String targetCode) {
 
 		// create the event message
@@ -277,9 +294,9 @@ public class QwandaUtils {
 	 * Delete a currently scheduled message via shleemy.
 	 *
 	 * @param userToken the userToken to delete with
-	 * @param code the code of the schedule message to delete
+	 * @param code      the code of the schedule message to delete
 	 */
-	public static void deleteSchedule(GennyToken userToken, String code) {
+	public void deleteSchedule(GennyToken userToken, String code) {
 
 		String uri = GennySettings.shleemyServiceUrl() + "/api/schedule/code/" + code;
 		HttpUtils.delete(uri, userToken.getToken());
@@ -290,21 +307,22 @@ public class QwandaUtils {
 	 * Generate Question group for a baseEntity
 	 *
 	 * @param baseEntity the baseEntity to create for
-	 * @param beUtils the utility to use
+	 * @param beUtils    the utility to use
 	 * @return Ask
 	 */
-	public static Ask generateAskGroupUsingBaseEntity(BaseEntity baseEntity, BaseEntityUtils beUtils) {
+	public Ask generateAskGroupUsingBaseEntity(BaseEntity baseEntity, BaseEntityUtils beUtils) {
 
 		// init tokens
 		GennyToken userToken = beUtils.getGennyToken();
 		String token = userToken.getToken();
 
 		// grab def entity
-		BaseEntity defBE = DefUtils.getDEF(baseEntity);
+		BaseEntity defBE = defUtils.getDEF(baseEntity);
 
 		// create GRP ask
 		Attribute questionAttribute = getAttribute("QQQ_QUESTION_GROUP");
-		Question question = new Question("QUE_EDIT_GRP", "Edit " + baseEntity.getCode() + " : " + baseEntity.getName(), questionAttribute);
+		Question question = new Question("QUE_EDIT_GRP", "Edit " + baseEntity.getCode() + " : " + baseEntity.getName(),
+				questionAttribute);
 		Ask ask = new Ask(question, userToken.getUserCode(), baseEntity.getCode());
 
 		List<Ask> childAsks = new ArrayList<>();
@@ -314,32 +332,33 @@ public class QwandaUtils {
 
 		// create a child ask for every valid atribute
 		baseEntity.getBaseEntityAttributes().stream()
-			.filter(ea -> defBE.containsEntityAttribute("ATT_" + ea.getAttributeCode()))
-			.forEach((ea) -> {
+				.filter(ea -> defBE.containsEntityAttribute("ATT_" + ea.getAttributeCode()))
+				.forEach((ea) -> {
 
-				String questionCode = "QUE_" + StringUtils.removeStart(StringUtils.removeStart(ea.getAttributeCode(), "PRI_"), "LNK_");
+					String questionCode = "QUE_"
+							+ StringUtils.removeStart(StringUtils.removeStart(ea.getAttributeCode(), "PRI_"), "LNK_");
 
-				Question childQues = new Question(questionCode, ea.getAttribute().getName(), ea.getAttribute());
-				Ask childAsk = new Ask(childQues, userToken.getUserCode(), baseEntity.getCode());
+					Question childQues = new Question(questionCode, ea.getAttribute().getName(), ea.getAttribute());
+					Ask childAsk = new Ask(childQues, userToken.getUserCode(), baseEntity.getCode());
 
-				childAsks.add(childAsk);
+					childAsks.add(childAsk);
 
-				if (ea.getAttributeCode().startsWith("LNK_")) {
-					if (ea.getValueString() != null) {
+					if (ea.getAttributeCode().startsWith("LNK_")) {
+						if (ea.getValueString() != null) {
 
-						String[] codes = BaseEntityUtils.cleanUpAttributeValue(ea.getValueString()).split(",");
+							String[] codes = BaseEntityUtils.cleanUpAttributeValue(ea.getValueString()).split(",");
 
-						for (String code : codes) {
-							BaseEntity link = beUtils.getBaseEntityByCode(code);
-							entityMessage.add(link);
+							for (String code : codes) {
+								BaseEntity link = beUtils.getBaseEntityByCode(code);
+								entityMessage.add(link);
+							}
 						}
 					}
-				}
 
-				if (defBE.containsEntityAttribute("SER_" + ea.getAttributeCode())) {
-					SearchUtils.performDropdownSearch(childAsk, userToken);
-				}
-			});
+					if (defBE.containsEntityAttribute("SER_" + ea.getAttributeCode())) {
+						searchUtils.performDropdownSearch(childAsk, userToken);
+					}
+				});
 
 		// set child asks
 		ask.setChildAsks(childAsks.toArray(new Ask[childAsks.size()]));
@@ -350,13 +369,13 @@ public class QwandaUtils {
 	}
 
 	/**
-	* Update the status of the disabled field for an Ask on the web.
-	*
-	* @param ask the ask to update
-	* @param disabled the disabled status to set
-	* @param userToken the userToken to use
+	 * Update the status of the disabled field for an Ask on the web.
+	 *
+	 * @param ask       the ask to update
+	 * @param disabled  the disabled status to set
+	 * @param userToken the userToken to use
 	 */
-	public static void updateAskDisabled(Ask ask, Boolean disabled, GennyToken userToken) {
+	public void updateAskDisabled(Ask ask, Boolean disabled, GennyToken userToken) {
 
 		ask.setDisabled(disabled);
 
@@ -368,28 +387,28 @@ public class QwandaUtils {
 	}
 
 	/**
-	* Send an updated entity for each unique target in answers.
-	*
-	* @param userToken the userToken to use
-	* @param answers the answers to send entities for
+	 * Send an updated entity for each unique target in answers.
+	 *
+	 * @param userToken the userToken to use
+	 * @param answers   the answers to send entities for
 	 */
-    static public void sendToFrontEnd(GennyToken userToken, Answer... answers) {
+	public void sendToFrontEnd(GennyToken userToken, Answer... answers) {
 
-        if (answers == null) {
+		if (answers == null) {
 			log.error("Answers is null!");
 			return;
-        }
+		}
 
-        if (answers.length == 0) {
+		if (answers.length == 0) {
 			log.error("Number of Answers is 0!");
 			return;
-        }
+		}
 
 		String realm = userToken.getRealm();
 
 		// sort answers into target BaseEntitys
 		Map<String, List<Answer>> answersPerTargetCodeMap = Stream.of(answers)
-			.collect(Collectors.groupingBy(Answer::getTargetCode));
+				.collect(Collectors.groupingBy(Answer::getTargetCode));
 
 		for (String targetCode : answersPerTargetCodeMap.keySet()) {
 
@@ -416,61 +435,61 @@ public class QwandaUtils {
 				KafkaUtils.writeMsg("webcmds", msg);
 			}
 		}
-    }
+	}
 
 	/**
-	* Send feedback for answer data. ERROR, WARN, SUSPICIOUS or HINT.
-	*
-	* @param userToken the userToken to use
-	* @param answer the answer to send for
-	* @param prefix the prefix to send
-	* @param message the message to send
+	 * Send feedback for answer data. ERROR, WARN, SUSPICIOUS or HINT.
+	 *
+	 * @param userToken the userToken to use
+	 * @param answer    the answer to send for
+	 * @param prefix    the prefix to send
+	 * @param message   the message to send
 	 */
-    public static void sendFeedback(GennyToken userToken, Answer answer, String prefix, String message) {
+	public void sendFeedback(GennyToken userToken, Answer answer, String prefix, String message) {
 
-        // find the baseentity
-        BaseEntity target = CacheUtils.getObject(userToken.getRealm(), answer.getTargetCode(), BaseEntity.class);
+		// find the baseentity
+		BaseEntity target = CacheUtils.getObject(userToken.getRealm(), answer.getTargetCode(), BaseEntity.class);
 
-        BaseEntity be = new BaseEntity(target.getCode(), target.getName());
-        be.setRealm(userToken.getRealm());
+		BaseEntity be = new BaseEntity(target.getCode(), target.getName());
+		be.setRealm(userToken.getRealm());
 
-        try {
+		try {
 
-            Attribute att = getAttribute(answer.getAttributeCode());
-            be.addAttribute(att);
-            be.setValue(att, answer.getValue());
-            Optional<EntityAttribute> ea = be.findEntityAttribute(answer.getAttributeCode());
+			Attribute att = getAttribute(answer.getAttributeCode());
+			be.addAttribute(att);
+			be.setValue(att, answer.getValue());
+			Optional<EntityAttribute> ea = be.findEntityAttribute(answer.getAttributeCode());
 
-            if (ea.isPresent()) {
-                ea.get().setFeedback(prefix+":"+message);
+			if (ea.isPresent()) {
+				ea.get().setFeedback(prefix + ":" + message);
 
-                QDataBaseEntityMessage msg = new QDataBaseEntityMessage(be);
-                msg.setReplace(true);
-                msg.setToken(userToken.getToken());
-                KafkaUtils.writeMsg("webcmds", msg);
-            }
-        } catch (BadDataException e) {
-            e.printStackTrace();
-        }
-    }
+				QDataBaseEntityMessage msg = new QDataBaseEntityMessage(be);
+				msg.setReplace(true);
+				msg.setToken(userToken.getToken());
+				KafkaUtils.writeMsg("webcmds", msg);
+			}
+		} catch (BadDataException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
-	* Is the number a valid ABN.
-	*
-	* @param abn the abn to check
-	* @return boolean
+	 * Is the number a valid ABN.
+	 *
+	 * @param abn the abn to check
+	 * @return boolean
 	 */
-    public static boolean isValidAbnFormat(final String abn) {
-        if (NumberUtils.isDigits(abn) && abn.length() != 11) {
-            return false;
-        }
-        final int[] weights = {10, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
-        // split abn number string by digits to get int array
-        int[] abnDigits = Stream.of(abn.split("\\B")).mapToInt(Integer::parseInt).toArray();
-        // reduce by applying weight[index] * abnDigits[index] (NOTE: substract 1 for
-        // the first digit in abn number)
-        int sum = IntStream.range(0, weights.length).reduce(0,
-                (total, idx) -> total + weights[idx] * (idx == 0 ? abnDigits[idx] - 1 : abnDigits[idx]));
-        return (sum % 89 == 0);
-    }
+	public boolean isValidAbnFormat(final String abn) {
+		if (NumberUtils.isDigits(abn) && abn.length() != 11) {
+			return false;
+		}
+		final int[] weights = { 10, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19 };
+		// split abn number string by digits to get int array
+		int[] abnDigits = Stream.of(abn.split("\\B")).mapToInt(Integer::parseInt).toArray();
+		// reduce by applying weight[index] * abnDigits[index] (NOTE: substract 1 for
+		// the first digit in abn number)
+		int sum = IntStream.range(0, weights.length).reduce(0,
+				(total, idx) -> total + weights[idx] * (idx == 0 ? abnDigits[idx] - 1 : abnDigits[idx]));
+		return (sum % 89 == 0);
+	}
 }
