@@ -1,28 +1,17 @@
 package life.genny.qwandaq.entity;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.Optional;
-
-import life.genny.qwandaq.attribute.AttributeBoolean;
-import life.genny.qwandaq.attribute.AttributeDate;
-import life.genny.qwandaq.attribute.AttributeDateTime;
-import life.genny.qwandaq.attribute.AttributeDouble;
-import life.genny.qwandaq.attribute.AttributeInteger;
-import life.genny.qwandaq.attribute.AttributeLong;
-import life.genny.qwandaq.attribute.AttributeText;
-import life.genny.qwandaq.attribute.AttributeTime;
-import life.genny.qwandaq.attribute.EntityAttribute;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.EEntityStatus;
+import life.genny.qwandaq.attribute.*;
 import life.genny.qwandaq.exception.BadDataException;
-
 import org.jboss.logging.Logger;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 /* 
  * SearchEntity class implements the search of base entities applying different filters/search to the
@@ -48,6 +37,7 @@ public class SearchEntity extends BaseEntity {
 	Double searchIndex = 1.0;
 	Double combinedSearchIndex = 1.0;
 	Double aliasIndex = 1.0;
+	Map<String, Map<String, String>> formatters = new HashMap<>();
 
 	/*
 	 * This Sort Enum is used to sort the search results in either Ascending and
@@ -1970,5 +1960,19 @@ public class SearchEntity extends BaseEntity {
 	 */
 	public Double getFilterIndex() {
 			return this.filterIndex;
+	}
+
+	/*
+	 * This method helps you format the search data
+	 */
+	public SearchEntity addFormatter(final String attributeCode, String formatKey, String formatValue) {
+		Map<String, String> format = new HashMap<>();
+		format.put(formatKey, formatValue);
+		this.formatters.put(attributeCode, format);
+		return this;
+	}
+
+	public Map<String, Map<String, String>> getFormatters(){
+		return this.formatters;
 	}
 }
