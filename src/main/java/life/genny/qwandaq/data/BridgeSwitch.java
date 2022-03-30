@@ -27,8 +27,9 @@ public class BridgeSwitch {
 	static Jsonb jsonb = JsonbBuilder.create();
 
 	public static String BRIDGE_INFO_PREFIX = "BIF";
+	public static String BRIDGE_SWITCH_KEY = "ACTIVE_BRIDGE_IDS";
 
-	public static Set<String> activeBridgeIds = new HashSet<String>();
+	// public static Set<String> activeBridgeIds = new HashSet<String>();
 
 	/**
 	 * A child class used to store bridge mappings for individual users.
@@ -38,6 +39,44 @@ public class BridgeSwitch {
 		public BridgeInfo() {}
 
 		public ConcurrentMap<String, String> mappings = new ConcurrentHashMap<>();
+	}
+
+	/**
+	* Cache active Bridge Ids
+	*
+	* @param gennyToken
+	 */
+	public static void addActiveBridgeId(GennyToken gennyToken, String bridgeId) {
+
+		String realm = gennyToken.getRealm();
+		Set<String> activeBridgeIds = CacheUtils.getObject(realm, BRIDGE_SWITCH_KEY, Set.class);
+
+		if (activeBridgeIds == null) {
+			activeBridgeIds = new HashSet<String>();
+		}
+
+		activeBridgeIds.add(bridgeId);
+
+		CacheUtils.putObject(realm, BRIDGE_SWITCH_KEY, activeBridgeIds);
+	}
+
+	/**
+	* Find an active bridge ID
+	*
+	* @param gennyToken Used to find the realm
+	* @return String An active Bridge ID
+	 */
+	public static String findActiveBridgeId(GennyToken gennyToken) {
+
+		String realm = gennyToken.getRealm();
+
+		Set<String> activeBridgeIds = CacheUtils.getObject(realm, BRIDGE_SWITCH_KEY, Set.class);
+
+		if (activeBridgeIds.iterator().hasNext()) {
+			return activeBridgeIds.iterator().next();
+		}
+
+		return null;
 	}
 
 	/**

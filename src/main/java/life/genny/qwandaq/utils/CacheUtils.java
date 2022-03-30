@@ -33,6 +33,16 @@ public class CacheUtils {
 	}
 
 	/**
+	* Clear a remote realm cache
+	*
+	* @param realm The realm of the cache to clear
+	 */
+	public static void clear(String realm) {
+
+		cache.getRemoteCache(realm).clear();
+	}
+
+	/**
 	 * Read a stringified item from a realm cache.
 	 *
 	 * @param realm the realm to read from
