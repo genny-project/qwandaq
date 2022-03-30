@@ -47,6 +47,7 @@ public class DatabaseUtils {
 
 	/**
 	 * Check if entityManager is present.
+	 * 
 	 * @return whether or not entityManager is present
 	 */
 	public static boolean checkEntityManager() {
@@ -60,13 +61,14 @@ public class DatabaseUtils {
 	}
 
 	/**
-	* Fetch Validations from the database using page size and num.
-	* If pageSize and pageNumber are both null, all results will be returned at once.
-	* 
-	* @param realm the realm to find in
-	* @param pageSize the pageSize to fetch
-	* @param pageNumber the pageNumber to fetch
-	* @return List
+	 * Fetch Validations from the database using page size and num.
+	 * If pageSize and pageNumber are both null, all results will be returned at
+	 * once.
+	 * 
+	 * @param realm      the realm to find in
+	 * @param pageSize   the pageSize to fetch
+	 * @param pageNumber the pageNumber to fetch
+	 * @return List
 	 */
 	@Transactional
 	public static List<Validation> findValidations(String realm, Integer pageSize, Integer pageNumber) {
@@ -79,10 +81,10 @@ public class DatabaseUtils {
 					.setParameter("realmStr", realm);
 
 			if (pageNumber != null && pageSize != null) {
-				query = query.setFirstResult((pageNumber-1) * pageSize)
-					.setMaxResults(pageSize);
+				query = query.setFirstResult((pageNumber - 1) * pageSize)
+						.setMaxResults(pageSize);
 			}
-				
+
 			return query.getResultList();
 
 		} catch (NoResultException e) {
@@ -93,7 +95,6 @@ public class DatabaseUtils {
 		return null;
 	}
 
-
 	@Transactional
 	public static Long countAttributes(String realm) {
 
@@ -101,11 +102,11 @@ public class DatabaseUtils {
 
 		try {
 			Query query = entityManager
-				.createQuery("SELECT count(1) FROM Attribute WHERE realm=:realmStr AND name not like 'App\\_%'")
-				.setParameter("realmStr", realm);
+					.createQuery("SELECT count(1) FROM Attribute WHERE realm=:realmStr AND name not like 'App\\_%'")
+					.setParameter("realmStr", realm);
 
-			return (Long)query.getResultList().get(0);
-		} catch(NoResultException e) {
+			return (Long) query.getResultList().get(0);
+		} catch (NoResultException e) {
 			log.error("No Attributes found from DB Search");
 			log.error(e.getStackTrace());
 		}
@@ -114,15 +115,16 @@ public class DatabaseUtils {
 	}
 
 	/**
-	* Fetch Attributes from the database using page size and num.
-	* If pageSize and pageNumber are both null, all results will be returned at once.
-	*
-	* @param realm the realm to find in
-	* @param pageSize the pageSize to fetch (Starting from Page 1)
-	* @param pageNumber the pageNumber to fetch
-	* @return List
+	 * Fetch Attributes from the database using page size and num.
+	 * If pageSize and pageNumber are both null, all results will be returned at
+	 * once.
+	 *
+	 * @param realm      the realm to find in
+	 * @param pageSize   the pageSize to fetch (Starting from Page 1)
+	 * @param pageNumber the pageNumber to fetch
+	 * @return List
 	 */
-	//@Transactional
+	// @Transactional
 	public static List<Attribute> findAttributes(String realm, Integer pageSize, Integer pageNumber) {
 
 		checkEntityManager();
@@ -135,11 +137,11 @@ public class DatabaseUtils {
 
 			if (pageNumber != null && pageSize != null) {
 				query = query.setFirstResult((pageNumber) * pageSize)
-					.setMaxResults(pageSize);
+						.setMaxResults(pageSize);
 			} else {
 				log.info("Fetching all Attributes (unset pageNumber or pageSize)");
 			}
-				
+
 			return query.getResultList();
 
 		} catch (NoResultException e) {
@@ -151,13 +153,14 @@ public class DatabaseUtils {
 	}
 
 	/**
-	* Fetch a list of {@link BaseEntity} types from the database using a realm.
-	* If pageSize and pageNumber are both null, all results will be returned at once.
-	* 
-	* @param realm the realm to find in
-	* @param pageSize the pageSize to fetch
-	* @param pageNumber the pageNumber to fetch
-	* @return List
+	 * Fetch a list of {@link BaseEntity} types from the database using a realm.
+	 * If pageSize and pageNumber are both null, all results will be returned at
+	 * once.
+	 * 
+	 * @param realm      the realm to find in
+	 * @param pageSize   the pageSize to fetch
+	 * @param pageNumber the pageNumber to fetch
+	 * @return List
 	 */
 	@Transactional
 	public static List<BaseEntity> findBaseEntitys(String realm, Integer pageSize, Integer pageNumber) {
@@ -171,10 +174,10 @@ public class DatabaseUtils {
 					.setParameter("realmStr", realm);
 
 			if (pageNumber != null && pageSize != null) {
-				query = query.setFirstResult((pageNumber-1) * pageSize)
-					.setMaxResults(pageSize);
+				query = query.setFirstResult((pageNumber - 1) * pageSize)
+						.setMaxResults(pageSize);
 			}
-				
+
 			return query.getResultList();
 
 		} catch (NoResultException e) {
@@ -185,13 +188,15 @@ public class DatabaseUtils {
 	}
 
 	/**
-	* Fetch a list of {@link Question} types from the database using a realm, page size and page number.
-	* If pageSize and pageNumber are both null, all results will be returned at once.
-	* 
-	* @param realm the realm to find in
-	* @param pageSize the pageSize to fetch
-	* @param pageNumber the pageNumber to fetch
-	* @return List
+	 * Fetch a list of {@link Question} types from the database using a realm, page
+	 * size and page number.
+	 * If pageSize and pageNumber are both null, all results will be returned at
+	 * once.
+	 * 
+	 * @param realm      the realm to find in
+	 * @param pageSize   the pageSize to fetch
+	 * @param pageNumber the pageNumber to fetch
+	 * @return List
 	 */
 	@Transactional
 	public static List<Question> findQuestions(String realm, Integer pageSize, Integer pageNumber) {
@@ -205,10 +210,10 @@ public class DatabaseUtils {
 					.setParameter("realmStr", realm);
 
 			if (pageNumber != null && pageSize != null) {
-				query = query.setFirstResult((pageNumber-1) * pageSize)
-					.setMaxResults(pageSize);
+				query = query.setFirstResult((pageNumber - 1) * pageSize)
+						.setMaxResults(pageSize);
 			}
-				
+
 			return query.getResultList();
 
 		} catch (NoResultException e) {
@@ -219,13 +224,15 @@ public class DatabaseUtils {
 	}
 
 	/**
-	* Fetch a list of {@link QuestionQuestion} types from the database using a realm, page size and page number.
-	* If pageSize and pageNumber are both null, all results will be returned at once.
-	* 
-	* @param realm the realm to find in
-	* @param pageSize the pageSize to fetch
-	* @param pageNumber the pageNumber to fetch
-	* @return List
+	 * Fetch a list of {@link QuestionQuestion} types from the database using a
+	 * realm, page size and page number.
+	 * If pageSize and pageNumber are both null, all results will be returned at
+	 * once.
+	 * 
+	 * @param realm      the realm to find in
+	 * @param pageSize   the pageSize to fetch
+	 * @param pageNumber the pageNumber to fetch
+	 * @return List
 	 */
 	@Transactional
 	public static List<QuestionQuestion> findQuestionQuestions(String realm, Integer pageSize, Integer pageNumber) {
@@ -239,10 +246,10 @@ public class DatabaseUtils {
 					.setParameter("realmStr", realm);
 
 			if (pageNumber != null && pageSize != null) {
-				query = query.setFirstResult((pageNumber-1) * pageSize)
-					.setMaxResults(pageSize);
+				query = query.setFirstResult((pageNumber - 1) * pageSize)
+						.setMaxResults(pageSize);
 			}
-				
+
 			return query.getResultList();
 
 		} catch (NoResultException e) {
@@ -252,13 +259,12 @@ public class DatabaseUtils {
 		return null;
 	}
 
-
 	/**
-	* Grab a Validation from the database using a code and a realm.
-	*
-	* @param realm the realm to find in
-	* @param code the code to find by
-	* @return Validation
+	 * Grab a Validation from the database using a code and a realm.
+	 *
+	 * @param realm the realm to find in
+	 * @param code  the code to find by
+	 * @return Validation
 	 */
 	@Transactional
 	public static Validation findValidationByCode(String realm, String code) {
@@ -268,11 +274,11 @@ public class DatabaseUtils {
 		try {
 
 			return entityManager
-				.createQuery("FROM Validation WHERE realm=:realmStr AND code=:code",
-						Validation.class)
-				.setParameter("realmStr", realm)
-				.setParameter("code", code)
-				.getSingleResult();
+					.createQuery("FROM Validation WHERE realm=:realmStr AND code=:code",
+							Validation.class)
+					.setParameter("realmStr", realm)
+					.setParameter("code", code)
+					.getSingleResult();
 
 		} catch (NoResultException e) {
 			log.error("No Validation found in DB for " + code + " in realm " + realm);
@@ -283,11 +289,11 @@ public class DatabaseUtils {
 	}
 
 	/**
-	* Fetch an Attribute from the database using a realm and a code.
-	*
-	* @param realm the realm to find in
-	* @param code the code to find by
-	* @return Attribute
+	 * Fetch an Attribute from the database using a realm and a code.
+	 *
+	 * @param realm the realm to find in
+	 * @param code  the code to find by
+	 * @return Attribute
 	 */
 	@Transactional
 	public static Attribute findAttributeByCode(String realm, String code) {
@@ -340,7 +346,7 @@ public class DatabaseUtils {
 	 * Fetch A {@link Question} from the database using the question code.
 	 *
 	 * @param realm the realm to find in
-	 * @param code the code to find by
+	 * @param code  the code to find by
 	 * @return Question
 	 */
 	@Transactional
@@ -364,23 +370,25 @@ public class DatabaseUtils {
 	}
 
 	/**
-	* Find a QuestionQuestion using a realm, a sourceCode and a targetCode.
-	*
-	* @param realm the realm to find in
-	* @param sourceCode the sourceCode to find by
-	* @param targetCode the targetCode to find by
-	* @return List list of QuestionQuestions
+	 * Find a QuestionQuestion using a realm, a sourceCode and a targetCode.
+	 *
+	 * @param realm      the realm to find in
+	 * @param sourceCode the sourceCode to find by
+	 * @param targetCode the targetCode to find by
+	 * @return List list of QuestionQuestions
 	 */
 	@Transactional
-	public static QuestionQuestion findQuestionQuestionBySourceAndTarget(String realm, String sourceCode, String targetCode) {
+	public static QuestionQuestion findQuestionQuestionBySourceAndTarget(String realm, String sourceCode,
+			String targetCode) {
 
 		checkEntityManager();
 
 		try {
 
 			return entityManager
-					.createQuery("FROM QuestionQuestion WHERE realm=:realmStr AND sourceCode = :sourceCode AND targetCode = :targetCode"
-							, QuestionQuestion.class)
+					.createQuery(
+							"FROM QuestionQuestion WHERE realm=:realmStr AND sourceCode = :sourceCode AND targetCode = :targetCode",
+							QuestionQuestion.class)
 					.setParameter("realmStr", realm)
 					.setParameter("sourceCode", sourceCode)
 					.setParameter("targetCode", targetCode)
@@ -394,11 +402,11 @@ public class DatabaseUtils {
 	}
 
 	/**
-	* Find a list of QuestionQuestions using a realm and a sourceCode
-	*
-	* @param realm the realm to find in
-	* @param sourceCode the sourceCode to find by
-	* @return List list of QuestionQuestions
+	 * Find a list of QuestionQuestions using a realm and a sourceCode
+	 *
+	 * @param realm      the realm to find in
+	 * @param sourceCode the sourceCode to find by
+	 * @return List list of QuestionQuestions
 	 */
 	@Transactional
 	public static List<QuestionQuestion> findQuestionQuestionsBySourceCode(String realm, String sourceCode) {
@@ -422,23 +430,24 @@ public class DatabaseUtils {
 	}
 
 	/**
-	* Find a list of Asks using question code, sourceCode and targetCode.
-	*
-	* @param realm the realm to find in
-	* @param questionCode the questionCode to find
-	* @param sourceCode the sourceCode to find by
-	* @param targetCode the targetCode to find by
-	* @return List list of asks
+	 * Find a list of Asks using question code, sourceCode and targetCode.
+	 *
+	 * @param realm        the realm to find in
+	 * @param questionCode the questionCode to find
+	 * @param sourceCode   the sourceCode to find by
+	 * @param targetCode   the targetCode to find by
+	 * @return List list of asks
 	 */
 	@Transactional
-	public static List<Ask> findAsksByQuestionCode(String realm, String questionCode, String sourceCode, String targetCode) {
+	public static List<Ask> findAsksByQuestionCode(String realm, String questionCode, String sourceCode,
+			String targetCode) {
 
 		checkEntityManager();
 
 		try {
 			return entityManager
-				.createQuery("FROM Ask WHERE realm=:realmStr AND sourceCode=:sourceCode"
-						+ " AND targetCode=:targetCode AND questionCode=:questionCode", Ask.class)
+					.createQuery("FROM Ask WHERE realm=:realmStr AND sourceCode=:sourceCode"
+							+ " AND targetCode=:targetCode AND questionCode=:questionCode", Ask.class)
 					.setParameter("questionCode", questionCode)
 					.setParameter("sourceCode", sourceCode)
 					.setParameter("realmStr", realm)
@@ -446,7 +455,37 @@ public class DatabaseUtils {
 					.getResultList();
 
 		} catch (NoResultException e) {
-			log.error("No Asks found in DB for " + questionCode + ":" + sourceCode + ":" + targetCode + " in realm " + realm);
+			log.error("No Asks found in DB for " + questionCode + ":" + sourceCode + ":" + targetCode + " in realm "
+					+ realm);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Find a list of Asks using question code, sourceCode and targetCode.
+	 *
+	 * @param realm        the realm to find in
+	 * @param questionCode the questionCode to find
+	 * @param sourceCode   the sourceCode to find by
+	 * @param targetCode   the targetCode to find by
+	 * @return List list of asks
+	 */
+	@Transactional
+	public static List<Ask> findAsksByQuestionGroupCode(String realm, String questionCode) {
+
+		checkEntityManager();
+
+		try {
+			return entityManager
+					.createQuery("FROM Ask WHERE realm=:realmStr AND questionCode=:questionCode", Ask.class)
+					.setParameter("sourceCode", questionCode)
+					.setParameter("realmStr", realm)
+					.getResultList();
+
+		} catch (NoResultException e) {
+			log.error("No Asks found in DB for " + questionCode + ":  in realm "
+					+ realm);
 		}
 
 		return null;
@@ -510,7 +549,6 @@ public class DatabaseUtils {
 		}
 	}
 
-
 	/**
 	 * Save a {@link BaseEntity} to the database.
 	 *
@@ -541,9 +579,9 @@ public class DatabaseUtils {
 	}
 
 	/**
-	* Save a {@link Question} to the database.
-	*
-	* @param question A {@link Question} object to save
+	 * Save a {@link Question} to the database.
+	 *
+	 * @param question A {@link Question} object to save
 	 */
 	@Transactional
 	public static void saveQuestion(Question question) {
@@ -570,9 +608,9 @@ public class DatabaseUtils {
 	}
 
 	/**
-	* Save a {@link QuestionQuestion} to the database.
-	*
-	* @param questionQuestion A {@link QuestionQuestion} object to save
+	 * Save a {@link QuestionQuestion} to the database.
+	 *
+	 * @param questionQuestion A {@link QuestionQuestion} object to save
 	 */
 	@Transactional
 	public static void saveQuestionQuestion(QuestionQuestion questionQuestion) {
@@ -586,8 +624,7 @@ public class DatabaseUtils {
 		QuestionQuestion existingQuestionQuestion = findQuestionQuestionBySourceAndTarget(
 				questionQuestion.getRealm(),
 				pk.getSourceCode(),
-				pk.getTargetCode()
-			);
+				pk.getTargetCode());
 
 		try {
 
@@ -608,7 +645,7 @@ public class DatabaseUtils {
 	 * Delete a Validation from the database.
 	 *
 	 * @param realm realm to delete in
-	 * @param code Code of the Validation to delete.
+	 * @param code  Code of the Validation to delete.
 	 */
 	@Transactional
 	public static void deleteValidation(String realm, String code) {
@@ -634,7 +671,7 @@ public class DatabaseUtils {
 	 * Delete an atttribute from the database.
 	 *
 	 * @param realm realm to delete in
-	 * @param code Code of the attribute to delete.
+	 * @param code  Code of the attribute to delete.
 	 */
 	@Transactional
 	public static void deleteAttribute(String realm, String code) {
@@ -660,7 +697,7 @@ public class DatabaseUtils {
 	 * Delete a BaseEntity from the database.
 	 *
 	 * @param realm realm to delete in
-	 * @param code Code of the BaseEntity to delete.
+	 * @param code  Code of the BaseEntity to delete.
 	 */
 	@Transactional
 	public static void deleteBaseEntity(String realm, String code) {
@@ -682,12 +719,11 @@ public class DatabaseUtils {
 		}
 	}
 
-
 	/**
 	 * Delete a Question from the database.
 	 *
 	 * @param realm realm to delete in
-	 * @param code Code of the Question to delete.
+	 * @param code  Code of the Question to delete.
 	 */
 	@Transactional
 	public static void deleteQuestion(String realm, String code) {
@@ -709,11 +745,10 @@ public class DatabaseUtils {
 		}
 	}
 
-
 	/**
 	 * Delete a QuestionQuestion from the database.
 	 * 
-	 * @param realm the realm to delete in
+	 * @param realm      the realm to delete in
 	 * @param sourceCode the sourceCode to delete by
 	 * @param targetCode the targetCode to delete by
 	 */
@@ -725,7 +760,8 @@ public class DatabaseUtils {
 		checkEntityManager();
 
 		try {
-			Query q = entityManager.createQuery("DELETE QuestionQuestion WHERE realm=:realmStr AND sourceCode=:sourceCode AND targetCode=:targetCode")
+			Query q = entityManager.createQuery(
+					"DELETE QuestionQuestion WHERE realm=:realmStr AND sourceCode=:sourceCode AND targetCode=:targetCode")
 					.setParameter("realmStr", realm)
 					.setParameter("sourceCode", sourceCode)
 					.setParameter("targetCode", targetCode);

@@ -318,7 +318,8 @@ public class QuestionUtils implements Serializable {
 	 * @param beUtils      the beUtils to use
 	 * @return QDataAskMessage
 	 */
-	public static QDataAskMessage getAsks(String sourceCode, String targetCode, String questionCode, BaseEntityUtils beUtils) {
+	public static QDataAskMessage getAsks(String sourceCode, String targetCode, String questionCode,
+			BaseEntityUtils beUtils) {
 
 		// TODO: Ensure migration from api to Database worked fine
 		List<Ask> asks = DatabaseUtils.findAsksByQuestionCode(beUtils.getRealm(), questionCode, sourceCode, targetCode);
