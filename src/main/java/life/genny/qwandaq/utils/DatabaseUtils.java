@@ -467,8 +467,6 @@ public class DatabaseUtils {
 	 *
 	 * @param realm        the realm to find in
 	 * @param questionCode the questionCode to find
-	 * @param sourceCode   the sourceCode to find by
-	 * @param targetCode   the targetCode to find by
 	 * @return List list of asks
 	 */
 	@Transactional
