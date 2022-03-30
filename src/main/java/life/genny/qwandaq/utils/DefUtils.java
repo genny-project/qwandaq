@@ -8,11 +8,14 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
 import org.jboss.logging.Logger;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.models.GennyToken;
 import life.genny.qwandaq.Answer;
 import life.genny.qwandaq.attribute.Attribute;
@@ -32,6 +35,8 @@ import life.genny.qwandaq.models.ANSIColour;
  * @author Adam Crow
  * @author Jasper Robison
  */
+@RegisterForReflection
+@ApplicationScoped
 public class DefUtils {
 
 	static final Logger log = Logger.getLogger(DefUtils.class);
@@ -40,12 +45,15 @@ public class DefUtils {
 
 	Jsonb jsonb = JsonbBuilder.create();
 
-	static BaseEntityUtils beUtils;
+	@Inject
+	QwandaUtils qwandaUtils;
 
-	/** 
+	BaseEntityUtils beUtils;
+
+	/**
 	 * @param baseEntityUtils the baseEntityUtils to set
 	 */
-	public static void init(BaseEntityUtils baseEntityUtils) {
+	public void init(BaseEntityUtils baseEntityUtils) {
 		beUtils = baseEntityUtils;
 		initializeDefs();
 	}
@@ -53,16 +61,16 @@ public class DefUtils {
 	/**
 	 * Initialize the in memory DEF store
 	 */
-	public static void initializeDefs() {
+	public void initializeDefs() {
 
 		String realm = beUtils.getGennyToken().getRealm();
 
 		SearchEntity searchBE = new SearchEntity("SBE_DEF", "DEF check")
-			.addSort("PRI_NAME", "Created", SearchEntity.Sort.ASC)
-			.addFilter("PRI_CODE", SearchEntity.StringFilter.LIKE, "DEF_%")
-			.addColumn("*", "All Columns")
-			.setPageStart(0)
-			.setPageSize(1000);
+				.addSort("PRI_NAME", "Created", SearchEntity.Sort.ASC)
+				.addFilter("PRI_CODE", SearchEntity.StringFilter.LIKE, "DEF_%")
+				.addColumn("*", "All Columns")
+				.setPageStart(0)
+				.setPageSize(1000);
 
 		searchBE.setRealm(realm);
 
@@ -77,7 +85,8 @@ public class DefUtils {
 
 		for (BaseEntity item : items) {
 
-			// if the item is a def appointment, then add a default datetime for the start (Mandatory)
+			// if the item is a def appointment, then add a default datetime for the start
+			// (Mandatory)
 			if (item.getCode().equals("DEF_APPOINTMENT")) {
 
 				Attribute attribute = new AttributeText("DFT_PRI_START_DATETIME", "Default Start Time");
@@ -98,25 +107,23 @@ public class DefUtils {
 
 			item.setFastAttributes(true);
 			defs.get(realm).put(item.getCode(), item);
-			log.info("Saving ("+realm+") DEF "+item.getCode());
+			log.info("Saving (" + realm + ") DEF " + item.getCode());
 		}
 	}
 
-	
-	/** 
+	/**
 	 * @param userToken the userToken to get defs with
 	 * @return Map
 	 */
-	public static Map<String, BaseEntity> getDefMap(final GennyToken userToken) {
+	public Map<String, BaseEntity> getDefMap(final GennyToken userToken) {
 		return getDefMap(userToken.getRealm());
 	}
-		
-	
-	/** 
+
+	/**
 	 * @param realm the realm to get defs from
 	 * @return Map
 	 */
-	public static Map<String, BaseEntity> getDefMap(final String realm) {
+	public Map<String, BaseEntity> getDefMap(final String realm) {
 		if ((defs == null) || (defs.isEmpty())) {
 			initializeDefs();
 			return defs.get(realm);
@@ -125,12 +132,12 @@ public class DefUtils {
 	}
 
 	/**
-	* Find the corresponding definition for a given {@link BaseEntity}.
-	*
-	* @param be		The {@link BaseEntity} to check
-	* @return		BaseEntity The corresponding definition {@link BaseEntity}
+	 * Find the corresponding definition for a given {@link BaseEntity}.
+	 *
+	 * @param be The {@link BaseEntity} to check
+	 * @return BaseEntity The corresponding definition {@link BaseEntity}
 	 */
-	public static BaseEntity getDEF(final BaseEntity be) {
+	public BaseEntity getDEF(final BaseEntity be) {
 
 		GennyToken gennyToken = beUtils.getGennyToken();
 		String realm = gennyToken.getRealm();
@@ -207,7 +214,8 @@ public class DefUtils {
 			BaseEntity defBe = beMapping.get("DEF_" + trimedAttrCode);
 
 			if (defBe == null) {
-				log.error("No such DEF called " + "DEF_" + isAs.get(0).getAttributeCode().substring("PRI_IS_".length()));
+				log.error(
+						"No such DEF called " + "DEF_" + isAs.get(0).getAttributeCode().substring("PRI_IS_".length()));
 			}
 			return defBe;
 
@@ -233,7 +241,7 @@ public class DefUtils {
 		} else {
 			// Create sorted merge code
 			String mergedCode = "DEF_" + isAs.stream().sorted(Comparator.comparing(EntityAttribute::getAttributeCode))
-				.map(ea -> ea.getAttributeCode()).collect(Collectors.joining("_"));
+					.map(ea -> ea.getAttributeCode()).collect(Collectors.joining("_"));
 
 			mergedCode = mergedCode.replaceAll("_PRI_IS_DELETED", "");
 			BaseEntity mergedBe = getDefMap(realm).get(mergedCode);
@@ -252,7 +260,8 @@ public class DefUtils {
 
 					// now copy all the combined DEF eas.
 					for (EntityAttribute isea : isAs) {
-						BaseEntity defEa = getDefMap(realm).get("DEF_" + isea.getAttributeCode().substring("PRI_IS_".length()));
+						BaseEntity defEa = getDefMap(realm)
+								.get("DEF_" + isea.getAttributeCode().substring("PRI_IS_".length()));
 						if (defEa != null) {
 							for (EntityAttribute ea : defEa.getBaseEntityAttributes()) {
 								try {
@@ -262,7 +271,8 @@ public class DefUtils {
 								}
 							}
 						} else {
-							log.info("No DEF code -> " + "DEF_" + isea.getAttributeCode().substring("PRI_IS_".length()));
+							log.info(
+									"No DEF code -> " + "DEF_" + isea.getAttributeCode().substring("PRI_IS_".length()));
 							return null;
 						}
 					}
@@ -281,13 +291,13 @@ public class DefUtils {
 	}
 
 	/**
-	* A function to determine the whether or not an attribute is allowed to be
-	* saved to a {@link BaseEntity}.
-	*
-	* @param answer the answer to check
-	* @return Boolean
+	 * A function to determine the whether or not an attribute is allowed to be
+	 * saved to a {@link BaseEntity}.
+	 *
+	 * @param answer the answer to check
+	 * @return Boolean
 	 */
-	public static Boolean answerValidForDEF(Answer answer) {
+	public Boolean answerValidForDEF(Answer answer) {
 		BaseEntity target = beUtils.getBaseEntityByCode(answer.getTargetCode());
 		if (target == null) {
 			log.error("TargetCode " + answer.getTargetCode() + " does not exist");
@@ -299,14 +309,14 @@ public class DefUtils {
 	}
 
 	/**
-	* A function to determine the whether or not an attribute is allowed to be
-	* saved to a {@link BaseEntity}
-	*
-	* @param defBE the defBE to check with
-	* @param answer the answer to check
-	* @return Boolean
+	 * A function to determine the whether or not an attribute is allowed to be
+	 * saved to a {@link BaseEntity}
+	 *
+	 * @param defBE  the defBE to check with
+	 * @param answer the answer to check
+	 * @return Boolean
 	 */
-	public static Boolean answerValidForDEF(BaseEntity defBE, Answer answer) {
+	public Boolean answerValidForDEF(BaseEntity defBE, Answer answer) {
 		String targetCode = answer.getTargetCode();
 		String attributeCode = answer.getAttributeCode();
 
@@ -334,23 +344,24 @@ public class DefUtils {
 	}
 
 	/**
-	* Ensure any filter values requiring merging have been handled.
-	*
-	* @param searchBE	The {@link SearchEntity} to process
-	* @param ctxMap		Map of merge contexts
-	* @return			SearchEntity The updated {@link SearchEntity}
+	 * Ensure any filter values requiring merging have been handled.
+	 *
+	 * @param searchBE The {@link SearchEntity} to process
+	 * @param ctxMap   Map of merge contexts
+	 * @return SearchEntity The updated {@link SearchEntity}
 	 */
-	public static SearchEntity mergeFilterValueVariables(SearchEntity searchBE, Map<String, Object> ctxMap) {
+	public SearchEntity mergeFilterValueVariables(SearchEntity searchBE, Map<String, Object> ctxMap) {
 
 		for (EntityAttribute ea : searchBE.getBaseEntityAttributes()) {
 			// iterate all Filters
 			if (ea.getAttributeCode().startsWith("PRI_") || ea.getAttributeCode().startsWith("LNK_")) {
 
-				// grab the Attribute for this Code, using array in case this is an associated filter
+				// grab the Attribute for this Code, using array in case this is an associated
+				// filter
 				String[] attributeCodeArray = ea.getAttributeCode().split("\\.");
-				String attributeCode = attributeCodeArray[attributeCodeArray.length-1];
+				String attributeCode = attributeCodeArray[attributeCodeArray.length - 1];
 				// fetch the corresponding attribute
-				Attribute att = QwandaUtils.getAttribute(attributeCode);
+				Attribute att = qwandaUtils.getAttribute(attributeCode);
 				DataType dataType = att.getDataType();
 
 				Object attributeFilterValue = ea.getValue();
@@ -374,12 +385,15 @@ public class DefUtils {
 						});
 						// check if contexts are present
 						if (MergeUtils.contextsArePresent(attrValStr, ctxMap)) {
-							// TODO: mergeUtils should be taking care of this bracket replacement - Jasper (6/08/2021)
-							Object mergedObj = MergeUtils.wordMerge(attrValStr.replace("[[", "").replace("]]", ""), ctxMap);
+							// TODO: mergeUtils should be taking care of this bracket replacement - Jasper
+							// (6/08/2021)
+							Object mergedObj = MergeUtils.wordMerge(attrValStr.replace("[[", "").replace("]]", ""),
+									ctxMap);
 							// Ensure Dataype is Correct, then set Value
 							ea.setValue(mergedObj);
 						} else {
-							log.error(ANSIColour.RED + "Not all contexts are present for " + attrValStr + ANSIColour.RESET);
+							log.error(ANSIColour.RED + "Not all contexts are present for " + attrValStr
+									+ ANSIColour.RESET);
 							return null;
 						}
 					} else {
@@ -387,7 +401,8 @@ public class DefUtils {
 						ea.setValue(attributeFilterValue);
 					}
 				} else {
-					log.error(ANSIColour.RED + "Value is NULL for entity attribute " + attributeCode + ANSIColour.RESET);
+					log.error(
+							ANSIColour.RED + "Value is NULL for entity attribute " + attributeCode + ANSIColour.RESET);
 					return null;
 				}
 			}

@@ -6,8 +6,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import org.jboss.logging.Logger;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.Answer;
 import life.genny.qwandaq.attribute.AttributeText;
@@ -25,13 +29,24 @@ import life.genny.qwandaq.models.GennyToken;
  * @author Jasper Robison
  * @author Bryn Mecheam
  */
+@RegisterForReflection
+@ApplicationScoped
 public class CapabilityUtils implements Serializable {
 
 	static final Logger log = Logger.getLogger(CapabilityUtils.class);
 
+	@Inject
+	DatabaseUtils databaseUtils;
+
+	@Inject
+	QwandaUtils qwandaUtils;
+
 	List<Attribute> capabilityManifest = new ArrayList<Attribute>();
 
-	BaseEntityUtils beUtils;
+	public BaseEntityUtils beUtils;
+
+	public CapabilityUtils() {
+	}
 
 	public CapabilityUtils(BaseEntityUtils beUtils) {
 		this.beUtils = beUtils;
@@ -57,17 +72,18 @@ public class CapabilityUtils implements Serializable {
 	public void setCapabilityManifest(List<Attribute> capabilityManifest) {
 		this.capabilityManifest = capabilityManifest;
 	}
-	
-	/** 
+
+	/**
 	 * @return String
 	 */
 	@Override
 	public String toString() {
-		return "CapabilityUtils [" + (capabilityManifest != null ? "capabilityManifest=" + capabilityManifest : "") + "]";
+		return "CapabilityUtils [" + (capabilityManifest != null ? "capabilityManifest=" + capabilityManifest : "")
+				+ "]";
 	}
 
-	/** 
-	 * @param role the role to add to
+	/**
+	 * @param role       the role to add to
 	 * @param parentRole the parentRole to inherit
 	 * @return BaseEntity
 	 */
@@ -83,16 +99,16 @@ public class CapabilityUtils implements Serializable {
 		return ret;
 	}
 
-	/** 
+	/**
 	 * @param capabilityCode the capabilityCode to add to
-	 * @param name the name to add
+	 * @param name           the name to add
 	 * @return Attribute
 	 */
 	public Attribute addCapability(final String capabilityCode, final String name) {
 
 		String fullCapabilityCode = "PRM_" + capabilityCode.toUpperCase();
 		log.info("Setting Capability : " + fullCapabilityCode + " : " + name);
-		Attribute attribute = QwandaUtils.getAttribute(fullCapabilityCode);
+		Attribute attribute = qwandaUtils.getAttribute(fullCapabilityCode);
 
 		if (attribute != null) {
 			// add to manifest
@@ -100,41 +116,43 @@ public class CapabilityUtils implements Serializable {
 		} else {
 			// create new attribute and save it
 			attribute = new AttributeText(fullCapabilityCode, name);
-			DatabaseUtils.saveAttribute(attribute);
+			databaseUtils.saveAttribute(attribute);
 			capabilityManifest.add(attribute);
 		}
 
 		return attribute;
 	}
 
-	/** 
-	 * @param role the role to add to
+	/**
+	 * @param role           the role to add to
 	 * @param capabilityCode the capabilityCode to add
-	 * @param mode the mode to add
+	 * @param mode           the mode to add
 	 * @return BaseEntity
 	 */
 	public BaseEntity addCapabilityToRole(BaseEntity role, final String capabilityCode, final CapabilityMode mode) {
 
 		// check if the userToken is allowed to do this!
-		if (!hasCapability(capabilityCode,mode)) {
-			log.error(beUtils.getGennyToken().getUserCode()+" is NOT ALLOWED TO ADD THIS CAPABILITY TO A ROLE :"+role.getCode());
+		if (!hasCapability(capabilityCode, mode)) {
+			log.error(beUtils.getGennyToken().getUserCode() + " is NOT ALLOWED TO ADD THIS CAPABILITY TO A ROLE :"
+					+ role.getCode());
 			return role;
 		}
 
-		Answer answer = new Answer(beUtils.getServiceToken().getUserCode(), role.getCode(), "PRM_" + capabilityCode, mode.toString());
+		Answer answer = new Answer(beUtils.getServiceToken().getUserCode(), role.getCode(), "PRM_" + capabilityCode,
+				mode.toString());
 
 		String prefixedCode = capabilityCode;
 		if (!capabilityCode.startsWith("PRM_")) {
-			prefixedCode = "PRM_"+capabilityCode;
+			prefixedCode = "PRM_" + capabilityCode;
 		}
 
-		Attribute capabilityAttribute = QwandaUtils.getAttribute(prefixedCode);
+		Attribute capabilityAttribute = qwandaUtils.getAttribute(prefixedCode);
 		answer.setAttribute(capabilityAttribute);
 		role = beUtils.saveAnswer(answer);
 
 		// now update the list of roles associated with the key
 		switch (mode) {
-			case NONE: 
+			case NONE:
 				updateCachedRoleSet(role.getCode(), capabilityCode, CapabilityMode.NONE);
 				break;
 			case VIEW:
@@ -168,9 +186,9 @@ public class CapabilityUtils implements Serializable {
 	/**
 	 * Update the cached role set for a capability.
 	 *
-	 * @param code				The code of the role of which to update the set.
-	 * @param capabilityCode	The code of the capability for the role set.
-	 * @param mode				The mode of the roleset.
+	 * @param code           The code of the role of which to update the set.
+	 * @param capabilityCode The code of the capability for the role set.
+	 * @param mode           The mode of the roleset.
 	 */
 	private void updateCachedRoleSet(String code, String capabilityCode, CapabilityMode mode) {
 
@@ -196,11 +214,11 @@ public class CapabilityUtils implements Serializable {
 	}
 
 	/**
-	* Checks if the user has a capability
-	*
-	* @param code The code of the capability.
-	* @param mode The mode of the capability.
-	* @return Boolean True if the user has the capability, False otherwise.
+	 * Checks if the user has a capability
+	 *
+	 * @param code The code of the capability.
+	 * @param mode The mode of the capability.
+	 * @return Boolean True if the user has the capability, False otherwise.
 	 */
 	public boolean hasCapability(String code, CapabilityMode mode) {
 
@@ -235,13 +253,13 @@ public class CapabilityUtils implements Serializable {
 	}
 
 	/**
-	* Checks if the user has a capability using any PRI_IS_ attributes.
-	*
-	* NOTE: This should be temporary until ROL_ attributes are properly in place
-	*
-	* @param code The code of the capability.
-	* @param mode The mode of the capability.
-	* @return Boolean True if the user has the capability, False otherwise.
+	 * Checks if the user has a capability using any PRI_IS_ attributes.
+	 *
+	 * NOTE: This should be temporary until ROL_ attributes are properly in place
+	 *
+	 * @param code The code of the capability.
+	 * @param mode The mode of the capability.
+	 * @return Boolean True if the user has the capability, False otherwise.
 	 */
 	public boolean hasCapabilityThroughPriIs(String code, CapabilityMode mode) {
 
@@ -275,7 +293,7 @@ public class CapabilityUtils implements Serializable {
 	}
 
 	/**
-	* Process capability attributes. This should remove any unused capabilities.
+	 * Process capability attributes. This should remove any unused capabilities.
 	 */
 	public void process() {
 
@@ -286,7 +304,7 @@ public class CapabilityUtils implements Serializable {
 		for (String existingAttributeCode : QwandaUtils.attributes.get(realm).keySet()) {
 			if (existingAttributeCode.startsWith("PRM_")) {
 				// fetch and add attribute to list
-				Attribute attribute = QwandaUtils.getAttribute(existingAttributeCode);
+				Attribute attribute = qwandaUtils.getAttribute(existingAttributeCode);
 				existingCapability.add(attribute);
 			}
 		}
@@ -297,11 +315,11 @@ public class CapabilityUtils implements Serializable {
 		// find all entityAttributes for each existing capability not in the manifest
 		for (Attribute toBeRemovedCapability : existingCapability) {
 
-			QwandaUtils.removeAttributeFromMemory(toBeRemovedCapability.getCode());
-			DatabaseUtils.deleteAttribute(realm, toBeRemovedCapability.getCode());
+			qwandaUtils.removeAttributeFromMemory(toBeRemovedCapability.getCode());
+			databaseUtils.deleteAttribute(realm, toBeRemovedCapability.getCode());
 
 			// update all the roles that use this attribute by reloading them into cache
-			QDataBaseEntityMessage msg = CacheUtils.getObject(realm, "ROLES_"+realm, QDataBaseEntityMessage.class);
+			QDataBaseEntityMessage msg = CacheUtils.getObject(realm, "ROLES_" + realm, QDataBaseEntityMessage.class);
 
 			if (msg != null) {
 
@@ -314,7 +332,7 @@ public class CapabilityUtils implements Serializable {
 		}
 	}
 
-	/** 
+	/**
 	 * @param condition the condition to check
 	 * @return Boolean
 	 */
@@ -345,9 +363,9 @@ public class CapabilityUtils implements Serializable {
 	/**
 	 * Generate a list of {@link Allowed} objects for the user.
 	 *
-	 * @param userToken		A {@link GennyToken}.
-	 * @param user			The user {@link BaseEntity} to process.
-	 * @return				List A list of {@link Allowed} objects.
+	 * @param userToken A {@link GennyToken}.
+	 * @param user      The user {@link BaseEntity} to process.
+	 * @return List A list of {@link Allowed} objects.
 	 */
 	public static List<Allowed> generateAlloweds(GennyToken userToken, BaseEntity user) {
 
@@ -396,7 +414,8 @@ public class CapabilityUtils implements Serializable {
 					if (!ignore) {
 						CapabilityMode mode = CapabilityMode.getMode(modeString);
 						// This is my cunning switch statement that takes into consideration the
-						// priority order of the modes... (note, no breaks and it relies upon the fall through)
+						// priority order of the modes... (note, no breaks and it relies upon the fall
+						// through)
 						switch (mode) {
 							case DELETE:
 								allowable.add(new Allowed(ea.getAttributeCode().substring(4), CapabilityMode.DELETE));
