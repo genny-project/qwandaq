@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.crypto.spec.SecretKeySpec;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.DatatypeConverter;
 
 import io.jsonwebtoken.JwtBuilder;
@@ -27,6 +28,38 @@ public class SecurityUtils {
 	static final Logger log = Logger.getLogger(SecurityUtils.class);
 
 	/**
+	* Function to validate the authority for a given token string
+	*
+	* @param token the jwt to check.
+	* @return Boolean representing whether or not the token is verified.
+	 */
+	public static Boolean isAuthorizedToken(String token) {
+
+		if (token == null) {
+			log.error("Token is null!");
+			return false;
+		}
+
+		if (token.startsWith("Bearer ")) {
+			token = token.substring("Bearer ".length());
+		}
+
+		GennyToken gennyToken = null;
+		try {
+			gennyToken = new GennyToken(token);
+		} catch (Exception e) {
+			log.errorv("Unable to create GennyToken from token: {}", token);
+			log.error(e);
+		}
+
+		if (gennyToken == null) {
+			return false;
+		}
+
+		return isAuthorisedGennyToken(gennyToken);
+	}
+
+	/**
 	* Function to validate the authority for a given {@link GennyToken}.
 	*
 	* @param gennyToken the gennyToken to check
@@ -34,14 +67,21 @@ public class SecurityUtils {
 	 */
 	public static Boolean isAuthorisedGennyToken(GennyToken gennyToken) {
 
-		if (gennyToken.hasRole("admin","service","dev")) {
-			log.error(gennyToken.getUserCode() + " has no authority to schedule");
+		if (gennyToken.hasRole("admin", "service", "dev")) {
 			return true;
 		}
+
+		log.error(gennyToken.getUserCode() + " is not authorized!");
 
 		return false;
 	}
 
+	/**
+	* Helper to check if a token corresponds to a service user.
+	*
+	* @param token The GennyToken to check
+	* @return Boolean
+	 */
 	public Boolean tokenIsServiceUser(GennyToken token) {
 		return SERVICE_USERNAME.equals(token.getUsername());
 	}

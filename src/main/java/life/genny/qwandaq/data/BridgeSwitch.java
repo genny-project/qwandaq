@@ -2,10 +2,7 @@ package life.genny.qwandaq.data;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
-import javax.json.JsonObject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
@@ -13,6 +10,7 @@ import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.models.GennyToken;
 import life.genny.qwandaq.utils.CacheUtils;
+import life.genny.qwandaq.data.BridgeInfo;
 
 /**
  * A Bridge ID management class for data message route selection.
@@ -27,17 +25,44 @@ public class BridgeSwitch {
 	static Jsonb jsonb = JsonbBuilder.create();
 
 	public static String BRIDGE_INFO_PREFIX = "BIF";
-
-	public static Set<String> activeBridgeIds = new HashSet<String>();
+	public static String BRIDGE_SWITCH_KEY = "ACTIVE_BRIDGE_IDS";
 
 	/**
-	 * A child class used to store bridge mappings for individual users.
+	* Cache active Bridge Ids
+	*
+	* @param gennyToken
 	 */
-	public static class BridgeInfo {
+	public static void addActiveBridgeId(GennyToken gennyToken, String bridgeId) {
 
-		public BridgeInfo() {}
+		String realm = gennyToken.getRealm();
+		Set<String> activeBridgeIds = CacheUtils.getObject(realm, BRIDGE_SWITCH_KEY, Set.class);
 
-		public ConcurrentMap<String, String> mappings = new ConcurrentHashMap<>();
+		if (activeBridgeIds == null) {
+			activeBridgeIds = new HashSet<String>();
+		}
+
+		activeBridgeIds.add(bridgeId);
+
+		CacheUtils.putObject(realm, BRIDGE_SWITCH_KEY, activeBridgeIds);
+	}
+
+	/**
+	* Find an active bridge ID
+	*
+	* @param gennyToken Used to find the realm
+	* @return String An active Bridge ID
+	 */
+	public static String findActiveBridgeId(GennyToken gennyToken) {
+
+		String realm = gennyToken.getRealm();
+
+		Set<String> activeBridgeIds = CacheUtils.getObject(realm, BRIDGE_SWITCH_KEY, Set.class);
+
+		if (activeBridgeIds.iterator().hasNext()) {
+			return activeBridgeIds.iterator().next();
+		}
+
+		return null;
 	}
 
 	/**
@@ -50,6 +75,8 @@ public class BridgeSwitch {
 
 		String realm = gennyToken.getRealm();
 		String key = BRIDGE_INFO_PREFIX + "_" + gennyToken.getUserCode();
+
+		log.info("Adding Switch to Cache --- " + key + " :: " + bridgeId);
 		
 		// grab from cache or create if null
 		BridgeInfo info = CacheUtils.getObject(realm, key, BridgeInfo.class);
@@ -88,6 +115,8 @@ public class BridgeSwitch {
 		// grab entry for jti
 		String jti = gennyToken.getJTI();
 		String bridgeId = info.mappings.get(jti);
+
+		log.info("Found Switch --- " + key + " :: " + bridgeId);
 
 		return bridgeId;
 	}
