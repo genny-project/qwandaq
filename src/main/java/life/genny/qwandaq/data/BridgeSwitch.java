@@ -2,10 +2,7 @@ package life.genny.qwandaq.data;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
-import javax.json.JsonObject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
@@ -13,6 +10,7 @@ import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.models.GennyToken;
 import life.genny.qwandaq.utils.CacheUtils;
+import life.genny.qwandaq.data.BridgeInfo;
 
 /**
  * A Bridge ID management class for data message route selection.
@@ -28,18 +26,6 @@ public class BridgeSwitch {
 
 	public static String BRIDGE_INFO_PREFIX = "BIF";
 	public static String BRIDGE_SWITCH_KEY = "ACTIVE_BRIDGE_IDS";
-
-	// public static Set<String> activeBridgeIds = new HashSet<String>();
-
-	/**
-	 * A child class used to store bridge mappings for individual users.
-	 */
-	public static class BridgeInfo {
-
-		public BridgeInfo() {}
-
-		public ConcurrentMap<String, String> mappings = new ConcurrentHashMap<>();
-	}
 
 	/**
 	* Cache active Bridge Ids
