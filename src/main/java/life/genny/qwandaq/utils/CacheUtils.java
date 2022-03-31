@@ -83,6 +83,7 @@ public class CacheUtils {
 		if (data == null) {
 			return null;
 		}
+		log.info("DEBUG, key:" + key + ", data:" + data);
 		Object object = jsonb.fromJson(data, c);
 		return (T) object;
 	}
