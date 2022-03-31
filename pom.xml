@@ -233,6 +233,7 @@
 		<groupId>io.quarkus</groupId>
 		<artifactId>quarkus-keycloak-authorization</artifactId>
 	</dependency>
+ 
   </dependencies>
 
   <build>
