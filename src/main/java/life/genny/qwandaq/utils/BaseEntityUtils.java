@@ -191,7 +191,7 @@ public class BaseEntityUtils implements Serializable {
 
 		if (response != null) {
 			String body = response.body();
-			log.info("Post " + searchBE.getCode() + " to url " + uri + ", response code:" + response.statusCode() + ", response body:" + body);
+			log.info("Post " + searchBE.getCode() + " to url " + uri + ", response code:" + response.statusCode());
 
 			if (body != null) {
 				try {
