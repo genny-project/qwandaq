@@ -822,11 +822,15 @@ public class QuestionUtils implements Serializable {
 
 	}
 
-	public void sendQuestions(BaseEntity recipient, GennyToken userToken) {
+	public void sendQuestions(final String rootQuestionCode, BaseEntity recipient, GennyToken userToken) {
 		BaseEntityUtils beUtils = new BaseEntityUtils(userToken);
 		QDataAskMessage askMsg = getAsks(userToken.getUserCode(), recipient.getCode(),
-				"QUE_ADMIN_GRP",
+				rootQuestionCode,
 				beUtils);
+		sendQuestions(askMsg, recipient, userToken);
+	}
+
+	public void sendQuestions(QDataAskMessage askMsg, BaseEntity recipient, GennyToken userToken) {
 
 		log.info("AskMsg=" + askMsg);
 
