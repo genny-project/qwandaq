@@ -3,6 +3,7 @@ package life.genny.qwandaq.utils;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
@@ -34,6 +35,8 @@ public class DatabaseUtils {
 
 	static final Logger log = Logger.getLogger(DatabaseUtils.class);
 	Jsonb jsonb = JsonbBuilder.create();
+
+	@Inject
 	EntityManager entityManager;
 
 	/**
@@ -42,7 +45,7 @@ public class DatabaseUtils {
 	 * @param em The EntityManager.
 	 */
 	public void init(EntityManager em) {
-		entityManager = em;
+		// entityManager = em;
 	}
 
 	/**
@@ -415,7 +418,8 @@ public class DatabaseUtils {
 		try {
 
 			return entityManager
-					.createQuery("FROM QuestionQuestion WHERE realm=:realmStr AND sourceCode = :sourceCode",
+					.createQuery(
+							"FROM QuestionQuestion WHERE realm=:realmStr AND sourceCode = :sourceCode order by weight ASC",
 							QuestionQuestion.class)
 					.setParameter("realmStr", realm)
 					.setParameter("sourceCode", sourceCode)
