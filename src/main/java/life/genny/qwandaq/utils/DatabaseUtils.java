@@ -98,6 +98,7 @@ public class DatabaseUtils {
 		return null;
 	}
 
+	@Transactional
 	public Long countAttributes(String realm) {
 
 		checkEntityManager();
@@ -127,6 +128,7 @@ public class DatabaseUtils {
 	 * @return List
 	 */
 
+	@Transactional
 	public List<Attribute> findAttributes(String realm, Integer pageSize, Integer pageNumber) {
 
 		checkEntityManager();
