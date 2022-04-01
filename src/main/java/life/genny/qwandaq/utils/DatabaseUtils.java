@@ -118,8 +118,8 @@ public class DatabaseUtils {
 	* If pageSize and pageNumber are both null, all results will be returned at once.
 	*
 	* @param realm the realm to find in
+	 * @param StartIdx the start index to fetch
 	* @param pageSize the pageSize to fetch (Starting from Page 1)
-	* @param pageNumber the pageNumber to fetch
 	* @return List
 	 */
 	//@Transactional
