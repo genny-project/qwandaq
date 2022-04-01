@@ -128,7 +128,7 @@ public class QwandaUtils {
 		try {
 			for(int currentPage = 0; currentPage < TOTAL_PAGES + 1; currentPage++) {
 
-				long attributesLoaded = currentPage * CHUNK_LOAD_SIZE;
+				int attributesLoaded = currentPage * CHUNK_LOAD_SIZE;
 
 
 				// Correctly determine how many more attributes we need to load in
@@ -136,14 +136,17 @@ public class QwandaUtils {
 				if(attributeCount - attributesLoaded < CHUNK_LOAD_SIZE) {
 					nextLoad = (int)(attributeCount - attributesLoaded);
 				}
-				log.info("Loading in page " + currentPage + " of " + TOTAL_PAGES + " containing " + nextLoad + " attributes");
-				attributeList = DatabaseUtils.findAttributes(realm, nextLoad, currentPage);
+
+				attributeList = DatabaseUtils.findAttributes(realm, attributesLoaded, nextLoad);
 				for(Attribute attribute : attributeList) {
 					// log.info("Loading attrib: " + attribute.getCode());
 					String key = attribute.getCode();
 					CacheUtils.putObject(realm, key, attribute);
 					totalAttribsCached++;
 				}
+				log.info("Loading in page " + currentPage + " of " + TOTAL_PAGES + " containing " + nextLoad + " attributes");
+				if(attributeList.size() > 0)
+					log.info("DEBUG, Start AttributeID:" + attributeList.get(0).getId() + ", End AttributeID:" + attributeList.get(attributeList.size() - 1).getId());
 			}
 
 			log.info("Cached " + totalAttribsCached + " attributes");
@@ -164,7 +167,7 @@ public class QwandaUtils {
 
 		try {
 			log.info("Fetching Attributes from database...");
-			attributeList = DatabaseUtils.findAttributes(realm, null, null);
+			attributeList = DatabaseUtils.findAttributes(realm, 0, 0);
 
 			log.info("Loaded all attributes for realm " + realm);
 			if (attributeList == null) {

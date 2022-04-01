@@ -123,23 +123,22 @@ public class DatabaseUtils {
 	* @return List
 	 */
 	//@Transactional
-	public static List<Attribute> findAttributes(String realm, Integer pageSize, Integer pageNumber) {
+	public static List<Attribute> findAttributes(String realm, int StartIdx, int pageSize) {
 
 		checkEntityManager();
 
 		try {
 			Query query = entityManager
-					.createQuery("FROM Attribute WHERE realm=:realmStr AND name not like 'App\\_%'",
+					.createQuery("FROM Attribute WHERE realm=:realmStr AND name not like 'App\\_% order by id'",
 							Attribute.class)
 					.setParameter("realmStr", realm);
 
-			if (pageNumber != null && pageSize != null) {
-				query = query.setFirstResult((pageNumber) * pageSize)
-					.setMaxResults(pageSize);
-			} else {
+			if (StartIdx == 0 && pageSize == 0) {
 				log.info("Fetching all Attributes (unset pageNumber or pageSize)");
+			} else {
+				query = query.setFirstResult(StartIdx).setMaxResults(pageSize);
 			}
-				
+
 			return query.getResultList();
 
 		} catch (NoResultException e) {
