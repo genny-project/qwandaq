@@ -139,11 +139,10 @@ public class DatabaseUtils {
 							Attribute.class)
 					.setParameter("realmStr", realm);
 
-			if (StartIdx != 0 && pageSize != 0) {
-				query = query.setFirstResult(StartIdx)
-						.setMaxResults(pageSize);
-			} else {
+			if (StartIdx == 0 && pageSize == 0) {
 				log.info("Fetching all Attributes (unset pageNumber or pageSize)");
+			} else {
+				query = query.setFirstResult(StartIdx).setMaxResults(pageSize);
 			}
 
 			return query.getResultList();

@@ -118,10 +118,6 @@ public class CacheUtils {
 	public static void putObject(String realm, String key, Object obj) {
 
 		String json = jsonb.toJson(obj);
-		//DEBUG
-		if (key.equals("LNK_MENTORING_SESSIONS")){
-			log.info("DEBUG, realm:" + realm + ", key:" + key + ", value:" + json);
-		}
 		cache.getRemoteCache(realm).put(key, json);
 	}
 }
