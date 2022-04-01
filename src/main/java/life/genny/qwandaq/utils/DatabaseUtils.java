@@ -124,12 +124,12 @@ public class DatabaseUtils {
 	 *
 	 * @param realm      the realm to find in
 	 * @param pageSize   the pageSize to fetch (Starting from Page 1)
-	 * @param pageNumber the pageNumber to fetch
+	 * @param StartIdx   the start index to fetch
 	 * @return List
 	 */
 
 	@Transactional
-	public List<Attribute> findAttributes(String realm, Integer pageSize, Integer pageNumber) {
+	public List<Attribute> findAttributes(String realm, int StartIdx, int pageSize) {
 
 		checkEntityManager();
 
@@ -139,8 +139,8 @@ public class DatabaseUtils {
 							Attribute.class)
 					.setParameter("realmStr", realm);
 
-			if (pageNumber != null && pageSize != null) {
-				query = query.setFirstResult((pageNumber) * pageSize)
+			if (StartIdx != 0 && pageSize != 0) {
+				query = query.setFirstResult(StartIdx)
 						.setMaxResults(pageSize);
 			} else {
 				log.info("Fetching all Attributes (unset pageNumber or pageSize)");
