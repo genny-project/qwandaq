@@ -483,4 +483,26 @@ public class GennyToken implements Serializable {
 
 		return json;
 	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public void setUserUUID(String userUUID) {
+		this.userUUID = userUUID;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public void setRealm(String realm) {
+		this.realm = realm;
+	}
+
+	public void setUserRoles(Set<String> userRoles) {
+		this.userRoles = userRoles;
+	}
+	
+	
 }
