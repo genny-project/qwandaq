@@ -830,7 +830,7 @@ public class QuestionUtils implements Serializable {
 		sendQuestions(askMsg, recipient, userToken);
 	}
 
-	public void sendQuestions(QDataAskMessage askMsg, BaseEntity recipient, GennyToken userToken) {
+	public void sendQuestions(QDataAskMessage askMsg, BaseEntity target, GennyToken userToken) {
 
 		log.info("AskMsg=" + askMsg);
 
@@ -839,7 +839,7 @@ public class QuestionUtils implements Serializable {
 
 		KafkaUtils.writeMsg("webcmds", msg);
 
-		QDataBaseEntityMessage beMsg = new QDataBaseEntityMessage(recipient);
+		QDataBaseEntityMessage beMsg = new QDataBaseEntityMessage(target);
 		beMsg.setToken(userToken.getToken());
 
 		KafkaUtils.writeMsg("webcmds", beMsg); // should be webdata
