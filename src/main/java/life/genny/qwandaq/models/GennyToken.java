@@ -48,6 +48,9 @@ public class GennyToken implements Serializable {
 	public String realm = null;
 	public Set<String> userRoles = new HashSet<String>();
 
+	public GennyToken() {
+	}
+
 	public GennyToken(final String token) {
 
 		if ((token != null) && (!token.isEmpty())) {
@@ -98,21 +101,21 @@ public class GennyToken implements Serializable {
 		}
 	}
 
-	/** 
+	/**
 	 * @return String
 	 */
 	public String getToken() {
 		return token;
 	}
-	
-	/** 
+
+	/**
 	 * @return Map&lt;String, Object&gt;
 	 */
 	public Map<String, Object> getAdecodedTokenMap() {
 		return adecodedTokenMap;
 	}
-	
-	/** 
+
+	/**
 	 * @param adecodedTokenMap the decoded token map to set
 	 */
 	public void setAdecodedTokenMap(Map<String, Object> adecodedTokenMap) {
@@ -139,8 +142,11 @@ public class GennyToken implements Serializable {
 
 	}
 
-	/** 
-	 * <p>Checks the {@link GennyToken#userRoles} for any of the supplied roles</p>
+	/**
+	 * <p>
+	 * Checks the {@link GennyToken#userRoles} for any of the supplied roles
+	 * </p>
+	 * 
 	 * @param roles the roles to check against
 	 * @return boolean whether or not the token has at least one of the roles
 	 */
@@ -148,30 +154,39 @@ public class GennyToken implements Serializable {
 		return hasRole(false, roles);
 	}
 
-	/** 
-	 * <p>A method to for checking the token roles. Can check for a match on all of the roles or at least one of the roles</p>
-	 * @param roles the roles to check against
-	 * @param requiresAll whether or not the token is required to have all roles supplied
-	 * - Default: <b>false</b>
-	 * @return boolean whether or not the token has either all of the roles or at least one of the roles (depending on requiresAll)
+	/**
+	 * <p>
+	 * A method to for checking the token roles. Can check for a match on all of the
+	 * roles or at least one of the roles
+	 * </p>
+	 * 
+	 * @param roles       the roles to check against
+	 * @param requiresAll whether or not the token is required to have all roles
+	 *                    supplied
+	 *                    - Default: <b>false</b>
+	 * @return boolean whether or not the token has either all of the roles or at
+	 *         least one of the roles (depending on requiresAll)
 	 */
 	public boolean hasRole(final boolean requiresAll, final String... roles) {
 		/*
-			if we require all to be checked, check if any are missing. If there is one missing return false
-			if we don't require all to be checked, return true if found at least 1
-
-			on return, if we require all and we didn't return early, return true (missing 1 match)
-			on return, if we didn't require all and we didn't return early, return false (no match)
-		*/
-		for(String role : roles) {
+		 * if we require all to be checked, check if any are missing. If there is one
+		 * missing return false
+		 * if we don't require all to be checked, return true if found at least 1
+		 * 
+		 * on return, if we require all and we didn't return early, return true (missing
+		 * 1 match)
+		 * on return, if we didn't require all and we didn't return early, return false
+		 * (no match)
+		 */
+		for (String role : roles) {
 			boolean hasRole = userRoles.contains(role);
 
-			if(requiresAll) {
-				if(!hasRole) {
+			if (requiresAll) {
+				if (!hasRole) {
 					return false;
 				}
 			} else {
-				if(hasRole) {
+				if (hasRole) {
 					return true;
 				}
 			}
@@ -180,58 +195,58 @@ public class GennyToken implements Serializable {
 		return requiresAll;
 	}
 
-	/** 
+	/**
 	 * @return String
 	 */
 	@Override
 	public String toString() {
 		return getRealm() + ": " + getCode() + ": " + getUserCode() + ": " + this.userRoles;
 	}
-	
-	/** 
+
+	/**
 	 * @return String
 	 */
 	public String getRealm() {
 		return realm;
 	}
-	
-	/** 
+
+	/**
 	 * @param key the key of the string item to get
 	 * @return String
 	 */
 	public String getString(final String key) {
 		return (String) adecodedTokenMap.get(key);
 	}
-	
-	/** 
+
+	/**
 	 * @return String
 	 */
 	public String getCode() {
 		return code;
 	}
 
-	/** 
+	/**
 	 * @return String
 	 */
 	public String getSessionCode() {
 		return getString("session_state");
 	}
-	
-	/** 
+
+	/**
 	 * @return String
 	 */
 	public String getUsername() {
 		return getString("preferred_username");
 	}
-	
-	/** 
+
+	/**
 	 * @return String
 	 */
 	public String getJti() {
 		return getString("jti");
 	}
-	
-	/** 
+
+	/**
 	 * @return String
 	 */
 	public String getKeycloakUrl() {
@@ -249,14 +264,14 @@ public class GennyToken implements Serializable {
 		return "http://keycloak.genny.life";
 	}
 
-	/** 
+	/**
 	 * @return String
 	 */
 	public String getClientCode() {
 		return getString("aud");
 	}
-	
-	/** 
+
+	/**
 	 * @return String
 	 */
 	public String getEmail() {
@@ -271,23 +286,23 @@ public class GennyToken implements Serializable {
 	}
 
 	/**
-	* Set the userCode
-	*
-	* @param userCode the user code to set
-	* @return String
+	 * Set the userCode
+	 *
+	 * @param userCode the user code to set
+	 * @return String
 	 */
 	public String setUserCode(String userCode) {
 		return this.userCode = userCode;
 	}
 
-	/** 
+	/**
 	 * @return String
 	 */
 	public String getUserUUID() {
 		return userUUID;
 	}
 
-	/** 
+	/**
 	 * @return LocalDateTime
 	 */
 	public LocalDateTime getAuthDateTime() {
@@ -296,8 +311,8 @@ public class GennyToken implements Serializable {
 				TimeZone.getDefault().toZoneId());
 		return authTime;
 	}
-	
-	/** 
+
+	/**
 	 * @return LocalDateTime
 	 */
 	public LocalDateTime getExpiryDateTime() {
@@ -306,8 +321,8 @@ public class GennyToken implements Serializable {
 				TimeZone.getDefault().toZoneId());
 		return expTime;
 	}
-	
-	/** 
+
+	/**
 	 * @return OffsetDateTime
 	 */
 	public OffsetDateTime getExpiryDateTimeInUTC() {
@@ -320,8 +335,8 @@ public class GennyToken implements Serializable {
 
 		return utcZoned.toOffsetDateTime();
 	}
-	
-	/** 
+
+	/**
 	 * @return Integer
 	 */
 	public Integer getSecondsUntilExpiry() {
@@ -333,7 +348,7 @@ public class GennyToken implements Serializable {
 	}
 
 	/**
-	* @return LocalDateTime the JWT Issue datetime object
+	 * @return LocalDateTime the JWT Issue datetime object
 	 */
 	public LocalDateTime getiatDateTime() {
 		Long iat_timestamp = ((Number) adecodedTokenMap.get("iat")).longValue();
@@ -343,13 +358,13 @@ public class GennyToken implements Serializable {
 	}
 
 	/**
-	* @return String the token jti field
+	 * @return String the token jti field
 	 */
 	public String getJTI() {
 		return (String) adecodedTokenMap.get("jti");
 	}
 
-	/** 
+	/**
 	 * @return String
 	 */
 	public String getUuid() {
@@ -364,7 +379,7 @@ public class GennyToken implements Serializable {
 		return uuid;
 	}
 
-	/** 
+	/**
 	 * @return String
 	 */
 	public String getEmailUserCode() {
@@ -374,7 +389,7 @@ public class GennyToken implements Serializable {
 
 	}
 
-	/** 
+	/**
 	 * @param rawUsername the raw username to normalize
 	 * @return String
 	 */
@@ -389,8 +404,8 @@ public class GennyToken implements Serializable {
 		return username;
 
 	}
-	
-	/** 
+
+	/**
 	 * @param userCode the userCode to check
 	 * @return Boolean
 	 */
@@ -413,13 +428,13 @@ public class GennyToken implements Serializable {
 	}
 
 	/**
-	* @return the realm and usercode concatenated
+	 * @return the realm and usercode concatenated
 	 */
 	public String getRealmUserCode() {
 		return getRealm() + "+" + getUserCode();
 	}
 
-	/** 
+	/**
 	 * @param json the json string to get
 	 * @return Map&lt;String, Object&gt;
 	 */
@@ -429,7 +444,7 @@ public class GennyToken implements Serializable {
 		return getJsonMap(jsonObj);
 	}
 
-	/** 
+	/**
 	 * @param jsonObj the json object to get
 	 * @return Map&lt;String, Object&gt;
 	 */
@@ -455,7 +470,7 @@ public class GennyToken implements Serializable {
 		return map;
 	}
 
-	/** 
+	/**
 	 * @param bearerToken the bearer token to set
 	 * @return JsonObject
 	 */
