@@ -83,13 +83,11 @@ import life.genny.qwandaq.exception.BadDataException;
  */
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
-@Table(name = "answer", 
-indexes = {
-        @Index(columnList = "targetcode", name =  "code_idx"),
-        @Index(columnList = "attributecode", name =  "code_idx"),
-        @Index(columnList = "realm", name = "code_idx")
-    }
-)
+@Table(name = "answer", indexes = {
+		@Index(columnList = "targetcode", name = "code_idx"),
+		@Index(columnList = "attributecode", name = "code_idx"),
+		@Index(columnList = "realm", name = "code_idx")
+})
 @Entity
 @QueryExclude
 @Immutable
@@ -102,8 +100,8 @@ public class Answer implements Serializable {
 	 * Stores the hibernate generated Id value for this object
 	 */
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+	@GenericGenerator(name = "native", strategy = "native")
 
 	@Basic(optional = false)
 	@Column(name = "id", updatable = false, nullable = false)
@@ -190,29 +188,31 @@ public class Answer implements Serializable {
 
 	private Boolean changeEvent = false;
 
-	// Provide a clue to any new attribute type that may be needed if the attribute does not exist yet, e.g. java.util.Double
+	// Provide a clue to any new attribute type that may be needed if the attribute
+	// does not exist yet, e.g. java.util.Double
 	@Transient
 	private String dataType = null;
-	
+
 	private String realm;
-	
+
 	/**
 	 * Constructor.
 	 */
 	@SuppressWarnings("unused")
-	public Answer() { }
+	public Answer() {
+	}
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param source
-	 *            The source associated with this Answer
+	 *                  The source associated with this Answer
 	 * @param target
-	 *            The target associated with this Answer
+	 *                  The target associated with this Answer
 	 * @param attribute
-	 *            The attribute associated with this Answer
+	 *                  The attribute associated with this Answer
 	 * @param value
-	 *            The associated String value
+	 *                  The associated String value
 	 */
 	public Answer(final BaseEntity source, final BaseEntity target, final Attribute attribute, final String value) {
 		this.sourceCode = source.getCode();
@@ -228,13 +228,13 @@ public class Answer implements Serializable {
 	 * Constructor.
 	 * 
 	 * @param sourceCode
-	 *            The sourceCode associated with this Answer
+	 *                      The sourceCode associated with this Answer
 	 * @param targetCode
-	 *            The targetCode associated with this Answer
+	 *                      The targetCode associated with this Answer
 	 * @param attributeCode
-	 *            The attributeCode associated with this Answer
+	 *                      The attributeCode associated with this Answer
 	 * @param value
-	 *            The associated String value
+	 *                      The associated String value
 	 */
 	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final String value) {
 		this.sourceCode = sourceCode;
@@ -244,157 +244,162 @@ public class Answer implements Serializable {
 		autocreateCreated();
 		checkInputs();
 	}
-	
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param sourceCode
-	 *            The sourceCode associated with this Answer
+	 *                      The sourceCode associated with this Answer
 	 * @param targetCode
-	 *            The targetCode associated with this Answer
+	 *                      The targetCode associated with this Answer
 	 * @param attributeCode
-	 *            The attributeCode associated with this Answer
+	 *                      The attributeCode associated with this Answer
 	 * @param value
-	 *            The associated Double value
+	 *                      The associated Double value
 	 */
 	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final Double value) {
-		this(sourceCode,targetCode,attributeCode,value+"");
-	}
-	
-	/**
-	 * Constructor.
-	 * 
-	 * @param sourceCode
-	 *            The sourceCode associated with this Answer
-	 * @param targetCode
-	 *            The targetCode associated with this Answer
-	 * @param attributeCode
-	 *            The attributeCode associated with this Answer
-	 * @param value
-	 *            The associated String value
-	 * @param changeEvent
-	 *            The changeEvent status
-	 * @param inferred
-	 *            The inferred status
-	 */
-	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final Double value, final Boolean changeEvent, final Boolean inferred) {
-		this(sourceCode,targetCode,attributeCode,value+"");
-		this.changeEvent = changeEvent;
-		this.inferred = inferred;
-	}
-	/**
-	 * Constructor.
-	 * 
-	 * @param sourceCode
-	 *            The sourceCode associated with this Answer
-	 * @param targetCode
-	 *            The targetCode associated with this Answer
-	 * @param attributeCode
-	 *            The attributeCode associated with this Answer
-	 * @param value
-	 *            The associated Long value
-	 */
-	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final Long value) {
-		this(sourceCode,targetCode,attributeCode,value+"");
+		this(sourceCode, targetCode, attributeCode, value + "");
 	}
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param sourceCode
-	 *            The sourceCode associated with this Answer
+	 *                      The sourceCode associated with this Answer
 	 * @param targetCode
-	 *            The targetCode associated with this Answer
+	 *                      The targetCode associated with this Answer
 	 * @param attributeCode
-	 *            The attributeCode associated with this Answer
+	 *                      The attributeCode associated with this Answer
 	 * @param value
-	 *            The associated LocalDateTime value
+	 *                      The associated String value
+	 * @param changeEvent
+	 *                      The changeEvent status
+	 * @param inferred
+	 *                      The inferred status
 	 */
-	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final LocalDateTime value) {
-		this(sourceCode,targetCode,attributeCode,value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final Double value,
+			final Boolean changeEvent, final Boolean inferred) {
+		this(sourceCode, targetCode, attributeCode, value + "");
+		this.changeEvent = changeEvent;
+		this.inferred = inferred;
 	}
-	
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param sourceCode
-	 *            The sourceCode associated with this Answer
+	 *                      The sourceCode associated with this Answer
 	 * @param targetCode
-	 *            The targetCode associated with this Answer
+	 *                      The targetCode associated with this Answer
 	 * @param attributeCode
-	 *            The attributeCode associated with this Answer
+	 *                      The attributeCode associated with this Answer
 	 * @param value
-	 *            The associated LocalDate value
+	 *                      The associated Long value
+	 */
+	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final Long value) {
+		this(sourceCode, targetCode, attributeCode, value + "");
+	}
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param sourceCode
+	 *                      The sourceCode associated with this Answer
+	 * @param targetCode
+	 *                      The targetCode associated with this Answer
+	 * @param attributeCode
+	 *                      The attributeCode associated with this Answer
+	 * @param value
+	 *                      The associated LocalDateTime value
+	 */
+	public Answer(final String sourceCode, final String targetCode, final String attributeCode,
+			final LocalDateTime value) {
+		this(sourceCode, targetCode, attributeCode, value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+	}
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param sourceCode
+	 *                      The sourceCode associated with this Answer
+	 * @param targetCode
+	 *                      The targetCode associated with this Answer
+	 * @param attributeCode
+	 *                      The attributeCode associated with this Answer
+	 * @param value
+	 *                      The associated LocalDate value
 	 */
 	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final LocalDate value) {
-		this(sourceCode,targetCode,attributeCode,value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		this(sourceCode, targetCode, attributeCode, value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 	}
-	
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param sourceCode
-	 *            The sourceCode associated with this Answer
+	 *                      The sourceCode associated with this Answer
 	 * @param targetCode
-	 *            The targetCode associated with this Answer
+	 *                      The targetCode associated with this Answer
 	 * @param attributeCode
-	 *            The attributeCode associated with this Answer
+	 *                      The attributeCode associated with this Answer
 	 * @param value
-	 *            The associated LocalTime value
+	 *                      The associated LocalTime value
 	 */
 	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final LocalTime value) {
-		this(sourceCode,targetCode,attributeCode,value.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+		this(sourceCode, targetCode, attributeCode, value.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 	}
-	
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param sourceCode
-	 *            The sourceCode associated with this Answer
+	 *                      The sourceCode associated with this Answer
 	 * @param targetCode
-	 *            The targetCode associated with this Answer
+	 *                      The targetCode associated with this Answer
 	 * @param attributeCode
-	 *            The attributeCode associated with this Answer
+	 *                      The attributeCode associated with this Answer
 	 * @param value
-	 *            The associated  Integer value
+	 *                      The associated Integer value
 	 */
 	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final Integer value) {
-		this(sourceCode,targetCode,attributeCode,value+"");
+		this(sourceCode, targetCode, attributeCode, value + "");
 	}
-	
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param sourceCode
-	 *            The sourceCode associated with this Answer
+	 *                      The sourceCode associated with this Answer
 	 * @param targetCode
-	 *            The targetCode associated with this Answer
+	 *                      The targetCode associated with this Answer
 	 * @param attributeCode
-	 *            The attributeCode associated with this Answer
+	 *                      The attributeCode associated with this Answer
 	 * @param value
-	 *            The associated  Boolean value
+	 *                      The associated Boolean value
 	 */
 	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final Boolean value) {
-		this(sourceCode,targetCode,attributeCode,value?"TRUE":"FALSE");
-	
-}
+		this(sourceCode, targetCode, attributeCode, value ? "TRUE" : "FALSE");
+
+	}
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param sourceCode
-	 *            The sourceCode associated with this Answer
+	 *                      The sourceCode associated with this Answer
 	 * @param targetCode
-	 *            The targetCode associated with this Answer
+	 *                      The targetCode associated with this Answer
 	 * @param attributeCode
-	 *            The attributeCode associated with this Answer
+	 *                      The attributeCode associated with this Answer
 	 * @param value
-	 *            The associated String value
+	 *                      The associated String value
 	 * @param changeEvent
-	 *            The changeEvent status
+	 *                      The changeEvent status
 	 * @param inferred
-	 *            The inferred status
+	 *                      The inferred status
 	 */
-	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final String value, final Boolean changeEvent, final Boolean inferred) {
+	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final String value,
+			final Boolean changeEvent, final Boolean inferred) {
 		this.sourceCode = sourceCode;
 		this.targetCode = targetCode;
 		this.attributeCode = attributeCode;
@@ -404,34 +409,37 @@ public class Answer implements Serializable {
 		this.changeEvent = changeEvent;
 		this.inferred = inferred;
 	}
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param sourceCode
-	 *            The sourceCode associated with this Answer
+	 *                      The sourceCode associated with this Answer
 	 * @param targetCode
-	 *            The targetCode associated with this Answer
+	 *                      The targetCode associated with this Answer
 	 * @param attributeCode
-	 *            The attributeCode associated with this Answer
+	 *                      The attributeCode associated with this Answer
 	 * @param value
-	 *            The associated String value
+	 *                      The associated String value
 	 * @param changeEvent
-	 *            The changeEvent status
+	 *                      The changeEvent status
 	 */
-	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final String value, final Boolean changeEvent) {
-		this(sourceCode,targetCode,attributeCode, value, changeEvent,false);
+	public Answer(final String sourceCode, final String targetCode, final String attributeCode, final String value,
+			final Boolean changeEvent) {
+		this(sourceCode, targetCode, attributeCode, value, changeEvent, false);
 	}
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param source
-	 *            The source BE associated with this Answer
+	 *                      The source BE associated with this Answer
 	 * @param target
-	 *            The target BE associated with this Answer
+	 *                      The target BE associated with this Answer
 	 * @param attributeCode
-	 *            The attributeCode associated with this Answer
+	 *                      The attributeCode associated with this Answer
 	 * @param value
-	 *            The associated String value
+	 *                      The associated String value
 	 */
 	public Answer(final BaseEntity source, final BaseEntity target, final String attributeCode, final String value) {
 		this.sourceCode = source.getCode();
@@ -446,9 +454,9 @@ public class Answer implements Serializable {
 	 * Constructor.
 	 * 
 	 * @param aAsk
-	 *            The ask that created this answer
+	 *              The ask that created this answer
 	 * @param value
-	 *            The associated String value
+	 *              The associated String value
 	 * @throws BadDataException if Answer could not be constructed
 	 */
 	public Answer(final Ask aAsk, final String value) throws BadDataException {
@@ -467,11 +475,11 @@ public class Answer implements Serializable {
 	 * Constructor.
 	 * 
 	 * @param aAsk
-	 *            The ask that created this answer
+	 *                The ask that created this answer
 	 * @param expired
-	 *            did this ask expire?
+	 *                did this ask expire?
 	 * @param refused
-	 *            did the user refuse this question?
+	 *                did the user refuse this question?
 	 * @throws BadDataException if Answer could not be constructed
 	 */
 	public Answer(final Ask aAsk, final Boolean expired, final Boolean refused) throws BadDataException {
@@ -498,7 +506,7 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param created
-	 *            the created to set
+	 *                the created to set
 	 */
 	public void setCreated(final LocalDateTime created) {
 		this.created = created;
@@ -513,7 +521,7 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param updated
-	 *            the updated to set
+	 *                the updated to set
 	 */
 	public void setUpdated(final LocalDateTime updated) {
 		this.updated = updated;
@@ -530,8 +538,7 @@ public class Answer implements Serializable {
 			setCreated(LocalDateTime.now(ZoneId.of("Z")));
 	}
 
-	
-	/** 
+	/**
 	 * @return Date
 	 */
 	@Transient
@@ -541,8 +548,7 @@ public class Answer implements Serializable {
 		return out;
 	}
 
-	
-	/** 
+	/**
 	 * @return Date
 	 */
 	@Transient
@@ -561,7 +567,7 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param id
-	 *            the id to set
+	 *           the id to set
 	 */
 	public void setId(final Long id) {
 		this.id = id;
@@ -576,10 +582,10 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param value
-	 *            the value to set
+	 *              the value to set
 	 */
 	public void setValue(final String value) {
-		if (value!=null) {
+		if (value != null) {
 			this.value = value.trim();
 		} else {
 			this.value = "";
@@ -595,7 +601,7 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param expired
-	 *            the expired to set
+	 *                the expired to set
 	 */
 	public void setExpired(final Boolean expired) {
 		this.expired = expired;
@@ -610,7 +616,7 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param refused
-	 *            the refused to set
+	 *                the refused to set
 	 */
 	public void setRefused(final Boolean refused) {
 		this.refused = refused;
@@ -625,7 +631,7 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param weight
-	 *            the weight to set
+	 *               the weight to set
 	 */
 	public void setWeight(final Double weight) {
 		this.weight = weight;
@@ -654,7 +660,7 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param attributeCode
-	 *            the attributeCode to set
+	 *                      the attributeCode to set
 	 */
 	public void setAttributeCode(final String attributeCode) {
 		this.attributeCode = attributeCode;
@@ -669,7 +675,7 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param askId
-	 *            the askId to set
+	 *              the askId to set
 	 */
 	public void setAskId(final Long askId) {
 		this.askId = askId;
@@ -684,7 +690,7 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param inferred
-	 *            the inferred to set
+	 *                 the inferred to set
 	 */
 	public void setInferred(Boolean inferred) {
 		this.inferred = inferred;
@@ -699,7 +705,7 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param targetCode
-	 *            the targetCode to set
+	 *                   the targetCode to set
 	 */
 	public void setTargetCode(final String targetCode) {
 		this.targetCode = targetCode;
@@ -714,7 +720,7 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param sourceCode
-	 *            the sourceCode to set
+	 *                   the sourceCode to set
 	 */
 	public void setSourceCode(final String sourceCode) {
 		this.sourceCode = sourceCode;
@@ -729,11 +735,11 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param attribute
-	 *            the attribute to set
+	 *                  the attribute to set
 	 */
 	public void setAttribute(final Attribute attribute) {
 		this.attribute = attribute;
-		if (this.dataType==null) {
+		if (this.dataType == null) {
 			setDataType(attribute.getDataType().getClassName());
 		}
 	}
@@ -747,14 +753,12 @@ public class Answer implements Serializable {
 
 	/**
 	 * @param changeEvent
-	 *            the changeEvent to set
+	 *                    the changeEvent to set
 	 */
 	public void setChangeEvent(Boolean changeEvent) {
 		this.changeEvent = changeEvent;
 	}
 
-	
-	
 	/**
 	 * @return the dataType
 	 */
@@ -769,8 +773,6 @@ public class Answer implements Serializable {
 		this.dataType = dataType;
 	}
 
-	
-	
 	/**
 	 * @return the realm
 	 */
@@ -785,18 +787,14 @@ public class Answer implements Serializable {
 		this.realm = realm;
 	}
 
-	
-	
-	/** 
+	/**
 	 * @return String
 	 */
-	public String getUniqueCode()
-	{
+	public String getUniqueCode() {
 		return getSourceCode() + ":" + getTargetCode() + ":" + getAttributeCode();
 	}
-	
-	
-	/** 
+
+	/**
 	 * @return String
 	 */
 	/*
@@ -806,7 +804,7 @@ public class Answer implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "Answer ["+realm+"," + (created != null ? "created=" + created + ", " : "")
+		return "Answer [" + realm + "," + (created != null ? "created=" + created + ", " : "")
 				+ (sourceCode != null ? "sourceCode=" + sourceCode + ", " : "")
 				+ (targetCode != null ? "targetCode=" + targetCode + ", " : "")
 				+ (attributeCode != null ? "attributeCode=" + attributeCode + ", " : "")
@@ -817,11 +815,28 @@ public class Answer implements Serializable {
 				+ "]";
 	}
 
-	private void checkInputs()
-	{
-		if (this.sourceCode==null) throw new NullPointerException("SourceCode cannot be null");
-		if (this.targetCode==null) throw new NullPointerException("targetCode cannot be null");
-		if (this.attributeCode==null) throw new NullPointerException("attributeCode cannot be null");
+	private void checkInputs() {
+		if (this.sourceCode == null)
+			throw new NullPointerException("SourceCode cannot be null");
+		if (this.targetCode == null)
+			throw new NullPointerException("targetCode cannot be null");
+		if (this.attributeCode == null)
+			throw new NullPointerException("attributeCode cannot be null");
 	}
-	
+
+	public Boolean isChangeEvent() {
+		return this.changeEvent;
+	}
+
+	public Boolean isExpired() {
+		return this.expired;
+	}
+
+	public Boolean isInferred() {
+		return this.inferred;
+	}
+
+	public Boolean isRefused() {
+		return this.refused;
+	}
 }
