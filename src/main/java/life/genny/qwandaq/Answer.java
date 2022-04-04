@@ -92,7 +92,7 @@ import life.genny.qwandaq.exception.BadDataException;
 @QueryExclude
 @Immutable
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
-public class Answer implements Serializable {
+public class Answer {
 
 	private static final long serialVersionUID = 1L;
 
