@@ -1,8 +1,6 @@
 package life.genny.qwandaq;
 
-import java.io.Serializable;
-
-public class AnswerToken implements Serializable {
+public class AnswerToken {
     private Answer answer;
     private String token;
 
