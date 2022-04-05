@@ -23,6 +23,8 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 import com.google.common.reflect.TypeToken;
 
@@ -68,6 +70,9 @@ public class QuestionUtils implements Serializable {
 
 	@Inject
 	QwandaUtils qwandaUtils;
+
+	@Inject
+	EntityManager entityManager;
 
 	/**
 	 * Check if a Question group exists in the database and cache.
@@ -851,5 +856,24 @@ public class QuestionUtils implements Serializable {
 		msgend.setToken(userToken.getToken());
 		msgend.setSend(true);
 		KafkaUtils.writeMsg("webcmds", msgend);
+	}
+
+	public Question getQuestion(final String realm, final String questionCode) {
+		Question question = null;
+		try {
+
+			question = entityManager
+					.createQuery(
+							"FROM Question WHERE realm=:realmStr AND code = :code",
+							Question.class)
+					.setParameter("realmStr", realm)
+					.setParameter("code", questionCode)
+					.getSingleResult();
+
+		} catch (NoResultException e) {
+			log.error("No Question found in DB for " + questionCode);
+		}
+
+		return question;
 	}
 }
