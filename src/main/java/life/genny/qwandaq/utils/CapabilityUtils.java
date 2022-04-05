@@ -10,6 +10,7 @@ import org.jboss.logging.Logger;
 
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Ask;
 import life.genny.qwandaq.attribute.AttributeText;
 import life.genny.qwandaq.attribute.EntityAttribute;
 import life.genny.qwandaq.datatype.Allowed;
@@ -421,5 +422,28 @@ public class CapabilityUtils implements Serializable {
 		}
 
 		return allowable;
+	}
+
+	/**
+	* Recursively ensure the user has the capability to view each ask in a group
+	*
+	* @param ask The ask to traverse
+	 */
+	public void recursivelyCheckSidebarAskForCapability(Ask ask) {
+
+		ArrayList<Ask> askList = new ArrayList<>();
+
+		for (Ask childAsk : ask.getChildAsks()) {
+			String code = "SIDEBAR_" + childAsk.getQuestionCode();
+
+			if (hasCapabilityThroughPriIs(code, CapabilityMode.VIEW)) {
+
+				recursivelyCheckSidebarAskForCapability(childAsk);
+				askList.add(childAsk);
+			}
+		}
+
+		Ask[] items = askList.toArray(new Ask[askList.size()]);
+		ask.setChildAsks(items);
 	}
 }
