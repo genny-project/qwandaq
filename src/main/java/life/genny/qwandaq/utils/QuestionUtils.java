@@ -754,7 +754,8 @@ public class QuestionUtils implements Serializable {
 		String realm = beUtils.getRealm();
 
 		// fetch from cache
-		Question question = CacheUtils.getObject(realm, code, Question.class);
+		Question question = getQuestion(realm, code);
+		// Question question = CacheUtils.getObject(realm, code, Question.class);
 
 		if (question != null) {
 			return question;
