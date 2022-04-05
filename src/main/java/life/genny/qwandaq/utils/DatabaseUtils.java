@@ -135,7 +135,7 @@ public class DatabaseUtils {
 
 		try {
 			Query query = entityManager
-					.createQuery("FROM Attribute WHERE realm=:realmStr AND name not like 'App\\_% order by id'",
+					.createQuery("FROM Attribute WHERE realm=:realmStr AND name not like 'App\\_%' order by id",
 							Attribute.class)
 					.setParameter("realmStr", realm);
 
