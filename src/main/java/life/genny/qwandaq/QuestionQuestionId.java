@@ -1,6 +1,5 @@
 package life.genny.qwandaq;
 
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -22,7 +21,6 @@ public class QuestionQuestionId implements java.io.Serializable {
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JsonBackReference(value = "questionQuestion")
 	@JsonIgnore
-	@JsonbTransient
 	private Question source;
 
 	private String targetCode;
