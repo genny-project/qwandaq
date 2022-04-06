@@ -20,7 +20,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -502,6 +501,9 @@ public class Answer implements Serializable {
 	 */
 	@XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
 	public LocalDateTime getCreated() {
+		if (createdDate == null) {
+			return null;
+		}
 		LocalDateTime createdLocalDateTime = LocalDateTime.ofInstant(createdDate.toInstant(), ZoneId.systemDefault());
 		return createdLocalDateTime;
 	}
@@ -511,6 +513,10 @@ public class Answer implements Serializable {
 	 *                the created to set
 	 */
 	public void setCreated(final LocalDateTime created) {
+		if (created == null) {
+			this.createdDate = null;
+			return;
+		}
 		Date date = Date.from(created.atZone(ZoneId.systemDefault()).toInstant());
 		this.createdDate = date;
 	}
@@ -519,6 +525,9 @@ public class Answer implements Serializable {
 	 * @return the updated
 	 */
 	public LocalDateTime getUpdated() {
+		if (updatedDate == null) {
+			return null;
+		}
 		LocalDateTime updatedLocalDateTime = LocalDateTime.ofInstant(updatedDate.toInstant(), ZoneId.systemDefault());
 		return updatedLocalDateTime;
 	}
@@ -528,6 +537,10 @@ public class Answer implements Serializable {
 	 *                the updated to set
 	 */
 	public void setUpdated(final LocalDateTime updated) {
+		if (updated == null) {
+			this.updatedDate = null;
+			return;
+		}
 		Date date = Date.from(updated.atZone(ZoneId.systemDefault()).toInstant());
 		this.updatedDate = date;
 	}
@@ -550,8 +563,6 @@ public class Answer implements Serializable {
 	@JsonIgnore
 	public Date getCreatedDate() {
 		return createdDate;
-		// final Date out = Date.from(created.atZone(ZoneId.systemDefault()).toInstant());
-		// return out;
 	}
 
 	/**
