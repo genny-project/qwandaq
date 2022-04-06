@@ -114,7 +114,6 @@ public class Ask extends CoreEntity implements Serializable {
 	private Boolean createOnTrigger = false;
 
 	@Transient
-	@JsonbTransient
 	private Ask[] childAsks;
 
 	// @Embedded

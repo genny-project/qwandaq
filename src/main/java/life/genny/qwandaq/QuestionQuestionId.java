@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.json.bind.annotation.JsonbTransient;
 
 import com.querydsl.core.annotations.QueryExclude;
 
@@ -21,6 +22,7 @@ public class QuestionQuestionId implements java.io.Serializable {
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JsonBackReference(value = "questionQuestion")
 	@JsonIgnore
+	@JsonbTransient
 	private Question source;
 
 	private String targetCode;
