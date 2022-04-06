@@ -20,7 +20,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -112,13 +111,13 @@ public class Answer implements Serializable {
 	 * Stores the Created UMT DateTime that this object was created
 	 */
 	@Column(name = "created")
-	private Date createdDate;
+	private LocalDateTime created;
 
 	/**
 	 * Stores the Last Modified UMT DateTime that this object was last updated
 	 */
 	@Column(name = "updated")
-	private Date updatedDate;
+	private LocalDateTime updated;
 
 	/**
 	 * A field that stores the human readable value of the answer.
@@ -502,8 +501,7 @@ public class Answer implements Serializable {
 	 */
 	@XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
 	public LocalDateTime getCreated() {
-		LocalDateTime createdLocalDateTime = LocalDateTime.ofInstant(createdDate.toInstant(), ZoneId.systemDefault());
-		return createdLocalDateTime;
+		return created;
 	}
 
 	/**
@@ -511,16 +509,14 @@ public class Answer implements Serializable {
 	 *                the created to set
 	 */
 	public void setCreated(final LocalDateTime created) {
-		Date date = Date.from(created.atZone(ZoneId.systemDefault()).toInstant());
-		this.createdDate = date;
+		this.created = created;
 	}
 
 	/**
 	 * @return the updated
 	 */
 	public LocalDateTime getUpdated() {
-		LocalDateTime updatedLocalDateTime = LocalDateTime.ofInstant(updatedDate.toInstant(), ZoneId.systemDefault());
-		return updatedLocalDateTime;
+		return updated;
 	}
 
 	/**
@@ -528,8 +524,7 @@ public class Answer implements Serializable {
 	 *                the updated to set
 	 */
 	public void setUpdated(final LocalDateTime updated) {
-		Date date = Date.from(updated.atZone(ZoneId.systemDefault()).toInstant());
-		this.updatedDate = date;
+		this.updated = updated;
 	}
 
 	@PreUpdate
@@ -549,17 +544,8 @@ public class Answer implements Serializable {
 	@Transient
 	@JsonIgnore
 	public Date getCreatedDate() {
-		return createdDate;
-		// final Date out = Date.from(created.atZone(ZoneId.systemDefault()).toInstant());
-		// return out;
-	}
-
-	/**
-	 * 
-	 * @param createdDate
-	 */
-	public void setCreatedDate(final Date createdDate) {
-		this.createdDate = createdDate;
+		final Date out = Date.from(created.atZone(ZoneId.systemDefault()).toInstant());
+		return out;
 	}
 
 	/**
@@ -568,15 +554,8 @@ public class Answer implements Serializable {
 	@Transient
 	@JsonIgnore
 	public Date getUpdatedDate() {
-		return updatedDate;
-	}
-
-	/**
-	 * 
-	 * @param updatedDate
-	 */
-	public void setUpdatedDate(final Date updatedDate) {
-		this.updatedDate = updatedDate;
+		final Date out = Date.from(updated.atZone(ZoneId.systemDefault()).toInstant());
+		return out;
 	}
 
 	/**
@@ -825,7 +804,7 @@ public class Answer implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "Answer [" + realm + "," + (createdDate != null ? "created=" + createdDate + ", " : "")
+		return "Answer [" + realm + "," + (created != null ? "created=" + created + ", " : "")
 				+ (sourceCode != null ? "sourceCode=" + sourceCode + ", " : "")
 				+ (targetCode != null ? "targetCode=" + targetCode + ", " : "")
 				+ (attributeCode != null ? "attributeCode=" + attributeCode + ", " : "")

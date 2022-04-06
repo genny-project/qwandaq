@@ -19,7 +19,6 @@ package life.genny.qwandaq;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -85,14 +84,14 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	 */
 	// @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
 	@Column(name = "created")
-	private Date createdDate;
+	private LocalDateTime created;
 
 	/**
 	 * Stores the Last Modified UMT DateTime that this object was last updated
 	 */
 	// @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
 	@Column(name = "updated")
-	private Date updatedDate;
+	private LocalDateTime updated;
 
 	/**
 	 * Stores the hibernate generated Id value for this object
@@ -194,10 +193,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	@XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
 	@JsonbTransient
 	public LocalDateTime getCreated() {
-		if (createdDate == null)
-			return null;
-		LocalDateTime createdLocalDateTime = LocalDateTime.ofInstant(createdDate.toInstant(), ZoneId.systemDefault());
-		return createdLocalDateTime;
+		return created;
 	}
 
 	/**
@@ -206,8 +202,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	 */
 	@Override
 	public void setCreated(final LocalDateTime created) {
-		Date date = Date.from(created.atZone(ZoneId.systemDefault()).toInstant());
-		this.createdDate = date;
+		this.created = created;
 	}
 
 	/**
@@ -215,8 +210,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	 */
 	@JsonbTransient
 	public LocalDateTime getUpdated() {
-		LocalDateTime updatedLocalDateTime = LocalDateTime.ofInstant(updatedDate.toInstant(), ZoneId.systemDefault());
-		return updatedLocalDateTime;
+		return updated;
 	}
 
 	/**
@@ -224,8 +218,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	 *            the updated to set
 	 */
 	public void setUpdated(final LocalDateTime updated) {
-		Date date = Date.from(updated.atZone(ZoneId.systemDefault()).toInstant());
-		this.updatedDate = date;
+		this.updated = updated;
 	}
 
 	/**
@@ -263,15 +256,8 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	@JsonIgnore
 	@JsonbTransient
 	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	/**
-	 * 
-	 * @param createdDate
-	 */
-	public void setCreatedDate(final Date createdDate) {
-		this.createdDate = createdDate;
+		final Date out = Date.from(created.atZone(ZoneId.systemDefault()).toInstant());
+		return out;
 	}
 
 	
@@ -282,15 +268,11 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	@JsonIgnore
 	@JsonbTransient
 	public Date getUpdatedDate() {
-		return updatedDate;
-	}
-
-	/**
-	 * 
-	 * @param updatedDate
-	 */
-	public void setUpdatedDate(final Date updatedDate) {
-		this.updatedDate = updatedDate;
+		if (updated != null) {
+			final Date out = Date.from(updated.atZone(ZoneId.systemDefault()).toInstant());
+			return out;
+		} else
+			return null;
 	}
 
 	
@@ -304,7 +286,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	 */
 	@Override
 	public String toString() {
-		return "[id=" + id + ", created=" + createdDate + ", updated=" + updatedDate + ", name=" + name + "]";
+		return "[id=" + id + ", created=" + created + ", updated=" + updated + ", name=" + name + "]";
 	}
 
 	
