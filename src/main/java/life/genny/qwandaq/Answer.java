@@ -149,6 +149,11 @@ public class Answer {
 	private Long askId;
 
 	/**
+	 * Store the processId (if present)
+	 */
+	private String processId;
+
+	/**
 	 * A field that stores the human readable targetcode associated with this
 	 * answer.
 	 */
@@ -679,6 +684,14 @@ public class Answer {
 	 */
 	public void setAskId(final Long askId) {
 		this.askId = askId;
+	}
+
+	public String getProcessId() {
+		return processId;
+	}
+
+	public void setProcessId(String processId) {
+		this.processId = processId;
 	}
 
 	/**
