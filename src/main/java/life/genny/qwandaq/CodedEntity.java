@@ -36,7 +36,6 @@ import org.jboss.logging.Logger;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
-
 /**
  * CoreEntity represents a base level core set of class attributes. It is the
  * base parent for many Qwanda classes and serves to establish Hibernate
@@ -88,25 +87,26 @@ public abstract class CodedEntity extends CoreEntity {
 	@Transient
 	private Integer index;
 
-	// TODO, this probably should not be exposed once we have hibernate/infinispan in place
+	// TODO, this probably should not be exposed once we have hibernate/infinispan
+	// in place
 	private EEntityStatus status = EEntityStatus.ACTIVE;
-	
+
 	/**
 	 * Constructor.
 	 */
 	protected CodedEntity() {
 		// dummy
-		super();
-		setIndex(0);
+		// super();
+		// setIndex(0);
 	}
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param name
-	 *            the summary name of the coded entity
+	 *             the summary name of the coded entity
 	 * @param code
-	 *            the unique code of the coded entity
+	 *             the unique code of the coded entity
 	 */
 	public CodedEntity(String code, String name) {
 		super(name);
@@ -132,8 +132,7 @@ public abstract class CodedEntity extends CoreEntity {
 		}
 	}
 
-	
-	/** 
+	/**
 	 * @return String
 	 */
 	/*
@@ -143,11 +142,10 @@ public abstract class CodedEntity extends CoreEntity {
 	 */
 	@Override
 	public String toString() {
-		return code+":"+super.toString();
+		return code + ":" + super.toString();
 	}
 
-	
-	/** 
+	/**
 	 * @return int
 	 */
 	/*
@@ -162,8 +160,7 @@ public abstract class CodedEntity extends CoreEntity {
 		return hcb.toHashCode();
 	}
 
-	
-	/** 
+	/**
 	 * Check equality
 	 *
 	 * @param obj the object to compare to
@@ -183,8 +180,7 @@ public abstract class CodedEntity extends CoreEntity {
 		return eb.isEquals();
 	}
 
-	
-	/** 
+	/**
 	 * Compare to an object.
 	 *
 	 * @param o the object to compare to
@@ -207,15 +203,12 @@ public abstract class CodedEntity extends CoreEntity {
 
 	/**
 	 * @param index
-	 *            the index to set
+	 *              the index to set
 	 */
 	public void setIndex(Integer index) {
 		this.index = index;
 	}
 
-	
-	
-	
 	/**
 	 * @return the status
 	 */
@@ -230,8 +223,7 @@ public abstract class CodedEntity extends CoreEntity {
 		this.status = status;
 	}
 
-	
-	/** 
+	/**
 	 * @return boolean
 	 */
 	public boolean hasCode() {
