@@ -2,16 +2,18 @@ package life.genny.qwandaq.message;
 
 import java.io.Serializable;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.Ask;
 
-public class QDataAskMessage extends QDataMessage implements Serializable {
+@RegisterForReflection
+public class QDataAskMessage extends QDataMessage {
 
 	private static final long serialVersionUID = 1L;
 	private Ask[] items;
 	private static final String DATATYPE_ASK = Ask.class.getSimpleName();
 
 	public QDataAskMessage() {
-		super();
+		// super(); // removed for native execution
 	}
 
 	public QDataAskMessage(Ask[] items) {
@@ -28,14 +30,14 @@ public class QDataAskMessage extends QDataMessage implements Serializable {
 		setItems(asks);
 	}
 
-	/** 
+	/**
 	 * @return Ask[]
 	 */
 	public Ask[] getItems() {
 		return this.items;
 	}
 
-	/** 
+	/**
 	 * @param asks the array of asks to set
 	 */
 	public void setItems(Ask[] asks) {

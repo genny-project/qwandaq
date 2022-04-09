@@ -52,6 +52,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Type;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import com.querydsl.core.annotations.QueryExclude;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -91,6 +93,7 @@ import life.genny.qwandaq.exception.BadDataException;
 @Entity
 @QueryExclude
 @Immutable
+@RegisterForReflection
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 public class Answer {
 

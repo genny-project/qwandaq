@@ -29,7 +29,7 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
 
   public QDataMessage() {
 
-    super();
+    // super();
   }
 
   public QDataMessage(final String data_type) {

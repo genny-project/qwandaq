@@ -3,26 +3,27 @@ package life.genny.qwandaq.message;
 import java.util.Arrays;
 import java.util.List;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.Answer;
 
+@RegisterForReflection
 public class QDataAnswerMessage extends QDataMessage {
 
 	private static final long serialVersionUID = 1L;
 	private Answer[] items;
 	private static final String DATATYPE_ANSWER = Answer.class.getSimpleName();
 
-
 	public QDataAnswerMessage() {
 
-		super(DATATYPE_ANSWER);
+		// super(DATATYPE_ANSWER); // removed for native execution
 	}
-	
+
 	public QDataAnswerMessage(Answer[] items) {
 
 		super(DATATYPE_ANSWER);
 		setItems(items);
 	}
-	
+
 	public QDataAnswerMessage(List<Answer> items) {
 
 		super(DATATYPE_ANSWER);
@@ -36,30 +37,32 @@ public class QDataAnswerMessage extends QDataMessage {
 		items[0] = item;
 		setItems(items);
 	}
-	
-	/** 
+
+	/**
 	 * @return Answer[]
 	 */
 	public Answer[] getItems() {
 		return items;
 	}
 
-	/** 
+	/**
 	 * @param items the array of answers to set
 	 */
 	public void setItems(Answer[] items) {
 		this.items = items;
 	}
 
-	/** 
+	/**
 	 * @return String
 	 */
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "QDataAnswerMessage [" + (items != null ? "items=" + Arrays.toString(items) : "") + "]";
 	}
-	
+
 }
