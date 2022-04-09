@@ -61,18 +61,14 @@ import life.genny.qwandaq.entity.BaseEntity;
 
 @Entity
 
-@Table(name = "baseentity_attribute" ,
-indexes = {
+@Table(name = "baseentity_attribute", indexes = {
 		@Index(columnList = "baseEntityCode", name = "ba_idx"),
 		@Index(columnList = "attributeCode", name = "ba_idx"),
 		@Index(columnList = "valueString", name = "ba_idx"),
-        @Index(columnList = "valueBoolean", name = "ba_idx")
-    },
-uniqueConstraints = @UniqueConstraint(columnNames = {"attributeCode","baseEntityCode","realm"})
-)
+		@Index(columnList = "valueBoolean", name = "ba_idx")
+}, uniqueConstraints = @UniqueConstraint(columnNames = { "attributeCode", "baseEntityCode", "realm" }))
 @AssociationOverrides({ @AssociationOverride(name = "pk.baseEntity", joinColumns = @JoinColumn(name = "BASEENTITY_ID")),
-		@AssociationOverride(name = "pk.attribute", joinColumns = @JoinColumn(name = "ATTRIBUTE_ID")) }
-		)
+		@AssociationOverride(name = "pk.attribute", joinColumns = @JoinColumn(name = "ATTRIBUTE_ID")) })
 
 @RegisterForReflection
 @Cacheable
@@ -95,18 +91,17 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	@Column
 	private Boolean readonly = false;
-	
+
 	private String realm;
-	
+
 	@Transient
 	@XmlTransient
 	@Column
-	private Integer index=0;  // used to assist with ordering 
+	private Integer index = 0; // used to assist with ordering
 
 	@Transient
 	private String feedback = null;
 
-	
 	/**
 	 * @return the baseEntityCode
 	 */
@@ -116,7 +111,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	/**
 	 * @param baseEntityCode
-	 *            the baseEntityCode to set
+	 *                       the baseEntityCode to set
 	 */
 	public void setBaseEntityCode(final String baseEntityCode) {
 		this.baseEntityCode = baseEntityCode;
@@ -131,7 +126,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	/**
 	 * @param attributeCode
-	 *            the attributeCode to set
+	 *                      the attributeCode to set
 	 */
 	public void setAttributeCode(final String attributeCode) {
 		this.attributeCode = attributeCode;
@@ -193,7 +188,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	 */
 	@Column
 	private LocalDate valueDate;
-	
+
 	/**
 	 * Store the String value of the attribute for the baseEntity
 	 */
@@ -204,7 +199,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	@Column(name = "money", length = 128)
 	@Convert(converter = MoneyConverter.class)
 	Money valueMoney;
-	
+
 	/**
 	 * Store the relative importance of the attribute for the baseEntity
 	 */
@@ -232,12 +227,13 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	 * Constructor.
 	 * 
 	 * @param baseEntity
-	 *            the entity that needs to contain attributes
+	 *                   the entity that needs to contain attributes
 	 * @param attribute
-	 *            the associated Attribute
+	 *                   the associated Attribute
 	 * @param weight
-	 *            the weighted importance of this attribute (relative to the other
-	 *            attributes)
+	 *                   the weighted importance of this attribute (relative to the
+	 *                   other
+	 *                   attributes)
 	 */
 	public EntityAttribute(final BaseEntity baseEntity, final Attribute attribute, Double weight) {
 		autocreateCreated();
@@ -255,14 +251,15 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	 * Constructor.
 	 * 
 	 * @param baseEntity
-	 *            the entity that needs to contain attributes
+	 *                   the entity that needs to contain attributes
 	 * @param attribute
-	 *            the associated Attribute
+	 *                   the associated Attribute
 	 * @param weight
-	 *            the weighted importance of this attribute (relative to the other
-	 *            attributes)
+	 *                   the weighted importance of this attribute (relative to the
+	 *                   other
+	 *                   attributes)
 	 * @param value
-	 *            the value associated with this attribute
+	 *                   the value associated with this attribute
 	 */
 	public EntityAttribute(final BaseEntity baseEntity, final Attribute attribute, Double weight, final Object value) {
 		autocreateCreated();
@@ -280,8 +277,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		}
 	}
 
-	
-	/** 
+	/**
 	 * @return EntityAttributeId
 	 */
 	@JsonIgnore
@@ -290,8 +286,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		return pk;
 	}
 
-	
-	/** 
+	/**
 	 * @param pk the pk to set
 	 */
 	public void setPk(final EntityAttributeId pk) {
@@ -304,8 +299,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		this.realm = baseEntity.getRealm();
 	}
 
-	
-	/** 
+	/**
 	 * @return Attribute
 	 */
 	@Transient
@@ -314,8 +308,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		return getPk().getAttribute();
 	}
 
-	
-	/** 
+	/**
 	 * @param attribute the attribute to set
 	 */
 	public void setAttribute(final Attribute attribute) {
@@ -324,40 +317,35 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		this.attributeName = attribute.getName();
 	}
 
-	
-	/** 
+	/**
 	 * @return Boolean
 	 */
 	public Boolean isConfirmationFlag() {
 		return getConfirmationFlag();
 	}
 
-	
-	/** 
+	/**
 	 * @return Boolean
 	 */
 	public Boolean isInferred() {
 		return getInferred();
 	}
 
-	
-	/** 
+	/**
 	 * @return Boolean
 	 */
 	public Boolean isPrivacyFlag() {
 		return getPrivacyFlag();
 	}
 
-	
-	/** 
+	/**
 	 * @return Boolean
 	 */
 	public Boolean isReadonly() {
 		return getReadonly();
 	}
 
-	
-	/** 
+	/**
 	 * @return Boolean
 	 */
 	public Boolean isValueBoolean() {
@@ -374,7 +362,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	/**
 	 * @param created
-	 *            the created to set
+	 *                the created to set
 	 */
 	public void setCreated(final LocalDateTime created) {
 		this.created = created;
@@ -390,7 +378,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	/**
 	 * @param updated
-	 *            the updated to set
+	 *                the updated to set
 	 */
 	public void setUpdated(final LocalDateTime updated) {
 		this.updated = updated;
@@ -405,7 +393,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	/**
 	 * @param weight
-	 *            the weight to set
+	 *               the weight to set
 	 */
 	public void setWeight(final Double weight) {
 		this.weight = weight;
@@ -420,7 +408,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	/**
 	 * @param valueDouble
-	 *            the valueDouble to set
+	 *                    the valueDouble to set
 	 */
 	public void setValueDouble(final Double valueDouble) {
 		this.valueDouble = valueDouble;
@@ -435,7 +423,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	/**
 	 * @param valueInteger
-	 *            the valueInteger to set
+	 *                     the valueInteger to set
 	 */
 	public void setValueInteger(final Integer valueInteger) {
 		this.valueInteger = valueInteger;
@@ -450,22 +438,20 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	/**
 	 * @param valueLong
-	 *            the valueLong to set
+	 *                  the valueLong to set
 	 */
 	public void setValueLong(final Long valueLong) {
 		this.valueLong = valueLong;
 	}
 
-	
-	/** 
+	/**
 	 * @return LocalDate
 	 */
 	public LocalDate getValueDate() {
 		return valueDate;
 	}
 
-	
-	/** 
+	/**
 	 * @param valueDate the valueDate to set
 	 */
 	public void setValueDate(LocalDate valueDate) {
@@ -481,7 +467,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	/**
 	 * @param valueDateTime
-	 *            the valueDateTime to set
+	 *                      the valueDateTime to set
 	 */
 	public void setValueDateTime(final LocalDateTime valueDateTime) {
 		this.valueDateTime = valueDateTime;
@@ -496,7 +482,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	/**
 	 * @param valueTime
-	 *            the valueTime to set
+	 *                  the valueTime to set
 	 */
 	public void setValueTime(LocalTime valueTime) {
 		this.valueTime = valueTime;
@@ -511,43 +497,39 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	/**
 	 * @param valueString
-	 *            the valueString to set
+	 *                    the valueString to set
 	 */
 	public void setValueString(final String valueString) {
 		this.valueString = valueString;
 	}
 
-	
-	/** 
+	/**
 	 * @return Boolean
 	 */
 	public Boolean getValueBoolean() {
 		return valueBoolean;
 	}
 
-	
-	/** 
+	/**
 	 * @param valueBoolean the valueBoolean to set
 	 */
 	public void setValueBoolean(Boolean valueBoolean) {
 		this.valueBoolean = valueBoolean;
 	}
 
-	
-	
-//	/**
-//	 * @return the valueDateRange
-//	 */
-//	public Range<LocalDate> getValueDateRange() {
-//		return valueDateRange;
-//	}
-//
-//	/**
-//	 * @param valueDateRange the valueDateRange to set
-//	 */
-//	public void setValueDateRange(Range<LocalDate> valueDateRange) {
-//		this.valueDateRange = valueDateRange;
-//	}
+	// /**
+	// * @return the valueDateRange
+	// */
+	// public Range<LocalDate> getValueDateRange() {
+	// return valueDateRange;
+	// }
+	//
+	// /**
+	// * @param valueDateRange the valueDateRange to set
+	// */
+	// public void setValueDateRange(Range<LocalDate> valueDateRange) {
+	// this.valueDateRange = valueDateRange;
+	// }
 
 	/**
 	 * @return the valueMoney
@@ -572,7 +554,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	/**
 	 * @param privacyFlag
-	 *            the privacyFlag to set
+	 *                    the privacyFlag to set
 	 */
 	public void setPrivacyFlag(Boolean privacyFlag) {
 		this.privacyFlag = privacyFlag;
@@ -587,12 +569,12 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 	/**
 	 * @param inferred
-	 *            the inferred to set
+	 *                 the inferred to set
 	 */
 	public void setInferred(Boolean inferred) {
 		this.inferred = inferred;
 	}
-	
+
 	/**
 	 * @return the readonly
 	 */
@@ -606,7 +588,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	public void setReadonly(Boolean readonly) {
 		this.readonly = readonly;
 	}
-	
+
 	/**
 	 * @return the feedback
 	 */
@@ -632,7 +614,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 			setCreated(LocalDateTime.now(ZoneId.of("Z")));
 	}
 
-	/** 
+	/**
 	 * @return Date
 	 */
 	@Transient
@@ -645,8 +627,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		return out;
 	}
 
-	
-	/** 
+	/**
 	 * @return Date
 	 */
 	@Transient
@@ -654,93 +635,96 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	@JsonbTransient
 	public Date getUpdatedDate() {
 
-		if (updated==null) return null;
+		if (updated == null)
+			return null;
 		final Date out = Date.from(updated.atZone(ZoneId.systemDefault()).toInstant());
 
 		return out;
 	}
 
-	
 	/**
-	* Get the value of the EntityAttribute.
-	*
-	* @param <T> the type to return
-	* @return T
+	 * Get the value of the EntityAttribute.
+	 *
+	 * @param <T> the type to return
+	 * @return T
 	 */
 	@SuppressWarnings("unchecked")
 	@JsonIgnore
 	@Transient
 	@XmlTransient
-	@JsonbProperty(nillable=true)
+	@JsonbProperty(nillable = true)
 	public <T> T getValue() {
-		if ((getPk()==null)||(getPk().attribute==null)) {
+		if ((getPk() == null) || (getPk().attribute == null)) {
 			return getLoopValue();
 		}
 		final String dataType = getPk().getAttribute().getDataType().getClassName();
 		switch (dataType) {
-		case "java.lang.Integer":
-		case "Integer":
-			return (T) getValueInteger();
-		case "java.time.LocalDateTime":
-		case "LocalDateTime":
-			return (T) getValueDateTime();
-		case "java.time.LocalTime":
-		case "LocalTime":
-			return (T) getValueTime();
-		case "java.lang.Long":
-		case "Long":
-			return (T) getValueLong();
-		case "java.lang.Double":
-		case "Double":
-			return (T) getValueDouble();
-		case "java.lang.Boolean":
-		case "Boolean":
-			return (T) getValueBoolean();
-		case "java.time.LocalDate":
-		case "LocalDate":
-			return (T) getValueDate();
-		case "org.javamoney.moneta.Money":
-		case "Money":
-			return (T) getValueMoney();
-		case "java.lang.String":
-		default:
-			return (T) getValueString();
+			case "java.lang.Integer":
+			case "Integer":
+				return (T) getValueInteger();
+			case "java.time.LocalDateTime":
+			case "LocalDateTime":
+				return (T) getValueDateTime();
+			case "java.time.LocalTime":
+			case "LocalTime":
+				return (T) getValueTime();
+			case "java.lang.Long":
+			case "Long":
+				return (T) getValueLong();
+			case "java.lang.Double":
+			case "Double":
+				return (T) getValueDouble();
+			case "java.lang.Boolean":
+			case "Boolean":
+				return (T) getValueBoolean();
+			case "java.time.LocalDate":
+			case "LocalDate":
+				return (T) getValueDate();
+			case "org.javamoney.moneta.Money":
+			case "Money":
+				return (T) getValueMoney();
+			case "java.lang.String":
+			default:
+				return (T) getValueString();
 		}
-	      
+
 	}
 
-	/** 
+	/**
 	 * Set the value
 	 *
-	 * @param <T> the Type
+	 * @param <T>   the Type
 	 * @param value the value to set
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> void setValue(final Object value) {
-		setValue(value,false);
+		setValue(value, false);
 	}
-	
-	/** 
+
+	/**
 	 * Set the value, specifying a lock status
 	 *
-	 * @param <T> the Type
+	 * @param <T>   the Type
 	 * @param value the value to set
-	 * @param lock should lock
+	 * @param lock  should lock
 	 */
 	@SuppressWarnings("unchecked")
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> void setValue(final Object value, final Boolean lock) {
 
 		if (this.getReadonly()) {
-			log.error("Trying to set the value of a readonly EntityAttribute! "+this.getBaseEntityCode()+":"+this.attributeCode);
-			return; 
+			log.error("Trying to set the value of a readonly EntityAttribute! " + this.getBaseEntityCode() + ":"
+					+ this.attributeCode);
+			return;
 		}
 
-		if (getAttribute()==null) { 
+		if (getAttribute() == null) {
 			setLoopValue(value);
 			return;
 		}
@@ -752,13 +736,14 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 					setValueString(result);
 				} else if (getAttribute().getDataType().getClassName()
 						.equalsIgnoreCase(LocalDateTime.class.getCanonicalName())) {
-					List<String> formatStrings = Arrays.asList("yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd HH:mm:ss",
-							"yyyy-MM-dd'T'HH:mm:ss.SSSZ","yyyy-MM-dd HH:mm:ss.SSSZ");
+					List<String> formatStrings = Arrays.asList("yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss",
+							"yyyy-MM-dd HH:mm:ss",
+							"yyyy-MM-dd'T'HH:mm:ss.SSSZ", "yyyy-MM-dd HH:mm:ss.SSSZ");
 					for (String formatString : formatStrings) {
 						try {
 							Date olddate = new SimpleDateFormat(formatString).parse(result);
 							final LocalDateTime dateTime = olddate.toInstant().atZone(ZoneId.systemDefault())
-								.toLocalDateTime();
+									.toLocalDateTime();
 							setValueDateTime(dateTime);
 							break;
 
@@ -774,8 +759,9 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 						olddate = DateUtils.parseDate(result, "M/y", "yyyy-MM-dd", "yyyy/MM/dd",
 								"yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 					} catch (java.text.ParseException e) {
-						olddate = DateUtils.parseDate(result, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd HH:mm:ss",
-								"yyyy-MM-dd'T'HH:mm:ss.SSSZ","yyyy-MM-dd HH:mm:ss.SSSZ");
+						olddate = DateUtils.parseDate(result, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss",
+								"yyyy-MM-dd HH:mm:ss",
+								"yyyy-MM-dd'T'HH:mm:ss.SSSZ", "yyyy-MM-dd HH:mm:ss.SSSZ");
 					}
 					final LocalDate date = olddate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 					setValueDate(date);
@@ -873,8 +859,10 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 				case "java.lang.String":
 				default:
 					if (value instanceof Boolean) {
-						log.error("Value is boolean being saved to String. DataType = "+this.getAttribute().getDataType().getClassName()+" and attributecode="+this.getAttributeCode());
-						setValueBoolean((Boolean)value);
+						log.error("Value is boolean being saved to String. DataType = "
+								+ this.getAttribute().getDataType().getClassName() + " and attributecode="
+								+ this.getAttributeCode());
+						setValueBoolean((Boolean) value);
 					} else {
 						setValueString((String) value);
 					}
@@ -882,41 +870,44 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 			}
 		}
 
-		// if the lock is set then 'Lock it in Eddie!'. 
+		// if the lock is set then 'Lock it in Eddie!'.
 		if (lock) {
 			this.setReadonly(true);
 		}
 	}
 
-	/** 
+	/**
 	 * Set the loop value
 	 *
-	 * @param <T> the Type
+	 * @param <T>   the Type
 	 * @param value the value to set
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> void setLoopValue(final Object value) {
-		setLoopValue(value,false);
+		setLoopValue(value, false);
 	}
-	
-	/** 
+
+	/**
 	 * Set the loop value, specifying a lock status
 	 *
-	 * @param <T> the Type
+	 * @param <T>   the Type
 	 * @param value the value to set
-	 * @param lock should lock
+	 * @param lock  should lock
 	 */
 	@SuppressWarnings("unchecked")
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> void setLoopValue(final Object value, final Boolean lock) {
 
 		if (this.getReadonly()) {
-			log.error("Trying to set the value of a readonly EntityAttribute! "+this.getBaseEntityCode()+":"+this.attributeCode);
-			return; 
+			log.error("Trying to set the value of a readonly EntityAttribute! " + this.getBaseEntityCode() + ":"
+					+ this.attributeCode);
+			return;
 		}
 
 		if (value instanceof Money)
@@ -936,7 +927,8 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		else if (value instanceof Boolean)
 			setValueBoolean((Boolean) value);
 		else if (value instanceof BigDecimal)
-			// NOTE: This assumes at least one will not be null and defaults to int otherwise
+			// NOTE: This assumes at least one will not be null and defaults to int
+			// otherwise
 			// This could cause issues with deserialisation.
 			if (this.getValueDouble() != null) {
 				setValueDouble(((BigDecimal) value).doubleValue());
@@ -953,8 +945,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		}
 	}
 
-	
-	/** 
+	/**
 	 * @return String
 	 */
 	@JsonIgnore
@@ -962,59 +953,59 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	@XmlTransient
 	@JsonbTransient
 	public String getAsString() {
-		if ((getPk()==null)||(getPk().attribute==null)) {
+		if ((getPk() == null) || (getPk().attribute == null)) {
 			return getAsLoopString();
 		}
 
-		if(getValue() == null) {
+		if (getValue() == null) {
 			return null;
 		}
 		final String dataType = getPk().getAttribute().getDataType().getClassName();
 		switch (dataType) {
-		case "java.lang.Integer":
-		case "Integer":
-			return "" + getValueInteger();
-		case "java.time.LocalDateTime":
-		case "LocalDateTime":
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
-			Date datetime = Date.from(getValueDateTime().atZone(ZoneId.systemDefault()).toInstant());
-			String dout = df.format(datetime);
-			return dout;
-		case "java.lang.Long":
-		case "Long":
-			return "" + getValueLong();
-		case "java.time.LocalTime":
-		case "LocalTime":
-			DateFormat df2 = new SimpleDateFormat("HH:mm");			
-			String dout2 = df2.format(getValueTime());
-			return dout2;
-		case "org.javamoney.moneta.Money":
-		case "Money":
-			DecimalFormat decimalFormat = new DecimalFormat("###############0.00");		        
-		    String amount = decimalFormat.format(getValueMoney().getNumber().doubleValue());
-			return "{\"amount\":"+amount+",\"currency\":\""+getValueMoney().getCurrency().getCurrencyCode()+"\"}";
-		case "java.lang.Double":
-		case "Double":
-			return getValueDouble().toString();
-		case "java.lang.Boolean":
-		case "Boolean":
-			return getValueBoolean() ? "TRUE" : "FALSE";
-		case "java.time.LocalDate":
-		case "LocalDate":
-			df2 = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = Date.from(getValueDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-		    dout2 = df2.format(date);
-			return dout2;
+			case "java.lang.Integer":
+			case "Integer":
+				return "" + getValueInteger();
+			case "java.time.LocalDateTime":
+			case "LocalDateTime":
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+				Date datetime = Date.from(getValueDateTime().atZone(ZoneId.systemDefault()).toInstant());
+				String dout = df.format(datetime);
+				return dout;
+			case "java.lang.Long":
+			case "Long":
+				return "" + getValueLong();
+			case "java.time.LocalTime":
+			case "LocalTime":
+				DateFormat df2 = new SimpleDateFormat("HH:mm");
+				String dout2 = df2.format(getValueTime());
+				return dout2;
+			case "org.javamoney.moneta.Money":
+			case "Money":
+				DecimalFormat decimalFormat = new DecimalFormat("###############0.00");
+				String amount = decimalFormat.format(getValueMoney().getNumber().doubleValue());
+				return "{\"amount\":" + amount + ",\"currency\":\"" + getValueMoney().getCurrency().getCurrencyCode()
+						+ "\"}";
+			case "java.lang.Double":
+			case "Double":
+				return getValueDouble().toString();
+			case "java.lang.Boolean":
+			case "Boolean":
+				return getValueBoolean() ? "TRUE" : "FALSE";
+			case "java.time.LocalDate":
+			case "LocalDate":
+				df2 = new SimpleDateFormat("yyyy-MM-dd");
+				Date date = Date.from(getValueDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+				dout2 = df2.format(date);
+				return dout2;
 
-		case "java.lang.String":
-		default:
-			return getValueString();
+			case "java.lang.String":
+			default:
+				return getValueString();
 		}
 
 	}
 
-	
-	/** 
+	/**
 	 * @return String
 	 */
 	@JsonIgnore
@@ -1024,77 +1015,77 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	public String getAsLoopString() {
 
 		String ret = "";
-		if( getValueString() != null) {
+		if (getValueString() != null) {
 			return getValueString();
 		}
-		if(getValueInteger() != null) {
+		if (getValueInteger() != null) {
 			return getValueInteger().toString();
 		}
-		if(getValueDateTime() != null) {
+		if (getValueDateTime() != null) {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
 			Date datetime = Date.from(getValueDateTime().atZone(ZoneId.systemDefault()).toInstant());
 			String dout = df.format(datetime);
 			return dout;
 		}
-		if(getValueDate() != null) {
+		if (getValueDate() != null) {
 			DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = Date.from(getValueDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
 			String dout2 = df2.format(date);
 			return dout2;
 		}
-		if(getValueTime() != null) {
-			DateFormat df2 = new SimpleDateFormat("HH:mm");			
+		if (getValueTime() != null) {
+			DateFormat df2 = new SimpleDateFormat("HH:mm");
 			String dout2 = df2.format(getValueTime());
 			return dout2;
 		}
-		if(getValueLong() != null) {
-		    return getValueLong().toString();
+		if (getValueLong() != null) {
+			return getValueLong().toString();
 		}
-		if(getValueDouble() != null) {
-		    return getValueDouble().toString();
+		if (getValueDouble() != null) {
+			return getValueDouble().toString();
 		}
-		if(getValueBoolean() != null) {
+		if (getValueBoolean() != null) {
 			return getValueBoolean() ? "TRUE" : "FALSE";
 		}
-		
+
 		return ret;
 	}
-	
+
 	/**
-	* Get the loop value
-	*
-	* @param <T> the Type to return
-	* @return T
+	 * Get the loop value
+	 *
+	 * @param <T> the Type to return
+	 * @return T
 	 */
 	@SuppressWarnings("unchecked")
 	@JsonIgnore
 	@Transient
 	@XmlTransient
 	@JsonbTransient
-	public  <T> T getLoopValue() {
+	public <T> T getLoopValue() {
 
 		if (getValueString() != null) {
-			return  (T) getValueString();
-		} else if(getValueBoolean() != null) {
-			return  (T) getValueBoolean();
-		} else if(getValueDateTime() != null) {
-			return  (T) getValueDateTime();
-		} else if(getValueDouble() != null) {
-		    return  (T) getValueDouble();
-		} else if(getValueInteger() != null) {
-			return (T)  getValueInteger();
-		}else if(getValueDate() != null) {
-			return  (T) getValueDate();
-		} else if(getValueTime() != null) {
-			return  (T) getValueTime();
-		} else if(getValueLong() != null) {
-		    return  (T) getValueLong();
+			return (T) getValueString();
+		} else if (getValueBoolean() != null) {
+			return (T) getValueBoolean();
+		} else if (getValueDateTime() != null) {
+			return (T) getValueDateTime();
+		} else if (getValueDouble() != null) {
+			return (T) getValueDouble();
+		} else if (getValueInteger() != null) {
+			return (T) getValueInteger();
+		} else if (getValueDate() != null) {
+			return (T) getValueDate();
+		} else if (getValueTime() != null) {
+			return (T) getValueTime();
+		} else if (getValueLong() != null) {
+			return (T) getValueLong();
 		}
 
 		return null;
 	}
-	
-	/** 
+
+	/**
 	 * @return int
 	 */
 	@Override
@@ -1106,8 +1097,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		return hcb.toHashCode();
 	}
 
-	
-	/** 
+	/**
 	 * @param obj the object to compare to
 	 * @return boolean
 	 */
@@ -1128,8 +1118,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		return eb.isEquals();
 	}
 
-	
-	/** 
+	/**
 	 * Compare to an object
 	 *
 	 * @param obj object to compare to
@@ -1148,7 +1137,8 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 
 			case "java.time.LocalDateTime":
 			case "LocalDateTime":
-				return new CompareToBuilder().append(this.getValueDateTime(), myClass.getValueDateTime()).toComparison();
+				return new CompareToBuilder().append(this.getValueDateTime(), myClass.getValueDateTime())
+						.toComparison();
 
 			case "java.time.LocalTime":
 			case "LocalTime":
@@ -1184,14 +1174,15 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 	@Override
 	public String toString() {
 		return "attributeCode=" + attributeCode + ", value="
-				+ getObjectAsString() + ", weight=" + weight + ", inferred=" + inferred + "] be="+this.getBaseEntityCode();
+				+ getObjectAsString() + ", weight=" + weight + ", inferred=" + inferred + "] be="
+				+ this.getBaseEntityCode();
 	}
 
 	/**
-	* Get the object
-	*
-	* @param <T> the Type to return
-	* @return T
+	 * Get the object
+	 *
+	 * @param <T> the Type to return
+	 * @return T
 	 */
 	@SuppressWarnings("unchecked")
 	@JsonIgnore
@@ -1272,7 +1263,7 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		if (getValueString() != null) {
 			return getValueString();
 		}
-		
+
 		return getValueString();
 	}
 
@@ -1318,18 +1309,18 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 		this.realm = realm;
 	}
 
-	/** 
+	/**
 	 * @return Boolean
 	 */
 	public Boolean getConfirmationFlag() {
 		return confirmationFlag;
 	}
 
-	/** 
+	/**
 	 * @param confirmationFlag the confirmationFlag to set
 	 */
 	public void setConfirmationFlag(Boolean confirmationFlag) {
 		this.confirmationFlag = confirmationFlag;
 	}
-	
+
 }
