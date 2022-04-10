@@ -134,6 +134,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	private Set<EntityEntity> links = new LinkedHashSet<>();
 
 	@Transient
+	@JsonbTransient
 	private Set<EntityQuestion> questions = new HashSet<EntityQuestion>(0);
 
 	@JsonIgnore
@@ -669,6 +670,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	@Transient
 	@XmlTransient
 	@JsonIgnore
+	@JsonbTransient
 	public Set<EntityAttribute> merge(final BaseEntity entity) {
 		final Set<EntityAttribute> changes = new HashSet<EntityAttribute>();
 
@@ -953,6 +955,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @throws BadDataException if value cannot be set
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> Optional<T> setValue(final String attributeCode, T value, Double weight) throws BadDataException {
