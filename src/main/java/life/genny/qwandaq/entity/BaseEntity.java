@@ -148,6 +148,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	private Boolean fromCache = false;
 
 	@JsonIgnore
+	@JsonbTransient
 	@XmlTransient
 	@Transient
 	private transient Map<String, EntityAttribute> attributeMap = null;
@@ -244,7 +245,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return the links
 	 */
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	@JsonbTransient
+	// @JsonbTransient
 	public Set<EntityEntity> getLinks() {
 		return links;
 	}
@@ -285,6 +286,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	/**
 	 * @param questions the questions to set
 	 */
+	@JsonbTransient
 	public void setQuestions(final List<EntityQuestion> questions) {
 		this.questions.addAll(questions);
 	}
@@ -711,6 +713,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return T
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	private <T> T getValue(final Attribute attribute) {
@@ -730,6 +733,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return T
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	private <T> T getValue(final EntityAttribute ea) {
@@ -743,6 +747,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return Optional
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> Optional<T> getValue(final String attributeCode) {
@@ -766,6 +771,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return Optional
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> Optional<T> getLoopValue(final String attributeCode) {
@@ -784,6 +790,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return String
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public String getValueAsString(final String attributeCode) {
@@ -809,6 +816,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return T
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> T getValue(final String attributeCode, T defaultValue) {
@@ -831,6 +839,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return T
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> T getLoopValue(final String attributeCode, T defaultValue) {
@@ -849,6 +858,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return Boolean
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public Boolean is(final String attributeCode) {
@@ -877,6 +887,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @throws BadDataException if value cannot be set
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> Optional<T> setValue(final Attribute attribute, T value, Double weight) throws BadDataException {
@@ -907,6 +918,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @throws BadDataException if value cannot be set
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> Optional<T> setValue(final Attribute attribute, T value) throws BadDataException {
@@ -923,6 +935,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @throws BadDataException if value cannot be set
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> Optional<T> setValue(final String attributeCode, T value) throws BadDataException {
@@ -1102,6 +1115,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return Optional&lt;EntityAttribute&gt;
 	 */
 	@Transient
+	@JsonbTransient
 	public Optional<EntityAttribute> getHighestEA(final String prefix) {
 		// go through all the EA
 		Optional<EntityAttribute> highest = Optional.empty();
@@ -1127,6 +1141,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @param fastMode the fastMode to set
 	 */
 	@Transient
+	@JsonbTransient
 	public void setFastAttributes(Boolean fastMode) {
 		if (fastMode) {
 			attributeMap = new ConcurrentHashMap<String, EntityAttribute>();
