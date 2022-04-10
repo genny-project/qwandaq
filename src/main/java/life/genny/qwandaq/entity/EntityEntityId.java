@@ -21,7 +21,7 @@ public class EntityEntityId implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne()
-	@JsonManagedReference(value="entityEntity")
+	@JsonManagedReference(value = "entityEntity")
 	@JsonIgnoreProperties("links")
 	private BaseEntity source;
 
@@ -29,6 +29,9 @@ public class EntityEntityId implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	private Attribute attribute;
+
+	public EntityEntityId() {
+	}
 
 	/**
 	 * @return the targetCode
@@ -79,9 +82,9 @@ public class EntityEntityId implements java.io.Serializable {
 		hcb.append(source.getCode());
 		hcb.append(targetCode);
 		return hcb.toHashCode();
-	}      
+	}
 
-	/** 
+	/**
 	 * @param obj the object to compare to
 	 * @return boolean
 	 */
@@ -100,5 +103,5 @@ public class EntityEntityId implements java.io.Serializable {
 		eb.append(targetCode, that.targetCode);
 		return eb.isEquals();
 	}
-        
+
 }

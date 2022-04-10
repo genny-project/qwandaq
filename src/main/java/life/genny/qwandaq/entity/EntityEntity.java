@@ -45,6 +45,7 @@ import life.genny.qwandaq.Link;
 import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.converter.MoneyConverter;
 
+
 @Entity
 @Table(name = "baseentity_baseentity")
 

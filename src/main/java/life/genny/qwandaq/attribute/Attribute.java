@@ -47,7 +47,7 @@ import life.genny.qwandaq.datatype.DataType;
  * An attribute may be used directly in processing meaning for a target
  * entity. Such processing may be in relation to a comparison score against
  * another target entity, or to generate more attribute information via
- * inference and induction  This
+ * inference and induction This
  * attribute information includes:
  * <ul>
  * <li>The Human Readable name for this attibute (used for summary lists)
@@ -60,72 +60,66 @@ import life.genny.qwandaq.datatype.DataType;
  * <p>
  * 
  * 
- * @author      Adam Crow
- * @author      Byron Aguirre
- * @version     %I%, %G%
- * @since       1.0
+ * @author Adam Crow
+ * @author Byron Aguirre
+ * @version %I%, %G%
+ * @since 1.0
  */
-
 
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 
-@Table(name = "attribute", 
-indexes = {
-        @Index(columnList = "code", name =  "code_idx"),
-        @Index(columnList = "realm", name = "code_idx")
-    },
-uniqueConstraints = @UniqueConstraint(columnNames = {"code", "realm"}))
+@Table(name = "attribute", indexes = {
+		@Index(columnList = "code", name = "code_idx"),
+		@Index(columnList = "realm", name = "code_idx")
+}, uniqueConstraints = @UniqueConstraint(columnNames = { "code", "realm" }))
 @Entity
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @RegisterForReflection
 public class Attribute extends CodedEntity implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private static final String DEFAULT_CODE_PREFIX = "PRI_";
 
-//	@OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.attribute")
-//	@JsonManagedReference(value="attribute")
-//	 @JsonIgnore
-//	private Set<EntityAttribute> baseEntityAttributes = new HashSet<EntityAttribute>(0);
+	// @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.attribute")
+	// @JsonManagedReference(value="attribute")
+	// @JsonIgnore
+	// private Set<EntityAttribute> baseEntityAttributes = new
+	// HashSet<EntityAttribute>(0);
 
 	@Embedded
 	@NotNull
 	public DataType dataType;
-	
+
 	private Boolean defaultPrivacyFlag = false;
 
 	private String description;
-	
-	private String help;
-	
-	private String placeholder;
-	
-	private String defaultValue;
-	
-    private String icon;
 
-	
+	private String help;
+
+	private String placeholder;
+
+	private String defaultValue;
+
+	private String icon;
+
 	/**
 	 * Constructor.
 	 */
 	@SuppressWarnings("unused")
-	public Attribute()
-	{
-		super();
+	public Attribute() {
+		// super();
 		// dummy for hibernate
 	}
-	
 
-	public Attribute(String aCode, String aName, DataType dataType)
-	{
+	public Attribute(String aCode, String aName, DataType dataType) {
 		super(aCode, aName);
 		setDataType(dataType);
 	}
-	
+
 	/**
 	 * @return the dataType
 	 */
@@ -149,16 +143,13 @@ public class Attribute extends CodedEntity implements Serializable {
 		return DEFAULT_CODE_PREFIX;
 	}
 
-
-	
-	/** 
+	/**
 	 * @return String
 	 */
 	@Override
 	public String toString() {
-		return getCode()+ ",dataType=" + dataType;
+		return getCode() + ",dataType=" + dataType;
 	}
-
 
 	/**
 	 * @return the defaultPrivacyFlag
@@ -167,14 +158,12 @@ public class Attribute extends CodedEntity implements Serializable {
 		return defaultPrivacyFlag;
 	}
 
-	
-	/** 
+	/**
 	 * @return Boolean
 	 */
 	public Boolean isDefaultPrivacyFlag() {
 		return getDefaultPrivacyFlag();
 	}
-
 
 	/**
 	 * @param defaultPrivacyFlag the defaultPrivacyFlag to set
@@ -183,14 +172,12 @@ public class Attribute extends CodedEntity implements Serializable {
 		this.defaultPrivacyFlag = defaultPrivacyFlag;
 	}
 
-
 	/**
 	 * @return the description
 	 */
 	public String getDescription() {
 		return description;
 	}
-
 
 	/**
 	 * @param description the description to set
@@ -199,14 +186,12 @@ public class Attribute extends CodedEntity implements Serializable {
 		this.description = description;
 	}
 
-
 	/**
 	 * @return the help
 	 */
 	public String getHelp() {
 		return help;
 	}
-
 
 	/**
 	 * @param help the help to set
@@ -215,14 +200,12 @@ public class Attribute extends CodedEntity implements Serializable {
 		this.help = help;
 	}
 
-
 	/**
 	 * @return the placeholder
 	 */
 	public String getPlaceholder() {
 		return placeholder;
 	}
-
 
 	/**
 	 * @param placeholder the placeholder to set
@@ -231,7 +214,6 @@ public class Attribute extends CodedEntity implements Serializable {
 		this.placeholder = placeholder;
 	}
 
-
 	/**
 	 * @return the defaultValue
 	 */
@@ -239,32 +221,34 @@ public class Attribute extends CodedEntity implements Serializable {
 		return defaultValue;
 	}
 
-
 	/**
 	 * @param defaultValue the defaultValue to set
 	 */
 	public void setDefaultValue(String defaultValue) {
 		this.defaultValue = defaultValue;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
-	/*@Override
-	public String toString() {
-		return "Attribute:"+getCode()+"(" + getDataType()+") ";
-	}*/
-	
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
+	/*
+	 * @Override
+	 * public String toString() {
+	 * return "Attribute:"+getCode()+"(" + getDataType()+") ";
+	 * }
+	 */
 
-    
-	/** 
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
+	/**
 	 * @return String
 	 */
 	public String getIcon() {
-        return this.icon;
-    }
+		return this.icon;
+	}
 
 }
