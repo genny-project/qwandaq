@@ -11,7 +11,8 @@ import life.genny.qwandaq.attribute.Attribute;
 import life.genny.qwandaq.entity.BaseEntity;
 
 /**
- * AnswerLinkId stores information regarding the source and target BaseEntitys for AnswerLink objects.
+ * AnswerLinkId stores information regarding the source and target BaseEntitys
+ * for AnswerLink objects.
  * 
  * @author Adam Crow
  * @author Byron Aguirre
@@ -74,6 +75,9 @@ public class AnswerLinkId implements java.io.Serializable {
     this.attribute = attribute;
   }
 
+  public AnswerLinkId() {
+  }
+
   @Override
   public boolean equals(final Object o) {
     if (this == o)
@@ -91,8 +95,8 @@ public class AnswerLinkId implements java.io.Serializable {
       return false;
     return true;
   }
-  
-  /** 
+
+  /**
    * @return int
    */
   @Override

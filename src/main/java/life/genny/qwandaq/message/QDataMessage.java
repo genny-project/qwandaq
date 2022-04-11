@@ -5,8 +5,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 @RegisterForReflection
 public abstract class QDataMessage extends QMessage implements QDataMessageIntf {
 
-  
-  /** 
+  /**
    * @return String
    */
   @Override
@@ -14,8 +13,7 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
     return data_type;
   }
 
-  
-  /** 
+  /**
    * @param data_type the data type to set
    */
   public void setData_type(final String data_type) {
@@ -31,7 +29,7 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
 
   public QDataMessage() {
 
-    super();
+    // super();
   }
 
   public QDataMessage(final String data_type) {
@@ -39,8 +37,8 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
     super(MESSAGE_TYPE);
     this.data_type = data_type;
   }
-  
-  /** 
+
+  /**
    * @return Boolean
    */
   @Override
@@ -48,16 +46,14 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
     return delete;
   }
 
-  
-  /** 
+  /**
    * @param delete the delete status to set
    */
   public void setDelete(final Boolean delete) {
     this.delete = delete;
   }
 
-  
-  /** 
+  /**
    * @return String
    */
   @Override
@@ -100,8 +96,7 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
     return shouldDeleteLinkedBaseEntities;
   }
 
-  
-  /** 
+  /**
    * @return boolean
    */
   public boolean isShouldDeleteLinkedBaseEntities() {
@@ -109,10 +104,19 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
   }
 
   /**
-   * @param shouldDeleteLinkedBaseEntities the shouldDeleteLinkedBaseEntities to set
+   * @param shouldDeleteLinkedBaseEntities the shouldDeleteLinkedBaseEntities to
+   *                                       set
    */
   public void setShouldDeleteLinkedBaseEntities(Object shouldDeleteLinkedBaseEntities) {
     this.shouldDeleteLinkedBaseEntities = (Boolean) shouldDeleteLinkedBaseEntities;
+  }
+
+  public Boolean isDelete() {
+    return this.delete;
+  }
+
+  public Boolean isReplace() {
+    return this.replace;
   }
 
 }

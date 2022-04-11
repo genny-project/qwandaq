@@ -19,6 +19,7 @@ package life.genny.qwandaq;
 import java.io.Serializable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Embedded;
@@ -40,11 +41,11 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import life.genny.qwandaq.exception.BadDataException;
-import life.genny.qwandaq.Question;
 
 import com.querydsl.core.annotations.QueryExclude;
 
@@ -109,7 +110,7 @@ public class Ask extends CoreEntity implements Serializable {
 	private Long parentId = 0L;
 
 	private Boolean formTrigger = false;
-	
+
 	private Boolean createOnTrigger = false;
 
 	@Transient
@@ -130,7 +131,8 @@ public class Ask extends CoreEntity implements Serializable {
 	 * dummy for hibernate
 	 */
 	@SuppressWarnings("unused")
-	public Ask() { }
+	public Ask() {
+	}
 
 	/**
 	 * Constructor.
@@ -151,7 +153,7 @@ public class Ask extends CoreEntity implements Serializable {
 	 * @param aAttributeCode The associated Attribute
 	 * @param aSourceCode    The person answering the question
 	 * @param aTargetCode    The BaseEntity that the question is about
-	 * @param name    The name of the Ask
+	 * @param name           The name of the Ask
 	 */
 	public Ask(final String aAttributeCode, final String aSourceCode, final String aTargetCode, final String name) {
 		super(name);
@@ -168,7 +170,7 @@ public class Ask extends CoreEntity implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param aQuestion The associated Question
+	 * @param aQuestion   The associated Question
 	 * @param aSourceCode The person answering the question
 	 * @param aTargetCode The BaseEntity that the question is about
 	 */
@@ -179,10 +181,10 @@ public class Ask extends CoreEntity implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param aQuestion The associated Question
+	 * @param aQuestion   The associated Question
 	 * @param aSourceCode The person answering the question
 	 * @param aTargetCode The BaseEntity that the question is about
-	 * @param aMandatory the mandatory status
+	 * @param aMandatory  the mandatory status
 	 */
 	public Ask(final Question aQuestion, final String aSourceCode, final String aTargetCode, final Boolean aMandatory) {
 		this(aQuestion, aSourceCode, aTargetCode, aMandatory, 0.0);
@@ -191,11 +193,11 @@ public class Ask extends CoreEntity implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param aQuestion The associated Question
+	 * @param aQuestion   The associated Question
 	 * @param aSourceCode The person answering the question
 	 * @param aTargetCode The BaseEntity that the question is about
-	 * @param aMandatory the mandatory status
-	 * @param weight the weight
+	 * @param aMandatory  the mandatory status
+	 * @param weight      the weight
 	 */
 	public Ask(final Question aQuestion, final String aSourceCode, final String aTargetCode, final Boolean aMandatory,
 			final Double weight) {
@@ -205,13 +207,13 @@ public class Ask extends CoreEntity implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param aQuestion The associated Question
+	 * @param aQuestion   The associated Question
 	 * @param aSourceCode The person answering the question
 	 * @param aTargetCode The BaseEntity that the question is about
-	 * @param aMandatory the mandatory status
-	 * @param weight the weight
-	 * @param disabled the disabled status
-	 * @param hidden the hidden status
+	 * @param aMandatory  the mandatory status
+	 * @param weight      the weight
+	 * @param disabled    the disabled status
+	 * @param hidden      the hidden status
 	 */
 	public Ask(final Question aQuestion, final String aSourceCode, final String aTargetCode, final Boolean aMandatory,
 			final Double weight, final Boolean disabled, final Boolean hidden) {
@@ -222,14 +224,14 @@ public class Ask extends CoreEntity implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param aQuestion  The associated Question
+	 * @param aQuestion   The associated Question
 	 * @param aSourceCode The source answering the question
 	 * @param aTargetCode The BaseEntity that the question is about
-	 * @param aMandatory the mandatory status
-	 * @param weight the weight
-	 * @param disabled the disabled status
-	 * @param hidden the hidden status
-	 * @param readonly the readonly status
+	 * @param aMandatory  the mandatory status
+	 * @param weight      the weight
+	 * @param disabled    the disabled status
+	 * @param hidden      the hidden status
+	 * @param readonly    the readonly status
 	 */
 	public Ask(final Question aQuestion, final String aSourceCode, final String aTargetCode, final Boolean aMandatory,
 			final Double weight, final Boolean disabled, final Boolean hidden, final Boolean readonly) {
@@ -238,7 +240,7 @@ public class Ask extends CoreEntity implements Serializable {
 
 		this.sourceCode = aSourceCode;
 		this.targetCode = aTargetCode;
-		this.attributeCode = aQuestion.getAttributeCode();		
+		this.attributeCode = aQuestion.getAttributeCode();
 		contextList = new ContextList(new CopyOnWriteArrayList<Context>());
 		this.mandatory = aMandatory;
 		this.weight = weight;
@@ -417,12 +419,12 @@ public class Ask extends CoreEntity implements Serializable {
 		this.targetCode = targetCode;
 	}
 
-	
-	/** 
+	/**
 	 * Add an Answer to an entity.
 	 *
 	 * @param answer the Answer to add to the entity
-	 * @throws BadDataException exception thrown if sourceCode, targetCode or attributeCode don't match
+	 * @throws BadDataException exception thrown if sourceCode, targetCode or
+	 *                          attributeCode don't match
 	 */
 	public void add(final Answer answer) throws BadDataException {
 		if ((answer.getSourceCode().equals(sourceCode)) && (answer.getTargetCode().equals(targetCode))
@@ -434,8 +436,7 @@ public class Ask extends CoreEntity implements Serializable {
 
 	}
 
-	
-	/** 
+	/**
 	 * Compare to an object
 	 *
 	 * @param o the object to compare to
@@ -505,8 +506,6 @@ public class Ask extends CoreEntity implements Serializable {
 		this.formTrigger = formTrigger;
 	}
 
-	
-	
 	/**
 	 * @return the createOnTrigger
 	 */
@@ -521,12 +520,13 @@ public class Ask extends CoreEntity implements Serializable {
 		this.createOnTrigger = createOnTrigger;
 	}
 
-	
-	/** 
+	/**
 	 * @return Boolean
 	 */
 	@XmlTransient
 	@Transient
+	@JsonbTransient
+	@JsonIgnore
 	public Boolean hasTriggerQuestion() {
 		// recurse through the childAsks
 		// this is used to tell if intermediate BaseEntity is to be created and then
@@ -534,7 +534,7 @@ public class Ask extends CoreEntity implements Serializable {
 		if (this.formTrigger) {
 			return true;
 		} else {
-			if ((this.childAsks!=null)&&(this.childAsks.length > 0)) {
+			if ((this.childAsks != null) && (this.childAsks.length > 0)) {
 				for (Ask childAsk : this.childAsks) {
 					return childAsk.hasTriggerQuestion();
 				}
@@ -542,9 +542,8 @@ public class Ask extends CoreEntity implements Serializable {
 		}
 		return false;
 	}
-	
-	
-	/** 
+
+	/**
 	 * Clone an Ask
 	 *
 	 * @param ask the Ask to clone
@@ -565,15 +564,13 @@ public class Ask extends CoreEntity implements Serializable {
 		newAsk.parentId = ask.getParentId();
 		newAsk.formTrigger = ask.getFormTrigger();
 		newAsk.createOnTrigger = ask.getCreateOnTrigger();
-		if(ask.getChildAsks() != null && ask.getChildAsks().length > 0){
+		if (ask.getChildAsks() != null && ask.getChildAsks().length > 0) {
 			newAsk.childAsks = ask.getChildAsks();
 		}
-		if(ask.getContextList() != null ){
+		if (ask.getContextList() != null) {
 			newAsk.contextList = ask.getContextList();
 		}
 		return newAsk;
 	}
 
-
-	
 }

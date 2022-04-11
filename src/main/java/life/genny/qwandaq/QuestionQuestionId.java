@@ -12,6 +12,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.json.bind.annotation.JsonbTransient;
 
 import com.querydsl.core.annotations.QueryExclude;
 
@@ -23,7 +24,7 @@ public class QuestionQuestionId implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JsonBackReference(value="questionQuestion")
+	@JsonBackReference(value = "questionQuestion")
 	@JsonIgnore
 	@JsonbTransient
 	private Question source;
@@ -62,10 +63,6 @@ public class QuestionQuestionId implements java.io.Serializable {
 		this.sourceCode = source.getCode();
 	}
 
-
-
-
-
 	/**
 	 * @return the sourceCode
 	 */
@@ -80,20 +77,19 @@ public class QuestionQuestionId implements java.io.Serializable {
 		this.sourceCode = sourceCode;
 	}
 
-
-	/** 
+	/**
 	 * @return int
 	 */
 	@Override
 	public int hashCode() {
-		//        int result;
+		// int result;
 		HashCodeBuilder hcb = new HashCodeBuilder();
 		hcb.append(sourceCode);
 		hcb.append(targetCode);
 		return hcb.toHashCode();
-	}      
+	}
 
-	/** 
+	/**
 	 * Check equality
 	 *
 	 * @param obj the object to compare to
@@ -113,6 +109,5 @@ public class QuestionQuestionId implements java.io.Serializable {
 		eb.append(targetCode, that.targetCode);
 		return eb.isEquals();
 	}
-
 
 }

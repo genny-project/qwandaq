@@ -47,8 +47,6 @@ import life.genny.qwandaq.validation.ValidationList;
 
 import org.javamoney.moneta.Money;
 
-
-
 /**
  * DataType represents a distinct abstract Data Representation in the Qwanda
  * library. The data types express the format and the validations required for
@@ -72,7 +70,7 @@ import org.javamoney.moneta.Money;
 public class DataType implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final Logger log = Logger.getLogger(DataType.class);
 
 	public static final String DTT_LINK = "LNK_ATTRIBUTE"; // This datatype classname indicates the datatype belongs to
@@ -92,16 +90,14 @@ public class DataType implements Serializable {
 
 	private String inputmask;
 
-	
-	/** 
+	/**
 	 * @return String
 	 */
 	public String getComponent() {
 		return component;
 	}
 
-	
-	/** 
+	/**
 	 * @param component the component to set
 	 */
 	public void setComponent(String component) {
@@ -109,7 +105,6 @@ public class DataType implements Serializable {
 	}
 
 	private String component;
-
 
 	/**
 	 * A fieldlist that stores the validations for this object.
@@ -125,7 +120,7 @@ public class DataType implements Serializable {
 	 */
 	@SuppressWarnings("unused")
 	public DataType() {
-		super();
+		// super();
 		// dummy for hibernate
 	}
 
@@ -139,7 +134,7 @@ public class DataType implements Serializable {
 
 	public DataType(final String className, final ValidationList aValidationList, final String name,
 			final String inputmask) {
-        setDttCodeFromClassName(className);
+		setDttCodeFromClassName(className);
 		setClassName(className);
 		setValidationList(aValidationList.getValidationList());
 		setTypeName(name);
@@ -147,7 +142,7 @@ public class DataType implements Serializable {
 	}
 
 	public DataType(final String className, final ValidationList aValidationList, final String name,
-					final String inputmask, final  String component) {
+			final String inputmask, final String component) {
 		setDttCodeFromClassName(className);
 		setClassName(className);
 		setValidationList(aValidationList.getValidationList());
@@ -160,22 +155,21 @@ public class DataType implements Serializable {
 		this(className, aValidationList, name, "");
 	}
 
-    
-	/** 
+	/**
 	 * @param str the className string used to set the Dtt
 	 */
-	public void setDttCodeFromClassName(String str){
+	public void setDttCodeFromClassName(String str) {
 		String[] strs = str.split("\\.");
 		String type;
 
-		if (strs.length > 1){
-			type = strs[strs.length-1];
+		if (strs.length > 1) {
+			type = strs[strs.length - 1];
 		} else {
 			type = strs[0];
 		}
 		if (str.contains("DTT")) {
 			setDttCode(str);
-		}else {
+		} else {
 			setDttCode("DTT_" + type.toUpperCase());
 		}
 	}
@@ -197,7 +191,7 @@ public class DataType implements Serializable {
 
 	/**
 	 * @param validationList
-	 *            the validationList to set
+	 *                       the validationList to set
 	 */
 	public void setValidationList(final List<Validation> validationList) {
 		this.validationList = validationList;
@@ -212,7 +206,7 @@ public class DataType implements Serializable {
 
 	/**
 	 * @param className
-	 *            the className to set
+	 *                  the className to set
 	 */
 	public void setClassName(final String className) {
 		this.className = className;
@@ -227,7 +221,7 @@ public class DataType implements Serializable {
 
 	/**
 	 * @param name
-	 *            the name to set
+	 *             the name to set
 	 */
 	public void setTypeName(String name) {
 		this.typeName = name;
@@ -242,11 +236,12 @@ public class DataType implements Serializable {
 
 	/**
 	 * @param code
-	 *            the name to set
+	 *             the name to set
 	 */
 	public void setDttCode(String code) {
 		this.dttCode = code;
 	}
+
 	/**
 	 * @return the inputmask
 	 */
@@ -256,14 +251,13 @@ public class DataType implements Serializable {
 
 	/**
 	 * @param inputmask
-	 *            the inputmask to set
+	 *                  the inputmask to set
 	 */
 	public void setInputmask(String inputmask) {
 		this.inputmask = inputmask;
 	}
 
-	
-	/** 
+	/**
 	 * @param c the class to set
 	 */
 	@JsonIgnore
@@ -274,8 +268,7 @@ public class DataType implements Serializable {
 		setClassName(simpleClassName);
 	}
 
-	
-	/** 
+	/**
 	 * @return String
 	 */
 	/*
@@ -285,11 +278,10 @@ public class DataType implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "DataType(" + className + " component: "+this.component+", inputmask:"+this.inputmask+")";
+		return "DataType(" + className + " component: " + this.component + ", inputmask:" + this.inputmask + ")";
 	}
 
-	
-	/** 
+	/**
 	 * Get an Instance of a class
 	 *
 	 * @param className the className of the instance to get
@@ -302,8 +294,7 @@ public class DataType implements Serializable {
 		return dataTypeInstance;
 	}
 
-	
-	/** 
+	/**
 	 * Is Datatype summable
 	 *
 	 * @param dtype the DataType to check
@@ -311,21 +302,21 @@ public class DataType implements Serializable {
 	 */
 	static public boolean summable(DataType dtype) {
 		switch (dtype.getClassName()) {
-		case "java.lang.Integer":
-		case "Integer":
-		case "java.lang.Long":
-		case "Long":
-		case "java.lang.Double":
-		case "Double":
-		case "org.javamoney.moneta.Money":
-		case "Money":
-			return true;
-		default:
-			return false;
+			case "java.lang.Integer":
+			case "Integer":
+			case "java.lang.Long":
+			case "Long":
+			case "java.lang.Double":
+			case "Double":
+			case "org.javamoney.moneta.Money":
+			case "Money":
+				return true;
+			default:
+				return false;
 		}
 	}
 
-	/** 
+	/**
 	 * Return a zero item
 	 *
 	 * @param dtype the DataType of the return item
@@ -333,51 +324,51 @@ public class DataType implements Serializable {
 	 */
 	static public Object Zero(DataType dtype) {
 		switch (dtype.getClassName()) {
-		case "java.lang.Integer":
-		case "Integer":
-			return new Integer(0);
-		case "java.lang.Long":
-		case "Long":
-			return new Long(0);
-		case "java.lang.Double":
-		case "Double":
-			return new Double(0.0);
-		case "javax.money.CurrencyUnit":
-		case "org.javamoney.moneta.Money":
-		case "Money":
-			return Money.zero(Monetary.getCurrency("AUD"));
-		default:
-			return null;
+			case "java.lang.Integer":
+			case "Integer":
+				return new Integer(0);
+			case "java.lang.Long":
+			case "Long":
+				return new Long(0);
+			case "java.lang.Double":
+			case "Double":
+				return new Double(0.0);
+			case "javax.money.CurrencyUnit":
+			case "org.javamoney.moneta.Money":
+			case "Money":
+				return Money.zero(Monetary.getCurrency("AUD"));
+			default:
+				return null;
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Add two items together
 	 *
 	 * @param dtype the DataType of the items
-	 * @param x item one
-	 * @param y item two
+	 * @param x     item one
+	 * @param y     item two
 	 * @return Object
 	 */
 	static public Object add(DataType dtype, Object x, Object y) {
 		switch (dtype.getClassName()) {
-		case "java.lang.Integer":
-		case "Integer":
-			return ((Integer) x) + ((Integer) y);
-		case "java.lang.Long":
-		case "Long":
-			return ((Long) x) + ((Long) y);
-		case "java.lang.Double":
-		case "Double":
-			return ((Double) x) + ((Double) y);
-		case "org.javamoney.moneta.Money":
-		case "Money":
-			Money m1 = (Money) x;
-			Money m2 = (Money) y;
-			Money sum = m1.add(m2);
-			return sum;
-		default:
-			return null;
+			case "java.lang.Integer":
+			case "Integer":
+				return ((Integer) x) + ((Integer) y);
+			case "java.lang.Long":
+			case "Long":
+				return ((Long) x) + ((Long) y);
+			case "java.lang.Double":
+			case "Double":
+				return ((Double) x) + ((Double) y);
+			case "org.javamoney.moneta.Money":
+			case "Money":
+				Money m1 = (Money) x;
+				Money m2 = (Money) y;
+				Money sum = m1.add(m2);
+				return sum;
+			default:
+				return null;
 		}
 	}
 

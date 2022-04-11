@@ -108,13 +108,12 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	private static final Logger log = Logger.getLogger(BaseEntity.class);
 
 	private static final String DEFAULT_CODE_PREFIX = "BAS_";
-	
+
 	public static final String PRI_NAME = "PRI_NAME";
 	public static final String PRI_IMAGE_URL = "PRI_IMAGE_URL";
 	public static final String PRI_PHONE = "PRI_PHONE";
 	public static final String PRI_ADDRESS_FULL = "PRI_ADDRESS_FULL";
 	public static final String PRI_EMAIL = "PRI_EMAIL";
-	
 
 	@XmlTransient
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.baseEntity")
@@ -135,6 +134,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	private Set<EntityEntity> links = new LinkedHashSet<>();
 
 	@Transient
+	@JsonbTransient
 	private Set<EntityQuestion> questions = new HashSet<EntityQuestion>(0);
 
 	@JsonIgnore
@@ -149,19 +149,19 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	private Boolean fromCache = false;
 
 	@JsonIgnore
+	@JsonbTransient
 	@XmlTransient
 	@Transient
-	private transient Map<String,EntityAttribute> attributeMap = null;
-	
-	/** 
+	private transient Map<String, EntityAttribute> attributeMap = null;
+
+	/**
 	 * @return Map&lt;String, EntityAttribute&gt; the attributeMap
 	 */
 	public Map<String, EntityAttribute> getAttributeMap() {
 		return attributeMap;
 	}
 
-	
-	/** 
+	/**
 	 * @param attributeMap the attributeMap to set
 	 */
 	public void setAttributeMap(Map<String, EntityAttribute> attributeMap) {
@@ -173,7 +173,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 */
 	@SuppressWarnings("unused")
 	public BaseEntity() {
-		super();
+		// super();
 		// dummy
 	}
 
@@ -213,8 +213,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		this.answers = answers;
 	}
 
-	
-	/** 
+	/**
 	 * @param answers the answers to set
 	 */
 	public void setAnswers(final List<AnswerLink> answers) {
@@ -236,8 +235,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		this.baseEntityAttributes = baseEntityAttributes;
 	}
 
-	
-	/** 
+	/**
 	 * @param baseEntityAttributes the baseEntityAttributes to set
 	 */
 	public void setBaseEntityAttributes(final List<EntityAttribute> baseEntityAttributes) {
@@ -248,7 +246,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return the links
 	 */
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	@JsonbTransient
+	// @JsonbTransient
 	public Set<EntityEntity> getLinks() {
 		return links;
 	}
@@ -262,8 +260,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		this.links = links;
 	}
 
-	
-	/** 
+	/**
 	 * @param links the links to set
 	 */
 	public void setLinks(final List<EntityEntity> links) {
@@ -287,10 +284,10 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		this.questions = questions;
 	}
 
-	
-	/** 
+	/**
 	 * @param questions the questions to set
 	 */
+	@JsonbTransient
 	public void setQuestions(final List<EntityQuestion> questions) {
 		this.questions.addAll(questions);
 	}
@@ -345,7 +342,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	/**
 	 * containsTarget This checks if another baseEntity is linked to the baseEntity.
 	 * 
-	 * @param targetCode the targetCode to check
+	 * @param targetCode        the targetCode to check
 	 * @param linkAttributeCode the linkAttributeCode to check
 	 * @return boolean
 	 */
@@ -368,23 +365,27 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * @return Optional
 	 */
 	public Optional<EntityAttribute> findEntityAttribute(final String attributeCode) {
-		//log.info("Hmmm which path in getValue are we taking, attributeCode:" + attributeCode);
+		// log.info("Hmmm which path in getValue are we taking, attributeCode:" +
+		// attributeCode);
 		if (attributeMap != null) {
-			//log.info("We are in the quick map part of getValue, attributeCode:" + attributeCode);
+			// log.info("We are in the quick map part of getValue, attributeCode:" +
+			// attributeCode);
 			return Optional.ofNullable(attributeMap.get(attributeCode));
 		}
 		Optional<EntityAttribute> foundEntity = null;
 
 		try {
-			//log.info("We are in the long filter part of getValue, attributeCode:" + attributeCode);
+			// log.info("We are in the long filter part of getValue, attributeCode:" +
+			// attributeCode);
 			foundEntity = getBaseEntityAttributes().stream().filter(x -> (x.getAttributeCode().equals(attributeCode)))
 					.findFirst();
 		} catch (Exception e) {
 			log.error("Error in fetching attribute value");
 		}
 
-//    Optional.of(getBaseEntityAttributes().stream()
-//            .filter(x -> (x.getAttribute().getCode().equals(attributeCode))).findFirst().get());
+		// Optional.of(getBaseEntityAttributes().stream()
+		// .filter(x ->
+		// (x.getAttribute().getCode().equals(attributeCode))).findFirst().get());
 
 		return foundEntity;
 	}
@@ -455,7 +456,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * attribute does not already exist
 	 * 
 	 * @param attribute tha Attribute to add
-	 * @param weight the weight
+	 * @param weight    the weight
 	 * @throws BadDataException if attribute could not be added
 	 * @return EntityAttribute
 	 */
@@ -470,8 +471,8 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * attribute does not already exist
 	 * 
 	 * @param attribute tha Attribute to add
-	 * @param weight the weight
-	 * @param value of type String, LocalDateTime, Long, Integer, Boolean
+	 * @param weight    the weight
+	 * @param value     of type String, LocalDateTime, Long, Integer, Boolean
 	 * @throws BadDataException if attribute could not be added
 	 * @return EntityAttribute
 	 */
@@ -501,8 +502,8 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * Use with Caution.
 	 * 
 	 * @param attribute tha Attribute to add the omit check to
-	 * @param weight the weight of the omit check
-	 * @param value of type String, LocalDateTime, Long, Integer, Boolean
+	 * @param weight    the weight of the omit check
+	 * @param value     of type String, LocalDateTime, Long, Integer, Boolean
 	 * @throws BadDataException if omit check could not be added
 	 * @return EntityAttribute
 	 */
@@ -538,7 +539,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 				break;
 			}
 		}
-		
+
 		if (attributeMap != null) {
 			attributeMap.remove(attributeCode);
 		}
@@ -552,9 +553,9 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * sets itself to be the source. For efficiency we assume the link does not
 	 * already exist
 	 * 
-	 * @param target the target to add
+	 * @param target        the target to add
 	 * @param linkAttribute the attribute link
-	 * @param weight the weight of the target
+	 * @param weight        the weight of the target
 	 * @return EntityEntity
 	 * @throws BadDataException if the target could not be added
 	 */
@@ -569,10 +570,10 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	 * sets itself to be the source. For efficiency we assume the link does not
 	 * already exist
 	 * 
-	 * @param target the target to add
+	 * @param target        the target to add
 	 * @param linkAttribute the attribute link
-	 * @param weight the weight of the target
-	 * @param value the value of the target
+	 * @param weight        the weight of the target
+	 * @param value         the value of the target
 	 * @return EntityEntity
 	 * @throws BadDataException if the target could not be added
 	 */
@@ -661,14 +662,15 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 	}
 
 	/**
-	* Merge a BaseEntity.
-	*
-	* @param entity the entity to merge
-	* @return Set
+	 * Merge a BaseEntity.
+	 *
+	 * @param entity the entity to merge
+	 * @return Set
 	 */
 	@Transient
 	@XmlTransient
 	@JsonIgnore
+	@JsonbTransient
 	public Set<EntityAttribute> merge(final BaseEntity entity) {
 		final Set<EntityAttribute> changes = new HashSet<EntityAttribute>();
 
@@ -707,12 +709,13 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		return changes;
 	}
 
-	/** 
-	 * @param <T> The Type to return
+	/**
+	 * @param <T>       The Type to return
 	 * @param attribute
 	 * @return T
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	private <T> T getValue(final Attribute attribute) {
@@ -726,25 +729,27 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		return null;
 	}
 
-	/** 
+	/**
 	 * @param <T> The Type to return
-	 * @param ea the ea to get
+	 * @param ea  the ea to get
 	 * @return T
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	private <T> T getValue(final EntityAttribute ea) {
 		return ea.getValue();
 
 	}
-	
-	/** 
-	 * @param <T> The Type to return
+
+	/**
+	 * @param <T>           The Type to return
 	 * @param attributeCode the attributeCode to get with
 	 * @return Optional
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> Optional<T> getValue(final String attributeCode) {
@@ -761,13 +766,14 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		}
 		return result;
 	}
-	
-	/** 
-	 * @param <T> the Type to return
+
+	/**
+	 * @param <T>           the Type to return
 	 * @param attributeCode the code of the attribute value to get
 	 * @return Optional
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> Optional<T> getLoopValue(final String attributeCode) {
@@ -781,11 +787,12 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		return result;
 	}
 
-	/** 
+	/**
 	 * @param attributeCode the code of the attribute value to get
 	 * @return String
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public String getValueAsString(final String attributeCode) {
@@ -802,15 +809,16 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		return result;
 	}
 
-	/** 
+	/**
 	 * Get the value
 	 *
 	 * @param attributeCode the attribute code
-	 * @param defaultValue the default value
-	 * @param <T> The Type to return
+	 * @param defaultValue  the default value
+	 * @param <T>           The Type to return
 	 * @return T
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> T getValue(final String attributeCode, T defaultValue) {
@@ -824,15 +832,16 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		return defaultValue;
 	}
 
-	/** 
+	/**
 	 * Get the loop value
 	 *
 	 * @param attributeCode the attribute code
-	 * @param defaultValue the default value
-	 * @param <T> The Type to return
+	 * @param defaultValue  the default value
+	 * @param <T>           The Type to return
 	 * @return T
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> T getLoopValue(final String attributeCode, T defaultValue) {
@@ -846,11 +855,12 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		return defaultValue;
 	}
 
-	/** 
+	/**
 	 * @param attributeCode the attribute code
 	 * @return Boolean
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public Boolean is(final String attributeCode) {
@@ -867,18 +877,19 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		return result;
 
 	}
-	
-	/** 
+
+	/**
 	 * Set the value
 	 *
 	 * @param attribute the attribute
-	 * @param value the value to set
-	 * @param weight the weight
-	 * @param <T> The Type to return
+	 * @param value     the value to set
+	 * @param weight    the weight
+	 * @param <T>       The Type to return
 	 * @return Optional
 	 * @throws BadDataException if value cannot be set
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> Optional<T> setValue(final Attribute attribute, T value, Double weight) throws BadDataException {
@@ -899,52 +910,52 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		return result;
 	}
 
-	
-	/** 
+	/**
 	 * Set the value
 	 *
 	 * @param attribute the attribute
-	 * @param value the value to set
-	 * @param <T> The Type to return
+	 * @param value     the value to set
+	 * @param <T>       The Type to return
 	 * @return Optional
 	 * @throws BadDataException if value cannot be set
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> Optional<T> setValue(final Attribute attribute, T value) throws BadDataException {
 		return setValue(attribute, value, 0.0);
 	}
 
-	
-	/** 
+	/**
 	 * Set the value
 	 *
 	 * @param attributeCode the attribute code
-	 * @param value the value to set
-	 * @param <T> The Type to return
+	 * @param value         the value to set
+	 * @param <T>           The Type to return
 	 * @return Optional
 	 * @throws BadDataException if value cannot be set
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> Optional<T> setValue(final String attributeCode, T value) throws BadDataException {
 		return setValue(attributeCode, value, 0.0);
 	}
 
-	
-	/** 
+	/**
 	 * Set the value
 	 *
 	 * @param attributeCode the attribute code
-	 * @param value the value to set
-	 * @param weight the weight
-	 * @param <T> The Type to return
+	 * @param value         the value to set
+	 * @param weight        the weight
+	 * @param <T>           The Type to return
 	 * @return Optional
 	 * @throws BadDataException if value cannot be set
 	 */
 	@JsonIgnore
+	@JsonbTransient
 	@Transient
 	@XmlTransient
 	public <T> Optional<T> setValue(final String attributeCode, T value, Double weight) throws BadDataException {
@@ -962,48 +973,44 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		return result;
 	}
 
-	
-	/** 
+	/**
 	 * Force private
 	 *
 	 * @param attribute the attribute to force
-	 * @param state should force
+	 * @param state     should force
 	 */
 	@Transient
 	public void forcePrivate(final Attribute attribute, final Boolean state) {
 		forcePrivate(attribute.getCode(), state);
 	}
 
-	
-	/** 
+	/**
 	 * Force inferred
 	 *
 	 * @param attribute the attribute to force
-	 * @param state should force
+	 * @param state     should force
 	 */
 	@Transient
 	public void forceInferred(final Attribute attribute, final Boolean state) {
 		forceInferred(attribute.getCode(), state);
 	}
 
-	
-	/** 
+	/**
 	 * Force readonly
 	 *
 	 * @param attribute the attribute to force
-	 * @param state should force
+	 * @param state     should force
 	 */
 	@Transient
 	public void forceReadonly(final Attribute attribute, final Boolean state) {
 		forceReadonly(attribute.getCode(), state);
 	}
 
-	
-	/** 
+	/**
 	 * Force private
 	 *
 	 * @param attributeCode the code of the attribute to force
-	 * @param state should force
+	 * @param state         should force
 	 */
 	@Transient
 	public void forcePrivate(String attributeCode, Boolean state) {
@@ -1014,12 +1021,11 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		}
 	}
 
-	
-	/** 
+	/**
 	 * Force inferred
 	 *
 	 * @param attributeCode the code of the attribute to force
-	 * @param state should force
+	 * @param state         should force
 	 */
 	@Transient
 	public void forceInferred(final String attributeCode, final Boolean state) {
@@ -1030,12 +1036,11 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		}
 	}
 
-	
-	/** 
+	/**
 	 * Force readonly
 	 *
 	 * @param attributeCode the code of the attribute to force
-	 * @param state should force
+	 * @param state         should force
 	 */
 	@Transient
 	public void forceReadonly(final String attributeCode, final Boolean state) {
@@ -1053,8 +1058,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		return fromCache;
 	}
 
-	
-	/** 
+	/**
 	 * @return Boolean
 	 */
 	public Boolean isFromCache() {
@@ -1068,8 +1072,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		this.fromCache = fromCache;
 	}
 
-	
-	/** 
+	/**
 	 * @return String[]
 	 */
 	@Transient
@@ -1078,8 +1081,7 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		return getPushCodes(new String[0]);
 	}
 
-	
-	/** 
+	/**
 	 * @param initialCodes the initialCodes to set
 	 * @return String[]
 	 */
@@ -1091,37 +1093,37 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 		codes.addAll(new HashSet<>(Arrays.asList(initialCodes)));
 		if ((this.baseEntityAttributes != null) && (!this.baseEntityAttributes.isEmpty())) {
 			for (EntityAttribute ea : this.baseEntityAttributes) {
-			//	if (ea.getAttributeCode().startsWith("LNK_")) {
-					String value = ea.getValueString();
-					if (value != null) {
-						if (value.startsWith("[") && !value.equals("[]")) {
-							value = value.substring(2, value.length() - 2);
-						}
-						if (value.startsWith("PER")||(value.startsWith("CPY"))) {
-							codes.add(value);
-						}
+				// if (ea.getAttributeCode().startsWith("LNK_")) {
+				String value = ea.getValueString();
+				if (value != null) {
+					if (value.startsWith("[") && !value.equals("[]")) {
+						value = value.substring(2, value.length() - 2);
+					}
+					if (value.startsWith("PER") || (value.startsWith("CPY"))) {
+						codes.add(value);
 					}
 				}
-			//}
-			if (this.getCode().startsWith("PER")||(this.getCode().startsWith("CPY"))) {
+			}
+			// }
+			if (this.getCode().startsWith("PER") || (this.getCode().startsWith("CPY"))) {
 				codes.add(this.getCode());
 			}
 		}
 
 		return codes.toArray(new String[0]);
 	}
-	
-	
-	/** 
+
+	/**
 	 * @param prefix the prefix to set
 	 * @return Optional&lt;EntityAttribute&gt;
 	 */
 	@Transient
+	@JsonbTransient
 	public Optional<EntityAttribute> getHighestEA(final String prefix) {
 		// go through all the EA
 		Optional<EntityAttribute> highest = Optional.empty();
 		Double weight = -1000.0;
-		
+
 		if ((this.baseEntityAttributes != null) && (!this.baseEntityAttributes.isEmpty())) {
 			for (EntityAttribute ea : this.baseEntityAttributes) {
 				if (ea.getAttributeCode().startsWith(prefix)) {
@@ -1129,31 +1131,31 @@ public class BaseEntity extends CodedEntity implements BaseEntityIntf {
 						highest = Optional.of(ea);
 						weight = ea.getWeight();
 					}
-				
+
 				}
 			}
-		
+
 		}
 
 		return highest;
 	}
-	
-	/** 
+
+	/**
 	 * @param fastMode the fastMode to set
 	 */
 	@Transient
-	public void setFastAttributes(Boolean fastMode)
-	{
+	@JsonbTransient
+	public void setFastAttributes(Boolean fastMode) {
 		if (fastMode) {
-			attributeMap = new ConcurrentHashMap<String,EntityAttribute>();
-		// Grab all the entityAttributes and create a fast HashMap lookup
-		for (EntityAttribute ea : this.baseEntityAttributes) {
-			attributeMap.put(ea.getAttributeCode(), ea);
-		}
+			attributeMap = new ConcurrentHashMap<String, EntityAttribute>();
+			// Grab all the entityAttributes and create a fast HashMap lookup
+			for (EntityAttribute ea : this.baseEntityAttributes) {
+				attributeMap.put(ea.getAttributeCode(), ea);
+			}
 		} else {
 			attributeMap = null;
 		}
 
 	}
-	
+
 }

@@ -9,6 +9,11 @@ public class QEventMessage extends QMessage implements Serializable {
 	private static final String MESSAGE_TYPE = "EVT_MSG";
 	private String event_type;
 	public MessageData data;
+
+	public QEventMessage()
+        {
+	   super();
+        }
 	
 	/** 
 	 * @return String

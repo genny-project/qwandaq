@@ -93,8 +93,8 @@ public class Question extends CodedEntity implements Serializable {
 	@XmlTransient
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.source", cascade = CascadeType.MERGE)
 	@JsonManagedReference(value = "questionQuestion")
-	@JsonIgnore
-	@JsonbTransient
+	// @JsonIgnore
+	// @JsonbTransient
 	private Set<QuestionQuestion> childQuestions = new HashSet<QuestionQuestion>(0);
 
 	@XmlTransient
@@ -113,7 +113,7 @@ public class Question extends CodedEntity implements Serializable {
 	private Boolean readonly = false;
 
 	private Boolean oneshot = false;
-	
+
 	private String placeholder = "";
 
 	private String directions = "";
@@ -125,34 +125,32 @@ public class Question extends CodedEntity implements Serializable {
 
 	private String icon;
 
-	
-	/** 
+	/**
 	 * @return String
 	 */
 	public String getHelper() {
 		return helper;
 	}
 
-	
-	/** 
+	/**
 	 * @param helper the helper to set
 	 */
 	public void setHelper(String helper) {
 		this.helper = helper;
 	}
 
-
 	/**
 	 * Constructor.
 	 */
 	@SuppressWarnings("unused")
-	public Question() { }
+	public Question() {
+	}
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param code     The unique code for this Question
-	 * @param name     The human readable summary name
+	 * @param code      The unique code for this Question
+	 * @param name      The human readable summary name
 	 * @param attribute The associated attribute
 	 */
 	public Question(final String code, final String name, final Attribute attribute) {
@@ -162,50 +160,49 @@ public class Question extends CodedEntity implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param code     The unique code for this Question
-	 * @param name     The human readable summary name
-	 * @param attribute The associated attribute
+	 * @param code        The unique code for this Question
+	 * @param name        The human readable summary name
+	 * @param attribute   The associated attribute
 	 * @param placeholder The placeholder text
 	 */
 	public Question(final String code, final String name, final Attribute attribute, final String placeholder) {
 		this(code, name, attribute, false, name, placeholder);
 	}
-	
+
 	/**
 	 * Constructor.
 	 * 
-	 * @param code     The unique code for this Question
-	 * @param name     The human readable summary name
+	 * @param code      The unique code for this Question
+	 * @param name      The human readable summary name
 	 * @param attribute The associated attribute
 	 * @param mandatory the mandatory status of the Question
 	 */
 	public Question(final String code, final String name, final Attribute attribute, final Boolean mandatory) {
 		this(code, name, attribute, mandatory, name);
 	}
-	
+
 	/**
 	 * Constructor.
 	 * 
-	 * @param code     The unique code for this Question
-	 * @param name     The human readable summary name
+	 * @param code      The unique code for this Question
+	 * @param name      The human readable summary name
 	 * @param attribute The associated attribute
 	 * @param mandatory the mandatory status of the Question
-	 * @param html 		the html of the Question
+	 * @param html      the html of the Question
 	 */
 	public Question(final String code, final String name, final Attribute attribute, final Boolean mandatory,
 			final String html) {
 		this(code, name, attribute, mandatory, html, null);
 	}
 
-	
 	/**
 	 * Constructor.
 	 * 
-	 * @param code     The unique code for this Question
-	 * @param name     The human readable summary name
-	 * @param attribute The associated attribute
-	 * @param mandatory the mandatory status of the Question
-	 * @param html 		the html of the Question
+	 * @param code        The unique code for this Question
+	 * @param name        The human readable summary name
+	 * @param attribute   The associated attribute
+	 * @param mandatory   the mandatory status of the Question
+	 * @param html        the html of the Question
 	 * @param placeholder The placeholder text
 	 */
 	public Question(final String code, final String name, final Attribute attribute, final Boolean mandatory,
@@ -224,8 +221,8 @@ public class Question extends CodedEntity implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param code          The unique code for this Question
-	 * @param name          The human readable summary name
+	 * @param code           The unique code for this Question
+	 * @param name           The human readable summary name
 	 * @param childQuestions The associated child Questions in this question Group
 	 */
 	public Question(final String code, final String name, final List<Question> childQuestions) {
@@ -253,8 +250,8 @@ public class Question extends CodedEntity implements Serializable {
 		this.attribute = null;
 		this.attributeCode = QUESTION_GROUP_ATTRIBUTE_CODE;
 	}
-	
-	/** 
+
+	/**
 	 * @param childQuestions the List of child Questions to initialize with
 	 */
 	@Transient
@@ -462,7 +459,7 @@ public class Question extends CodedEntity implements Serializable {
 	 * object. For efficiency we assume the question link does not already exist
 	 *
 	 * @param childQuestionCode the code of the child Question to add
-	 * @param weight the weight
+	 * @param weight            the weight
 	 * @throws BadDataException if something is missing
 	 */
 	public void addChildQuestion(final String childQuestionCode, final Double weight) throws BadDataException {
@@ -475,8 +472,8 @@ public class Question extends CodedEntity implements Serializable {
 	 * object. For efficiency we assume the question link does not already exist
 	 *
 	 * @param childQuestionCode the code of the child question to add
-	 * @param weight the weight
-	 * @param mandatory the mandatory status
+	 * @param weight            the weight
+	 * @param mandatory         the mandatory status
 	 * @return QuestionQuestion
 	 * @throws BadDataException if something is missing
 	 */
@@ -499,7 +496,8 @@ public class Question extends CodedEntity implements Serializable {
 	 * removeChildQuestion This removes a child Question from the question group.
 	 * For efficiency we assume the child question exists
 	 *
-	 * @param childQuestionCode the code of the child Question used to remove the child Question
+	 * @param childQuestionCode the code of the child Question used to remove the
+	 *                          child Question
 	 */
 	public void removeChildQuestion(final String childQuestionCode) {
 		final Optional<QuestionQuestion> optQuestionQuestion = findQuestionLink(childQuestionCode);
@@ -510,7 +508,8 @@ public class Question extends CodedEntity implements Serializable {
 	 * findChildQuestion This returns an QuestionLink if it exists in the question
 	 * group.
 	 *
-	 * @param childQuestionCode the code of the child Question used to find the Question Link
+	 * @param childQuestionCode the code of the child Question used to find the
+	 *                          Question Link
 	 * @return Optional&lt;QuestionQuestion&gt;
 	 */
 	public Optional<QuestionQuestion> findQuestionLink(final String childQuestionCode) {
@@ -524,7 +523,8 @@ public class Question extends CodedEntity implements Serializable {
 	 * findQuestionQuestion This returns an question link if it exists in the
 	 * question group. Could be more efficient in retrival (ACC: test)
 	 *
-	 * @param childQuestion the code of the child Question used to find the QuestionQuestion
+	 * @param childQuestion the code of the child Question used to find the
+	 *                      QuestionQuestion
 	 * @return QuestionQuestion
 	 */
 	public QuestionQuestion findQuestionQuestion(final Question childQuestion) {
@@ -534,8 +534,7 @@ public class Question extends CodedEntity implements Serializable {
 		return foundEntity;
 	}
 
-	
-	/** 
+	/**
 	 * @return String
 	 */
 	@Override
@@ -543,8 +542,7 @@ public class Question extends CodedEntity implements Serializable {
 		return this.getCode() + ":" + getChildQuestionCodes();
 	}
 
-	
-	/** 
+	/**
 	 * @return String
 	 */
 	@Transient
@@ -589,7 +587,7 @@ public class Question extends CodedEntity implements Serializable {
 	 */
 	public void setReadonly(Boolean readonly) {
 		this.readonly = readonly;
-	} 
+	}
 
 	/**
 	 * @return the icon
@@ -603,6 +601,6 @@ public class Question extends CodedEntity implements Serializable {
 	 */
 	public void setIcon(String icon) {
 		this.icon = icon;
-	} 
+	}
 
 }

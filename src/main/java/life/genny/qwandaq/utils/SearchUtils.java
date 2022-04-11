@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.bind.Jsonb;
@@ -18,6 +20,7 @@ import java.util.HashMap;
 
 import org.jboss.logging.Logger;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.Answer;
 import life.genny.qwandaq.Ask;
 import life.genny.qwandaq.attribute.Attribute;
@@ -35,24 +38,29 @@ import life.genny.qwandaq.message.QSearchMessage;
 import life.genny.qwandaq.message.QEventDropdownMessage;
 
 /**
- * A static utility class used for performing table 
+ * A utility class used for performing table
  * searches and search related operations.
  * 
  * @author Jasper Robison
  */
+@RegisterForReflection
+@ApplicationScoped
 public class SearchUtils {
 
 	static Logger log = Logger.getLogger(SearchUtils.class);
 	static Jsonb jsonb = JsonbBuilder.create();
 
+	@Inject
+	QwandaUtils qwandaUtils;
+
 	/**
-	* Evaluate any conditional filters for a {@link SearchEntity}
-	*
-	* @param beUtils the utils to use
-	* @param searchBE the SearchEntity to evaluate filters of
-	* @return SearchEntity
+	 * Evaluate any conditional filters for a {@link SearchEntity}
+	 *
+	 * @param beUtils  the utils to use
+	 * @param searchBE the SearchEntity to evaluate filters of
+	 * @return SearchEntity
 	 */
-	public static SearchEntity evaluateConditionalFilters(BaseEntityUtils beUtils, SearchEntity searchBE) {
+	public SearchEntity evaluateConditionalFilters(BaseEntityUtils beUtils, SearchEntity searchBE) {
 
 		CapabilityUtils capabilityUtils = new CapabilityUtils(beUtils);
 
@@ -62,11 +70,12 @@ public class SearchUtils {
 
 			if (!ea.getAttributeCode().startsWith("CND_")) {
 				// find Conditional Filters
-				EntityAttribute cnd = searchBE.findEntityAttribute("CND_"+ea.getAttributeCode()).orElse(null);
+				EntityAttribute cnd = searchBE.findEntityAttribute("CND_" + ea.getAttributeCode()).orElse(null);
 
 				if (cnd != null) {
 
-					log.info("Condition found for " + ea.getAttributeCode() + " with value: " + cnd.getValue().toString());
+					log.info("Condition found for " + ea.getAttributeCode() + " with value: "
+							+ cnd.getValue().toString());
 					String[] condition = cnd.getValue().toString().split(":");
 
 					String capability = condition[0];
@@ -77,7 +86,8 @@ public class SearchUtils {
 					capability = not ? capability.substring(1) : capability;
 
 					// check for Capability
-					Boolean hasCap = capabilityUtils.hasCapabilityThroughPriIs(capability, CapabilityMode.getMode(mode));
+					Boolean hasCap = capabilityUtils.hasCapabilityThroughPriIs(capability,
+							CapabilityMode.getMode(mode));
 
 					// XNOR operator
 					if (!(hasCap ^ not)) {
@@ -88,19 +98,22 @@ public class SearchUtils {
 		}
 
 		// remove unwanted attrs
-		shouldRemove.stream().forEach(item -> {searchBE.removeAttribute(item);});
+		shouldRemove.stream().forEach(item -> {
+			searchBE.removeAttribute(item);
+		});
 
 		return searchBE;
 	}
 
 	/**
-	* Perform a table like search in Genny using a {@link SearchEntity} code. 
-	* The respective {@link SearchEntity} will be fetched from the cache befor processing.
-	*
-	* @param beUtils the utils to use
-	* @param code the code of the SearchEntity to grab from cache and search
+	 * Perform a table like search in Genny using a {@link SearchEntity} code.
+	 * The respective {@link SearchEntity} will be fetched from the cache befor
+	 * processing.
+	 *
+	 * @param beUtils the utils to use
+	 * @param code    the code of the SearchEntity to grab from cache and search
 	 */
-	public static void searchTable(BaseEntityUtils beUtils, String code) {
+	public void searchTable(BaseEntityUtils beUtils, String code) {
 
 		String realm = beUtils.getRealm();
 
@@ -127,12 +140,12 @@ public class SearchUtils {
 	}
 
 	/**
-	* Perform a table like search in Genny using a {@link SearchEntity}.
-	*
-	* @param beUtils the utils to use
-	* @param searchEntity the SearchEntity to search
+	 * Perform a table like search in Genny using a {@link SearchEntity}.
+	 *
+	 * @param beUtils      the utils to use
+	 * @param searchEntity the SearchEntity to search
 	 */
-	public static void searchTable(BaseEntityUtils beUtils, SearchEntity searchEntity) {
+	public void searchTable(BaseEntityUtils beUtils, SearchEntity searchEntity) {
 
 		String realm = beUtils.getRealm();
 
@@ -154,7 +167,7 @@ public class SearchUtils {
 			}
 		}
 
-		CacheUtils.putObject(realm, "LAST-SEARCH:"+searchEntity.getCode(), searchEntity);
+		CacheUtils.putObject(realm, "LAST-SEARCH:" + searchEntity.getCode(), searchEntity);
 
 		// ensure column and action indexes are accurate
 		searchEntity.updateColumnIndex();
@@ -168,14 +181,15 @@ public class SearchUtils {
 	}
 
 	/**
-	* A method to fetch any additional {@link EntityAttribute} filters for a given {@link SearchEntity} 
-	* from the SearchFilters rulegroup.
-	*
-	* @param beUtils the utils to use
-	* @param searchBE the SearchEntity to get additional filters for
-	* @return List
+	 * A method to fetch any additional {@link EntityAttribute} filters for a given
+	 * {@link SearchEntity}
+	 * from the SearchFilters rulegroup.
+	 *
+	 * @param beUtils  the utils to use
+	 * @param searchBE the SearchEntity to get additional filters for
+	 * @return List
 	 */
-	public static List<EntityAttribute> getUserFilters(BaseEntityUtils beUtils, SearchEntity searchBE) {
+	public List<EntityAttribute> getUserFilters(BaseEntityUtils beUtils, SearchEntity searchBE) {
 
 		List<EntityAttribute> filters = new ArrayList<>();
 
@@ -185,12 +199,11 @@ public class SearchUtils {
 		facts.put("searchBE", searchBE);
 
 		Map<String, Object> results = new RuleFlowGroupWorkItemHandler()
-			.executeRules(
-				beUtils,
-				facts, 
-				"SearchFilters", 
-				"SearchUtils:getUserFilters"
-			);
+				.executeRules(
+						beUtils,
+						facts,
+						"SearchFilters",
+						"SearchUtils:getUserFilters");
 
 		Object obj = results.get("payload");
 
@@ -214,22 +227,22 @@ public class SearchUtils {
 		}
 		return filters;
 	}
-	
-	/** 
-	 * @param beUtils the utils to use
+
+	/**
+	 * @param beUtils  the utils to use
 	 * @param searchBE the SearchEntity to send filter questions for
 	 */
-	public static void sendFilterQuestions(BaseEntityUtils beUtils, SearchEntity searchBE) {
+	public void sendFilterQuestions(BaseEntityUtils beUtils, SearchEntity searchBE) {
 		log.error("Function not complete!");
 	}
-	
-	/** 
-	 * @param beUtils the utils to use
-	 * @param baseBE the baseBE to get associated column for
+
+	/**
+	 * @param beUtils   the utils to use
+	 * @param baseBE    the baseBE to get associated column for
 	 * @param calEACode the calEACode to get
 	 * @return Answer
 	 */
-	public static Answer getAssociatedColumnValue(BaseEntityUtils beUtils, BaseEntity baseBE, String calEACode) {
+	public Answer getAssociatedColumnValue(BaseEntityUtils beUtils, BaseEntity baseBE, String calEACode) {
 
 		String[] calFields = calEACode.substring("COL__".length()).split("__");
 		if (calFields.length == 1) {
@@ -237,20 +250,20 @@ public class SearchUtils {
 			return null;
 		}
 
-		String linkBeCode = calFields[calFields.length-1];
+		String linkBeCode = calFields[calFields.length - 1];
 		BaseEntity be = baseBE;
 		Optional<EntityAttribute> associateEa = null;
 		String finalAttributeCode = calEACode.substring("COL_".length());
 
 		// Fetch The Attribute of the last code
-		String primaryAttrCode = calFields[calFields.length-1];
-		Attribute primaryAttribute = QwandaUtils.getAttribute(primaryAttrCode);
+		String primaryAttrCode = calFields[calFields.length - 1];
+		Attribute primaryAttribute = qwandaUtils.getAttribute(primaryAttrCode);
 
 		Answer ans = new Answer(baseBE.getCode(), baseBE.getCode(), finalAttributeCode, "");
 		Attribute att = new Attribute(finalAttributeCode, primaryAttribute.getName(), primaryAttribute.getDataType());
 		ans.setAttribute(att);
 
-		for (int i = 0; i < calFields.length-1; i++) {
+		for (int i = 0; i < calFields.length - 1; i++) {
 			String attributeCode = calFields[i];
 			String calBe = be.getValueAsString(attributeCode);
 
@@ -260,7 +273,8 @@ public class SearchUtils {
 
 				for (String code : codeArr) {
 					if (code.isBlank()) {
-						log.error("code from Calfields is empty calVal["+calVal+"] skipping calFields=["+calFields+"] - be:"+baseBE.getCode());
+						log.error("code from Calfields is empty calVal[" + calVal + "] skipping calFields=[" + calFields
+								+ "] - be:" + baseBE.getCode());
 						continue;
 					}
 
@@ -270,7 +284,7 @@ public class SearchUtils {
 						return null;
 					}
 
-					if (i == (calFields.length-2)) {
+					if (i == (calFields.length - 2)) {
 						associateEa = associatedBe.findEntityAttribute(linkBeCode);
 
 						if (associateEa != null && (associateEa.isPresent() || ("PRI_NAME".equals(linkBeCode)))) {
@@ -298,15 +312,15 @@ public class SearchUtils {
 
 		return ans;
 	}
-	
+
 	/**
-	* Get a session search for a given SearchEntity
-	*
-	* @param beUtils the utility used in operation
-	* @param searchEntity the searchEntity
-	* @return SearchEntity
+	 * Get a session search for a given SearchEntity
+	 *
+	 * @param beUtils      the utility used in operation
+	 * @param searchEntity the searchEntity
+	 * @return SearchEntity
 	 */
-	public static SearchEntity getSessionSearch(BaseEntityUtils beUtils, SearchEntity searchEntity) {
+	public SearchEntity getSessionSearch(BaseEntityUtils beUtils, SearchEntity searchEntity) {
 
 		GennyToken gennyToken = beUtils.getGennyToken();
 		String realm = gennyToken.getRealm();
@@ -324,10 +338,10 @@ public class SearchUtils {
 		searchEntity.setCode(sessionSearchCode);
 
 		searchEntity.getBaseEntityAttributes().stream()
-			.filter(ea -> ea.getAttributeCode().startsWith("SBE_"))
-			.forEach(ea -> {
-				ea.setAttributeCode(ea.getAttributeCode() + "_" + gennyToken.getJTI().toUpperCase());
-			});
+				.filter(ea -> ea.getAttributeCode().startsWith("SBE_"))
+				.forEach(ea -> {
+					ea.setAttributeCode(ea.getAttributeCode() + "_" + gennyToken.getJTI().toUpperCase());
+				});
 
 		// put/update in the cache
 		CacheUtils.putObject(realm, searchEntity.getCode(), searchEntity);
@@ -335,11 +349,11 @@ public class SearchUtils {
 		return searchEntity;
 	}
 
-	/** 
-	 * @param beUtils the utils to use
+	/**
+	 * @param beUtils       the utils to use
 	 * @param dropdownValue the dropdownValue to perform for
 	 */
-	public static void performQuickSearch(BaseEntityUtils beUtils, String dropdownValue) {
+	public void performQuickSearch(BaseEntityUtils beUtils, String dropdownValue) {
 
 		Instant start = Instant.now();
 
@@ -408,7 +422,7 @@ public class SearchUtils {
 					// SearchEntity.convertOperatorToStringFilter(operator);
 					SearchEntity.StringFilter stringFilter = SearchEntity.StringFilter.EQUAL;
 					String mergedValue = MergeUtils.merge(value, ctxMap);
-					log.info( "Adding filter: " + attributeCode + " " 
+					log.info("Adding filter: " + attributeCode + " "
 							+ stringFilter.toString() + " " + mergedValue);
 					baseSearch.addFilter(attributeCode, stringFilter, mergedValue);
 				}
@@ -474,7 +488,8 @@ public class SearchUtils {
 				}
 
 				// fetch each search from cache
-				SearchEntity searchBE = CacheUtils.getObject(realm, targetedBucketCode + "_" + sessionCode, SearchEntity.class);
+				SearchEntity searchBE = CacheUtils.getObject(realm, targetedBucketCode + "_" + sessionCode,
+						SearchEntity.class);
 
 				if (searchBE == null) {
 					log.error("Null SBE in cache for " + targetedBucketCode);
@@ -522,11 +537,13 @@ public class SearchUtils {
 				KafkaUtils.writeMsg("webcmds", msg);
 
 				// update and send the SearchEntity
-				// updateBaseEntity(searchBE, "PRI_TOTAL_RESULTS", Long.valueOf(finalResultList.size()) + "");
+				// updateBaseEntity(searchBE, "PRI_TOTAL_RESULTS",
+				// Long.valueOf(finalResultList.size()) + "");
 
-				Attribute attribute = QwandaUtils.getAttribute("PRI_TOTAL_RESULTS");
+				Attribute attribute = qwandaUtils.getAttribute("PRI_TOTAL_RESULTS");
 				try {
-					searchBE.addAnswer(new Answer(searchBE, searchBE, attribute, Long.valueOf(finalResultList.size()) + ""));
+					searchBE.addAnswer(
+							new Answer(searchBE, searchBE, attribute, Long.valueOf(finalResultList.size()) + ""));
 				} catch (BadDataException e) {
 					log.error("Could not update total results");
 				}
@@ -552,10 +569,10 @@ public class SearchUtils {
 	 * Evaluate whether a set of conditions are met for a specific BaseEntity.
 	 *
 	 * @param conditions the conditions to check
-	 * @param target the target entity to check against
+	 * @param target     the target entity to check against
 	 * @return Boolean
 	 */
-	public static Boolean jsonConditionsMet(JsonArray conditions, BaseEntity target) {
+	public Boolean jsonConditionsMet(JsonArray conditions, BaseEntity target) {
 
 		// TODO: Add support for roles and context map
 
@@ -579,10 +596,10 @@ public class SearchUtils {
 	 * Evaluate whether the condition is met for a specific BaseEntity.
 	 *
 	 * @param condition the condition to check
-	 * @param target the target entity to check against
+	 * @param target    the target entity to check against
 	 * @return Boolean
 	 */
-	public static Boolean jsonConditionMet(JsonObject condition, BaseEntity target) {
+	public Boolean jsonConditionMet(JsonObject condition, BaseEntity target) {
 
 		// TODO: Add support for roles and context map
 
@@ -599,10 +616,10 @@ public class SearchUtils {
 			if (ea == null) {
 				log.info(
 						"Could not evaluate condition: Attribute "
-						+ attributeCode
-						+ " for "
-						+ target.getCode()
-						+ " returned Null!");
+								+ attributeCode
+								+ " for "
+								+ target.getCode()
+								+ " returned Null!");
 				return false;
 			} else {
 				log.info("Found Attribute " + attributeCode + " for " + target.getCode());
@@ -620,10 +637,10 @@ public class SearchUtils {
 	/**
 	 * Perform a dropdown search through dropkick.
 	 *
-	 * @param ask the ask to perform dropdown search for
+	 * @param ask       the ask to perform dropdown search for
 	 * @param userToken the userToken used to perform the search
 	 */
-	public static void performDropdownSearch(Ask ask, GennyToken userToken) {
+	public void performDropdownSearch(Ask ask, GennyToken userToken) {
 
 		// setup message data
 		MessageData messageData = new MessageData();

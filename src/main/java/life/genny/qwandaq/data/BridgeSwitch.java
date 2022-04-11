@@ -108,7 +108,7 @@ public class BridgeSwitch {
 		BridgeInfo info = CacheUtils.getObject(realm, key, BridgeInfo.class);
 		
 		if (info == null) {
-			log.error("No BridgeInfo object found for user " + gennyToken.getUserCode());
+			log.debug("No BridgeInfo object found for user " + gennyToken.getUserCode());
 			return null;
 		}
 

@@ -30,19 +30,15 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 
 import com.querydsl.core.annotations.QueryExclude;
 
-
-
 @Entity
 @QueryExclude
-@Table(name = "question_question", uniqueConstraints = @UniqueConstraint(columnNames= {"sourceCode","targetCode", "realm"}),
-indexes = {
-		 @Index(columnList = "sourceCode", name = "source_idx"),
-        @Index(columnList = "realm", name = "code_idx")
-    })
-@AssociationOverrides(
-		{ @AssociationOverride(name = "pk.source", joinColumns = @JoinColumn(name = "SOURCE_ID"))
-		}
-)
+@Table(name = "question_question", uniqueConstraints = @UniqueConstraint(columnNames = { "sourceCode", "targetCode",
+		"realm" }), indexes = {
+				@Index(columnList = "sourceCode", name = "source_idx"),
+				@Index(columnList = "realm", name = "code_idx")
+		})
+@AssociationOverrides({ @AssociationOverride(name = "pk.source", joinColumns = @JoinColumn(name = "SOURCE_ID"))
+})
 @Cacheable
 @RegisterForReflection
 public class QuestionQuestion implements java.io.Serializable, Comparable<Object> {
@@ -50,8 +46,6 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	@JsonIgnore
-	@JsonbTransient
 	private QuestionQuestionId pk = new QuestionQuestionId();
 
 	@Column(name = "created")
@@ -72,10 +66,11 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
 	Boolean mandatory = false;
 
-	// If this is set to true then attribute needs to be set to readonly after value set.
+	// If this is set to true then attribute needs to be set to readonly after value
+	// set.
 	Boolean oneshot = false;
 
-	private Boolean disabled=false;
+	private Boolean disabled = false;
 	private Boolean hidden = false;
 
 	private Boolean readonly = false;
@@ -97,23 +92,25 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 	 * Constructor.
 	 * 
 	 * @param source
-	 *            the source baseEntity
+	 *                   the source baseEntity
 	 * @param targetCode
-	 *            the target code of the entity that is linked to
+	 *                   the target code of the entity that is linked to
 	 * @param weight
-	 *            the associated weight
+	 *                   the associated weight
 	 * @param mandatory
-	 *            Is the question mandatory
+	 *                   Is the question mandatory
 	 * @param disabled
-	 *            Is the question read only
+	 *                   Is the question read only
 	 * @param readonly
-	 *            Is the question readonly
+	 *                   Is the question readonly
 	 * @param hidden
-	 *            Is the question hidden	 * @param Weight
-	 *            the weighted importance of this attribute (relative to the other
-	 *            attributes)
+	 *                   Is the question hidden * @param Weight
+	 *                   the weighted importance of this attribute (relative to the
+	 *                   other
+	 *                   attributes)
 	 */
-	public QuestionQuestion(final Question source, final String targetCode, Double weight, boolean mandatory, boolean disabled, boolean hidden, boolean readonly) {
+	public QuestionQuestion(final Question source, final String targetCode, Double weight, boolean mandatory,
+			boolean disabled, boolean hidden, boolean readonly) {
 		autocreateCreated();
 		getPk().setSource(source);
 		getPk().setTargetCode(targetCode);
@@ -132,69 +129,75 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 	 * Constructor.
 	 * 
 	 * @param source
-	 *            the source baseEntity
+	 *                   the source baseEntity
 	 * @param targetCode
-	 *            the target code of the entity that is linked to
+	 *                   the target code of the entity that is linked to
 	 * @param weight
-	 *            the weighted importance of this attribute (relative to the other
-	 *            attributes)
+	 *                   the weighted importance of this attribute (relative to the
+	 *                   other
+	 *                   attributes)
 	 * @param mandatory
-	 *            Is the question mandatory
+	 *                   Is the question mandatory
 	 * @param disabled
-	 *            Is the question read only
+	 *                   Is the question read only
 	 * @param hidden
-	 *            Is the question hidden
+	 *                   Is the question hidden
 	 */
-	public QuestionQuestion(final Question source, final String targetCode, Double weight, boolean mandatory, boolean disabled, boolean hidden) {
-		this(source,targetCode,weight,mandatory,disabled,hidden,false);
+	public QuestionQuestion(final Question source, final String targetCode, Double weight, boolean mandatory,
+			boolean disabled, boolean hidden) {
+		this(source, targetCode, weight, mandatory, disabled, hidden, false);
 	}
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param source
-	 *            the source baseEntity
+	 *                   the source baseEntity
 	 * @param targetCode
-	 *            the target code of the entity that is linked to
+	 *                   the target code of the entity that is linked to
 	 * @param weight
-	 *            the weighted importance of this attribute (relative to the other
-	 *            attributes)
+	 *                   the weighted importance of this attribute (relative to the
+	 *                   other
+	 *                   attributes)
 	 * @param mandatory
-	 *            Is the question mandatory
+	 *                   Is the question mandatory
 	 * @param disabled
-	 *            Is the question read only
+	 *                   Is the question read only
 	 */
-	public QuestionQuestion(final Question source, final String targetCode, Double weight, boolean mandatory, boolean disabled) {
-		this(source,targetCode,weight,mandatory,disabled,false);
+	public QuestionQuestion(final Question source, final String targetCode, Double weight, boolean mandatory,
+			boolean disabled) {
+		this(source, targetCode, weight, mandatory, disabled, false);
 	}
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param source
-	 *            the source baseEntity
+	 *                   the source baseEntity
 	 * @param targetCode
-	 *            the target code of the entity that is linked to
+	 *                   the target code of the entity that is linked to
 	 * @param weight
-	 *            the weighted importance of this attribute (relative to the other
-	 *            attributes)
+	 *                   the weighted importance of this attribute (relative to the
+	 *                   other
+	 *                   attributes)
 	 * @param mandatory
-	 * 				The mandatory status of this QuestionQuestion
+	 *                   The mandatory status of this QuestionQuestion
 	 */
 	public QuestionQuestion(final Question source, final String targetCode, Double weight, boolean mandatory) {
-		this(source,targetCode,weight,mandatory,false);
+		this(source, targetCode, weight, mandatory, false);
 	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param source
-	 * 			The Source Question.
+	 *               The Source Question.
 	 * @param target
-	 * 			The Target Question.
+	 *               The Target Question.
 	 * @param weight
-	 *            the weighted importance of this attribute (relative to the other
-	 *            attributes)
+	 *               the weighted importance of this attribute (relative to the
+	 *               other
+	 *               attributes)
 	 */
 	public QuestionQuestion(final Question source, final Question target, Double weight) {
 		autocreateCreated();
@@ -211,16 +214,14 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
 	}
 
-	
-	/** 
+	/**
 	 * @return QuestionQuestionId
 	 */
 	public QuestionQuestionId getPk() {
 		return pk;
 	}
 
-	
-	/** 
+	/**
 	 * @param pk the pk to set
 	 */
 	public void setPk(final QuestionQuestionId pk) {
@@ -236,7 +237,7 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
 	/**
 	 * @param created
-	 *            the created to set
+	 *                the created to set
 	 */
 	public void setCreated(final LocalDateTime created) {
 		this.created = created;
@@ -251,7 +252,7 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
 	/**
 	 * @param updated
-	 *            the updated to set
+	 *                the updated to set
 	 */
 	public void setUpdated(final LocalDateTime updated) {
 		this.updated = updated;
@@ -266,7 +267,7 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
 	/**
 	 * @param weight
-	 *            the weight to set
+	 *               the weight to set
 	 */
 	public void setWeight(final Double weight) {
 		this.weight = weight;
@@ -281,7 +282,7 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
 	/**
 	 * @param version
-	 *            the version to set
+	 *                the version to set
 	 */
 	public void setVersion(final Long version) {
 		this.version = version;
@@ -296,14 +297,12 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 
 	/**
 	 * @param mandatory
-	 *            the mandatory to set
+	 *                  the mandatory to set
 	 */
 	public void setMandatory(Boolean mandatory) {
 		this.mandatory = mandatory;
 	}
 
-	
-	
 	/**
 	 * @return the oneshot
 	 */
@@ -318,8 +317,6 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 		this.oneshot = oneshot;
 	}
 
-	
-	
 	/**
 	 * @return the disabled
 	 */
@@ -348,7 +345,6 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 		this.hidden = hidden;
 	}
 
-	
 	/**
 	 * @return the readonly
 	 */
@@ -374,8 +370,7 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 			setCreated(LocalDateTime.now(ZoneId.of("Z")));
 	}
 
-	
-	/** 
+	/**
 	 * @return Date
 	 */
 	@Transient
@@ -384,8 +379,7 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 		return out;
 	}
 
-	
-	/** 
+	/**
 	 * @return Date
 	 */
 	@Transient
@@ -398,8 +392,7 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 		}
 	}
 
-	
-	/** 
+	/**
 	 * @return int
 	 */
 	@Override
@@ -412,8 +405,7 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 		return hcb.toHashCode();
 	}
 
-	
-	/** 
+	/**
 	 * Check equality
 	 *
 	 * @param obj the object to compare to
@@ -435,21 +427,19 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 		return eb.isEquals();
 	}
 
-
-	 
-	 /** 
-	  * Compare to an object
-	  *
-	  * @param o the object to compare to
-	  * @return int
-	  */
-	 public int compareTo(Object o) {
-		 QuestionQuestion myClass = (QuestionQuestion) o;
-	     return new CompareToBuilder()
-//	       .appendSuper(super.compareTo(o)
-	       .append(this.weight, myClass.weight)
-	       .toComparison();
-	   }
+	/**
+	 * Compare to an object
+	 *
+	 * @param o the object to compare to
+	 * @return int
+	 */
+	public int compareTo(Object o) {
+		QuestionQuestion myClass = (QuestionQuestion) o;
+		return new CompareToBuilder()
+				// .appendSuper(super.compareTo(o)
+				.append(this.weight, myClass.weight)
+				.toComparison();
+	}
 
 	/**
 	 * @return the realm
@@ -465,8 +455,6 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 		this.realm = realm;
 	}
 
-	
-	
 	/**
 	 * @return the formTrigger
 	 */
@@ -495,61 +483,56 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 		this.createOnTrigger = createOnTrigger;
 	}
 
-	
-	/** 
+	/**
 	 * @return String
 	 */
 	@Override
 	public String toString() {
-		return "SRC:"+getPk().getSourceCode()+" - "+getPk().getTargetCode()+" "+(this.getMandatory()?"MANDATORY":"OPTIONAL")+" "+(this.getReadonly()?"RO":"RW")+" "+(this.getFormTrigger()?"FT":"NFT")+" "+(this.getCreateOnTrigger()?"COT":"NCOT");
+		return "SRC:" + getPk().getSourceCode() + " - " + getPk().getTargetCode() + " "
+				+ (this.getMandatory() ? "MANDATORY" : "OPTIONAL") + " " + (this.getReadonly() ? "RO" : "RW") + " "
+				+ (this.getFormTrigger() ? "FT" : "NFT") + " " + (this.getCreateOnTrigger() ? "COT" : "NCOT");
 	}
 
-	
-	/** 
+	/**
 	 * @return String
 	 */
-	public String getSourceCode(){
+	public String getSourceCode() {
 		return pk.getSourceCode();
 	}
 
-	
-	/** 
+	/**
 	 * @return String
 	 */
 	public String getTargetCode() {
 		return pk.getTargetCode();
 	}
 
-	
-	/** 
+	/**
 	 * @return String
 	 */
 	public String getDependency() {
 		return dependency;
 	}
 
-	
-	/** 
+	/**
 	 * @param dependency the dependency to set
 	 */
 	public void setDependency(String dependency) {
 		this.dependency = dependency;
 	}
 
-    
-	/** 
+	/**
 	 * @param icon the icon to set
 	 */
 	public void setIcon(String icon) {
-        this.icon = icon;
-    }
+		this.icon = icon;
+	}
 
-    
-	/** 
+	/**
 	 * @return String
 	 */
 	public String getIcon() {
-        return this.icon;
-    }
+		return this.icon;
+	}
 
 }

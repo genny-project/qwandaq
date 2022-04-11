@@ -33,7 +33,7 @@ import life.genny.qwandaq.exception.BadDataException;
 import life.genny.qwandaq.message.QSearchBeResult;
 
 /**
- * A non-static utility class used for standard 
+ * A non-static utility class used for standard
  * operations involving BaseEntitys.
  * 
  * @author Adam Crow
@@ -49,7 +49,8 @@ public class BaseEntityUtils implements Serializable {
 	GennyToken gennyToken;
 	GennyToken serviceToken;
 
-	public BaseEntityUtils() {}
+	public BaseEntityUtils() {
+	}
 
 	public BaseEntityUtils(String token, String realm) {
 		this(new GennyToken(token));
@@ -68,28 +69,27 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	* Get the Token
-	*
-	* @return The token
+	 * Get the Token
+	 *
+	 * @return The token
 	 */
 	public String getToken() {
 		return token;
 	}
 
 	/**
-	* Set the Token
-	*
-	* @param token The token to set
+	 * Set the Token
+	 *
+	 * @param token The token to set
 	 */
 	public void setToken(String token) {
 		this.token = token;
 	}
 
-
 	/**
-	* Get the current realm
-	*
-	* @return The realm
+	 * Get the current realm
+	 *
+	 * @return The realm
 	 */
 	public String getRealm() {
 		return gennyToken.getRealm();
@@ -143,16 +143,17 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	 * Fetch the user base entity of the {@link GennyToken} used to initialise the BaseEntityUtils
+	 * Fetch the user base entity of the {@link GennyToken} used to initialise the
+	 * BaseEntityUtils
+	 * 
 	 * @return the user {@link BaseEntity}
 	 */
 	public BaseEntity getUserBaseEntity() {
 		return this.getBaseEntityByCode(this.getGennyToken().getUserCode());
 	}
-	
 
 	/**
-	 * Update the {@link GennyToken} of this utils instance. Unlike the standard 
+	 * Update the {@link GennyToken} of this utils instance. Unlike the standard
 	 * setter method, this will also update the token and the realm.
 	 *
 	 * @param gennyToken The genny token to update with
@@ -164,10 +165,10 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	* Fetch A {@link BaseEntity} from cache the using a code.
-	*
-	* @param code The code of the {@link BaseEntity} to fetch
-	* @return The corresponding BaseEntity, or null if not found.
+	 * Fetch A {@link BaseEntity} from cache the using a code.
+	 *
+	 * @param code The code of the {@link BaseEntity} to fetch
+	 * @return The corresponding BaseEntity, or null if not found.
 	 */
 	public BaseEntity getBaseEntityByCode(String code) {
 
@@ -175,11 +176,11 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	* Call the Fyodor API to fetch a list of {@link BaseEntity} 
-	* objects using a {@link SearchEntity} object.
-	*
-	* @param searchBE A {@link SearchEntity} object used to determine the results
-	* @return A list of {@link BaseEntity} objects
+	 * Call the Fyodor API to fetch a list of {@link BaseEntity}
+	 * objects using a {@link SearchEntity} object.
+	 *
+	 * @param searchBE A {@link SearchEntity} object used to determine the results
+	 * @return A list of {@link BaseEntity} objects
 	 */
 	public List<BaseEntity> getBaseEntitys(SearchEntity searchBE) {
 
@@ -187,15 +188,20 @@ public class BaseEntityUtils implements Serializable {
 		String uri = GennySettings.fyodorServiceUrl() + "/api/search/fetch";
 		String json = jsonb.toJson(searchBE);
 		HttpResponse<String> response = HttpUtils.post(uri, json, this.token);
-		String body = response.body();
 
-		if (body != null) {
-			try {
-				// deserialise and grab entities
-				QSearchBeResult results = jsonb.fromJson(body, QSearchBeResult.class);
-				return Arrays.asList(results.getEntities());
-			} catch (Exception e) {
-				log.error(e);
+		if (response != null) {
+			String body = response.body();
+			log.info("Post " + searchBE.getCode() + " to url " + uri + ", response code:" + response.statusCode());
+
+			if (body != null) {
+				try {
+					// deserialise and grab entities
+					QSearchBeResult results = jsonb.fromJson(body, QSearchBeResult.class);
+					return Arrays.asList(results.getEntities());
+				} catch (Exception e) {
+					log.error(e.getMessage());
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -203,11 +209,11 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	* Call the Fyodor API to fetch a count of {@link BaseEntity} 
-	* objects using a {@link SearchEntity} object.
-	*
-	* @param searchBE A {@link SearchEntity} object used to determine the results
-	* @return A count of items
+	 * Call the Fyodor API to fetch a count of {@link BaseEntity}
+	 * objects using a {@link SearchEntity} object.
+	 *
+	 * @param searchBE A {@link SearchEntity} object used to determine the results
+	 * @return A count of items
 	 */
 	public Long getBaseEntityCount(SearchEntity searchBE) {
 
@@ -230,15 +236,14 @@ public class BaseEntityUtils implements Serializable {
 		return null;
 	}
 
-
 	/**
-	* Update a {@link BaseEntity} in the database and the cache.
-	*
-	* @param baseEntity The BaseEntity to update
+	 * Update a {@link BaseEntity} in the database and the cache.
+	 *
+	 * @param baseEntity The BaseEntity to update
 	 */
 	public void updateBaseEntity(BaseEntity baseEntity) {
-
-		DatabaseUtils.saveBaseEntity(baseEntity);
+		DatabaseUtils databaseUtils = new DatabaseUtils();
+		databaseUtils.saveBaseEntity(baseEntity);
 		CacheUtils.putObject(this.realm, baseEntity.getCode(), baseEntity);
 	}
 
@@ -339,7 +344,7 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	 * Classic Genny style string clean up. This will remove any double quotes, 
+	 * Classic Genny style string clean up. This will remove any double quotes,
 	 * whitespaces and square brackets from the string.
 	 * <p>
 	 * Hope this makes our code look a little
@@ -354,11 +359,11 @@ public class BaseEntityUtils implements Serializable {
 		return cleanCode;
 	}
 
-	/** 
+	/**
 	 * Get the value of an EntityAttribute as an Object.
 	 *
 	 * @param baseEntityCode The code of the entity to grab from
-	 * @param attributeCode The code of the attribute to check
+	 * @param attributeCode  The code of the attribute to check
 	 * @return The value as an Object
 	 */
 	public Object getBaseEntityValue(final String baseEntityCode, final String attributeCode) {
@@ -370,12 +375,12 @@ public class BaseEntityUtils implements Serializable {
 			return null;
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Get the value of an EntityAttribute as a String.
 	 *
-	 * @param be The code of the entity to grab from
-	 * @param attributeCode The code of the attribute to check 
+	 * @param be            The code of the entity to grab from
+	 * @param attributeCode The code of the attribute to check
 	 * @return The value as a String
 	 */
 	public static String getBaseEntityAttrValueAsString(BaseEntity be, String attributeCode) {
@@ -393,11 +398,11 @@ public class BaseEntityUtils implements Serializable {
 		return attributeVal;
 	}
 
-	/** 
+	/**
 	 * Get the value of an EntityAttribute as a String.
 	 *
 	 * @param baseEntityCode The code of the entity to grab from
-	 * @param attributeCode The code of the attribute to check
+	 * @param attributeCode  The code of the attribute to check
 	 * @return The value as a String
 	 */
 	public String getBaseEntityValueAsString(final String baseEntityCode, final String attributeCode) {
@@ -413,11 +418,11 @@ public class BaseEntityUtils implements Serializable {
 		return attrValue;
 	}
 
-	/** 
+	/**
 	 * Get the value of an EntityAttribute as a LocalDateTime.
 	 *
 	 * @param baseEntityCode The code of the entity to grab from
-	 * @param attributeCode The code of the attribute to check
+	 * @param attributeCode  The code of the attribute to check
 	 * @return The value as a LocalDateTime
 	 */
 	public LocalDateTime getBaseEntityValueAsLocalDateTime(final String baseEntityCode, final String attributeCode) {
@@ -430,11 +435,11 @@ public class BaseEntityUtils implements Serializable {
 		}
 	}
 
-	/** 
+	/**
 	 * Get the value of an EntityAttribute as a LocalDate.
 	 *
 	 * @param baseEntityCode The code of the entity to grab from
-	 * @param attributeCode The code of the attribute to check
+	 * @param attributeCode  The code of the attribute to check
 	 * @return The value as a LocalDate
 	 */
 	public LocalDate getBaseEntityValueAsLocalDate(final String baseEntityCode, final String attributeCode) {
@@ -446,12 +451,12 @@ public class BaseEntityUtils implements Serializable {
 			return null;
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Get the value of an EntityAttribute as a LocalTime.
 	 *
 	 * @param baseEntityCode The code of the entity to grab from
-	 * @param attributeCode The code of the attribute to check
+	 * @param attributeCode  The code of the attribute to check
 	 * @return The value as a LocalTime
 	 */
 	public LocalTime getBaseEntityValueAsLocalTime(final String baseEntityCode, final String attributeCode) {
@@ -465,9 +470,9 @@ public class BaseEntityUtils implements Serializable {
 		}
 	}
 
-	
-	/** 
-	 * Convert a stringified list of BaseEntity codes into a list of BaseEntity objects.
+	/**
+	 * Convert a stringified list of BaseEntity codes into a list of BaseEntity
+	 * objects.
 	 *
 	 * @param strArr The stringified array to convert
 	 * @return A list of BaseEntitys
@@ -475,19 +480,19 @@ public class BaseEntityUtils implements Serializable {
 	public List<BaseEntity> convertCodesToBaseEntityArray(String strArr) {
 
 		String[] arr = strArr.replace("\"", "").replace("[", "").replace("]", "").replace(" ", "").split(",");
-        List<BaseEntity> entityList = Arrays.stream(arr)
-			.filter(item -> !item.isEmpty())
-			.map(item -> (BaseEntity) getBaseEntityByCode(item))
-			.collect(Collectors.toList());
+		List<BaseEntity> entityList = Arrays.stream(arr)
+				.filter(item -> !item.isEmpty())
+				.map(item -> (BaseEntity) getBaseEntityByCode(item))
+				.collect(Collectors.toList());
 
 		return entityList;
 	}
 
 	/**
-	* Save an {@link Answer} object.
-	*
-	* @param answer The answer to save
-	* @return The target BaseEntity
+	 * Save an {@link Answer} object.
+	 *
+	 * @param answer The answer to save
+	 * @return The target BaseEntity
 	 */
 	public BaseEntity saveAnswer(Answer answer) {
 
@@ -501,10 +506,10 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	* Save {@link Answers}.
-	* 
-	* @param answers The answers to save
-	* @return The target BaseEntitys
+	 * Save {@link Answers}.
+	 * 
+	 * @param answers The answers to save
+	 * @return The target BaseEntitys
 	 */
 	public List<BaseEntity> saveAnswers(Answers answers) {
 
@@ -512,10 +517,10 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	* Save a List of {@link Answer} objects.
-	*
-	* @param answers The list of answers to save
-	* @return The target BaseEntitys
+	 * Save a List of {@link Answer} objects.
+	 *
+	 * @param answers The list of answers to save
+	 * @return The target BaseEntitys
 	 */
 	public List<BaseEntity> saveAnswers(List<Answer> answers) {
 
@@ -523,25 +528,26 @@ public class BaseEntityUtils implements Serializable {
 
 		// sort answers into target BaseEntitys
 		Map<String, List<Answer>> answersPerTargetCodeMap = answers.stream()
-			.collect(Collectors.groupingBy(Answer::getTargetCode));
+				.collect(Collectors.groupingBy(Answer::getTargetCode));
 
 		for (String targetCode : answersPerTargetCodeMap.keySet()) {
 
 			// check if target is valid
 			BaseEntity target = getBaseEntityByCode(targetCode);
 			if (target == null) {
-				log.error(targetCode +  " does not exist!");
+				log.error(targetCode + " does not exist!");
 				continue;
 			}
 
 			// fetch the DEF for this target
-			BaseEntity defBE = DefUtils.getDEF(target);
+			DefUtils defUtils = new DefUtils();
+			BaseEntity defBE = defUtils.getDEF(target);
 
 			// filter Non-valid answers using def
 			List<Answer> group = answersPerTargetCodeMap.get(targetCode);
 			List<Answer> validAnswers = group.stream()
-				.filter(item -> DefUtils.answerValidForDEF(defBE, item))
-				.collect(Collectors.toList());
+					.filter(item -> defUtils.answerValidForDEF(defBE, item))
+					.collect(Collectors.toList());
 
 			// update target using valid answers
 			for (Answer answer : validAnswers) {
@@ -556,7 +562,8 @@ public class BaseEntityUtils implements Serializable {
 			CacheUtils.putObject(realm, target.getCode(), target);
 
 			// update target in the DB
-			DatabaseUtils.saveBaseEntity(target);
+			DatabaseUtils databaseUtils = new DatabaseUtils();
+			databaseUtils.saveBaseEntity(target);
 
 			targets.add(target);
 		}
@@ -565,51 +572,52 @@ public class BaseEntityUtils implements Serializable {
 	}
 
 	/**
-	* Create a new {@link BaseEntity} using a DEF entity code.
-	*
-	* @param defCode The defCode to use 
-	* @return The created BaseEntity
-	* @throws Exception If the entity could not be created
+	 * Create a new {@link BaseEntity} using a DEF entity code.
+	 *
+	 * @param defCode The defCode to use
+	 * @return The created BaseEntity
+	 * @throws Exception If the entity could not be created
 	 */
 	public BaseEntity create(final String defCode) throws Exception {
 
 		String realm = this.getGennyToken().getRealm();
-		BaseEntity defBE = DefUtils.getDefMap(realm).get(defCode);
+		DefUtils defUtils = new DefUtils();
+		BaseEntity defBE = defUtils.getDefMap(realm).get(defCode);
 
 		return create(defBE);
 	}
 
 	/**
-	* Create a new {@link BaseEntity} using a DEF entity.
-	*
-	* @param defBE The def entity to use
-	* @return The created BaseEntity
-	* @throws Exception If the entity could not be created
+	 * Create a new {@link BaseEntity} using a DEF entity.
+	 *
+	 * @param defBE The def entity to use
+	 * @return The created BaseEntity
+	 * @throws Exception If the entity could not be created
 	 */
 	public BaseEntity create(final BaseEntity defBE) throws Exception {
 		return create(defBE, null, null);
 	}
 
 	/**
-	* Create a new {@link BaseEntity} using a DEF entity and a name.
-	*
-	* @param defBE The def entity to use
-	* @param name The name of the entity
-	* @return The created BaseEntity
-	* @throws Exception If the entity could not be created
+	 * Create a new {@link BaseEntity} using a DEF entity and a name.
+	 *
+	 * @param defBE The def entity to use
+	 * @param name  The name of the entity
+	 * @return The created BaseEntity
+	 * @throws Exception If the entity could not be created
 	 */
 	public BaseEntity create(final BaseEntity defBE, String name) throws Exception {
 		return create(defBE, name, null);
 	}
 
 	/**
-	* Create a new {@link BaseEntity} using a name and code.
-	*
-	* @param defBE The def entity to use
-	* @param name The name of the entity
-	* @param code The code of the entity
-	* @return The created BaseEntity
-	* @throws Exception If the entity could not be created
+	 * Create a new {@link BaseEntity} using a name and code.
+	 *
+	 * @param defBE The def entity to use
+	 * @param name  The name of the entity
+	 * @param code  The code of the entity
+	 * @return The created BaseEntity
+	 * @throws Exception If the entity could not be created
 	 */
 	public BaseEntity create(final BaseEntity defBE, String name, String code) throws Exception {
 
@@ -624,12 +632,14 @@ public class BaseEntityUtils implements Serializable {
 			log.error(errorMsg);
 			throw new Exception(errorMsg);
 		}
+		QwandaUtils qwandaUtils = new QwandaUtils();
 
 		BaseEntity item = null;
 		Optional<EntityAttribute> uuidEA = defBE.findEntityAttribute("ATT_PRI_UUID");
 
 		if (uuidEA.isPresent()) {
-			// if the defBE is a user without an email provided, create a keycloak acc using a unique random uuid
+			// if the defBE is a user without an email provided, create a keycloak acc using
+			// a unique random uuid
 			String randomEmail = "random+" + UUID.randomUUID().toString().substring(0, 20) + "@gada.io";
 			item = createUser(defBE, randomEmail);
 		}
@@ -658,7 +668,7 @@ public class BaseEntityUtils implements Serializable {
 				if (ea.getAttributeCode().startsWith("ATT_")) {
 
 					String attrCode = ea.getAttributeCode().substring("ATT_".length());
-					Attribute attribute = QwandaUtils.getAttribute(attrCode);
+					Attribute attribute = qwandaUtils.getAttribute(attrCode);
 
 					if (attribute != null) {
 
@@ -670,9 +680,10 @@ public class BaseEntityUtils implements Serializable {
 
 							// Only process mandatory attributes, or defaults
 							Boolean mandatory = ea.getValueBoolean();
-							if (mandatory==null) {
+							if (mandatory == null) {
 								mandatory = false;
-								log.warn("**** DEF attribute ATT_"+attrCode+" has no mandatory boolean set in "+defBE.getCode());
+								log.warn("**** DEF attribute ATT_" + attrCode + " has no mandatory boolean set in "
+										+ defBE.getCode());
 							}
 							// Only process mandatory attributes, or defaults
 							if (mandatory || defaultVal != null) {
@@ -696,22 +707,24 @@ public class BaseEntityUtils implements Serializable {
 		updateBaseEntity(item);
 
 		// force the type of baseentity
-		Attribute attributeDEF = QwandaUtils.getAttribute("PRI_IS_" + defBE.getCode().substring("DEF_".length()));
+
+		Attribute attributeDEF = qwandaUtils.getAttribute("PRI_IS_" + defBE.getCode().substring("DEF_".length()));
 		item = saveAnswer(new Answer(item, item, attributeDEF, "TRUE"));
 
 		return item;
 	}
 
 	/**
-	* Create a new user {@link BaseEntity} using a DEF entity.
-	*
-	* @param defBE The def entity to use
-	* @param email The email to use
-	* @return The created BaseEntity
-	* @throws Exception If the user could not be created
+	 * Create a new user {@link BaseEntity} using a DEF entity.
+	 *
+	 * @param defBE The def entity to use
+	 * @param email The email to use
+	 * @return The created BaseEntity
+	 * @throws Exception If the user could not be created
 	 */
 	public BaseEntity createUser(final BaseEntity defBE, final String email) throws Exception {
 
+		QwandaUtils qwandaUtils = new QwandaUtils();
 		BaseEntity item = null;
 		String uuid = null;
 		Optional<EntityAttribute> uuidEA = defBE.findEntityAttribute("ATT_PRI_UUID");
@@ -719,7 +732,7 @@ public class BaseEntityUtils implements Serializable {
 		if (uuidEA.isPresent()) {
 
 			if (!StringUtils.isBlank(email)) {
-               // TODO: run a regexp check to see if the email is valid
+				// TODO: run a regexp check to see if the email is valid
 
 				if (!email.startsWith("random+")) {
 					// TODO: check to see if the email exists in the database and keycloak
@@ -740,23 +753,23 @@ public class BaseEntityUtils implements Serializable {
 					if (!email.startsWith("random+")) {
 						// Check to see if the email exists
 						// TODO: check to see if the email exists in the database and keycloak
-						Attribute emailAttribute = QwandaUtils.getAttribute("PRI_EMAIL");
+						Attribute emailAttribute = qwandaUtils.getAttribute("PRI_EMAIL");
 						item.addAnswer(new Answer(item, item, emailAttribute, email));
-						Attribute usernameAttribute = QwandaUtils.getAttribute("PRI_USERNAME");
+						Attribute usernameAttribute = qwandaUtils.getAttribute("PRI_USERNAME");
 						item.addAnswer(new Answer(item, item, usernameAttribute, email));
 					}
 
 					// Add PRI_UUID
-					Attribute uuidAttribute = QwandaUtils.getAttribute("PRI_UUID");
+					Attribute uuidAttribute = qwandaUtils.getAttribute("PRI_UUID");
 					item.addAnswer(new Answer(item, item, uuidAttribute, uuid.toUpperCase()));
 
 					// Keycloak UUID
-					Attribute keycloakAttribute = QwandaUtils.getAttribute("PRI_KEYCLOAK_UUID");
+					Attribute keycloakAttribute = qwandaUtils.getAttribute("PRI_KEYCLOAK_UUID");
 					item.addAnswer(new Answer(item, item, keycloakAttribute, uuid.toUpperCase()));
 
 					// Author of the BE
 					// NOTE: Maybe should be moved to run for all BEs
-					Attribute lnkAuthorAttr = QwandaUtils.getAttribute("LNK_AUTHOR");
+					Attribute lnkAuthorAttr = qwandaUtils.getAttribute("LNK_AUTHOR");
 					item.addAnswer(
 							new Answer(item, item, lnkAuthorAttr, "[\"" + getGennyToken().getUserCode() + "\"]"));
 				} else {

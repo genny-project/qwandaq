@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -90,7 +91,8 @@ public class CacheUtils {
 	public static <T> T getObject(String realm, String key, Class c) {
 
 		String data = (String) readCache(realm, key);
-		if (data == null) {
+		if (StringUtils.isEmpty(data)) {
+			log.info("DEBUG, key:" + key + ", data:" + data);
 			return null;
 		}
 		Object object = jsonb.fromJson(data, c);

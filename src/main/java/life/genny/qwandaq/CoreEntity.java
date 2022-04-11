@@ -126,15 +126,16 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	/**
 	 * Constructor.
 	 */
-	protected CoreEntity() { }
+	public CoreEntity() {
+	}
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param realm
-	 *            the security realm of the core entity
+	 *              the security realm of the core entity
 	 * @param name
-	 *            the name of the core entity
+	 *              the name of the core entity
 	 */
 	public CoreEntity(final String realm, final String name) {
 		super();
@@ -147,7 +148,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	 * Constructor.
 	 * 
 	 * @param name
-	 *            the summary name of the core entity
+	 *             the summary name of the core entity
 	 */
 	public CoreEntity(final String name) {
 		super();
@@ -165,7 +166,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 
 	/**
 	 * @param id
-	 *            the id to set
+	 *           the id to set
 	 */
 	public void setId(final Long id) {
 		this.id = id;
@@ -181,7 +182,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 	/**
 	 * 
 	 * @param aName
-	 *            human readable text representing the question
+	 *              human readable text representing the question
 	 */
 	public void setName(final String aName) {
 		this.name = aName;
@@ -198,7 +199,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 
 	/**
 	 * @param created
-	 *            the created to set
+	 *                the created to set
 	 */
 	@Override
 	public void setCreated(final LocalDateTime created) {
@@ -215,7 +216,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 
 	/**
 	 * @param updated
-	 *            the updated to set
+	 *                the updated to set
 	 */
 	public void setUpdated(final LocalDateTime updated) {
 		this.updated = updated;
@@ -230,7 +231,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 
 	/**
 	 * @param realm
-	 *            the realm to set
+	 *              the realm to set
 	 */
 	public void setRealm(final String realm) {
 		this.realm = realm;
@@ -248,8 +249,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 		autocreateUpdate();
 	}
 
-	
-	/** 
+	/**
 	 * @return Date
 	 */
 	@Transient
@@ -260,8 +260,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 		return out;
 	}
 
-	
-	/** 
+	/**
 	 * @return Date
 	 */
 	@Transient
@@ -275,8 +274,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 			return null;
 	}
 
-	
-	/** 
+	/**
 	 * @return String
 	 */
 	/*
@@ -289,8 +287,7 @@ public abstract class CoreEntity implements CoreEntityInterface, CreatedIntf, Se
 		return "[id=" + id + ", created=" + created + ", updated=" + updated + ", name=" + name + "]";
 	}
 
-	
-	/** 
+	/**
 	 * @return boolean
 	 */
 	public boolean hasName() {
