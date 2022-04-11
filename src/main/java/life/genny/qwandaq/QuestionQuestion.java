@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
 import javax.persistence.Cacheable;
@@ -20,6 +21,8 @@ import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,12 +44,14 @@ indexes = {
 		}
 )
 @Cacheable
+@RegisterForReflection
 public class QuestionQuestion implements java.io.Serializable, Comparable<Object> {
 
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
 	@JsonIgnore
+	@JsonbTransient
 	private QuestionQuestionId pk = new QuestionQuestionId();
 
 	@Column(name = "created")
@@ -511,7 +516,7 @@ public class QuestionQuestion implements java.io.Serializable, Comparable<Object
 	/** 
 	 * @return String
 	 */
-	public String getTarketCode() {
+	public String getTargetCode() {
 		return pk.getTargetCode();
 	}
 

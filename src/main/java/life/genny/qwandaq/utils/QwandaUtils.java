@@ -137,7 +137,7 @@ public class QwandaUtils {
 					nextLoad = (int)(attributeCount - attributesLoaded);
 				}
 
-				attributeList = DatabaseUtils.findAttributes(realm, attributesLoaded, nextLoad);
+				attributeList = DatabaseUtils.findAttributes(realm, attributesLoaded, nextLoad, null);
 				for(Attribute attribute : attributeList) {
 					// log.info("Loading attrib: " + attribute.getCode());
 					String key = attribute.getCode();
@@ -167,7 +167,7 @@ public class QwandaUtils {
 
 		try {
 			log.info("Fetching Attributes from database...");
-			attributeList = DatabaseUtils.findAttributes(realm, 0, 0);
+			attributeList = DatabaseUtils.findAttributes(realm, 0, 0, null);
 
 			log.info("Loaded all attributes for realm " + realm);
 			if (attributeList == null) {

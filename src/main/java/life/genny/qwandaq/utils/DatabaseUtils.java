@@ -62,27 +62,36 @@ public class DatabaseUtils {
 	/**
 	* Fetch Validations from the database using page size and num.
 	* If pageSize and pageNumber are both null, all results will be returned at once.
+	* If wildcard is not null, the result codes will contain the wildcard string.
 	* 
 	* @param realm the realm to find in
 	* @param pageSize the pageSize to fetch
 	* @param pageNumber the pageNumber to fetch
+	* @param wildcard perform a wildcard on the code field
 	* @return List
 	 */
 	@Transactional
-	public static List<Validation> findValidations(String realm, Integer pageSize, Integer pageNumber) {
+	public static List<Validation> findValidations(String realm, Integer pageSize, Integer pageNumber, String wildcard) {
 
 		checkEntityManager();
 
+		Boolean isWildcard = (wildcard != null && !wildcard.isEmpty());
+
+		String queryStr = "FROM Validation WHERE realm=:realmStr" + (isWildcard ? " AND code like :code" : "");
+
 		try {
-			Query query = entityManager
-					.createQuery("FROM Validation WHERE realm=:realmStr", Validation.class)
+			Query query = entityManager.createQuery(queryStr, Validation.class)
 					.setParameter("realmStr", realm);
+
+			if (isWildcard) {
+				query.setParameter("code", "%"+wildcard+"%");
+			}
 
 			if (pageNumber != null && pageSize != null) {
 				query = query.setFirstResult((pageNumber-1) * pageSize)
 					.setMaxResults(pageSize);
 			}
-				
+
 			return query.getResultList();
 
 		} catch (NoResultException e) {
@@ -116,27 +125,35 @@ public class DatabaseUtils {
 	/**
 	* Fetch Attributes from the database using page size and num.
 	* If pageSize and pageNumber are both null, all results will be returned at once.
+	* If wildcard is not null, the result codes will contain the wildcard string.
 	*
 	* @param realm the realm to find in
-	 * @param StartIdx the start index to fetch
+	* @param startIdx the start index to fetch
 	* @param pageSize the pageSize to fetch (Starting from Page 1)
+	* @param wildcard perform a wildcard on the code field
 	* @return List
 	 */
 	//@Transactional
-	public static List<Attribute> findAttributes(String realm, int StartIdx, int pageSize) {
+	public static List<Attribute> findAttributes(String realm, int startIdx, int pageSize, String wildcard) {
 
 		checkEntityManager();
 
+		Boolean isWildcard = (wildcard != null && !wildcard.isEmpty());
+
+		String queryStr = "FROM Attribute WHERE realm=:realmStr" + (isWildcard ? " AND code like :code" : "") + " AND name not like 'App\\_%' order by id";
+
 		try {
-			Query query = entityManager
-					.createQuery("FROM Attribute WHERE realm=:realmStr AND name not like 'App\\_%' order by id",
-							Attribute.class)
+			Query query = entityManager.createQuery(queryStr, Attribute.class)
 					.setParameter("realmStr", realm);
 
-			if (StartIdx == 0 && pageSize == 0) {
+			if (isWildcard) {
+				query.setParameter("code", "%"+wildcard+"%");
+			}
+
+			if (startIdx == 0 && pageSize == 0) {
 				log.info("Fetching all Attributes (unset pageNumber or pageSize)");
 			} else {
-				query = query.setFirstResult(StartIdx).setMaxResults(pageSize);
+				query = query.setFirstResult(startIdx).setMaxResults(pageSize);
 			}
 
 			return query.getResultList();
@@ -152,22 +169,31 @@ public class DatabaseUtils {
 	/**
 	* Fetch a list of {@link BaseEntity} types from the database using a realm.
 	* If pageSize and pageNumber are both null, all results will be returned at once.
+	* If wildcard is not null, the result codes will contain the wildcard string.
 	* 
 	* @param realm the realm to find in
 	* @param pageSize the pageSize to fetch
 	* @param pageNumber the pageNumber to fetch
+	* @param wildcard perform a wildcard on the code field
 	* @return List
 	 */
 	@Transactional
-	public static List<BaseEntity> findBaseEntitys(String realm, Integer pageSize, Integer pageNumber) {
+	public static List<BaseEntity> findBaseEntitys(String realm, Integer pageSize, Integer pageNumber, String wildcard) {
 
 		checkEntityManager();
 
+		Boolean isWildcard = (wildcard != null && !wildcard.isEmpty());
+
+		String queryStr = "FROM BaseEntity WHERE realm=:realmStr" + (isWildcard ? " AND code like :code" : "");
+
 		try {
 
-			Query query = entityManager
-					.createQuery("FROM BaseEntity WHERE realm=:realmStr", BaseEntity.class)
+			Query query = entityManager.createQuery(queryStr, BaseEntity.class)
 					.setParameter("realmStr", realm);
+
+			if (isWildcard) {
+				query.setParameter("code", "%"+wildcard+"%");
+			}
 
 			if (pageNumber != null && pageSize != null) {
 				query = query.setFirstResult((pageNumber-1) * pageSize)
@@ -186,22 +212,31 @@ public class DatabaseUtils {
 	/**
 	* Fetch a list of {@link Question} types from the database using a realm, page size and page number.
 	* If pageSize and pageNumber are both null, all results will be returned at once.
+	* If wildcard is not null, the result codes will contain the wildcard string.
 	* 
 	* @param realm the realm to find in
 	* @param pageSize the pageSize to fetch
 	* @param pageNumber the pageNumber to fetch
+	* @param wildcard perform a wildcard on the code field
 	* @return List
 	 */
 	@Transactional
-	public static List<Question> findQuestions(String realm, Integer pageSize, Integer pageNumber) {
+	public static List<Question> findQuestions(String realm, Integer pageSize, Integer pageNumber, String wildcard) {
 
 		checkEntityManager();
 
+		Boolean isWildcard = (wildcard != null && !wildcard.isEmpty());
+
+		String queryStr = "FROM Question WHERE realm=:realmStr" + (isWildcard ? " AND code like :code" : "");
+
 		try {
 
-			Query query = entityManager
-					.createQuery("FROM Question WHERE realm=:realmStr", Question.class)
+			Query query = entityManager.createQuery(queryStr, Question.class)
 					.setParameter("realmStr", realm);
+
+			if (isWildcard) {
+				query.setParameter("code", "%"+wildcard+"%");
+			}
 
 			if (pageNumber != null && pageSize != null) {
 				query = query.setFirstResult((pageNumber-1) * pageSize)
@@ -220,22 +255,31 @@ public class DatabaseUtils {
 	/**
 	* Fetch a list of {@link QuestionQuestion} types from the database using a realm, page size and page number.
 	* If pageSize and pageNumber are both null, all results will be returned at once.
+	* If wildcard is not null, the result sourceCodes will contain the wildcard string.
 	* 
 	* @param realm the realm to find in
 	* @param pageSize the pageSize to fetch
 	* @param pageNumber the pageNumber to fetch
+	* @param wildcard perform a wildcard on the code field
 	* @return List
 	 */
 	@Transactional
-	public static List<QuestionQuestion> findQuestionQuestions(String realm, Integer pageSize, Integer pageNumber) {
+	public static List<QuestionQuestion> findQuestionQuestions(String realm, Integer pageSize, Integer pageNumber, String wildcard) {
 
 		checkEntityManager();
 
+		Boolean isWildcard = (wildcard != null && !wildcard.isEmpty());
+
+		String queryStr = "FROM QuestionQuestion WHERE realm=:realmStr" + (isWildcard ? " AND sourceCode like :code" : "");
+
 		try {
 
-			Query query = entityManager
-					.createQuery("FROM QuestionQuestion WHERE realm=:realmStr", QuestionQuestion.class)
+			Query query = entityManager.createQuery(queryStr, QuestionQuestion.class)
 					.setParameter("realmStr", realm);
+
+			if (isWildcard) {
+				query.setParameter("code", "%"+wildcard+"%");
+			}
 
 			if (pageNumber != null && pageSize != null) {
 				query = query.setFirstResult((pageNumber-1) * pageSize)

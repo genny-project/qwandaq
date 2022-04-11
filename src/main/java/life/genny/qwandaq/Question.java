@@ -23,6 +23,7 @@ import life.genny.qwandaq.exception.BadDataException;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -36,6 +37,8 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.jboss.logging.Logger;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import com.querydsl.core.annotations.QueryExclude;
 
@@ -77,6 +80,7 @@ import com.querydsl.core.annotations.QueryExclude;
 @Inheritance(strategy = InheritanceType.JOINED)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 
+@RegisterForReflection
 public class Question extends CodedEntity implements Serializable {
 
 	private static final Logger log = Logger.getLogger(Question.class);
@@ -90,6 +94,7 @@ public class Question extends CodedEntity implements Serializable {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.source", cascade = CascadeType.MERGE)
 	@JsonManagedReference(value = "questionQuestion")
 	@JsonIgnore
+	@JsonbTransient
 	private Set<QuestionQuestion> childQuestions = new HashSet<QuestionQuestion>(0);
 
 	@XmlTransient
