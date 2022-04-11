@@ -302,7 +302,7 @@ public class CapabilityUtils implements Serializable {
 		List<Attribute> existingCapability = new ArrayList<Attribute>();
 
 		// iterate attributes in memory
-		for (String existingAttributeCode : QwandaUtils.attributes.get(realm).keySet()) {
+		for (String existingAttributeCode : qwandaUtils.attributes.get(realm).keySet()) {
 			if (existingAttributeCode.startsWith("PRM_")) {
 				// fetch and add attribute to list
 				Attribute attribute = qwandaUtils.getAttribute(existingAttributeCode);
@@ -444,9 +444,9 @@ public class CapabilityUtils implements Serializable {
 	}
 
 	/**
-	* Recursively ensure the user has the capability to view each ask in a group
-	*
-	* @param ask The ask to traverse
+	 * Recursively ensure the user has the capability to view each ask in a group
+	 *
+	 * @param ask The ask to traverse
 	 */
 	public void recursivelyCheckSidebarAskForCapability(Ask ask) {
 

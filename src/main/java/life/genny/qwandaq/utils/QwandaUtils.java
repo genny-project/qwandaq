@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
@@ -38,7 +37,7 @@ import life.genny.qwandaq.models.GennySettings;
 import life.genny.qwandaq.models.GennyToken;
 
 /**
- * A Static utility class to assist in any Qwanda Engine Question
+ * A utility class to assist in any Qwanda Engine Question
  * and Answer operations.
  * <p>
  * The class should be initialized with a GennyToken
@@ -64,7 +63,7 @@ public class QwandaUtils {
 
 	private final ExecutorService executorService = Executors.newFixedThreadPool(200);
 
-	static Map<String, Map<String, Attribute>> attributes = new ConcurrentHashMap<>();
+	Map<String, Map<String, Attribute>> attributes = new ConcurrentHashMap<>();
 
 	static Jsonb jsonb = JsonbBuilder.create();
 
@@ -154,7 +153,7 @@ public class QwandaUtils {
 					nextLoad = (int) (attributeCount - attributesLoaded);
 				}
 
-				attributeList = DatabaseUtils.findAttributes(realm, attributesLoaded, nextLoad, null);
+				attributeList = databaseUtils.findAttributes(realm, attributesLoaded, nextLoad, null);
 				for (Attribute attribute : attributeList) {
 					// log.info("Loading attrib: " + attribute.getCode());
 					String key = attribute.getCode();
@@ -186,7 +185,7 @@ public class QwandaUtils {
 
 		try {
 			log.info("Fetching Attributes from database...");
-			attributeList = DatabaseUtils.findAttributes(realm, 0, 0, null);
+			attributeList = databaseUtils.findAttributes(realm, 0, 0, null);
 
 			log.info("Loaded all attributes for realm " + realm);
 			if (attributeList == null) {

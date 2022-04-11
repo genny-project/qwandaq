@@ -4,7 +4,7 @@
 
   <groupId>life.genny</groupId>
   <artifactId>qwandaq</artifactId>
-  <version>10.0.0</version>
+  <version>10.1.0</version>
 
   <name>Qwanda Native</name>
   <description>A Natively Compiled package for Genny classes and utilities</description>

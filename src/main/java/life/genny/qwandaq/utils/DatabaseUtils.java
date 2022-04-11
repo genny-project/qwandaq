@@ -23,7 +23,7 @@ import life.genny.qwandaq.entity.BaseEntity;
 import life.genny.qwandaq.validation.Validation;
 
 /*
- * A static utility class used for standard read and write 
+ * A  utility class used for standard read and write 
  * operations to the database.
  * 
  * @author Jasper Robison
@@ -76,7 +76,7 @@ public class DatabaseUtils {
 	 * @return List
 	 */
 	@Transactional
-	public static List<Validation> findValidations(String realm, Integer pageSize, Integer pageNumber,
+	public List<Validation> findValidations(String realm, Integer pageSize, Integer pageNumber,
 			String wildcard) {
 
 		checkEntityManager();
@@ -109,7 +109,7 @@ public class DatabaseUtils {
 	}
 
 	@Transactional
-	public static Long countAttributes(String realm) {
+	public Long countAttributes(String realm) {
 
 		checkEntityManager();
 
@@ -140,7 +140,7 @@ public class DatabaseUtils {
 	 * @return List
 	 */
 	// @Transactional
-	public static List<Attribute> findAttributes(String realm, int startIdx, int pageSize, String wildcard) {
+	public List<Attribute> findAttributes(String realm, int startIdx, int pageSize, String wildcard) {
 
 		checkEntityManager();
 
@@ -186,7 +186,7 @@ public class DatabaseUtils {
 	 * @return List
 	 */
 	@Transactional
-	public static List<BaseEntity> findBaseEntitys(String realm, Integer pageSize, Integer pageNumber,
+	public List<BaseEntity> findBaseEntitys(String realm, Integer pageSize, Integer pageNumber,
 			String wildcard) {
 
 		checkEntityManager();
@@ -232,7 +232,7 @@ public class DatabaseUtils {
 	 * @return List
 	 */
 	@Transactional
-	public static List<Question> findQuestions(String realm, Integer pageSize, Integer pageNumber, String wildcard) {
+	public List<Question> findQuestions(String realm, Integer pageSize, Integer pageNumber, String wildcard) {
 
 		checkEntityManager();
 
@@ -278,7 +278,7 @@ public class DatabaseUtils {
 	 * @return List
 	 */
 	@Transactional
-	public static List<QuestionQuestion> findQuestionQuestions(String realm, Integer pageSize, Integer pageNumber,
+	public List<QuestionQuestion> findQuestionQuestions(String realm, Integer pageSize, Integer pageNumber,
 			String wildcard) {
 
 		checkEntityManager();
