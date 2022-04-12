@@ -1972,6 +1972,10 @@ public class SearchEntity extends BaseEntity {
 		return this;
 	}
 
+	public void setFormatters(Map<String, Map<String, String>> formatters){
+		this.formatters = formatters;
+	}
+
 	public Map<String, Map<String, String>> getFormatters(){
 		return this.formatters;
 	}
