@@ -107,6 +107,7 @@ public class QwandaUtils {
 	 */
 	public Attribute getAttribute(final String attributeCode) {
 
+		log.info(gennyToken != null ? ("QWANDAQ Genny token not null: " + gennyToken.getRealm()) : "QWANDAQ GENNY TOKEN IS NULL!!!!!!");
 		String realm = gennyToken.getRealm();
 		Attribute cachedAttribute = CacheUtils.getObject(realm, attributeCode, Attribute.class);
 
