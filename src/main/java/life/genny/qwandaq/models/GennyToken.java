@@ -204,12 +204,21 @@ public class GennyToken implements Serializable {
 	}
 
 	/**
-	 * @return String
+	 * @return String TODO: Docs
 	 */
 	public String getRealm() {
-		return realm;
-	}
+		String clientId = adecodedTokenMap.get("azp").toString();
 
+		if (clientId.equals("mentormatch")) {
+		return clientId;
+		} else if (clientId.equals("lojing")) {
+		return clientId;
+		} else if (clientId.equals("credmatch")) {
+		return clientId;
+		}
+
+		return "internmatch";
+	}
 	/**
 	 * @param key the key of the string item to get
 	 * @return String
