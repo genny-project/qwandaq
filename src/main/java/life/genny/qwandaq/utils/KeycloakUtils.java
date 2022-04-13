@@ -57,6 +57,8 @@ public class KeycloakUtils {
 	* @return GennyToken
 	 */
     public static GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret, String username, String password) {
+        // TODO: Please for the love of god lets fix this
+        realm = "internmatch";
 
         HashMap<String, String> params = new HashMap<>();
 
@@ -86,6 +88,8 @@ public class KeycloakUtils {
 	* @return GennyToken
 	 */
     public static GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret, String refreshToken) {
+        // TODO: Please for the love of god lets fix this
+        realm = "internmatch";
 
         HashMap<String, String> params = new HashMap<>();
 
@@ -114,6 +118,8 @@ public class KeycloakUtils {
     public static String getImpersonatedToken(BaseEntity userBE, GennyToken gennyToken, BaseEntity project) {
 
 		String realm = gennyToken.getRealm();
+        // TODO: Please for the love of god lets fix this
+        realm = "internmatch";
 		String token = gennyToken.getToken();
 		String keycloakUrl = gennyToken.getKeycloakUrl();
 
@@ -174,6 +180,8 @@ public class KeycloakUtils {
 	* @return String
 	 */
 	public static String fetchOIDCToken(String keycloakUrl, String realm, HashMap<String, String> params) {
+        // TODO: Please for the love of god lets fix this
+        realm = "internmatch";
 
         String uri = keycloakUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token";
 		log.debug("Fetching OIDC Token from " + uri);
@@ -272,6 +280,8 @@ public class KeycloakUtils {
      * @return String
      */
     public static String createDummyUser(String token, String realm) {
+        // TODO: Please for the love of god lets fix this
+        realm = "internmatch";
 
         String randomCode = UUID.randomUUID().toString().substring(0, 18);
         String defaultPassword = "password1";
@@ -344,7 +354,9 @@ public class KeycloakUtils {
      * @return Strign
      * @throws IOException if id could not be fetched
      */
-    public static String getKeycloakUserId(final String token, final String realm, final String username) throws IOException {
+    public static String getKeycloakUserId(final String token, String realm, final String username) throws IOException {
+        // TODO: Please for the love of god lets fix this
+        realm = "internmatch";
 
         final List<LinkedHashMap> users = fetchKeycloakUser(token, realm, username);
         if (!users.isEmpty()) {
@@ -361,7 +373,9 @@ public class KeycloakUtils {
      * @param username the username to fetch for
      * @return List
      */
-    public static List<LinkedHashMap> fetchKeycloakUser(final String token, final String realm, final String username) {
+    public static List<LinkedHashMap> fetchKeycloakUser(final String token, String realm, final String username) {
+        // TODO: Please for the love of god lets fix this
+        realm = "internmatch";
 
         String uri = GennySettings.keycloakUrl + "/auth/admin/realms/" + realm + "/users?username=" + username;
 
@@ -418,6 +432,8 @@ public class KeycloakUtils {
 	public static int updateUserField(GennyToken userToken, BaseEntity user, String field, String value) {
 
 		String realm = userToken.getRealm();
+        // TODO: Please for the love of god lets fix this
+        realm = "internmatch";
 		String token = userToken.getToken();
 
 		String uuid = user.getValue("PRI_UUID", null);
@@ -440,6 +456,8 @@ public class KeycloakUtils {
 	public static int updateUserEmail(GennyToken userToken, BaseEntity user, String email) {
 
 		String realm = userToken.getRealm();
+        // TODO: Please for the love of god lets fix this
+        realm = "internmatch";
 		String token = userToken.getToken();
 
 		String uuid = user.getValue("PRI_UUID", null);
