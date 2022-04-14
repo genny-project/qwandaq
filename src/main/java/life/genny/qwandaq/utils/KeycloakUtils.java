@@ -154,10 +154,14 @@ public class KeycloakUtils {
 
         // fetch keycloak json from porject entity
         String keycloakJson = project.getValueAsString("ENV_KEYCLOAK_JSON");
-        JsonReader reader = Json.createReader(new StringReader(keycloakJson));
-        String secret = reader.readObject().getJsonObject("credentials").getString("secret");
-        reader.close();
+        if(false) {
+            JsonReader reader = Json.createReader(new StringReader(keycloakJson));
+            String secret = reader.readObject().getJsonObject("credentials").getString("secret");
+            reader.close();
+        }
 
+        // TODO: its disgusting im sorry
+        String secret = "nosecret";
 		// setup param map
         HashMap<String, String> params = new HashMap<>();
 		params.put("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange");
