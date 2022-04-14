@@ -203,6 +203,10 @@ public class GennyToken implements Serializable {
 		return getRealm() + ": " + getCode() + ": " + getUserCode() + ": " + this.userRoles;
 	}
 
+	public String getClientId() {
+		return clientId;
+	}
+
 	/**
 	 * @return String TODO: Docs
 	 */
