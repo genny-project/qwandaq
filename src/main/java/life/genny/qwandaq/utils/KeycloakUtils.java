@@ -122,8 +122,7 @@ public class KeycloakUtils {
         // TODO: Please for the love of god lets fix this
         realm = "internmatch";
 		String token = gennyToken.getToken();
-		// String keycloakUrl = gennyToken.getKeycloakUrl();
-        String keycloakUrl = "";
+		String keycloakUrl = gennyToken.getKeycloakUrl();
         if (userBE == null) {
             log.error(ANSIColour.RED + "User BE is NULL" + ANSIColour.RESET);
             return null;
