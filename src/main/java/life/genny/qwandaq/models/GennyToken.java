@@ -264,9 +264,19 @@ public class GennyToken implements Serializable {
 		try {
 			uri = new URI(fullUrl);
 			String domain = uri.getHost();
+			if(domain == null) {
+				log.error("DOMAIN IS NULL FROM TOKEN WITH BEARER: " + getToken());
+				log.error("URI (iss): " + fullUrl);
+				return null;
+			}
 			String proto = uri.getScheme();
+			if(proto == null) {
+				log.error("NULL PROTO RETURNED FROM TOKEN WITH BEARER: " + getToken());
+				log.error("URI (iss): " + fullUrl);
+				return null;
+			}
 			Integer port = uri.getPort();
-			return proto + "://" + domain + ":" + port;
+			return proto + "://" + domain + ":" + (port != -1 ? port : "");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
