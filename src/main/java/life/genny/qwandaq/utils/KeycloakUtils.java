@@ -186,7 +186,7 @@ public class KeycloakUtils {
 
         String uri = keycloakUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token";
 		log.debug("Fetching OIDC Token from " + uri);
-
+        log.info("Fetching OIDC Token from: " + uri);
         String str = executeEncodedPostRequest(uri, params);
 
         JsonObject json = jsonb.fromJson(str, JsonObject.class);

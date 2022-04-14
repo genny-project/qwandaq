@@ -204,8 +204,25 @@ public class GennyToken implements Serializable {
 	}
 
 	/**
+	 * TOGO: Make this less hard coded
+	 * Return the realm used to interact with keycloak
+	 */
+	public String getKeycloakRealm() {
+		return "internmatch";
+	}
+
+	/**
+	 * Return the realm the project exists in (the clientId on Keycloak)
+	 * @return keycloak clientId/the project realm
+	 */
+	public String getProjectRealm() {
+		return getRealm();
+	}
+
+	/**
 	 * @return String TODO: Docs
 	 */
+	@Deprecated
 	public String getRealm() {
 		String clientId = adecodedTokenMap.get("azp").toString();
 
@@ -276,7 +293,7 @@ public class GennyToken implements Serializable {
 				return null;
 			}
 			Integer port = uri.getPort();
-			return proto + "://" + domain + ":" + (port != -1 ? port : "");
+			return proto + "://" + domain + (port != -1 ? ":" + port : "");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
