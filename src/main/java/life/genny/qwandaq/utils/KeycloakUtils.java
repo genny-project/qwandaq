@@ -67,7 +67,8 @@ public class KeycloakUtils {
 		params.put("grant_type", "password");
         params.put("client_id", clientId);
 
-        if (!StringUtils.isBlank(secret)) {
+        // TODO: MAke this more elegant ok ty
+        if (!"nosecret".equals(secret) || StringUtils.isBlank(secret)) {
             params.put("client_secret", secret);
         }
 
