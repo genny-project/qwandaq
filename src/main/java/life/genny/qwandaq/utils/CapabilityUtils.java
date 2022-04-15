@@ -266,24 +266,34 @@ public class CapabilityUtils implements Serializable {
 		GennyToken gennyToken = beUtils.getGennyToken();
 		String realm = gennyToken.getRealm();
 
+		System.out.println("hasCapabilityThroughPriIs :: realm " + realm);
+
 		// allow keycloak admin and devcs to do anything
 		if (gennyToken.hasRole("admin") || gennyToken.hasRole("dev") || ("service".equals(gennyToken.getUsername()))) {
+			System.out.println("Admin || Dev || Service");
 			return true;
 		}
 
 		// create a capability code and mode combined unique key
 		String key = realm + ":" + code + ":" + mode.name();
+		System.out.println("hasCapabilityThroughPriIs :: key " + key);
 
 		// fetch from cache and parse as arraylist
 		String json = (String) CacheUtils.readCache(realm, key);
 		List<String> roleCodes = Arrays.asList(json.split(","));
+		System.out.println("hasCapabilityThroughPriIs :: roleCodes " + roleCodes);
 
 		// fetch user baseentity
 		String userCode = gennyToken.getUserCode();
+		System.out.println("hasCapabilityThroughPriIs :: userCode " + userCode);
 		BaseEntity user = beUtils.getBaseEntityByCode(userCode);
 
 		for (String roleCode : roleCodes) {
 			String priIsCode = "PRI_IS_" + roleCode.split("ROL_")[1];
+
+			System.out.println("hasCapabilityThroughPriIs :: roleCode " + roleCode);
+			System.out.println("hasCapabilityThroughPriIs :: priIsCode " + priIsCode);
+
 			if (user.getBaseEntityAttributes().parallelStream()
 					.anyMatch(item -> item.getAttributeCode().equals(priIsCode))) {
 				return true;
