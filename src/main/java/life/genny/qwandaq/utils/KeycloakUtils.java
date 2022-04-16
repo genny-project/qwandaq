@@ -45,84 +45,86 @@ public class KeycloakUtils {
     static final Logger log = Logger.getLogger(KeycloakUtils.class);
     static Jsonb jsonb = JsonbBuilder.create();
 
-	/**
-    * Fetch an access token for a user using a username and password.
-	* 
-	* @param keycloakUrl the keycloakUrl to use
-	* @param realm the realm to use
-	* @param clientId the clientId to use
-	* @param secret the secret to use
-	* @param username the username to use
-	* @param password the password to use
-	* @return GennyToken
-	 */
-    public static GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret, String username, String password) {
+    /**
+     * Fetch an access token for a user using a username and password.
+     * 
+     * @param keycloakUrl the keycloakUrl to use
+     * @param realm       the realm to use
+     * @param clientId    the clientId to use
+     * @param secret      the secret to use
+     * @param username    the username to use
+     * @param password    the password to use
+     * @return GennyToken
+     */
+    public static GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret, String username,
+            String password) {
         // TODO: Please for the love of god lets fix this
         realm = "internmatch";
 
         HashMap<String, String> params = new HashMap<>();
 
-		params.put("username", username);
-		params.put("password", password);
-		params.put("grant_type", "password");
+        params.put("username", username);
+        params.put("password", password);
+        params.put("grant_type", "password");
         params.put("client_id", clientId);
 
         // TODO: MAke this more elegant ok ty
-        if (!"nosecret".equals(secret) || StringUtils.isBlank(secret)) {
+        if (!"nosecret".equals(secret) && (!StringUtils.isBlank(secret))) {
             params.put("client_secret", secret);
         }
 
-		String token = fetchOIDCToken(keycloakUrl, realm, params);
+        String token = fetchOIDCToken(keycloakUrl, realm, params);
 
         GennyToken gennyToken = new GennyToken(token);
         return gennyToken;
     }
 
-	/**
-	* Fetch an access token for a user using a refresh token.
-	* 
-	* @param keycloakUrl the keycloakUrl to use
-	* @param realm the realm to use
-	* @param clientId the clientId to use
-	* @param secret the secret to use
-	* @param refreshToken the refreshToken to use
-	* @return GennyToken
-	 */
-    public static GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret, String refreshToken) {
+    /**
+     * Fetch an access token for a user using a refresh token.
+     * 
+     * @param keycloakUrl  the keycloakUrl to use
+     * @param realm        the realm to use
+     * @param clientId     the clientId to use
+     * @param secret       the secret to use
+     * @param refreshToken the refreshToken to use
+     * @return GennyToken
+     */
+    public static GennyToken getToken(String keycloakUrl, String realm, String clientId, String secret,
+            String refreshToken) {
         // TODO: Please for the love of god lets fix this
         realm = "internmatch";
 
         HashMap<String, String> params = new HashMap<>();
 
-		params.put("refresh_token", refreshToken);
-		params.put("grant_type", "refresh_token");
-		params.put("client_id", clientId);
+        params.put("refresh_token", refreshToken);
+        params.put("grant_type", "refresh_token");
+        params.put("client_id", clientId);
 
-		if (!StringUtils.isBlank(secret)) {
-			params.put("client_secret", secret);
-		}
+        if (!"nosecret".equals(secret) && (!StringUtils.isBlank(secret))) {
+            params.put("client_secret", secret);
+        }
 
-		String token = fetchOIDCToken(keycloakUrl, realm, params);
+        String token = fetchOIDCToken(keycloakUrl, realm, params);
 
         GennyToken gennyToken = new GennyToken(token);
         return gennyToken;
-	}
+    }
 
-	/**
-	* Fetch an Impersonated Token for a user.
-	*
-	* @param userBE the userBE to get a token for
-	* @param gennyToken the gennyToken to use to fetch the token
-	* @param project the project to use to fetch the token
-	* @return String
-	 */
+    /**
+     * Fetch an Impersonated Token for a user.
+     *
+     * @param userBE     the userBE to get a token for
+     * @param gennyToken the gennyToken to use to fetch the token
+     * @param project    the project to use to fetch the token
+     * @return String
+     */
     public static String getImpersonatedToken(BaseEntity userBE, GennyToken gennyToken, BaseEntity project) {
 
-		String realm = gennyToken.getRealm();
+        String realm = gennyToken.getRealm();
         // TODO: Please for the love of god lets fix this
         realm = "internmatch";
-		String token = gennyToken.getToken();
-		String keycloakUrl = gennyToken.getKeycloakUrl();
+        String token = gennyToken.getToken();
+        String keycloakUrl = gennyToken.getKeycloakUrl();
         if (userBE == null) {
             log.error(ANSIColour.RED + "User BE is NULL" + ANSIColour.RESET);
             return null;
@@ -133,27 +135,27 @@ public class KeycloakUtils {
 
         if (uuid == null) {
 
-			log.warn(ANSIColour.YELLOW + "No PRI_UUID found for user " + userBE.getCode() + ", attempting to use PRI_EMAIL instead" + ANSIColour.RESET);
+            log.warn(ANSIColour.YELLOW + "No PRI_UUID found for user " + userBE.getCode()
+                    + ", attempting to use PRI_EMAIL instead" + ANSIColour.RESET);
 
-			// grab email to fetch token
-			String email = userBE.getValue("PRI_EMAIL", null);
+            // grab email to fetch token
+            String email = userBE.getValue("PRI_EMAIL", null);
 
-			if (email == null) {
-				log.error(ANSIColour.RED + "No PRI_EMAIL found for user " + userBE.getCode() + ANSIColour.RESET);
-				return null;
-			}
+            if (email == null) {
+                log.error(ANSIColour.RED + "No PRI_EMAIL found for user " + userBE.getCode() + ANSIColour.RESET);
+                return null;
+            }
 
-			// use email as backup
-			uuid = email;
+            // use email as backup
+            uuid = email;
         } else {
-			// use lowercase UUID
-			uuid = uuid.toLowerCase();
-		}
-
+            // use lowercase UUID
+            uuid = uuid.toLowerCase();
+        }
 
         // fetch keycloak json from porject entity
         String keycloakJson = project.getValueAsString("ENV_KEYCLOAK_JSON");
-        if(false) {
+        if (false) {
             JsonReader reader = Json.createReader(new StringReader(keycloakJson));
             String secret = reader.readObject().getJsonObject("credentials").getString("secret");
             reader.close();
@@ -161,34 +163,34 @@ public class KeycloakUtils {
 
         // TODO: its disgusting im sorry
         String secret = "nosecret";
-		// setup param map
+        // setup param map
         HashMap<String, String> params = new HashMap<>();
-		params.put("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange");
-		params.put("subject_token", token);
-		params.put("requested_subject", uuid);
+        params.put("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange");
+        params.put("subject_token", token);
+        params.put("requested_subject", uuid);
         params.put("client_id", gennyToken.getRealm());
 
-        if ("nosecret".equals(secret) && secret != null && !StringUtils.isBlank(secret)) {
+        if (!"nosecret".equals(secret) && (!StringUtils.isBlank(secret))) {
             params.put("client_secret", secret);
         }
 
-		return fetchOIDCToken(keycloakUrl, realm, params);
+        return fetchOIDCToken(keycloakUrl, realm, params);
     }
 
-	/**
-	* Fetch an OIDC access token from keycloak.
-	*
-	* @param keycloakUrl the keycloakUrl to fetch from
-	* @param realm the realm to fetch in
-	* @param params the params to use
-	* @return String
-	 */
-	public static String fetchOIDCToken(String keycloakUrl, String realm, HashMap<String, String> params) {
+    /**
+     * Fetch an OIDC access token from keycloak.
+     *
+     * @param keycloakUrl the keycloakUrl to fetch from
+     * @param realm       the realm to fetch in
+     * @param params      the params to use
+     * @return String
+     */
+    public static String fetchOIDCToken(String keycloakUrl, String realm, HashMap<String, String> params) {
         // TODO: Please for the love of god lets fix this
         realm = "internmatch";
 
         String uri = keycloakUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token";
-		log.debug("Fetching OIDC Token from " + uri);
+        log.debug("Fetching OIDC Token from " + uri);
         log.info("Fetching OIDC Token from: " + uri);
         String str = executeEncodedPostRequest(uri, params);
 
@@ -196,12 +198,12 @@ public class KeycloakUtils {
         String token = json.getString("access_token");
 
         return token;
-	}
+    }
 
     /**
      * Perform Custom encoded POST request.
      *
-     * @param uri the uri to request from
+     * @param uri            the uri to request from
      * @param postDataParams the postDataParams to use in rquest
      * @return String
      */
@@ -209,8 +211,8 @@ public class KeycloakUtils {
 
         try {
 
-			// setup connection
-			URL url = new URL(uri);
+            // setup connection
+            URL url = new URL(uri);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
@@ -223,12 +225,12 @@ public class KeycloakUtils {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
             writer.write(getPostDataString(postDataParams));
 
-			// flush and close
+            // flush and close
             writer.flush();
             writer.close();
             os.close();
 
-			String response = "";
+            String response = "";
             String line;
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while ((line = br.readLine()) != null) {
@@ -236,7 +238,7 @@ public class KeycloakUtils {
             }
             if (conn.getResponseCode() == HttpsURLConnection.HTTP_OK) {
                 log.info("Successful Token Request!");
-				return response;
+                return response;
             } else {
                 log.error("Bad Token Request: " + conn.getResponseCode() + " " + conn.getResponseMessage());
             }
@@ -244,7 +246,7 @@ public class KeycloakUtils {
             e.printStackTrace();
         }
 
-		return null;
+        return null;
     }
 
     /**
@@ -290,7 +292,8 @@ public class KeycloakUtils {
         String randomCode = UUID.randomUUID().toString().substring(0, 18);
         String defaultPassword = "password1";
 
-        String json = "{ " + "\"username\" : \"" + randomCode + "\"," + "\"email\" : \"" + randomCode + "@gmail.com\" , "
+        String json = "{ " + "\"username\" : \"" + randomCode + "\"," + "\"email\" : \"" + randomCode
+                + "@gmail.com\" , "
                 + "\"enabled\" : true, " + "\"emailVerified\" : true, " + "\"firstName\" : \"" + randomCode + "\", "
                 + "\"lastName\" : \"" + randomCode + "\", " + "\"groups\" : [" + " \"users\" " + "], "
                 + "\"requiredActions\" : [\"terms_and_conditions\"], "
@@ -352,8 +355,8 @@ public class KeycloakUtils {
     /**
      * Fetch a keycloak users Id using a username.
      *
-     * @param token the token to fetch with
-     * @param realm the realm to fetch in
+     * @param token    the token to fetch with
+     * @param realm    the realm to fetch in
      * @param username the username to fetch for
      * @return Strign
      * @throws IOException if id could not be fetched
@@ -372,8 +375,8 @@ public class KeycloakUtils {
     /**
      * Fetch a keycloak user using a username.
      *
-     * @param token the token to fetch with
-     * @param realm the realm to fetch in
+     * @param token    the token to fetch with
+     * @param realm    the realm to fetch in
      * @param username the username to fetch for
      * @return List
      */
@@ -402,7 +405,8 @@ public class KeycloakUtils {
             log.info("StatusCode: " + statusCode);
 
             if (statusCode != 200) {
-                log.error("Failed to get users from Keycloak, url:" + uri + ", response code:" + statusCode + ", token:" + token);
+                log.error("Failed to get users from Keycloak, url:" + uri + ", response code:" + statusCode + ", token:"
+                        + token);
                 return null;
             }
 
@@ -424,53 +428,59 @@ public class KeycloakUtils {
         return null;
     }
 
-	/**
-	* Update a keycloak user field.
-	*
-	* @param userToken the userToken to update with
-	* @param user the user to update for
-	* @param field the field to update
-	* @param value the value to update to
-	* @return int statusCode
-	 */
-	public static int updateUserField(GennyToken userToken, BaseEntity user, String field, String value) {
+    /**
+     * Update a keycloak user field.
+     *
+     * @param userToken the userToken to update with
+     * @param user      the user to update for
+     * @param field     the field to update
+     * @param value     the value to update to
+     * @return int statusCode
+     */
+    public static int updateUserField(GennyToken userToken, BaseEntity user, String field, String value) {
 
-		String realm = userToken.getRealm();
+        String realm = userToken.getRealm();
         // TODO: Please for the love of god lets fix this
         realm = "internmatch";
-		String token = userToken.getToken();
+        String token = userToken.getToken();
 
-		String uuid = user.getValue("PRI_UUID", null);
+        String uuid = user.getValue("PRI_UUID", null);
 
-		String json = "{\""  + field  + "\":\"" + value + "\"}";
+        String json = "{\"" + field + "\":\"" + value + "\"}";
         String uri = GennySettings.keycloakUrl + "/auth/admin/realms/" + realm + "/users/" + uuid;
-		HttpResponse<String> response = HttpUtils.put(uri, json, token);
+        HttpResponse<String> response = HttpUtils.put(uri, json, token);
 
-		return response.statusCode();
-	}
+        return response.statusCode();
+    }
 
-	/**
-	* Update a keycloak user email.
-	*
-	* @param userToken the userToken to update with
-	* @param user the user to update for
-	* @param email the email to set
-	* @return int statusCode
-	 */
-	public static int updateUserEmail(GennyToken userToken, BaseEntity user, String email) {
+    /**
+     * Update a keycloak user email.
+     *
+     * @param userToken the userToken to update with
+     * @param user      the user to update for
+     * @param email     the email to set
+     * @return int statusCode
+     */
+    public static int updateUserEmail(GennyToken userToken, BaseEntity user, String email) {
 
-		String realm = userToken.getRealm();
+        String realm = userToken.getRealm();
         // TODO: Please for the love of god lets fix this
         realm = "internmatch";
-		String token = userToken.getToken();
+        String token = userToken.getToken();
 
-		String uuid = user.getValue("PRI_UUID", null);
+        String uuid = user.getValue("PRI_UUID", null);
+        if (StringUtils.isBlank(uuid)) {
+            uuid = user.getValue("PRI_KEYCLOAK_UUID", null);
+            if (uuid == null) {
+                log.error("User " + user.getCode() + " has NO keycloak uuid ");
+            }
+        }
 
-		String json = "{ \"email\" : \"" + email + "\" , \"enabled\" : true, \"emailVerified\" : true}";
+        String json = "{ \"email\" : \"" + email + "\" , \"enabled\" : true, \"emailVerified\" : true}";
         String uri = GennySettings.keycloakUrl + "/auth/admin/realms/" + realm + "/users/" + uuid;
-		HttpResponse<String> response = HttpUtils.put(uri, json, token);
+        HttpResponse<String> response = HttpUtils.put(uri, json, token);
 
-		return response.statusCode();
-	}
+        return response.statusCode();
+    }
 
 }
