@@ -395,6 +395,7 @@ public class MergeUtils {
 			}
 		} catch (Exception e) {
 			log.error("Something is wrong with the context association JSON!!!!!");
+			log.error("Exception: " + e);
 		}
 	}
 
