@@ -1,5 +1,10 @@
 package life.genny.qwandaq.models;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
@@ -19,19 +24,14 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.json.JsonObject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-
 import org.jboss.logging.Logger;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+
 
 @RegisterForReflection
 public class GennyToken implements Serializable {
@@ -209,15 +209,12 @@ public class GennyToken implements Serializable {
 	public String getRealm() {
 		String clientId = adecodedTokenMap.get("azp").toString();
 
-		if (clientId.equals("mentormatch")) {
-		return clientId;
-		} else if (clientId.equals("lojing")) {
-		return clientId;
-		} else if (clientId.equals("credmatch")) {
-		return clientId;
+		if ((clientId.equals("internmatch"))||(clientId.equals("alyson"))) {
+			return "internmatch";
+		} 
+		else {
+			return clientId;
 		}
-
-		return "internmatch";
 	}
 	/**
 	 * @param key the key of the string item to get
