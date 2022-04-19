@@ -1,23 +1,21 @@
 package life.genny.qwandaq.utils;
 
-import java.io.StringReader;
-import java.text.DecimalFormat;
-import java.time.LocalDateTime;
-import java.time.LocalDate;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import life.genny.qwandaq.entity.BaseEntity;
+import org.javamoney.moneta.Money;
+import org.jboss.logging.Logger;
 
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-
-import org.jboss.logging.Logger;
-import org.javamoney.moneta.Money;
-
-import life.genny.qwandaq.entity.BaseEntity;
+import java.io.StringReader;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A utiltity used in the MailMerge feature of Genny.
@@ -395,7 +393,7 @@ public class MergeUtils {
 			}
 		} catch (Exception e) {
 			log.error("Something is wrong with the context association JSON!!!!!");
-			log.error("Exception: " + e);
+			log.error("###### Exception: " + e);
 		}
 	}
 
