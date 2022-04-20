@@ -168,7 +168,7 @@ public class KeycloakUtils {
         params.put("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange");
         params.put("subject_token", token);
         params.put("requested_subject", uuid);
-        params.put("client_id", gennyToken.getRealm());
+        params.put("client_id", "backend");//gennyToken.getRealm());
 
         if (!"nosecret".equals(secret) && (!StringUtils.isBlank(secret))) {
             log.info("[!] Using secret: " + secret);
