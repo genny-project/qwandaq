@@ -171,6 +171,7 @@ public class KeycloakUtils {
         params.put("client_id", gennyToken.getRealm());
 
         if (!"nosecret".equals(secret) && (!StringUtils.isBlank(secret))) {
+            log.info("[!] Using secret: " + secret);
             params.put("client_secret", secret);
         }
 
