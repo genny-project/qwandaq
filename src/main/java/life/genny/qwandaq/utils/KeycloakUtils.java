@@ -160,9 +160,9 @@ public class KeycloakUtils {
             String secret = reader.readObject().getJsonObject("credentials").getString("secret");
             reader.close();
         }
-
+        String secret = System.getenv("GENNY_CLIENT_SECRET");
         // TODO: its disgusting im sorry
-        String secret = "nosecret";
+        // String secret = "nosecret";
         // setup param map
         HashMap<String, String> params = new HashMap<>();
         params.put("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange");
