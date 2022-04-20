@@ -168,11 +168,27 @@ public class KeycloakUtils {
         params.put("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange");
         params.put("subject_token", token);
         params.put("requested_subject", uuid);
-        params.put("client_id", "backend");//gennyToken.getRealm());
+        
+        
+        // TODO: Discus further with Jasper. This is kinda cracked
+        String backendSecret = System.getenv("GENNY_BACKEND_SECRET");
+        boolean useBackendSecret = !(backendSecret != null && "nosecret".equals(backendSecret));
 
-        if (!"nosecret".equals(secret) && (!StringUtils.isBlank(secret))) {
+        // Only use the backend client/secret if there is a backend secret defined
+        if(useBackendSecret) {
+            params.put("client_id", "backend");//gennyToken.getRealm());
+        } else {
+            params.put("client_id", gennyToken.getRealm());
+        }
+
+        boolean useStandardSecret = !"nosecret".equals(secret) && (!StringUtils.isBlank(secret));
+
+        if (useStandardSecret) {
             log.info("[!] Using secret: " + secret);
             params.put("client_secret", secret);
+        } else if (useBackendSecret) {
+            log.info("Using backend Secret: " + backendSecret);
+            params.put("client_secret", backendSecret);
         }
 
         return fetchOIDCToken(keycloakUrl, realm, params);
