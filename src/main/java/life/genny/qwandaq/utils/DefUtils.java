@@ -227,6 +227,7 @@ public class DefUtils {
 				if (prefix == null) {
 					continue;
 				}
+				// TODO: Address this little hack
 				// LITTLE HACK FOR OHS DOCS, SORRY!
 				if (prefix.equals("DOC") && be.getCode().startsWith("DOC_OHS_")) {
 					continue;

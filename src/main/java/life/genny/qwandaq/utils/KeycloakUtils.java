@@ -184,11 +184,11 @@ public class KeycloakUtils {
         boolean useStandardSecret = !"nosecret".equals(secret) && (!StringUtils.isBlank(secret));
 
         if (useBackendSecret) {
-            log.info("[!] Using secret: " + secret);
-            params.put("client_secret", secret);
-        } else if (useStandardSecret) {
             log.info("Using backend Secret: " + backendSecret);
             params.put("client_secret", backendSecret);
+        } else if (useStandardSecret) {
+            log.info("[!] Using secret: " + secret);
+            params.put("client_secret", secret);
         }
 
         return fetchOIDCToken(keycloakUrl, realm, params);
