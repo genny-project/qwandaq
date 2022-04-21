@@ -34,7 +34,7 @@ public class CommonUtils {
 
         /**
          * Get a JSON style array of objects. Pass a callback for custom values. Will default to {@link Object#toString()} otherwise
-         * @param list - list to get array of
+         * @param array - list to get array of
          * @param stringCallback - callback to use to retrieve a string value of the object
          * @return a JSON style array of objects, where each item is the value returned from stringCallback
          */
