@@ -136,9 +136,12 @@ public class QwandaUtils {
 		List<Attribute> attributeList = null;
 
 		Long attributeCount = databaseUtils.countAttributes(realm);
-		final Integer CHUNK_LOAD_SIZE = 200;
+		String chunkLoadEnv = CommonUtils.getSystemEnv("GENNY_ATTRIB_CHUNKSIZE", false);
+		int chunkLoadSize = 200;
+		if(chunkLoadEnv != null)
+			chunkLoadSize = Integer.parseInt(chunkLoadEnv);
 
-		final int TOTAL_PAGES = (int) Math.ceil(attributeCount / CHUNK_LOAD_SIZE);
+		final int TOTAL_PAGES = (int) Math.ceil(attributeCount / chunkLoadSize);
 
 		Long totalAttribsCached = 0L;
 
@@ -147,11 +150,11 @@ public class QwandaUtils {
 		try {
 			for (int currentPage = 0; currentPage < TOTAL_PAGES + 1; currentPage++) {
 
-				int attributesLoaded = currentPage * CHUNK_LOAD_SIZE;
+				int attributesLoaded = currentPage * chunkLoadSize;
 
 				// Correctly determine how many more attributes we need to load in
-				int nextLoad = CHUNK_LOAD_SIZE;
-				if (attributeCount - attributesLoaded < CHUNK_LOAD_SIZE) {
+				int nextLoad = chunkLoadSize;
+				if (attributeCount - attributesLoaded < chunkLoadSize) {
 					nextLoad = (int) (attributeCount - attributesLoaded);
 				}
 
