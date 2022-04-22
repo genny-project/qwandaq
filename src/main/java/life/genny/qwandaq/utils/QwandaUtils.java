@@ -133,7 +133,6 @@ public class QwandaUtils {
 
 	public void loadAllAttributesIntoCache() {
 		String realm = gennyToken.getRealm();
-		List<Attribute> attributeList = null;
 
 		Long attributeCount = databaseUtils.countAttributes(realm);
 		String chunkLoadEnv = CommonUtils.getSystemEnv("GENNY_ATTRIB_CHUNKSIZE", false);
@@ -149,6 +148,7 @@ public class QwandaUtils {
 		log.info("Found " + attributeCount + " attributes");
 		try {
 			for (int currentPage = 0; currentPage < TOTAL_PAGES + 1; currentPage++) {
+				List<Attribute> attributeList = null;
 
 				int attributesLoaded = currentPage * chunkLoadSize;
 
