@@ -156,13 +156,13 @@ public class QwandaUtils {
 				}
 
 				attributeList = databaseUtils.findAttributes(realm, attributesLoaded, nextLoad);
+				log.info("Loading in page " + currentPage + " of " + TOTAL_PAGES + " containing " + nextLoad + " attributes");
 				for (Attribute attribute : attributeList) {
-					// log.info("Loading attrib: " + attribute.getCode());
+					log.info("Loading attrib: " + attribute.getCode());
 					String key = attribute.getCode();
 					CacheUtils.putObject(realm, key, attribute);
 					totalAttribsCached++;
 				}
-				log.info("Loading in page " + currentPage + " of " + TOTAL_PAGES + " containing " + nextLoad + " attributes");
 				if(attributeList.size() > 0)
 					log.info("DEBUG, Start AttributeID:" + attributeList.get(0).getId() + ", End AttributeID:" + attributeList.get(attributeList.size() - 1).getId());
 			}
