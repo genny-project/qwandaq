@@ -210,7 +210,9 @@ public class DefUtils {
 			// Easy
 			Map<String, BaseEntity> beMapping = getDefMap(realm);
 			String attrCode = isAs.get(0).getAttributeCode();
+			log.info("AttrCode for be" + be.getCode() + ": " + attrCode);
 			String trimedAttrCode = attrCode.substring("PRI_IS_".length());
+			log.info("Trimmed AttrCode: " + trimedAttrCode);
 			BaseEntity defBe = beMapping.get("DEF_" + trimedAttrCode);
 
 			if (defBe == null) {
