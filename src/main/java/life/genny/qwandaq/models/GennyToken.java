@@ -27,7 +27,6 @@ import javax.json.bind.JsonbBuilder;
 import org.jboss.logging.Logger;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import life.genny.qwandaq.utils.CommonUtils;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -226,10 +225,6 @@ public class GennyToken implements Serializable {
 	 */
 	@Deprecated
 	public String getRealm() {
-		String projectRealm = CommonUtils.getSystemEnv("PROJECT_REALM");
-		if(projectRealm != null) {
-			return projectRealm;
-		}
 		String clientId = adecodedTokenMap.get("azp").toString();
 
 		if (clientId.equals("mentormatch")) {

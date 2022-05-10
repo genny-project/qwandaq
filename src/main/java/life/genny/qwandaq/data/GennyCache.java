@@ -31,7 +31,7 @@ public class GennyCache {
 
     Set<String> realms = new HashSet<String>();
 
-    private Map<String, RemoteCache> caches = new HashMap<>();
+    private Map<String, RemoteCache<String, String>> caches = new HashMap<>();
 
     private RemoteCacheManager remoteCacheManager;
 

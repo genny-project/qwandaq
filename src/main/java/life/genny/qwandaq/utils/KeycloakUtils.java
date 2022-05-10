@@ -214,6 +214,7 @@ public class KeycloakUtils {
             log.info("[!] Client Secret: " + params.get("client_secret"));
         }
         String str = executeEncodedPostRequest(uri, params);
+
         JsonObject json = jsonb.fromJson(str, JsonObject.class);
         String token = json.getString("access_token");
 
@@ -263,12 +264,6 @@ public class KeycloakUtils {
                 log.error("Bad Token Request: " + conn.getResponseCode() + " " + conn.getResponseMessage());
             }
         } catch (Exception e) {
-            log.error("Error executing post request to: " + uri);
-            log.error("============= Params =============");
-            for(String param : postDataParams.keySet()) {
-                log.error("[!] " + param + ": " + postDataParams.get(param));
-            }
-            log.error("============= END PARAMS =============");
             e.printStackTrace();
         }
 
