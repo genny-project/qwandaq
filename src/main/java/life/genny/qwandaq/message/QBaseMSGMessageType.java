@@ -8,5 +8,5 @@ public enum QBaseMSGMessageType {
 	VOICE,
 	SENDGRID,
 	SLACK,
-	SENDGRIDV2;
+	SENDGRID_RELAY;
 }
