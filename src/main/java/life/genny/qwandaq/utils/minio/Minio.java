@@ -28,10 +28,10 @@ public class Minio {
     private MinioClient minioClient;
     private String REALM = Optional.ofNullable(System.getenv("REALM")).orElse("internmatch");
 
-    private static final String publicMediaPath = "/public/media/";
-    private static final String publicPath = "/public";
-    private static final String mediaPath = "/media/";
-    private static final String infoFileSuffix = "-info";
+    private static final String PUBLIC_MEDIA_PATH = "/public/media/";
+    private static final String PUBLIC_PATH = "/public";
+    private static final String MEDIA_PATH = "/media/";
+    private static final String INFO_FILE_SUFFIX = "-info";
 
     @PostConstruct
     public void beforeConstruct() {
@@ -43,7 +43,7 @@ public class Minio {
     }
 
     public String saveOnStore(FileUpload file) {
-        boolean isUploaded = uploadFile(REALM + publicPath, file.uploadedFileName(), file.fileName());
+        boolean isUploaded = uploadFile(REALM + PUBLIC_PATH, file.uploadedFileName(), file.fileName());
         if (isUploaded) {
             return file.fileName();
         } else {
@@ -52,7 +52,7 @@ public class Minio {
     }
 
     public String saveOnStore(String fileName, File file) {
-        Boolean isFileUploaded = uploadFile(REALM + publicPath, file.getPath(), fileName);
+        Boolean isFileUploaded = uploadFile(REALM + PUBLIC_PATH, file.getPath(), fileName);
         if (isFileUploaded) {
             return fileName;
         } else {
@@ -72,7 +72,7 @@ public class Minio {
 
     public byte[] fetchFromStoreUserDirectory(UUID fileUUID, UUID userUUID) {
         try {
-            String fullPath = REALM + "/" + userUUID.toString() + mediaPath + fileUUID.toString() + infoFileSuffix;
+            String fullPath = REALM + "/" + userUUID.toString() + MEDIA_PATH + fileUUID.toString() + INFO_FILE_SUFFIX;
             GetObjectArgs getObjectArgs = GetObjectArgs.builder().bucket(MinIOConstant.getBucketName()).object(fullPath).build();
             GetObjectResponse getObjectResponse = minioClient.getObject(getObjectArgs);
             byte[] byteArray = IOUtils.toByteArray(getObjectResponse);
@@ -89,7 +89,7 @@ public class Minio {
 
     public StatObjectResponse fetchStatFromStorePublicDirectory(String fileUUID) {
         try {
-            String fullPath = REALM + publicMediaPath + fileUUID;
+            String fullPath = REALM + PUBLIC_MEDIA_PATH + fileUUID;
             StatObjectArgs statObjectArgs = StatObjectArgs.builder().bucket(MinIOConstant.getBucketName()).object(fullPath).build();
             StatObjectResponse statObjectResponse = minioClient.statObject(statObjectArgs);
             return statObjectResponse;
@@ -105,7 +105,7 @@ public class Minio {
 
     public String fetchInfoFromStorePublicDirectory(String fileUUID) {
         try {
-            String fullPath = REALM + publicMediaPath + fileUUID + infoFileSuffix;
+            String fullPath = REALM + PUBLIC_MEDIA_PATH + fileUUID + INFO_FILE_SUFFIX;
             GetObjectArgs getObjectArgs = GetObjectArgs.builder().bucket(MinIOConstant.getBucketName()).object(fullPath).build();
             GetObjectResponse getObjectResponse = minioClient.getObject(getObjectArgs);
             byte[] byteArray = IOUtils.toByteArray(getObjectResponse);
@@ -122,7 +122,7 @@ public class Minio {
 
     public byte[] streamFromStorePublicDirectory(String fileUUID, Long start, Long end) {
         try {
-            String fullPath = REALM + publicMediaPath + fileUUID;
+            String fullPath = REALM + PUBLIC_MEDIA_PATH + fileUUID;
             GetObjectArgs getObjectArgs = GetObjectArgs.builder().bucket(MinIOConstant.getBucketName()).object(fullPath).offset(start).length(end).build();
             GetObjectResponse getObjectResponse = minioClient.getObject(getObjectArgs);
             byte[] byteArray = IOUtils.toByteArray(getObjectResponse);
@@ -135,7 +135,7 @@ public class Minio {
 
     public byte[] fetchFromStorePublicDirectory(UUID fileUUID) {
         try {
-            String fullPath = REALM + publicMediaPath + fileUUID.toString();
+            String fullPath = REALM + PUBLIC_MEDIA_PATH + fileUUID.toString();
             GetObjectArgs getObjectArgs = GetObjectArgs.builder().bucket(MinIOConstant.getBucketName()).object(fullPath).build();
             GetObjectResponse getObjectResponse = minioClient.getObject(getObjectArgs);
             byte[] byteArray = IOUtils.toByteArray(getObjectResponse);
@@ -148,7 +148,7 @@ public class Minio {
 
     public byte[] fetchFromStorePublicDirectory(String fileName) {
         try {
-            String fullPath = REALM + publicMediaPath + fileName;
+            String fullPath = REALM + PUBLIC_MEDIA_PATH + fileName;
             GetObjectArgs getObjectArgs = GetObjectArgs.builder().bucket(MinIOConstant.getBucketName()).object(fullPath).build();
             GetObjectResponse getObjectResponse = minioClient.getObject(getObjectArgs);
             byte[] byteArray = IOUtils.toByteArray(getObjectResponse);
@@ -161,7 +161,7 @@ public class Minio {
 
     public void deleteFromStorePublicDirectory(UUID fileUUID) {
         try {
-            String fullPath = REALM + publicMediaPath + fileUUID.toString();
+            String fullPath = REALM + PUBLIC_MEDIA_PATH + fileUUID.toString();
             RemoveObjectArgs removeObjectArgs = RemoveObjectArgs.builder().bucket(MinIOConstant.getBucketName()).object(fullPath).build();
             minioClient.removeObject(removeObjectArgs);
         } catch (Exception ex) {
@@ -172,7 +172,7 @@ public class Minio {
     public boolean uploadFile(String sub, String inpt, String uuid) {
         boolean isSuccess = false;
 
-        String path = sub + mediaPath + uuid;
+        String path = sub + MEDIA_PATH + uuid;
         try {
             BucketExistsArgs bucketExistsArgs = BucketExistsArgs.builder().bucket(MinIOConstant.getBucketName()).build();
 
