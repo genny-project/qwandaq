@@ -1,6 +1,7 @@
 package life.genny.qwandaq.converter;
 
 import io.quarkus.arc.Arc;
+import life.genny.qwandaq.constant.MinIOConstant;
 import life.genny.qwandaq.constant.QwandaQConstant;
 import life.genny.qwandaq.utils.minio.Minio;
 import org.jboss.logging.Logger;
@@ -27,7 +28,9 @@ public class MinIOConverter implements AttributeConverter<String, String> {
             if (data.length > 0) {
                 return new String(data);
             } else {
-                return "Error Occurred";
+                // Exception handled in Minio.fetchFromStorePublicDirectory(dbData);;
+                // This will be the default text the attribute value will show since there was exception in Minio.fetchFromStorePublicDirectory(dbData);
+                return MinIOConstant.ERROR_FALLBACK_MSG;
             }
         } else {
             return dbData;
