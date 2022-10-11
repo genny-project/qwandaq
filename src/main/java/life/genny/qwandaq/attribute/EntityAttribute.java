@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import io.quarkus.arc.Arc;
 import life.genny.qwandaq.constant.QwandaQConstant;
 import life.genny.qwandaq.converter.MinIOConverter;
+import life.genny.qwandaq.utils.ConfigUtils;
 import life.genny.qwandaq.utils.minio.FileUpload;
 import life.genny.qwandaq.utils.minio.Minio;
 import org.apache.commons.lang3.builder.CompareToBuilder;
@@ -664,12 +665,13 @@ public class EntityAttribute implements java.io.Serializable, Comparable<Object>
 			byte[] data = valueString.getBytes(StandardCharsets.UTF_8);
 			if (data.length > limit) {
 				log.info("Greater Size");
-				String fileName = QwandaQConstant.MINIO_LAZY_PREFIX+ baseEntityCode + "-" + attributeCode;
-				File theDir = new File("file-uploads/");
+				String fileName = QwandaQConstant.MINIO_LAZY_PREFIX + baseEntityCode + "-" + attributeCode;
+				String path = ConfigUtils.getConfig("file.temp", String.class);
+				File theDir = new File(path);
 				if (!theDir.exists()) {
 					theDir.mkdirs();
 				}
-				String fileInfoName = "file-uploads/".concat(fileName);
+				String fileInfoName = path.concat(fileName);
 				File fileInfo = new File(fileInfoName);
 				try (FileWriter myWriter = new FileWriter(fileInfo.getPath())) {
 					myWriter.write(valueString);
