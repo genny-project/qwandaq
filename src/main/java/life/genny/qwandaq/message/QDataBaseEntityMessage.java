@@ -303,16 +303,6 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 		 this.parentCode = parentCode;
 	 }
 
-	 @JsonbTransient
-	 public boolean isDelete() {
-		 return super.getDelete();
-	 }
-
-	@JsonbTransient
-	 public boolean isReplace() {
-		return super.getReplace();
-	}
-	 
 	 /**
 	  * @return the linkValue
 	  */
