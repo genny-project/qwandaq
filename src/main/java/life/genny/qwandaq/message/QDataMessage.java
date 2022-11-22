@@ -19,8 +19,8 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
    */
   private static final String MESSAGE_TYPE = "DATA_MSG";
   private String data_type;
-  private boolean delete;
-  private boolean replace = true;
+  private Boolean delete = false;
+  private Boolean replace = false;
   private boolean shouldDeleteLinkedBaseEntities;
   private String aliasCode;
 
@@ -65,14 +65,14 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
   /**
    * @return the replace
    */
-  public boolean getReplace() {
+  public Boolean getReplace() {
     return replace;
   }
 
   /**
    * @param replace the replace to set
    */
-  public void setReplace(boolean replace) {
+  public void setReplace(Boolean replace) {
     this.replace = replace;
   }
 
