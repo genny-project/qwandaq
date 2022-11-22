@@ -303,6 +303,14 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 		 this.parentCode = parentCode;
 	 }
 
+	 public boolean isDelete() {
+		 return super.getDelete();
+	 }
+
+	 public boolean isReplace() {
+		return super.getReplace();
+	}
+	 
 	 /**
 	  * @return the linkValue
 	  */
