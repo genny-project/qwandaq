@@ -8,6 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import life.genny.qwandaq.WeightedItem;
 import life.genny.qwandaq.entity.BaseEntity;
+import javax.json.bind.annotation.JsonbTransient;
 
 @RegisterForReflection
 public class QDataBaseEntityMessage extends QDataMessage implements Comparable<QDataBaseEntityMessage> {
@@ -302,11 +303,11 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 		 this.parentCode = parentCode;
 	 }
 
-	 public Boolean isDelete() {
+	 public boolean isDelete() {
 		 return super.getDelete();
 	 }
 
-	 public Boolean isReplace() {
+	 public boolean isReplace() {
 		return super.getReplace();
 	}
 	 
