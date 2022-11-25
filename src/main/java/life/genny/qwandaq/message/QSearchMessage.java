@@ -12,7 +12,7 @@ public class QSearchMessage extends QMessage implements Serializable {
 	private static final String MESSAGE_TYPE = "SCH_MSG";
 	private SearchEntity searchEntity;
 	private String destination;
-	private boolean replace = true;
+	private boolean replace;
 
 	public QSearchMessage() {
 		super(MESSAGE_TYPE);
