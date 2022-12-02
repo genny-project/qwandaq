@@ -298,7 +298,7 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 	  * @param delete
 	  * @param parentCode
 	  */
-	 public void setDelete(final Boolean delete, final String parentCode) {
+	 public void setDelete(final boolean delete, final String parentCode) {
 		 super.setDelete(delete);
 		 this.parentCode = parentCode;
 	 }
@@ -307,6 +307,7 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 		 return super.getDelete();
 	 }
 
+	 @JsonbTransient
 	 public boolean isReplace() {
 		return super.getReplace();
 	}

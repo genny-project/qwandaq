@@ -20,7 +20,7 @@ public abstract class QDataMessage extends QMessage implements QDataMessageIntf 
   private static final String MESSAGE_TYPE = "DATA_MSG";
   private String data_type;
   private boolean delete;
-  private boolean replace = true;
+  private boolean replace;
   private boolean shouldDeleteLinkedBaseEntities;
   private String aliasCode;
 
