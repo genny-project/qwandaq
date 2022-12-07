@@ -1,2 +1,2 @@
 #!/bin/bash
-./mvnw package -Pnative -DskipTests=true
+./mvnw install -Pnative -DskipTests=true

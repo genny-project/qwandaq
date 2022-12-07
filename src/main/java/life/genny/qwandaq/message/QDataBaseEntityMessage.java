@@ -297,16 +297,16 @@ public class QDataBaseEntityMessage extends QDataMessage implements Comparable<Q
 	  * @param delete
 	  * @param parentCode
 	  */
-	 public void setDelete(final Boolean delete, final String parentCode) {
+	 public void setDelete(final boolean delete, final String parentCode) {
 		 super.setDelete(delete);
 		 this.parentCode = parentCode;
 	 }
 
-	 public Boolean isDelete() {
+	 public boolean isDelete() {
 		 return super.getDelete();
 	 }
 
-	 public Boolean isReplace() {
+	 public boolean isReplace() {
 		return super.getReplace();
 	}
 	 
