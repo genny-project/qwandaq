@@ -44,7 +44,7 @@ public class QSearchMessage extends QMessage implements Serializable {
 		return this.destination;
 	}
 
-	public void setRelace(Boolean replace) {
+	public void setReplace(Boolean replace) {
 		this.replace = replace;
 	}
 
