@@ -268,7 +268,39 @@ public class QMessageGennyMSG extends QMessage {
 
 			// Set Msg Type to DEFAULT if none set already
 			if (this.msg.messageTypeArr.length == 0) {
-				this.msg.addMessageType(QBaseMSGMessageType.DEFAULT);
+				String type = templateBE.getValue("PRI_DEFAULT_MSG_TYPE", null);
+				System.out.println("type: "+ type);
+				type = type.replace("[\"", "");
+				type = type.replace("\"]", "");
+				System.out.println("type: "+ type);
+				switch(type){
+					case SMS:
+					this.msg.addMessageType(QBaseMSGMessageType.SMS);
+					break;
+
+				case EMAIL:
+					this.msg.addMessageType(QBaseMSGMessageType.EMAIL);
+					break;
+
+				case TOAST:
+					this.msg.addMessageType(QBaseMSGMessageType.TOAST);
+					break;
+
+				case SENDGRID:
+					this.msg.addMessageType(QBaseMSGMessageType.SENDGRID);
+					break;
+
+				case SLACK:
+					this.msg.addMessageType(QBaseMSGMessageType.SLACK);
+					break;
+
+				case DEFAULT:
+					this.msg.addMessageType(QBaseMSGMessageType.DEFAULT);
+					break;
+
+				default:
+					this.msg.addMessageType(QBaseMSGMessageType.DEFAULT);
+				}
 			}
 			// Set token and send
 			this.msg.setToken(beUtils.getGennyToken().getToken());
