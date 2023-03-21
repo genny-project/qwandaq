@@ -17,7 +17,7 @@
     <quarkus.platform.version>2.7.3.Final</quarkus.platform.version>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
 	<querydsl.version>4.4.0</querydsl.version>
-	<commons-text.version>1.8</commons-text.version>
+	<commons-text.version>1.10.0</commons-text.version>
 	<jackson-datatype-money.version>1.0.0</jackson-datatype-money.version>
 	<version.moneta>1.1</version.moneta>
 	<jwt.version>0.10.7</jwt.version>
